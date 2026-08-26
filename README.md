@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/kronos_sentinel_intro.gif" alt="KRONOS SENTINEL Introduction" width="100%">
+  <img src="assets/sentinel_shield_logo.png" alt="KRONOS SENTINEL Emblem" width="360px">
 </p>
 
 <h1 align="center">KRONOS SENTINEL</h1>
@@ -34,6 +34,10 @@ En las infraestructuras corporativas modernas, los Centros de Operaciones de Seg
 * Inspecciona el tráfico en tiempo real mediante **pfSense** y **Suricata en modo Inline IPS (Netmap)**.
 * Ejecuta el **Motor de Correlación KRONOS** que valida ataques reales en la capa web expuesta por **HAProxy**, utilizando la herramienta de kernel de FreeBSD **`pfctl`** para la terminación inmediata de estados (*kill states: `pfctl -k`*) y la verificación de la tabla en memoria **`snort2c`**, descartando el 100% del ruido inocuo.
 * Dispara una llamada telefónica de emergencia en tiempo real vía **Asterisk PBX**, donde un **Agente de IA Multimodal (Google Gemini Live Flash 3.1)** interactúa por voz con el CISO, entregando un *debriefing* táctico inmediato (IP, país GeoIP, payload SQLi, bloqueo en firewall) y proponiendo mitigaciones estratégicas en vivo.
+
+<p align="center">
+  <img src="assets/kronos_process_flow.gif" alt="Pipeline de Flujo de Ataque y Respuesta SOAR en Tiempo Real" width="100%">
+</p>
 
 ---
 
