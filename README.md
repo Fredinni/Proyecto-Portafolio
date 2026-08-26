@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Firewall-pfSense%20CE%202.7.2-00599C?style=for-the-badge&logo=pfsense&logoColor=white" alt="pfSense">
+  <img src="https://img.shields.io/badge/Firewall-pfSense%20CE%202.9.0-00599C?style=for-the-badge&logo=pfsense&logoColor=white" alt="pfSense">
   <img src="https://img.shields.io/badge/IPS_Engine-Suricata%20Inline%20(Netmap)-FF1E56?style=for-the-badge&logo=securityscorecard&logoColor=white" alt="Suricata">
   <img src="https://img.shields.io/badge/Kernel_Filter-FreeBSD%20pfctl%20(snort2c)-1E293B?style=for-the-badge&logo=freebsd&logoColor=white" alt="pfctl">
   <img src="https://img.shields.io/badge/AI_Engine-Gemini%20Live%20API%20Flash%203.1-00F5FF?style=for-the-badge&logo=google&logoColor=black" alt="Gemini">
@@ -45,7 +45,7 @@ En las infraestructuras corporativas modernas, los Centros de Operaciones de Seg
 ### Matriz de Componentes Técnicos
 | Módulo Arquitectónico | Tecnología Implementada | Rol Táctico en KRONOS SENTINEL |
 | :--- | :--- | :--- |
-| **Defensa Perimetral** | `pfSense CE 2.7.2 (FreeBSD)` | Firewall perimetral, segmentación L2/L3 en VLANs (Corp 10, DMZ 20, VoIP 30, Mgmt 99). |
+| **Defensa Perimetral** | `pfSense CE 2.9.0 (FreeBSD)` | Firewall perimetral, segmentación L2/L3 en VLANs (Corp 10, DMZ 20, VoIP 30, Mgmt 99). |
 | **Prevención de Intrusos** | `Suricata 7.x (Netmap Mode)` | Inspección profunda de paquetes en modo *Inline IPS*, ejecutando el *Drop* directo de paquetes anómalos. |
 | **Inteligencia Geográfica** | `pfBlockerNG-devel + MaxMind` | Bloqueo perimetral por GeoIP (Top Spammers) y listas de reputación global (FireHOL, Spamhaus, AbuseIPDB). |
 | **Proxy Inverso & DMZ** | `HAProxy + DVWA Docker` | Terminación SSL/TLS, balanceo y publicación segura del entorno vulnerable controlado (DVWA) en DMZ. |

@@ -1,4 +1,4 @@
-# MANUAL MAESTRO DE CONFIGURACIÓN Y HARDENING PERIMETRAL: pfSense CE 2.7.2
+# MANUAL MAESTRO DE CONFIGURACIÓN Y HARDENING PERIMETRAL: pfSense CE 2.9.0
 ## Proyecto: KRONOS SENTINEL (APT122) — Autonomous AI-IPS & Voice SOAR
 **Autor:** Bruno Urrea Ortiz | Especialidad en Conectividad, Redes y Ciberseguridad  
 **Institución:** Escuela de Informática y Telecomunicaciones — Duoc UC Sede San Joaquín  

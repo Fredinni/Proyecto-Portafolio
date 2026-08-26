@@ -18,7 +18,7 @@
 El proyecto **KRONOS SENTINEL** ha sido diseñado bajo una estricta restricción de ingeniería financiera: **Costo de Infraestructura = $0 CLP**. Se aprovechan al 100% plataformas de código abierto, licencias comunitarias y capas gratuitas de computación e Inteligencia Artificial:
 
 * **IA Generativa de Voz Multimodal:** Google Gemini Live API Flash 3.1 (*Google AI Studio Free Tier* con cuota gratuita de peticiones por minuto).
-* **Firewall & Kernel Filtering:** pfSense CE 2.7.2 (FreeBSD Open Source, $0).
+* **Firewall & Kernel Filtering:** pfSense CE 2.9.0 (FreeBSD Open Source, $0).
 * **Prevención de Intrusos (IPS):** Suricata 7.x en modo Inline Netmap + *Emerging Threats Open Rulesets* ($0).
 * **Geolocalización IP:** MaxMind GeoLite2 Free Edition ($0).
 * **Centralita Telefónica:** Asterisk 20 LTS en Docker ($0).

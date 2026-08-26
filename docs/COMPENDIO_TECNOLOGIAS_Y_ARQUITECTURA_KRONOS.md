@@ -21,7 +21,7 @@
  ┌────────────────────────────────────────────────────────────────────────────────────────┐
  │                      MAPA TECNOLÓGICO DE KRONOS SENTINEL ($0 CLP)                      │
  ├────────────────────────────────────────────────────────────────────────────────────────┤
- │ 1. CAPA PERIMETRAL & KERNEL   │ pfSense CE 2.7.2 • FreeBSD 14 (pf) • Tabla snort2c     │
+ │ 1. CAPA PERIMETRAL & KERNEL   │ pfSense CE 2.9.0 • FreeBSD 14 (pf) • Tabla snort2c     │
  │ 2. CAPA PREVENCIÓN IPS & GeoIP│ Suricata 7.x (Netmap) • ET Open Rules • pfBlockerNG   │
  │ 3. CAPA PROXY DMZ & LAB       │ HAProxy 2.8+ (Stick Tables) • DVWA Docker              │
  │ 4. CAPA ANÁLISIS & FILTRADO   │ Motor pfctl en Python 3.12 • Heurística Anti-FP (>50%) │
@@ -36,7 +36,7 @@
 
 ---
 
-### 2.1 pfSense CE 2.7.2 & Kernel FreeBSD 14 (`pf` / Packet Filter)
+### 2.1 pfSense CE 2.9.0 & Kernel FreeBSD 14 (`pf` / Packet Filter)
 * **¿Qué es?**  
   pfSense Community Edition es una distribución de seguridad de red de código abierto basada en el sistema operativo FreeBSD. Utiliza el módulo de filtrado de paquetes en kernel `pf(4)` (*Packet Filter*), originalmente desarrollado por el proyecto OpenBSD.
 * **¿Cómo funciona bajo el capó?**  
@@ -164,7 +164,7 @@
 
 | Módulo / Tecnología | Licencia / Modelo | Costo Monetario | Impacto en KRONOS SENTINEL |
 | :--- | :--- | :---: | :--- |
-| **pfSense CE 2.7.2** | FreeBSD Open Source | **$0 CLP** | Firewall L2-L4, VLANs y tabla kernel `snort2c`. |
+| **pfSense CE 2.9.0** | FreeBSD Open Source | **$0 CLP** | Firewall L2-L4, VLANs y tabla kernel `snort2c`. |
 | **Suricata 7.x Inline Netmap** | GPLv2 Open Source | **$0 CLP** | Inspección profunda y Drop en ring buffer de red. |
 | **Reglas ET Open & Snort** | Community Free Rules | **$0 CLP** | Base de firmas para detección de SQLi y exploits. |
 | **pfBlockerNG + MaxMind** | GPLv3 / GeoLite2 Free | **$0 CLP** | Bloqueo perimetral por GeoIP y feeds de amenazas. |

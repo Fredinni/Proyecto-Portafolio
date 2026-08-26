@@ -215,7 +215,7 @@ def build_ip_problems_pdf(output_filename: str):
     story.append(Paragraph("1. PREMISA DE ARQUITECTURA DE COSTO CERO ($0 CLP)", h1_style))
     story.append(Paragraph("El proyecto <b>KRONOS SENTINEL</b> ha sido diseñado bajo una estricta directriz de costo cero ($0 CLP), aprovechando recursos comunitarios y capas gratuitas de computación e Inteligencia Artificial:", body_style))
     story.append(Paragraph("• <b>Google Gemini Live API Flash 3.1:</b> Capa gratuita de Google AI Studio para streaming de audio bidireccional.<br/>"
-                           "• <b>pfSense CE 2.7.2 & FreeBSD 14:</b> Sistema operativo y firewall perimetral Open Source ($0).<br/>"
+                           "• <b>pfSense CE 2.9.0 & FreeBSD 14:</b> Sistema operativo y firewall perimetral Open Source ($0).<br/>"
                            "• <b>Suricata 7.x & ET Open:</b> Motor de prevención de intrusiones y firmas comunitarias ($0).<br/>"
                            "• <b>Asterisk 20 LTS PBX & HAProxy:</b> Telefonía VoIP y balanceo inverso en contenedores Docker ($0).<br/>"
                            "• <b>Tailscale Free Community:</b> Red mesh WireGuard Zero Trust gratuita hasta 100 nodos ($0).<br/>"

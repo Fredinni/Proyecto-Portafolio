@@ -202,7 +202,7 @@ def build_technologies_pdf(output_filename: str):
     story.append(HRFlowable(width="100%", thickness=1, color=CYAN_ACCENT, spaceAfter=6))
 
     story.append(Paragraph("1. CAPA PERIMETRAL &amp; KERNEL DE FREEBSD", h1_style))
-    story.append(Paragraph("<b>1.1 pfSense CE 2.7.2 &amp; Packet Filter (pf):</b><br/>"
+    story.append(Paragraph("<b>1.1 pfSense CE 2.9.0 &amp; Packet Filter (pf):</b><br/>"
                            "pfSense CE es la distribución de seguridad perimetral basada en FreeBSD 14. El subsistema <code>pf(4)</code> gestiona la inspección de estados en memoria (SPI). Utiliza <b>Tablas pf</b> (estructuras <code>struct pfr_ktable</code> en C) indexadas mediante árboles binarios Radix con tiempo de búsqueda atómico $O(1)$. Administra la tabla <code>&lt;snort2c&gt;</code> para el bloqueo instantáneo en memoria sin costo computacional. <i>(100% Open Source FreeBSD, $0 CLP)</i>.", body_style))
 
     story.append(Paragraph("<b>1.2 Suricata 7.x en Modo Inline IPS (Netmap Engine):</b><br/>"
@@ -253,7 +253,7 @@ def build_technologies_pdf(output_filename: str):
     
     mat_table_data = [
         [Paragraph("<b>Tecnología</b>", body_style), Paragraph("<b>Rol en KRONOS</b>", body_style), Paragraph("<b>Licencia / Modelo</b>", body_style), Paragraph("<b>Costo</b>", body_style)],
-        [Paragraph("<b>pfSense CE 2.7.2</b>", body_style), Paragraph("Firewall L2-L4, VLANs y tabla snort2c", body_style), Paragraph("FreeBSD Open Source", body_style), Paragraph("<b>$0 CLP</b>", body_style)],
+        [Paragraph("<b>pfSense CE 2.9.0</b>", body_style), Paragraph("Firewall L2-L4, VLANs y tabla snort2c", body_style), Paragraph("FreeBSD Open Source", body_style), Paragraph("<b>$0 CLP</b>", body_style)],
         [Paragraph("<b>Suricata 7.x</b>", body_style), Paragraph("Inline Netmap IPS y Drop atómico", body_style), Paragraph("GPLv2 Open Source", body_style), Paragraph("<b>$0 CLP</b>", body_style)],
         [Paragraph("<b>Reglas ET Open</b>", body_style), Paragraph("Firmas L7 SQLi y Exploits", body_style), Paragraph("Community Free Rules", body_style), Paragraph("<b>$0 CLP</b>", body_style)],
         [Paragraph("<b>pfBlockerNG</b>", body_style), Paragraph("GeoIP MaxMind y Threat Feeds", body_style), Paragraph("GPLv3 / GeoLite2 Free", body_style), Paragraph("<b>$0 CLP</b>", body_style)],

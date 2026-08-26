@@ -51,7 +51,7 @@ class NumberedCanvas(canvas.Canvas):
             
             self.setFont("Helvetica", 7.5)
             self.setFillColor(TEXT_MUTED)
-            self.drawString(130, 762, "//  pfSense CE 2.7.2 & Netmap IPS Engineering Manual")
+            self.drawString(130, 762, "//  pfSense CE 2.9.0 & Netmap IPS Engineering Manual")
             
             self.setFont("Helvetica-Bold", 7.5)
             self.setFillColor(TEXT_LIGHT)
@@ -210,7 +210,7 @@ def build_pfsense_pdf_manual(output_filename: str):
     story.append(Spacer(1, 8))
     story.append(Paragraph("KRONOS <font color='#00E5FF'>SENTINEL</font>", title_style))
     story.append(Spacer(1, 6))
-    story.append(Paragraph("MANUAL MAESTRO DE CONFIGURACIÓN Y HARDENING PERIMETRAL<br/>FIREWALL pfSense CE 2.7.2 &amp; SUB-SISTEMA pfctl / SURICATA IPS", subtitle_style))
+    story.append(Paragraph("MANUAL MAESTRO DE CONFIGURACIÓN Y HARDENING PERIMETRAL<br/>FIREWALL pfSense CE 2.9.0 &amp; SUB-SISTEMA pfctl / SURICATA IPS", subtitle_style))
     story.append(Spacer(1, 14))
     
     # Shield Logo
@@ -226,7 +226,7 @@ def build_pfsense_pdf_manual(output_filename: str):
         [Paragraph("<b>PROYECTO:</b>", body_style), Paragraph("KRONOS SENTINEL (APT122 - Portafolio de Título)", body_style)],
         [Paragraph("<b>AUTOR:</b>", body_style), Paragraph("Bruno Urrea Ortiz (Futuro Ing. en Conectividad y Redes)", body_style)],
         [Paragraph("<b>INSTITUCIÓN:</b>", body_style), Paragraph("Duoc UC — Sede San Joaquín", body_style)],
-        [Paragraph("<b>SISTEMA BASE:</b>", body_style), Paragraph("FreeBSD 14.0-CURRENT / pfSense CE 2.7.2 (amd64)", body_style)],
+        [Paragraph("<b>SISTEMA BASE:</b>", body_style), Paragraph("FreeBSD 14.0-CURRENT / pfSense CE 2.9.0 (amd64)", body_style)],
         [Paragraph("<b>ARQUITECTURA:</b>", body_style), Paragraph("Inline Netmap IPS + HAProxy SSL + pfBlockerNG + Gemini Live Flash 3.1", body_style)],
         [Paragraph("<b>ESTADO:</b>", body_style), Paragraph("<font color='#00E5FF'><b>PROTOTIPO FUNCIONAL EN DESARROLLO Y VALIDACIÓN (PORTAFOLIO DE TÍTULO)</b></font>", body_style)]
     ]
