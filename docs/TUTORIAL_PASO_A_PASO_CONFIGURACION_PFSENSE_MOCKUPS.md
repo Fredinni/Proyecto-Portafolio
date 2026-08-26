@@ -1,9 +1,10 @@
-# TUTORIAL PASO A PASO: CONFIGURACIÓN MAESTRA DE pfSense CE 2.9.0
-## Simulación Visual de WebGUI y Parámetros Oficiales para KRONOS SENTINEL
+# MANUAL MAESTRO DE CONFIGURACIÓN PASO A PASO: pfSense CE 2.9.0
+## Blueprint Visual Completo, Simulación WebGUI y Parámetros Oficiales de Laboratorio
 **Autor:** Bruno Urrea Ortiz | Especialidad en Conectividad, Redes y Ciberseguridad  
 **Institución:** Escuela de Informática y Telecomunicaciones — Duoc UC Sede San Joaquín  
 **Proyecto:** Portafolio de Título (APT122) — Arquitectura de Costo Cero ($0 CLP)  
-**Entorno de Validación:** FreeBSD 14.0-CURRENT / pfSense CE 2.9.0 (amd64)
+**Sistema Base:** FreeBSD 14.0-CURRENT / pfSense CE 2.9.0 (amd64)  
+**Clasificación:** Manual Técnico de Laboratorio y Guía Paso a Paso de Despliegue
 
 ---
 
@@ -13,13 +14,73 @@
 
 ---
 
-## 📌 GUÍA TÉCNICA Y BLUEPRINT VISUAL DE CONFIGURACIÓN
+## 📌 ESTRUCTURA METODOLÓGICA DEL TUTORIAL
 
-Este documento constituye la guía oficial y tutorial paso a paso para reproducir la configuración exacta del firewall **pfSense CE 2.9.0** en el laboratorio de titulación. Cada paso incluye el **árbol de navegación oficial**, la **representación visual de la interfaz WebGUI** y los **valores obligatorios de cada campo**.
+Este documento constituye la guía oficial y exhaustiva para el despliegue del firewall **pfSense CE 2.9.0** en el proyecto **KRONOS SENTINEL**. Cada módulo incluye el árbol de navegación oficial, los parámetros técnicos requeridos por las mejores prácticas de Netgate/FreeBSD y la **simulación visual de los formularios WebGUI**.
 
 ---
 
-### PASO 1: CONFIGURACIÓN DE TRONCAL 802.1Q Y CREACIÓN DE VLANs
+# FASE 1: SETUP INICIAL, HARDWARE TUNING & NETWORKING BASE
+
+---
+
+### PASO 1.1: CONFIGURACIÓN GENERAL DEL SISTEMA Y SERVIDORES DNS
+
+**Ruta en WebGUI:** `System > General Setup`
+
+```text
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ pfSense WebGUI: System / General Setup                                                           │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Hostname:             [ kronos-fw                                                              ] │
+│ Domain:               [ kronos.local                                                           ] │
+│                                                                                                  │
+│ --- DNS SERVER SETTINGS ---                                                                      │
+│ DNS Server 1:         [ 1.1.1.1                    ] Gateway: [ none (WAN_DHCP)              ▼ ] │
+│ DNS Server 2:         [ 8.8.8.8                    ] Gateway: [ none (WAN_DHCP)              ▼ ] │
+│ DNS Server Override:  [ ] Allow DNS server list to be overridden by DHCP/PPP on WAN             │
+│ DNS Resolution Behavior:[ Use local DNS (127.0.0.1), fall back to remote DNS Servers         ▼ ] │
+│                                                                                                  │
+│ --- TIME CONFIGURATION ---                                                                       │
+│ Timezone:             [ America/Santiago (Chile Standard Time)                                 ▼ ] │
+│ NTP Time Server:      [ 0.south-america.pool.ntp.org                                           ] │
+│                                                                                                  │
+│                       [ Save ]   [ Apply Changes ]                                               │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### PASO 1.2: HARDWARE OFFLOADING TUNING (CRÍTICO PARA NETMAP INLINE IPS)
+
+> [!IMPORTANT]
+> Para garantizar la estabilidad del framework `netmap(4)` en modo **Inline IPS** y evitar colisiones con los ring buffers de la tarjeta de red, la documentación oficial de Netgate exige **desactivar todo el offloading de hardware** en el kernel de FreeBSD.
+
+**Ruta en WebGUI:** `System > Advanced > Networking` ➔ Sección **Network Interfaces**
+
+```text
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ pfSense WebGUI: System / Advanced / Networking                                                   │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ --- HARDWARE CHECKSUM OFFLOADING ---                                                             │
+│ Hardware Checksum Offload:      [X] Disable hardware checksum offload                            │
+│                                     (Checking this option disables hardware checksum calculation) │
+│                                                                                                  │
+│ --- HARDWARE TCP SEGMENTATION ---                                                                │
+│ Hardware TCP Segmentation:      [X] Disable hardware TCP segmentation offload (TSO)              │
+│                                     (Mandatory for Suricata Netmap Inline packet interception)   │
+│                                                                                                  │
+│ --- HARDWARE LARGE RECEIVE ---                                                                   │
+│ Hardware Large Receive Offload:  [X] Disable hardware large receive offload (LRO)                │
+│                                     (Prevents driver-level packet aggregation before IPS)        │
+│                                                                                                  │
+│                       [ Save ]   [ Apply Changes ]                                               │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### PASO 1.3: CREACIÓN DE TRONCAL 802.1Q Y VLANs
 
 **Ruta en WebGUI:** `Interfaces > Assignments > VLANs` ➔ `[ + Add ]`
 
@@ -27,33 +88,69 @@ Este documento constituye la guía oficial y tutorial paso a paso para reproduci
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
 │ pfSense WebGUI: Interfaces / VLANs / Edit                                                        │
 ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ Parent Interface:     [ vtnet1 (LAN Trunk Physical Interface)                                 ▼ ] │
+│ Parent Interface:     [ vtnet1 (LAN Trunk Physical Adapter)                                   ▼ ] │
 │ VLAN Tag:             [ 10                                                                      ] │
-│ VLAN Priority:        [ 0                                                                       ] │
+│ VLAN Priority:        [ 0 (Best Effort)                                                         ] │
 │ Description:          [ VLAN_10_CORP_INTERNAL                                                   ] │
 │                                                                                                  │
 │                       [ Save ]   [ Apply Changes ]                                               │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-* **Repetir para todas las subredes del proyecto:**
-  * **VLAN 10 (Corporativa):** Tag `10` | Parent `vtnet1` | Asignación: `LAN_CORP` (`192.168.10.1/24`)
-  * **VLAN 20 (DMZ Web):** Tag `20` | Parent `vtnet1` | Asignación: `DMZ_SERVERS` (`192.168.20.1/24`)
-  * **VLAN 30 (Telefonía VoIP):** Tag `30` | Parent `vtnet1` | Asignación: `VOIP_PBX` (`192.168.30.1/24`)
-  * **VLAN 99 (Administración):** Tag `99` | Parent `vtnet1` | Asignación: `MGMT_SEC` (`192.168.99.1/24`)
+* **Tabla de Asignación de Tags VLAN:**
+  1. **VLAN 10:** Tag `10` | Parent `vtnet1` | Descripción: `VLAN_10_CORP`
+  2. **VLAN 20:** Tag `20` | Parent `vtnet1` | Descripción: `VLAN_20_DMZ_SERVERS`
+  3. **VLAN 30:** Tag `30` | Parent `vtnet1` | Descripción: `VLAN_30_VOIP_PBX`
+  4. **VLAN 99:** Tag `99` | Parent `vtnet1` | Descripción: `VLAN_99_MGMT_SEC`
 
 ---
 
-### PASO 2: SERVIDOR DHCP Y RESERVAS ESTÁTICAS DE IP (DVWA Y ASTERISK)
+### PASO 1.4: ASIGNACIÓN DE INTERFACES Y DIRECCIONAMIENTO IP ESTÁTICO
 
-**Ruta en WebGUI:** `Services > DHCP Server > [DMZ_SERVERS]`
+**Ruta en WebGUI:** `Interfaces > Assignments` ➔ Asignar cada puerto y configurar IP fija:
+
+```text
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ pfSense WebGUI: Interfaces / DMZ_SERVERS (vtnet1.20)                                             │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Enable:               [X] Enable interface                                                       │
+│ Description:          [ DMZ_SERVERS                                                            ] │
+│ IPv4 Configuration:   [ Static IPv4                                                            ▼ ] │
+│ IPv4 Address:         [ 192.168.20.1               ] / [ 24                                    ▼ ] │
+│ IPv4 Upstream Gateway:[ None                                                                   ▼ ] │
+│                                                                                                  │
+│ --- WAN SPECIFIC SETTINGS (Interfaces > WAN vtnet0) ---                                          │
+│ Block Private Networks:[ ] Block private networks and loopback addresses (Desmarcar para Lab)    │
+│ Block Bogon Networks:  [ ] Block bogon networks (Desmarcar para reenvío en Lab/Tethering)        │
+│                                                                                                  │
+│                       [ Save ]   [ Apply Changes ]                                               │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+* **Matriz de Direccionamiento IP por Interfaz:**
+  * **WAN (`vtnet0`):** `198.51.100.1/24` (IP Estática en Lab Dual-Host) o DHCP en red externa.
+  * **LAN_CORP (`vtnet1.10`):** `192.168.10.1/24`
+  * **DMZ_SERVERS (`vtnet1.20`):** `192.168.20.1/24`
+  * **VOIP_PBX (`vtnet1.30`):** `192.168.30.1/24`
+  * **MGMT_SEC (`vtnet1.99`):** `192.168.99.1/24`
+
+---
+
+# FASE 2: SERVICIOS DHCP Y RESERVAS ESTÁTICAS DE INFRAESTRUCTURA
+
+---
+
+### PASO 2.1: SERVIDOR DHCP Y RESERVA FIJA PARA EL SERVIDOR WEB DMZ (DVWA)
+
+**Ruta en WebGUI:** `Services > DHCP Server > DMZ_SERVERS`
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
 │ pfSense WebGUI: Services / DHCP Server / DMZ_SERVERS                                             │
 ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
 │ Enable:               [X] Enable DHCP server on DMZ_SERVERS interface                            │
-│ Subnet:               192.168.20.0 / Subnet Mask: 255.255.255.0 / Available Range: .1 to .254    │
+│ Subnet:               192.168.20.0 / Subnet Mask: 255.255.255.0                                  │
+│ Available Range:      192.168.20.1 - 192.168.20.254                                              │
 │ Range:                From: [ 192.168.20.100       ] To: [ 192.168.20.199       ]                │
 │ DNS Servers:          [ 192.168.20.1               ] [ 1.1.1.1                  ]                │
 │ Gateway:              [ 192.168.20.1               ]                                             │
@@ -68,12 +165,65 @@ Este documento constituye la guía oficial y tutorial paso a paso para reproduci
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-* **Reserva en VLAN 30 VoIP (`Services > DHCP Server > VOIP_PBX`):**
-  * MAC Address: `02:42:c0:a8:1e:32` | IP Address: `192.168.30.50` | Hostname: `asterisk-pbx-core`
+---
+
+### PASO 2.2: SERVIDOR DHCP Y RESERVA FIJA PARA CENTRALITA ASTERISK PBX
+
+**Ruta en WebGUI:** `Services > DHCP Server > VOIP_PBX`
+
+```text
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ pfSense WebGUI: Services / DHCP Server / VOIP_PBX                                                │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Enable:               [X] Enable DHCP server on VOIP_PBX interface                               │
+│ Range:                From: [ 192.168.30.100       ] To: [ 192.168.30.199       ]                │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ DHCP Static Mappings (Reserva Fija para Asterisk PBX Core):                                      │
+│   • MAC Address:      [ 02:42:c0:a8:1e:32          ]                                             │
+│   • IP Address:       [ 192.168.30.50              ]                                             │
+│   • Hostname:         [ asterisk-pbx-core          ]                                             │
+│   • Description:      [ Centralita Telefonica SIP/PJSIP y Auto-Dialer SOAR ]                     │
+│                                                                                                  │
+│                       [ Save ]   [ Apply Changes ]                                               │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-### PASO 3: SURICATA 7.X — MODO INLINE IPS NETMAP Y TELEMETRÍA EVE JSON
+# FASE 3: SURICATA 7.X — PREVENCIÓN EN KERNEL (NETMAP INLINE IPS)
+
+---
+
+### PASO 3.1: INSTALACIÓN DEL PAQUETE SURICATA
+
+**Ruta en WebGUI:** `System > Package Manager > Available Packages` ➔ Buscar `suricata` ➔ `[ + Install ]`
+
+---
+
+### PASO 3.2: CONFIGURACIÓN GLOBAL DE REGLAS (ET OPEN & SNORT COMMUNITY)
+
+**Ruta en WebGUI:** `Services > Suricata > Global Settings`
+
+```text
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ pfSense WebGUI: Services / Suricata / Global Settings                                            │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ --- RULESETS SUBSCRIPTION ($0 COST COMMUNITY EDITIONS) ---                                       │
+│ Install ETOpen Rules: [X] Install Emerging Threats Open rules (Free Community Ruleset)           │
+│ Install Snort Rules:  [X] Install Snort Community rules (Free Cisco Talos Community)             │
+│ Snort Oinkmaster Code:[ none (Not required for Snort Community Free Tier)                      ] │
+│                                                                                                  │
+│ --- AUTOMATIC UPDATES & LIVE SWAP ---                                                            │
+│ Update Interval:      [ 12 Hours                                                               ▼ ] │
+│ Live Rule Swap:       [X] Live rule swap on update (Zero downtime inspection)                    │
+│                                                                                                  │
+│                       [ Save ]                                                                   │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### PASO 3.3: CONFIGURACIÓN DE LA INTERFAZ WAN EN MODO INLINE IPS (NETMAP)
 
 **Ruta en WebGUI:** `Services > Suricata > Interfaces > Edit [WAN]`
 
@@ -81,7 +231,7 @@ Este documento constituye la guía oficial y tutorial paso a paso para reproduci
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
 │ pfSense WebGUI: Services / Suricata / Interfaces / WAN Settings                                  │
 ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ Enable Interface:     [X] Enable Suricata inspection on this interface                           │
+│ Enable:               [X] Enable Suricata inspection on this interface                           │
 │ Interface:            [ WAN (vtnet0)                                                           ▼ ] │
 │ Description:          [ WAN External Perimeter Inspection                                       ] │
 │                                                                                                  │
@@ -95,6 +245,7 @@ Este documento constituye la guía oficial y tutorial paso a paso para reproduci
 │ EVE Output Type:      (X) FILE   ( ) SYSLOG                                                      │
 │ EVE Log Alerts:       [X] Alert events (essential for pfctl Engine)                              │
 │ EVE Log HTTP:         [X] Extended HTTP metadata (URI, User-Agent, POST payload)                 │
+│ EVE Log TLS:          [X] TLS/SSL handshake metadata                                             │
 │ EVE Log File:         /var/log/suricata/eve.json                                                 │
 │                                                                                                  │
 │                       [ Save ]   [ Apply Changes ]                                               │
@@ -103,7 +254,7 @@ Este documento constituye la guía oficial y tutorial paso a paso para reproduci
 
 ---
 
-### PASO 4: GESTIÓN DE FIRMAS ET OPEN Y POLÍTICA ATÓMICA `dropsid.conf`
+### PASO 3.4: GESTIÓN DE FIRMAS ET OPEN Y POLÍTICA `dropsid.conf`
 
 **Ruta en WebGUI:** `Services > Suricata > SID Mgmt` ➔ `Enable Automatic SID Management`
 
@@ -114,7 +265,7 @@ Este documento constituye la guía oficial y tutorial paso a paso para reproduci
 │ Automatic SID Mgmt:   [X] Enable Automatic SID State Management                                  │
 │                                                                                                  │
 │ Drop SID List:        [ dropsid.conf                                                           ▼ ] │
-│ Content of dropsid:                                                                              │
+│ Edit dropsid.conf:                                                                               │
 │   pcre:emerging-sql                                                                              │
 │   pcre:emerging-exploit                                                                          │
 │   pcre:emerging-current_events                                                                   │
@@ -129,7 +280,11 @@ Este documento constituye la guía oficial y tutorial paso a paso para reproduci
 
 ---
 
-### PASO 5: pfBlockerNG-devel — GEOIP MAXMIND Y LISTAS DE REPUTACIÓN IP
+# FASE 4: INTELIGENCIA DE AMENAZAS CON pfBlockerNG-devel Y MAXMIND GEOIP
+
+---
+
+### PASO 4.1: CONFIGURACIÓN DE MAXMIND GEOIP FREE TIER
 
 **Ruta en WebGUI:** `Firewall > pfBlockerNG > IP > GeoIP`
 
@@ -145,10 +300,28 @@ Este documento constituye la guía oficial y tutorial paso a paso para reproduci
 │ Action:               ( ) Disabled   ( ) Permit   (X) Deny Inbound   ( ) Deny Both               │
 │ Logging:              [X] Enable pfBlockerNG log (/var/log/pfblockerng/ip_block.log)             │
 │                                                                                                  │
-│ --- IP THREAT FEEDS (FireHOL L1 & Spamhaus DROP) ---                                             │
-│ Feed 1: FireHOL_L1    URL: https://iplists.firehol.org/files/firehol_level1.netset | Action: Deny│
-│ Feed 2: Spamhaus_DROP URL: https://www.spamhaus.org/drop/drop.txt                   | Action: Deny│
+│                       [ Save ]   [ Apply Changes ]                                               │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### PASO 4.2: FEEDS DE REPUTACIÓN IP GLOBALES (FireHOL & Spamhaus)
+
+**Ruta en WebGUI:** `Firewall > pfBlockerNG > IP > IP Feeds` ➔ `[ + Add ]`
+
+```text
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ pfSense WebGUI: Firewall / pfBlockerNG / IP / IP Feeds / Edit                                    │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Group Name:           [ FireHOL_Level1                                                         ] │
+│ Description:          [ Listas de Maxima Amenaza C2, Botnets y Scanners Activos                ] │
+│ State:                [ ON                                                                     ▼ ] │
+│                                                                                                  │
+│ Source URL:           [ https://iplists.firehol.org/files/firehol_level1.netset                ] │
+│ List Action:          [ Deny Inbound                                                           ▼ ] │
 │ Update Frequency:     [ Every 4 Hours                                                          ▼ ] │
+│ Automatic Rule Order: [ | pfB_Block (Floating Rules Top Priority)                              ▼ ] │
 │                                                                                                  │
 │                       [ Save ]   [ Apply Changes ]                                               │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
@@ -156,7 +329,39 @@ Este documento constituye la guía oficial y tutorial paso a paso para reproduci
 
 ---
 
-### PASO 6: HAPROXY 2.8+ — FRONTEND SSL Y STICK-TABLES ANTI-FUZZING
+# FASE 5: PROXY INVERSO HAPROXY 2.8+ Y PROTECCIÓN ANTI-DOS / FUZZING
+
+---
+
+### PASO 5.1: CONFIGURACIÓN DEL BACKEND (DVWA EN DMZ)
+
+**Ruta en WebGUI:** `Services > HAProxy > Backend` ➔ `[ + Add ]`
+
+```text
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ pfSense WebGUI: Services / HAProxy / Backend / Edit: DVWA_DMZ_POOL                               │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Name:                 [ DVWA_DMZ_POOL                                                          ] │
+│ Server list:                                                                                     │
+│   • Mode:             [ active                                                                 ▼ ] │
+│   • Name:             [ dvwa-target                                                            ] │
+│   • Forward to:       [ Address+Port                                                           ▼ ] │
+│   • Address:          [ 192.168.20.50                                                          ] │
+│   • Port:             [ 80                                                                     ] │
+│   • SSL:              [ ] Encrypt connection to backend (HTTP Plano en DMZ interna)              │
+│                                                                                                  │
+│ --- HEALTH CHECKING ---                                                                          │
+│ Health check method:  [ HTTP                                                                   ▼ ] │
+│ HTTP check URI:       [ /index.php                                                             ] │
+│ Check frequency:      [ 2000 ms                                                                ] │
+│                                                                                                  │
+│                       [ Save ]   [ Apply Changes ]                                               │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### PASO 5.2: CONFIGURACIÓN DEL FRONTEND SSL Y STICK-TABLES DE RATE LIMITING
 
 **Ruta en WebGUI:** `Services > HAProxy > Frontend` ➔ `[ + Add ]`
 
@@ -170,14 +375,13 @@ Este documento constituye la guía oficial y tutorial paso a paso para reproduci
 │ Type:                 ( ) HTTP / HTTPS (offloading)   (X) SSL / HTTPS offloading                 │
 │ SSL Offloading Cert:  [ KRONOS_LAB_SELF_SIGNED_CERT (RSA 2048 / SHA256)                         ▼ ] │
 │                                                                                                  │
-│ --- ADVANCED STICK TABLES & RATE LIMITING ---                                                    │
+│ --- ADVANCED STICK TABLES & RATE LIMITING (Pass thru) ---                                        │
 │ Advanced pass thru:   stick-table type ip size 100k expire 30s store http_req_rate(10s),http_err_rate(10s)│
 │                       http-request track-sc0 src                                                 │
 │                       http-request deny deny_status 429 if { sc_http_req_rate(0) gt 100 }        │
 │                       http-request deny deny_status 403 if { sc_http_err_rate(0) gt 25 }         │
 │                                                                                                  │
 │ Default Backend:      [ DVWA_DMZ_POOL                                                          ▼ ] │
-│                       Address: 192.168.20.50 | Port: 80 | Health Check: HTTP GET /index.php      │
 │                                                                                                  │
 │                       [ Save ]   [ Apply Changes ]                                               │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
@@ -185,9 +389,31 @@ Este documento constituye la guía oficial y tutorial paso a paso para reproduci
 
 ---
 
-### PASO 7: MATRIZ DE REGLAS DE FIREWALL ZERO TRUST
+# FASE 6: MATRIZ DE REGLAS DE FIREWALL ZERO TRUST
 
-**Ruta en WebGUI:** `Firewall > Rules > [WAN / DMZ_SERVERS / VOIP_PBX]`
+---
+
+### PASO 6.1: REGLAS EN INTERFAZ WAN (ACCESO A HAPROXY)
+
+**Ruta en WebGUI:** `Firewall > Rules > WAN`
+
+```text
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ pfSense WebGUI: Firewall / Rules / WAN                                                           │
+├──────┬─────────┬──────────────┬───────────────┬────────────────┬───────────────┬─────────────────┤
+│ Act  │ Proto   │ Source       │ Port          │ Destination    │ Port          │ Description     │
+├──────┼─────────┼──────────────┼───────────────┼────────────────┼───────────────┼─────────────────┤
+│ PASS │ IPv4    │ *            │ *             │ WAN address    │ 443 (HTTPS)   │ HAProxy VIP     │
+│ PASS │ IPv4    │ *            │ *             │ WAN address    │ 80 (HTTP)     │ Redirect HTTP   │
+│ DROP │ IPv4    │ *            │ *             │ *              │ *             │ Default Block   │
+└──────┴─────────┴──────────────┴───────────────┴────────────────┴───────────────┴─────────────────┘
+```
+
+---
+
+### PASO 6.2: REGLAS EN INTERFAZ DMZ_SERVERS (AISLAMIENTO RIGUROSO)
+
+**Ruta en WebGUI:** `Firewall > Rules > DMZ_SERVERS`
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -204,7 +430,11 @@ Este documento constituye la guía oficial y tutorial paso a paso para reproduci
 
 ---
 
-### PASO 8: TAILSCALE SUBNET ROUTER PARA TELEFONÍA ASTERISK PBX
+# FASE 7: ENLACE ZERO TRUST CON TAILSCALE SUBNET ROUTER (VOIP PBX)
+
+---
+
+### PASO 7.1: CONFIGURACIÓN DEL SERVICIO TAILSCALE EN pfSense
 
 **Ruta en WebGUI:** `VPN > Tailscale`
 
@@ -224,21 +454,27 @@ Este documento constituye la guía oficial y tutorial paso a paso para reproduci
 
 ---
 
-### PASO 9: VERIFICACIÓN EN CONSOLA FREEBSD (CLI DE DIAGNÓSTICO)
+# FASE 8: VERIFICACIÓN Y DIAGNÓSTICO EN CONSOLA FREEBSD
 
-Acceder por SSH al firewall (`ssh admin@192.168.99.1`):
+Acceder mediante sesión SSH administrativa (`ssh admin@192.168.99.1`):
 
 ```bash
-# 1. Comprobar que Suricata está capturando en modo netmap:
+# 1. Comprobar que Suricata está ejecutando en hilos Netmap:
 ps aux | grep suricata
 netstat -i
 
-# 2. Monitorear eventos EVE JSON en tiempo real:
+# 2. Monitorear eventos EVE JSON en tiempo real con jq:
 tail -f /var/log/suricata/eve.json | jq '{timestamp, src_ip, dest_ip, alert: .alert.signature}'
 
-# 3. Comprobar la tabla atómica de bloqueo en memoria del kernel:
+# 3. Comprobar la tabla de persistencia en kernel de FreeBSD (snort2c):
 pfctl -t snort2c -T show
 
-# 4. Probar atómicamente si una IP atacante está bloqueada:
+# 4. Probar atómicamente si una IP atacante está bloqueada en memoria:
 pfctl -t snort2c -T test 198.51.100.100
+
+# 5. Forzar la inserción manual de una IP en la tabla de kernel:
+pfctl -t snort2c -T add 198.51.100.100
+
+# 6. Eliminar los estados TCP/UDP activos asociados a la IP hostil:
+pfctl -k 198.51.100.100
 ```
