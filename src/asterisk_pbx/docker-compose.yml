@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  kronos_asterisk:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kronos_asterisk_pbx
+    restart: unless-stopped
+    network_mode: "host" # Para evitar problemas de NAT en RTP y SIP
+    environment:
+      - TZ=America/Santiago
+    volumes:
+      - ./pjsip.conf:/etc/asterisk/pjsip.conf:ro
+      - ./extensions.conf:/etc/asterisk/extensions.conf:ro
+      - ./rtp.conf:/etc/asterisk/rtp.conf:ro
+      - ./gemini_audio_bridge.py:/usr/local/bin/gemini_audio_bridge.py:ro
+      - asterisk_spool:/var/spool/asterisk/outgoing
+      - asterisk_logs:/var/log/asterisk
+
+volumes:
+  asterisk_spool:
+  asterisk_logs:

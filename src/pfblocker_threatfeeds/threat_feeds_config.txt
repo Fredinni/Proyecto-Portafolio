@@ -1,0 +1,22 @@
+# KRONOS SENTINEL - Feeds de Amenazas e Inteligencia de Reputación IP
+# Listas recomendadas para pfBlockerNG-devel (IPv4 / IPv6)
+
+# 1. FireHOL Level 1 (IPs maliciosas confirmadas, botnets y malware C2)
+URL: https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_level1.netset
+Action: Deny Inbound
+Update Frequency: Every 6 Hours
+
+# 2. Emerging Threats Compromised Hosts List
+URL: https://rules.emergingthreats.net/blockrules/compromised-ips.txt
+Action: Deny Inbound
+Update Frequency: Every 12 Hours
+
+# 3. Spamhaus DROP & EDROP (Don't Route Or Peer Lists)
+URL: https://www.spamhaus.org/drop/drop.txt
+Action: Deny Both
+Update Frequency: Daily
+
+# 4. AbuseIPDB Top 100% Malicious IPs Feed
+URL: https://api.abuseipdb.com/api/v2/blacklist
+Action: Deny Inbound
+Update Frequency: Daily

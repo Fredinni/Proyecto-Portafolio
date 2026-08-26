@@ -1,0 +1,25 @@
+# KRONOS SENTINEL Configuration File
+# pfSense + Suricata + pfctl + Asterisk Voice Agent
+
+suricata_eve_path: "/var/log/suricata/eve.json"
+pfctl_table: "snort2c"
+use_ssh: false
+pfsense_host: "192.168.1.1"
+pfsense_user: "admin"
+
+dispatcher_webhook_url: "http://localhost:8080/incident"
+
+confidence_threshold: 0.75
+enable_auto_pfctl_drop: true
+
+geoip:
+  db_path: "/usr/local/share/GeoIP/GeoLite2-City.mmdb"
+  provider: "MaxMind Free Tier"
+
+asterisk:
+  host: "localhost"
+  port: 5038
+  user: "kronos_ami"
+  secret: "KronosSecOps2026!"
+  ciso_extension: "PJSIP/1001" # Anexo Bruno Urrea Ortiz (CISO / SecOps Lead)
+  ciso_phone_number: "+56912345678"
