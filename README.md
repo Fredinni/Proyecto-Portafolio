@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/sentinel_shield_logo.png" alt="KRONOS SENTINEL Logo" width="380px">
+  <video src="assets/kronos_sentinel_intro.mp4" autoplay loop muted playsinline width="100%"></video>
 </p>
 
 <h1 align="center">KRONOS SENTINEL</h1>
@@ -143,7 +143,9 @@ El isotipo corporativo fue diseñado bajo una estética ciberpunk y militar de a
 
 ```bash
 Proyecto-Portafolio/
-├── assets/                                     # Logotipos vectoriales y diagramas ilustrativos de procesos
+├── assets/                                     # Logotipos vectoriales, videos y diagramas de procesos
+│   ├── kronos_sentinel_intro.mp4               # Video cinemático de introducción y activación SOAR (Muted)
+│   ├── kronos_sentinel_intro.gif               # Versión animada GIF de introducción de alta compatibilidad
 │   ├── kronos_sentinel_flow_build.gif          # Animación GIF del flujo construyéndose y nacimiento del logo
 │   ├── sentinel_shield_logo.png                # Isotipo de alta resolución 4K transparente
 │   ├── sentinel_shield_logo.svg                # Isotipo vectorial maestro
