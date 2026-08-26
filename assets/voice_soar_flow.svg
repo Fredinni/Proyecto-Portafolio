@@ -1,0 +1,200 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 750" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGrad2" cx="50%" cy="50%" r="80%">
+      <stop offset="0%" stop-color="#120A24" />
+      <stop offset="60%" stop-color="#080414" />
+      <stop offset="100%" stop-color="#03010A" />
+    </radialGradient>
+
+    <linearGradient id="headerPurple" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8B5CF6" />
+      <stop offset="100%" stop-color="#6D28D9" />
+    </linearGradient>
+    <linearGradient id="headerCyan" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00F5FF" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+    <linearGradient id="headerAmber" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+    <linearGradient id="headerEmerald" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+
+    <!-- Glows -->
+    <filter id="glowCyan" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glowPurple" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Grid -->
+    <pattern id="grid2" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#2E1B4E" stroke-width="0.6" stroke-opacity="0.4" />
+    </pattern>
+
+    <!-- Markers -->
+    <marker id="arrowCyan" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto">
+      <polygon points="0 0, 8 3.5, 0 7" fill="#00F5FF" />
+    </marker>
+    <marker id="arrowPurple" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto">
+      <polygon points="0 0, 8 3.5, 0 7" fill="#A855F7" />
+    </marker>
+    <marker id="arrowAmber" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto">
+      <polygon points="0 0, 8 3.5, 0 7" fill="#F59E0B" />
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto">
+      <polygon points="0 0, 8 3.5, 0 7" fill="#10B981" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1300" height="750" fill="url(#bgGrad2)" />
+  <rect width="1300" height="750" fill="url(#grid2)" />
+
+  <!-- Frame -->
+  <rect x="20" y="20" width="1260" height="710" rx="12" fill="none" stroke="#2D1B4E" stroke-width="1.5" />
+  <rect x="24" y="24" width="1252" height="702" rx="10" fill="none" stroke="#A855F7" stroke-width="0.7" stroke-opacity="0.3" stroke-dasharray="30 60" />
+
+  <!-- ================= BANNER TITLE ================= -->
+  <g transform="translate(650, 52)">
+    <text x="0" y="0" font-family="'Orbitron', 'Segoe UI', sans-serif" font-size="24" font-weight="900" 
+          letter-spacing="5" fill="#FFFFFF" text-anchor="middle">
+      ARQUITECTURA SOAR : AGENTE DE VOZ IA &amp; TELEFON&#205;A ASTERISK
+    </text>
+    <text x="0" y="24" font-family="'Consolas', monospace" font-size="13" font-weight="bold" 
+          letter-spacing="2" fill="#00F5FF" text-anchor="middle" filter="url(#glowCyan)">
+      LLAMADA AUTOM&#193;TICA EN TIEMPO REAL &#8226; GOOGLE GEMINI LIVE FLASH 3.1 &#8226; DEBRIEFING AL CISO
+    </text>
+  </g>
+  <line x1="60" y1="86" x2="1240" y2="86" stroke="#2D1B4E" stroke-width="2" />
+  <line x1="380" y1="86" x2="920" y2="86" stroke="#A855F7" stroke-width="2.5" filter="url(#glowPurple)" />
+
+  <!-- ================= STEP 1: INCIDENT WEBHOOK INGEST ================= -->
+  <g transform="translate(60, 115)">
+    <rect width="360" height="230" rx="10" fill="#170A26" stroke="#A855F7" stroke-width="2" filter="url(#glowPurple)" />
+    <path d="M 0 10 Q 0 0 10 0 L 350 0 Q 360 0 360 10 L 360 38 L 0 38 Z" fill="url(#headerPurple)" />
+    <text x="180" y="25" font-family="'Orbitron', sans-serif" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">1. DISPARO DE WEBHOOK (JSON)</text>
+
+    <text x="16" y="66" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#D8B4FE">Emisor: Motor pfctl (Puerto 5000)</text>
+    <text x="28" y="86" font-family="'Consolas', monospace" font-size="12" fill="#CBD5E1">POST http://127.0.0.1:5000/incident</text>
+
+    <text x="16" y="114" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#38BDF8">Carga T&#225;ctica en Payload:</text>
+    <text x="28" y="134" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#E2E8F0">&#8226; IP Atacante + País GeoIP MaxMind</text>
+    <text x="28" y="154" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#E2E8F0">&#8226; Vector SQLi + Regla Suricata SID</text>
+    <text x="28" y="174" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#E2E8F0">&#8226; Estado de Bloqueo en Tabla snort2c</text>
+
+    <rect x="16" y="190" width="328" height="26" rx="4" fill="#2E124D" stroke="#A855F7" stroke-width="1" />
+    <text x="180" y="208" font-family="'Consolas', monospace" font-size="11.5" font-weight="bold" fill="#E9D5FF" text-anchor="middle">&#9679; DESPACHO INMEDIATO: &lt; 50ms</text>
+  </g>
+
+  <!-- Arrow 1 -> 2 -->
+  <path d="M 420 230 L 480 230" stroke="#A855F7" stroke-width="3.5" fill="none" marker-end="url(#arrowPurple)" filter="url(#glowPurple)" />
+
+  <!-- ================= STEP 2: ASTERISK PBX & AMI DIALER ================= -->
+  <g transform="translate(480, 115)">
+    <rect width="360" height="230" rx="10" fill="#1C1405" stroke="#F59E0B" stroke-width="2" />
+    <path d="M 0 10 Q 0 0 10 0 L 350 0 Q 360 0 360 10 L 360 38 L 0 38 Z" fill="url(#headerAmber)" />
+    <text x="180" y="25" font-family="'Orbitron', sans-serif" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">2. ASTERISK PBX &amp; AUTO-DIAL</text>
+
+    <text x="16" y="66" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#FBBF24">Asterisk Manager Interface (AMI):</text>
+    <text x="28" y="86" font-family="'Consolas', monospace" font-size="12" fill="#FDE68A">Action: Originate</text>
+    <text x="28" y="104" font-family="'Consolas', monospace" font-size="12" fill="#CBD5E1">Channel: PJSIP/1001 (CISO Mobile)</text>
+    <text x="28" y="122" font-family="'Consolas', monospace" font-size="12" fill="#CBD5E1">Context: kronos-incident</text>
+    <text x="28" y="140" font-family="'Consolas', monospace" font-size="12" fill="#CBD5E1">Exten: 1000 (Agente de Voz IA)</text>
+
+    <rect x="16" y="165" width="328" height="50" rx="5" fill="#332005" stroke="#F59E0B" stroke-width="1.2" />
+    <text x="180" y="184" font-family="'Consolas', monospace" font-size="11.5" font-weight="bold" fill="#FBBF24" text-anchor="middle">&#128222; REPIQUE TELEF&#211;NICO SIP INMEDIATO</text>
+    <text x="180" y="202" font-family="'Segoe UI', sans-serif" font-size="11" fill="#FFFFFF" text-anchor="middle">Anexos: 1001 (Bruno), 1002, 1003, 1004</text>
+  </g>
+
+  <!-- Arrow 2 -> 3 -->
+  <path d="M 840 230 L 900 230" stroke="#10B981" stroke-width="3.5" fill="none" marker-end="url(#arrowGreen)" />
+
+  <!-- ================= STEP 3: CISO PICKUP ================= -->
+  <g transform="translate(900, 115)">
+    <rect width="340" height="230" rx="10" fill="#041A12" stroke="#10B981" stroke-width="2" />
+    <path d="M 0 10 Q 0 0 10 0 L 330 0 Q 340 0 340 10 L 340 38 L 0 38 Z" fill="url(#headerEmerald)" />
+    <text x="170" y="25" font-family="'Orbitron', sans-serif" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">3. ATENCI&#211;N DEL CISO</text>
+
+    <text x="16" y="66" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#34D399">&#128241; Softphone / Canal VoIP Activo</text>
+    <text x="28" y="86" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">CISO atiende la llamada en su dispositivo</text>
+
+    <text x="16" y="114" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#34D399">&#128266; Apertura de Bridge de Audio</text>
+    <text x="28" y="134" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">Audio PCM a 24kHz / 16-bit Mono</text>
+
+    <rect x="16" y="165" width="308" height="50" rx="5" fill="#062E1D" stroke="#10B981" stroke-width="1.2" />
+    <text x="170" y="184" font-family="'Consolas', monospace" font-size="11.5" font-weight="bold" fill="#6EE7B7" text-anchor="middle">&#10004; ENLACE ESTABLECIDO CON IA</text>
+    <text x="170" y="202" font-family="'Segoe UI', sans-serif" font-size="11" fill="#FFFFFF" text-anchor="middle">Se inicia el di&#225;logo en directo</text>
+  </g>
+
+  <!-- Downwards Connectors to Step 4 & Step 5 -->
+  <path d="M 650 345 L 650 415" stroke="#00F5FF" stroke-width="3.5" fill="none" marker-end="url(#arrowCyan)" filter="url(#glowCyan)" />
+
+  <!-- ================= STEP 4: GEMINI LIVE FLASH 3.1 ENGINE ================= -->
+  <g transform="translate(60, 420)">
+    <rect width="680" height="265" rx="10" fill="#081A29" stroke="#00F5FF" stroke-width="2" filter="url(#glowCyan)" />
+    <path d="M 0 10 Q 0 0 10 0 L 670 0 Q 680 0 680 10 L 680 40 L 0 40 Z" fill="url(#headerCyan)" />
+    <text x="340" y="26" font-family="'Orbitron', sans-serif" font-size="15" font-weight="bold" fill="#000000" text-anchor="middle">4. GOOGLE GEMINI LIVE API FLASH 3.1 (VOICE BRIDGE)</text>
+
+    <!-- 2 Sub-panels -->
+    <g transform="translate(16, 55)">
+      <text x="0" y="16" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#38BDF8">&#129302; Streaming Bidireccional WebSocket:</text>
+      <text x="12" y="36" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">&#8226; Audio PCM full-duplex de ultrabaja latencia</text>
+      <text x="12" y="56" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">&#8226; Capacidad de interrupci&#243;n (Barge-in)</text>
+      <text x="12" y="76" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">&#8226; Comprensi&#243;n sem&#225;ntica y contexto t&#225;ctico</text>
+
+      <text x="0" y="106" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#FBBF24">&#128227; Briefing Estructurado de Incidente:</text>
+      <text x="12" y="126" font-family="'Consolas', monospace" font-size="12" fill="#FDE68A">"Alerta Cr&#237;tica: Se neutraliz&#243; un SQLi"</text>
+      <text x="12" y="144" font-family="'Consolas', monospace" font-size="11.5" fill="#94A3B8">IP: 185.220.101.5 (Rusia) &#8226; Bloqueado</text>
+    </g>
+
+    <g transform="translate(360, 55)">
+      <text x="0" y="16" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#34D399">&#128737; Asesor&#237;a y Mitigaciones en Vivo:</text>
+      <text x="12" y="36" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">&#8226; Recomienda aislar subred DMZ</text>
+      <text x="12" y="56" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">&#8226; Verifica si persisten otros vectores</text>
+      <text x="12" y="76" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">&#8226; Responde consultas t&#233;cnicas del CISO</text>
+
+      <rect x="0" y="96" width="295" height="54" rx="5" fill="#031E2B" stroke="#00F5FF" stroke-width="1.2" />
+      <text x="147" y="116" font-family="'Consolas', monospace" font-size="11" font-weight="bold" fill="#00F5FF" text-anchor="middle">LATENCIA DE VOZ: &lt; 800ms</text>
+      <text x="147" y="136" font-family="'Segoe UI', sans-serif" font-size="11" fill="#FFFFFF" text-anchor="middle">Interlocuci&#243;n natural y fluida</text>
+    </g>
+
+    <!-- Bottom summary line -->
+    <rect x="16" y="215" width="648" height="34" rx="4" fill="#051524" stroke="#1E293B" stroke-width="1" />
+    <text x="340" y="236" font-family="'Consolas', monospace" font-size="11.5" font-weight="bold" fill="#38BDF8" text-anchor="middle">INTEGRACI&#211;N: gemini_live_client.py &#8596; gemini_audio_bridge.py (Audio RTP)</text>
+  </g>
+
+  <!-- Arrow Step 4 -> Step 5 -->
+  <path d="M 740 550 L 800 550" stroke="#00F5FF" stroke-width="3.5" fill="none" marker-end="url(#arrowCyan)" filter="url(#glowCyan)" />
+
+  <!-- ================= STEP 5: TACTICAL DECISION & HARDENING ================= -->
+  <g transform="translate(800, 420)">
+    <rect width="440" height="265" rx="10" fill="#1C0F2B" stroke="#A855F7" stroke-width="2" />
+    <path d="M 0 10 Q 0 0 10 0 L 430 0 Q 440 0 440 10 L 440 40 L 0 40 Z" fill="url(#headerPurple)" />
+    <text x="220" y="26" font-family="'Orbitron', sans-serif" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle">5. RESPUESTA T&#193;CTICA DEL CISO</text>
+
+    <text x="16" y="70" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#E9D5FF">Comandos de Mitigaci&#243;n por Voz:</text>
+    <text x="28" y="92" font-family="'Segoe UI', sans-serif" font-size="13" fill="#FFFFFF">&#8226; <tspan fill="#34D399" font-weight="bold">"Confirmar bloqueo permanente en pfBlockerNG"</tspan></text>
+    <text x="28" y="114" font-family="'Segoe UI', sans-serif" font-size="13" fill="#FFFFFF">&#8226; <tspan fill="#38BDF8" font-weight="bold">"Aumentar sensibilidad de reglas en Suricata"</tspan></text>
+    <text x="28" y="136" font-family="'Segoe UI', sans-serif" font-size="13" fill="#FFFFFF">&#8226; <tspan fill="#FBBF24" font-weight="bold">"Enviar reporte forense por email"</tspan></text>
+
+    <!-- Success Outcome Box -->
+    <rect x="16" y="158" width="408" height="85" rx="6" fill="#2E1045" stroke="#A855F7" stroke-width="1.5" />
+    <text x="220" y="180" font-family="'Orbitron', sans-serif" font-size="13" font-weight="bold" fill="#34D399" text-anchor="middle">&#10004; INCIDENTE CONTENIDO EN &lt; 60 SEGUNDOS</text>
+    <text x="220" y="204" font-family="'Segoe UI', sans-serif" font-size="12" fill="#E2E8F0" text-anchor="middle">Cero p&#233;rdida de datos &#8226; Cero tiempo muerto en DMZ</text>
+    <text x="220" y="226" font-family="'Consolas', monospace" font-size="11" font-weight="bold" fill="#00F5FF" text-anchor="middle">TELEMETR&#205;A COMPLETA REGISTRADA EN SIEM / LOGS</text>
+  </g>
+</svg>

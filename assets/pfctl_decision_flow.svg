@@ -1,0 +1,213 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 750" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="80%">
+      <stop offset="0%" stop-color="#0C1626" />
+      <stop offset="60%" stop-color="#060B14" />
+      <stop offset="100%" stop-color="#020408" />
+    </radialGradient>
+
+    <linearGradient id="stepHeaderBlue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0284C7" />
+      <stop offset="100%" stop-color="#0369A1" />
+    </linearGradient>
+    <linearGradient id="stepHeaderAmber" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D97706" />
+      <stop offset="100%" stop-color="#B45309" />
+    </linearGradient>
+    <linearGradient id="stepHeaderCrimson" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E11D48" />
+      <stop offset="100%" stop-color="#BE123C" />
+    </linearGradient>
+    <linearGradient id="stepHeaderEmerald" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="glowCyan" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glowAmber" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glowRed" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Grid -->
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#1E293B" stroke-width="0.6" stroke-opacity="0.4" />
+    </pattern>
+
+    <!-- Markers -->
+    <marker id="arrowCyan" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto">
+      <polygon points="0 0, 8 3.5, 0 7" fill="#00F5FF" />
+    </marker>
+    <marker id="arrowAmber" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto">
+      <polygon points="0 0, 8 3.5, 0 7" fill="#F59E0B" />
+    </marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto">
+      <polygon points="0 0, 8 3.5, 0 7" fill="#FF1E56" />
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto">
+      <polygon points="0 0, 8 3.5, 0 7" fill="#10B981" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1300" height="750" fill="url(#bgGrad)" />
+  <rect width="1300" height="750" fill="url(#grid)" />
+
+  <!-- Frame -->
+  <rect x="20" y="20" width="1260" height="710" rx="12" fill="none" stroke="#1E293B" stroke-width="1.5" />
+  <rect x="24" y="24" width="1252" height="702" rx="10" fill="none" stroke="#00F5FF" stroke-width="0.7" stroke-opacity="0.3" stroke-dasharray="30 60" />
+
+  <!-- ================= BANNER TITLE ================= -->
+  <g transform="translate(650, 52)">
+    <text x="0" y="0" font-family="'Orbitron', 'Segoe UI', sans-serif" font-size="24" font-weight="900" 
+          letter-spacing="5" fill="#FFFFFF" text-anchor="middle">
+      MOTOR pfctl : FILTRADO DE FALSOS POSITIVOS Y VERIFICACI&#211;N EN KERNEL
+    </text>
+    <text x="0" y="24" font-family="'Consolas', monospace" font-size="13" font-weight="bold" 
+          letter-spacing="2" fill="#00F5FF" text-anchor="middle" filter="url(#glowCyan)">
+      DIAGRAMA TE&#211;RICO DE PROCESAMIENTO &#8226; SUPRESI&#211;N &gt;50% DE RUIDO &#8226; VALIDACI&#211;N AT&#211;MICA
+    </text>
+  </g>
+  <line x1="60" y1="86" x2="1240" y2="86" stroke="#1E293B" stroke-width="2" />
+  <line x1="420" y1="86" x2="880" y2="86" stroke="#00F5FF" stroke-width="2.5" filter="url(#glowCyan)" />
+
+  <!-- ================= STAGE 1: INGESTION ================= -->
+  <g transform="translate(60, 115)">
+    <rect width="340" height="240" rx="10" fill="#0B1526" stroke="#00F5FF" stroke-width="2" filter="url(#glowCyan)" />
+    <path d="M 0 10 Q 0 0 10 0 L 330 0 Q 340 0 340 10 L 340 38 L 0 38 Z" fill="url(#stepHeaderBlue)" />
+    <text x="170" y="25" font-family="'Orbitron', sans-serif" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">FASE 1: INGESTA &amp; RING BUFFER</text>
+
+    <text x="16" y="68" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#00F5FF">1. Netmap Inline IPS (Suricata 7.x)</text>
+    <text x="28" y="88" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">Inspecci&#243;n de paquetes en ring-buffer directo</text>
+
+    <text x="16" y="118" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#38BDF8">2. Generaci&#243;n de Eventos EVE JSON</text>
+    <text x="28" y="138" font-family="'Consolas', monospace" font-size="12" fill="#94A3B8">/var/log/suricata/eve.json</text>
+
+    <text x="16" y="168" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#E2E8F0">3. Captura en Tiempo Real (Tailing)</text>
+    <text x="28" y="188" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#94A3B8">I/O as&#237;ncrono sin bloqueo de red</text>
+
+    <rect x="16" y="202" width="308" height="24" rx="4" fill="#041B2D" stroke="#00F5FF" stroke-width="1" />
+    <text x="170" y="219" font-family="'Consolas', monospace" font-size="11.5" font-weight="bold" fill="#34D399" text-anchor="middle">LATENCIA INFERIOR A 10ms</text>
+  </g>
+
+  <!-- Arrow Stage 1 -> Stage 2 -->
+  <path d="M 400 235 L 480 235" stroke="#00F5FF" stroke-width="3.5" fill="none" marker-end="url(#arrowCyan)" filter="url(#glowCyan)" />
+  <text x="440" y="222" font-family="'Consolas', monospace" font-size="11" font-weight="bold" fill="#00F5FF" text-anchor="middle">EVENT STREAM</text>
+
+  <!-- ================= STAGE 2: HEURISTIC CORRELATOR ================= -->
+  <g transform="translate(480, 105)">
+    <rect width="380" height="260" rx="10" fill="#1A1406" stroke="#F59E0B" stroke-width="2" filter="url(#glowAmber)" />
+    <path d="M 0 10 Q 0 0 10 0 L 370 0 Q 380 0 380 10 L 380 38 L 0 38 Z" fill="url(#stepHeaderAmber)" />
+    <text x="190" y="25" font-family="'Orbitron', sans-serif" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">FASE 2: AN&#193;LISIS HEUR&#205;STICO KRONOS</text>
+
+    <text x="16" y="68" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#FBBF24">1. Parser de Payload SQLi / RCE</text>
+    <text x="28" y="88" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">Evaluaci&#243;n de sintaxis: UNION, OR '1'='1, SLEEP()</text>
+
+    <text x="16" y="116" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#FBBF24">2. C&#225;lculo de Score de Confianza</text>
+    <text x="28" y="136" font-family="'Consolas', monospace" font-size="12" fill="#94A3B8">Confidence = W_sig * Score + W_geo * GeoScore</text>
+
+    <text x="16" y="164" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#FBBF24">3. Filtro de Supresi&#243;n de Ruido</text>
+    <text x="28" y="184" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">Detecci&#243;n de escaneos masivos (ZGrab, Shodan, Nmap)</text>
+
+    <!-- Branch Indicator Box -->
+    <rect x="16" y="200" width="348" height="44" rx="5" fill="#2A1803" stroke="#F59E0B" stroke-width="1.5" />
+    <text x="190" y="218" font-family="'Consolas', monospace" font-size="11" font-weight="bold" fill="#FDE68A" text-anchor="middle">¿SCORE &gt;= 0.75 Y VECTOR CR&#205;TICO?</text>
+    <text x="190" y="234" font-family="'Consolas', monospace" font-size="10.5" fill="#FFFFFF" text-anchor="middle">[ S&#205; &#8594; VALIDAR KERNEL ] | [ NO &#8594; DESCARTAR ]</text>
+  </g>
+
+  <!-- Split Paths: Top Right (Noise Elimination) & Down (Kernel Validation) -->
+
+  <!-- Path to Noise Elimination (Right) -->
+  <path d="M 860 190 L 940 190" stroke="#FF1E56" stroke-width="3" stroke-dasharray="5 4" fill="none" marker-end="url(#arrowRed)" />
+  <text x="900" y="180" font-family="'Consolas', monospace" font-size="11" font-weight="bold" fill="#FF1E56" text-anchor="middle">NO (RUIDO)</text>
+
+  <!-- ================= NOISE ELIMINATION BOX ================= -->
+  <g transform="translate(940, 115)">
+    <rect width="300" height="240" rx="10" fill="#200810" stroke="#FF1E56" stroke-width="2" filter="url(#glowRed)" />
+    <path d="M 0 10 Q 0 0 10 0 L 290 0 Q 300 0 300 10 L 300 38 L 0 38 Z" fill="url(#stepHeaderCrimson)" />
+    <text x="150" y="25" font-family="'Orbitron', sans-serif" font-size="13.5" font-weight="bold" fill="#FFFFFF" text-anchor="middle">SUPRESI&#211;N DE FALSOS POSITIVOS</text>
+
+    <text x="16" y="68" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#FF809B">&#10008; Descarte Silencioso</text>
+    <text x="28" y="88" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">Escaneos autom&#225;ticos de puertos</text>
+    <text x="28" y="108" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">Peticiones 404 de crawlers web</text>
+
+    <text x="16" y="138" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#FF809B">&#10008; Cero Fatiga de Alerta</text>
+    <text x="28" y="158" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">No se llama al CISO innecesariamente</text>
+
+    <rect x="16" y="182" width="268" height="40" rx="5" fill="#380A18" stroke="#FF1E56" stroke-width="1.2" />
+    <text x="150" y="200" font-family="'Consolas', monospace" font-size="11" font-weight="bold" fill="#FDA4AF" text-anchor="middle">&gt;50% DE ALERTAS PURGADAS</text>
+    <text x="150" y="214" font-family="'Consolas', monospace" font-size="10" fill="#FFFFFF" text-anchor="middle">Registro local en log_correlator.log</text>
+  </g>
+
+  <!-- Down Path from Heuristic to Kernel Validation (Stage 3) -->
+  <path d="M 670 365 L 670 435" stroke="#10B981" stroke-width="3.5" fill="none" marker-end="url(#arrowGreen)" />
+  <text x="730" y="400" font-family="'Consolas', monospace" font-size="12" font-weight="bold" fill="#10B981" text-anchor="middle">S&#205; (SCORE &gt;= 0.75)</text>
+
+  <!-- ================= STAGE 3: KERNEL VERIFICATION (pfctl) ================= -->
+  <g transform="translate(380, 440)">
+    <rect width="580" height="250" rx="10" fill="#051B14" stroke="#10B981" stroke-width="2" />
+    <path d="M 0 10 Q 0 0 10 0 L 570 0 Q 580 0 580 10 L 580 38 L 0 38 Z" fill="url(#stepHeaderEmerald)" />
+    <text x="290" y="25" font-family="'Orbitron', sans-serif" font-size="14.5" font-weight="bold" fill="#FFFFFF" text-anchor="middle">FASE 3: VERIFICACI&#211;N AT&#211;MICA EN KERNEL pfctl (FreeBSD)</text>
+
+    <!-- Submodules in 2 columns -->
+    <g transform="translate(16, 55)">
+      <text x="0" y="16" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#34D399">1. Test de Kernel FreeBSD</text>
+      <text x="12" y="36" font-family="'Consolas', monospace" font-size="12" fill="#A7F3D0">pfctl -t snort2c -T test &lt;IP&gt;</text>
+      <text x="12" y="54" font-family="'Segoe UI', sans-serif" font-size="12" fill="#94A3B8">Retorno 0 = IP bloqueada en hardware</text>
+
+      <text x="0" y="82" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#34D399">2. Purga de Estados TCP (Kill)</text>
+      <text x="12" y="102" font-family="'Consolas', monospace" font-size="12" fill="#A7F3D0">pfctl -k &lt;IP&gt; &amp;&amp; pfctl -k 0/0 -k &lt;IP&gt;</text>
+      <text x="12" y="120" font-family="'Segoe UI', sans-serif" font-size="12" fill="#94A3B8">Cierre de sockets activos del atacante</text>
+    </g>
+
+    <g transform="translate(300, 55)">
+      <text x="0" y="16" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#34D399">3. Inserci&#243;n Forzada de Emergencia</text>
+      <text x="12" y="36" font-family="'Consolas', monospace" font-size="12" fill="#A7F3D0">pfctl -t snort2c -T add &lt;IP&gt;</text>
+      <text x="12" y="54" font-family="'Segoe UI', sans-serif" font-size="12" fill="#94A3B8">Garantiza contenci&#243;n perimetral 100%</text>
+
+      <text x="0" y="82" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#38BDF8">4. Formateo de Payload JSON SOAR</text>
+      <text x="12" y="102" font-family="'Segoe UI', sans-serif" font-size="12" fill="#CBD5E1">IP, Pa&#237;s, Vector SQLi, Hora, Regla SID</text>
+    </g>
+
+    <!-- Final Trigger Bar -->
+    <rect x="16" y="190" width="548" height="44" rx="6" fill="#022618" stroke="#10B981" stroke-width="1.5" />
+    <text x="290" y="210" font-family="'Consolas', monospace" font-size="12" font-weight="bold" fill="#6EE7B7" text-anchor="middle">ATAQUE REAL CONFIRMADO Y NEUTRALIZADO EN KERNEL</text>
+    <text x="290" y="226" font-family="'Consolas', monospace" font-size="11" font-weight="bold" fill="#00F5FF" text-anchor="middle">&#8680; DISPARO DE LLAMADA TELEF&#211;NICA DE ALERTA AL CISO (PUERTO 5000 /webhook)</text>
+  </g>
+
+  <!-- Final Exit Arrow to AI Voice Agent -->
+  <path d="M 960 565 L 1050 565" stroke="#00F5FF" stroke-width="3.5" fill="none" marker-end="url(#arrowCyan)" filter="url(#glowCyan)" />
+  <text x="1005" y="552" font-family="'Consolas', monospace" font-size="11" font-weight="bold" fill="#00F5FF" text-anchor="middle">VOICE SOAR</text>
+
+  <!-- Output Box: Trigger SOAR -->
+  <g transform="translate(1050, 485)">
+    <rect width="190" height="160" rx="10" fill="#1B0C2E" stroke="#A855F7" stroke-width="2" />
+    <path d="M 0 10 Q 0 0 10 0 L 180 0 Q 190 0 190 10 L 190 35 L 0 35 Z" fill="#6B21A8" />
+    <text x="95" y="23" font-family="'Orbitron', sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">AGENTE DE VOZ IA</text>
+
+    <text x="14" y="60" font-family="'Segoe UI', sans-serif" font-size="13" font-weight="bold" fill="#D8B4FE">Llamada Activa:</text>
+    <text x="14" y="80" font-family="'Consolas', monospace" font-size="11.5" fill="#FFFFFF">Asterisk PBX</text>
+    <text x="14" y="98" font-family="'Consolas', monospace" font-size="11.5" fill="#00F5FF">Gemini Live 3.1</text>
+    <text x="14" y="120" font-family="'Segoe UI', sans-serif" font-size="12" fill="#34D399">&#10004; Debriefing CISO</text>
+    <text x="14" y="138" font-family="'Segoe UI', sans-serif" font-size="12" fill="#34D399">&#10004; Mitigaci&#243;n en vivo</text>
+  </g>
+</svg>

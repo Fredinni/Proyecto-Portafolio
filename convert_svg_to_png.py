@@ -76,10 +76,16 @@ def convert():
                 os.remove(tmp_path)
 
     # 1. Logo (4K 1:1 - 3840x3840)
-    render_svg("assets/sentinel_shield_logo.svg", "assets/sentinel_shield_logo.png", 3840, 3840, "#070A11")
+    render_svg("assets/sentinel_shield_logo.svg", "assets/sentinel_shield_logo.png", 3840, 3840, "#020305")
 
-    # 2. Architecture Diagram (4K 24:13 - 3840x2080)
-    render_svg("assets/architecture_diagram.svg", "assets/architecture_diagram.png", 3840, 2080, "#070A11")
+    # 2. Architecture Master Diagram (4K 13:7.2 - 3900x2160)
+    render_svg("assets/architecture_diagram.svg", "assets/architecture_diagram.png", 3900, 2160, "#020408")
+
+    # 3. Process & False-Positive Decision Diagram (4K 13:7.5 - 3900x2250)
+    render_svg("assets/pfctl_decision_flow.svg", "assets/pfctl_decision_flow.png", 3900, 2250, "#020408")
+
+    # 4. Voice SOAR & Asterisk AI Protocol Flow Diagram (4K 13:7.5 - 3900x2250)
+    render_svg("assets/voice_soar_flow.svg", "assets/voice_soar_flow.png", 3900, 2250, "#03010A")
 
 if __name__ == "__main__":
     convert()

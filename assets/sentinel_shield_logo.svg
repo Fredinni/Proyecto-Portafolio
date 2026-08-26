@@ -1,109 +1,132 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
   <defs>
-    <!-- Background Gradient -->
-    <radialGradient id="bg" cx="50%" cy="45%" r="60%">
-      <stop offset="0%" stop-color="#0F172A" />
-      <stop offset="100%" stop-color="#070A11" />
+    <!-- Background Radial Gradient -->
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#0e1626" />
+      <stop offset="60%" stop-color="#070a10" />
+      <stop offset="100%" stop-color="#020305" />
     </radialGradient>
 
-    <!-- Shield Facet Gradients -->
-    <linearGradient id="shieldLeft" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1E293B" />
-      <stop offset="100%" stop-color="#0F172A" />
+    <!-- Crimson Threat Glow Gradient -->
+    <linearGradient id="crimsonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF1E56" />
+      <stop offset="50%" stop-color="#E60049" />
+      <stop offset="100%" stop-color="#800020" />
     </linearGradient>
 
-    <linearGradient id="shieldRight" x1="100%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#283548" />
-      <stop offset="100%" stop-color="#131D2E" />
+    <!-- Neon Cyan AI Core Gradient -->
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F5FF" />
+      <stop offset="50%" stop-color="#00A8FF" />
+      <stop offset="100%" stop-color="#0048BA" />
     </linearGradient>
 
-    <!-- Core Sentinel Glow -->
-    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#00E5FF" stop-opacity="1" />
-      <stop offset="60%" stop-color="#0284C7" stop-opacity="0.8" />
-      <stop offset="100%" stop-color="#0284C7" stop-opacity="0" />
-    </radialGradient>
+    <!-- Steel Armor Gradient -->
+    <linearGradient id="steelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2A364F" />
+      <stop offset="50%" stop-color="#182030" />
+      <stop offset="100%" stop-color="#0D121D" />
+    </linearGradient>
 
-    <!-- Subtle Drop Shadow -->
-    <filter id="subtleElevation" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.6" />
+    <!-- Glow Filters -->
+    <filter id="neonGlowCyan" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur1" />
+      <feGaussianBlur stdDeviation="16" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur2" />
+        <feMergeNode in="blur1" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
     </filter>
+
+    <filter id="neonGlowRed" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur1" />
+      <feGaussianBlur stdDeviation="14" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur2" />
+        <feMergeNode in="blur1" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Futuristic Circuit Pattern -->
+    <pattern id="circuitGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#162238" stroke-width="0.8" stroke-opacity="0.4" />
+      <circle cx="0" cy="0" r="1.5" fill="#00F5FF" fill-opacity="0.3" />
+    </pattern>
   </defs>
 
-  <!-- Background Canvas -->
-  <rect width="800" height="800" fill="url(#bg)" />
+  <!-- Canvas Background -->
+  <rect width="800" height="800" fill="url(#bgGrad)" />
+  <rect width="800" height="800" fill="url(#circuitGrid)" />
 
-  <!-- Technical Axis Guidelines (Minimal Grid) -->
-  <g stroke="#1E293B" stroke-width="1" stroke-opacity="0.4">
-    <line x1="400" y1="80" x2="400" y2="600" stroke-dasharray="4 8" />
-    <circle cx="400" cy="340" r="220" fill="none" stroke-dasharray="2 6" />
-    <circle cx="400" cy="340" r="260" fill="none" stroke-opacity="0.2" />
+  <!-- Outer Cyber Target HUD Rings -->
+  <circle cx="400" cy="380" r="320" fill="none" stroke="#00F5FF" stroke-width="1.5" stroke-dasharray="10 20 40 10" stroke-opacity="0.25" />
+  <circle cx="400" cy="380" r="300" fill="none" stroke="#FF1E56" stroke-width="1" stroke-dasharray="8 30" stroke-opacity="0.3" />
+  <circle cx="400" cy="380" r="260" fill="none" stroke="#1E293B" stroke-width="2" />
+
+  <!-- Angular Hazard Shield Outer Hull -->
+  <polygon points="400,80 630,190 570,490 400,650 230,490 170,190" 
+           fill="url(#steelGrad)" stroke="#00F5FF" stroke-width="3" stroke-opacity="0.7" />
+
+  <!-- Shield Internal Armor Plates (Aggressive Stealth Wings) -->
+  <polygon points="400,110 600,210 545,470 400,615" fill="#131B2B" stroke="#FF1E56" stroke-width="1.5" stroke-opacity="0.6" />
+  <polygon points="400,110 200,210 255,470 400,615" fill="#0E1624" stroke="#FF1E56" stroke-width="1.5" stroke-opacity="0.6" />
+
+  <!-- Mecha Horns / Defensive Pylons (pfSense + Suricata Netmap) -->
+  <path d="M 400 130 L 480 200 L 530 140 L 490 280 L 400 230 Z" fill="url(#crimsonGrad)" filter="url(#neonGlowRed)" opacity="0.9" />
+  <path d="M 400 130 L 320 200 L 270 140 L 310 280 L 400 230 Z" fill="url(#crimsonGrad)" filter="url(#neonGlowRed)" opacity="0.9" />
+
+  <!-- Cyber Attack Threat Matrix Blade (Center Geometry) -->
+  <polygon points="400,160 450,290 400,560 350,290" fill="#0A0E17" stroke="#00F5FF" stroke-width="2" />
+
+  <!-- Real-Time Voice Waveform Telemetry (Asterisk VoIP + Gemini Audio Streams) -->
+  <g filter="url(#neonGlowCyan)">
+    <!-- Left Soundwaves -->
+    <line x1="260" y1="380" x2="260" y2="380" stroke="#00F5FF" stroke-width="4" stroke-linecap="round" />
+    <line x1="280" y1="350" x2="280" y2="410" stroke="#00F5FF" stroke-width="4" stroke-linecap="round" />
+    <line x1="300" y1="320" x2="300" y2="440" stroke="#00F5FF" stroke-width="4" stroke-linecap="round" />
+    <line x1="320" y1="340" x2="320" y2="420" stroke="#00F5FF" stroke-width="4" stroke-linecap="round" />
+    <line x1="340" y1="365" x2="340" y2="395" stroke="#00F5FF" stroke-width="4" stroke-linecap="round" />
+
+    <!-- Right Soundwaves -->
+    <line x1="460" y1="365" x2="460" y2="395" stroke="#00F5FF" stroke-width="4" stroke-linecap="round" />
+    <line x1="480" y1="340" x2="480" y2="420" stroke="#00F5FF" stroke-width="4" stroke-linecap="round" />
+    <line x1="500" y1="320" x2="500" y2="440" stroke="#00F5FF" stroke-width="4" stroke-linecap="round" />
+    <line x1="520" y1="350" x2="520" y2="410" stroke="#00F5FF" stroke-width="4" stroke-linecap="round" />
+    <line x1="540" y1="380" x2="540" y2="380" stroke="#00F5FF" stroke-width="4" stroke-linecap="round" />
   </g>
 
-  <!-- Monolithic Shield Entity -->
-  <g filter="url(#subtleElevation)">
-    <!-- Outer Shield Bezel -->
-    <polygon points="400,100 580,180 540,440 400,560 260,440 220,180" 
-             fill="none" stroke="#334155" stroke-width="2" />
+  <!-- Central Autonomous AI Neural Eye (Gemini Live Engine & pfctl Correlator) -->
+  <circle cx="400" cy="380" r="55" fill="#060A12" stroke="#FF1E56" stroke-width="3" filter="url(#neonGlowRed)" />
+  <circle cx="400" cy="380" r="40" fill="url(#cyanGrad)" filter="url(#neonGlowCyan)" />
+  <polygon points="400,350 425,395 375,395" fill="#FFFFFF" />
+  <circle cx="400" cy="380" r="10" fill="#040810" />
+  <circle cx="400" cy="380" r="4" fill="#00F5FF" />
 
-    <!-- Left Shield Facet -->
-    <polygon points="396,112 232,185 270,432 396,544" 
-             fill="url(#shieldLeft)" stroke="#1E293B" stroke-width="1.5" />
-
-    <!-- Right Shield Facet -->
-    <polygon points="404,112 568,185 530,432 404,544" 
-             fill="url(#shieldRight)" stroke="#334155" stroke-width="1.5" />
-
-    <!-- Precision Central Seam -->
-    <line x1="400" y1="112" x2="400" y2="544" stroke="#0F172A" stroke-width="4" />
-    <line x1="400" y1="112" x2="400" y2="544" stroke="#00E5FF" stroke-width="1" stroke-opacity="0.6" />
+  <!-- Data Flow Nodes & High-Tech Connecting Circuit Tracks -->
+  <g stroke="#00F5FF" stroke-width="1.5" stroke-opacity="0.8">
+    <line x1="400" y1="160" x2="400" y2="325" stroke-dasharray="4 4" />
+    <line x1="400" y1="435" x2="400" y2="560" stroke-dasharray="4 4" />
+    <line x1="280" y1="230" x2="350" y2="300" />
+    <circle cx="280" cy="230" r="4" fill="#FF1E56" />
+    <line x1="520" y1="230" x2="450" y2="300" />
+    <circle cx="520" cy="230" r="4" fill="#FF1E56" />
   </g>
 
-  <!-- Voice Telemetry Waveform Nodes (Lateral Bars) -->
-  <g stroke="#00E5FF" stroke-width="3" stroke-linecap="round" opacity="0.85">
-    <!-- Left Channel -->
-    <line x1="310" y1="340" x2="310" y2="340" stroke-opacity="0.3" />
-    <line x1="325" y1="320" x2="325" y2="360" />
-    <line x1="340" y1="300" x2="340" y2="380" stroke-width="3.5" />
-    <line x1="355" y1="315" x2="355" y2="365" />
-
-    <!-- Right Channel -->
-    <line x1="445" y1="315" x2="445" y2="365" />
-    <line x1="460" y1="300" x2="460" y2="380" stroke-width="3.5" />
-    <line x1="475" y1="320" x2="475" y2="360" />
-    <line x1="490" y1="340" x2="490" y2="340" stroke-opacity="0.3" />
-  </g>
-
-  <!-- Central Optical Sentinel Iris (Autonomous Core) -->
-  <g transform="translate(400, 340)">
-    <!-- Base Core Ring -->
-    <circle cx="0" cy="0" r="38" fill="#070A11" stroke="#1E293B" stroke-width="2" />
-    <!-- Ambient Halo -->
-    <circle cx="0" cy="0" r="30" fill="url(#coreGlow)" opacity="0.35" />
-    <!-- Precision Aperture Ring -->
-    <circle cx="0" cy="0" r="22" fill="#0B132B" stroke="#00E5FF" stroke-width="2" />
-    <!-- Focal Diamond -->
-    <polygon points="0,-10 10,0 0,10 -10,0" fill="#00E5FF" />
-    <circle cx="0" cy="0" r="3" fill="#FFFFFF" />
-  </g>
-
-  <!-- Threat Mitigation Node (Upper Crimson Indicator) -->
-  <circle cx="400" cy="180" r="4" fill="#F43F5E" />
-  <circle cx="400" cy="180" r="8" fill="none" stroke="#F43F5E" stroke-width="1" stroke-opacity="0.5" />
-
-  <!-- Modernist Typographic Block -->
-  <text x="400" y="650" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" 
-        font-size="24" font-weight="700" letter-spacing="0.22em" fill="#F8FAFC" text-anchor="middle">
+  <!-- Technical Branding & Callouts (Valid XML with Unicode Bullets) -->
+  <text x="400" y="705" font-family="'Orbitron', 'Segoe UI', 'Arial Black', sans-serif" font-size="34" font-weight="900" 
+        letter-spacing="12" fill="#FFFFFF" text-anchor="middle">
     KRONOS SENTINEL
   </text>
   
-  <text x="400" y="678" font-family="'Geist Mono', 'SF Mono', 'Consolas', monospace" 
-        font-size="10.5" font-weight="600" letter-spacing="0.18em" fill="#00E5FF" text-anchor="middle">
+  <text x="400" y="735" font-family="'Consolas', 'Courier New', monospace" font-size="13" font-weight="bold" 
+        letter-spacing="5" fill="#00F5FF" text-anchor="middle" filter="url(#neonGlowCyan)">
     AUTONOMOUS AI-IPS &#8226; LIVE VOICE SOAR &#8226; pfSense
   </text>
 
-  <text x="400" y="704" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" 
-        font-size="9" font-weight="500" letter-spacing="0.08em" fill="#64748B" text-anchor="middle">
+  <text x="400" y="760" font-family="'Consolas', 'Courier New', monospace" font-size="10" 
+        letter-spacing="2" fill="#64748B" text-anchor="middle">
     DUOC UC SAN JOAQU&#205;N &#8226; INGENIER&#205;A EN CONECTIVIDAD Y REDES
   </text>
 </svg>

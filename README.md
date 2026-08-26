@@ -39,7 +39,7 @@ En las infraestructuras corporativas modernas, los Centros de Operaciones de Seg
 ## 🏛️ 2. Arquitectura Global del Sistema
 
 <p align="center">
-  <img src="assets/architecture_diagram.png" alt="Diagrama de Arquitectura KRONOS SENTINEL" width="950px">
+  <img src="assets/architecture_diagram.png" alt="Diagrama de Arquitectura Global KRONOS SENTINEL" width="100%">
 </p>
 
 ### Matriz de Componentes Técnicos
@@ -55,10 +55,15 @@ En las infraestructuras corporativas modernas, los Centros de Operaciones de Seg
 
 ---
 
-## ⚡ 3. Motor `pfctl` y Algoritmo de Supresión de Falsos Positivos
+## ⚡ 3. Diagrama de Procesos: Motor `pfctl` y Supresión de Falsos Positivos
 
-El núcleo diferenciador de KRONOS SENTINEL radica en su lógica de doble verificación:
+Para erradicar la sobrecarga de alertas innecesarias, **KRONOS SENTINEL** implementa un modelo de decisión en 3 fases:
 
+<p align="center">
+  <img src="assets/pfctl_decision_flow.png" alt="Diagrama Teórico de Procesamiento pfctl" width="100%">
+</p>
+
+### Lógica Matemática y Heurística de Decisión:
 ```mermaid
 flowchart TD
     A["Petición Externa hacia HAProxy"] --> B{"¿Suricata detecta anomalía?"}
@@ -72,15 +77,29 @@ flowchart TD
     H -- Sí --> J["Confirmación de Ataque Real Mitigado"]
     I --> J
     J --> K["Disparo de Webhook a Despachador de Voz"]
-    K --> L["Asterisk PBX Llama al Teléfono del CISO"]
-    L --> M["Gemini Live API Ejecuta Debriefing por Voz en Vivo"]
 ```
 
 $$\text{Criterio de Disparo} = \left( \mathrm{Confianza}_{\text{SQLi}} \ge 0.75 \right) \land \left( \mathrm{Estado}_{\text{snort2c}} = \text{BLOCKED} \right) \land \left( \mathrm{Filtro}_{\text{Ruido}} = \text{PASSED} \right)$$
 
 ---
 
-## ⏱️ 4. Línea de Tiempo de Respuesta a Incidentes (SOC War-Room)
+## 🎙️ 4. Diagrama de Flujo: Orquestación SOAR & Telefonía IA
+
+Cuando un ataque es validado y contenido en el firewall, el subsistema de voz ejecuta el enlace con el operador CISO:
+
+<p align="center">
+  <img src="assets/voice_soar_flow.png" alt="Diagrama de Flujo SOAR Voz IA y Asterisk" width="100%">
+</p>
+
+### Fases de la Interacción por Voz:
+1. **Disparo Inmediato (Webhook):** El motor `pfctl` envía un payload JSON al despachador local con la IP, país GeoIP, payload del vector y regla disparada.
+2. **Auto-Dialer Asterisk (AMI):** Asterisk genera una llamada instantánea hacia el softphone del CISO (`PJSIP/1001`).
+3. **Bridge de Audio Multimodal:** Se conecta el flujo RTP hacia **Google Gemini Live Flash 3.1** mediante WebSocket (PCM 24kHz).
+4. **Debriefing Táctico & Mitigación:** El agente dialoga en tiempo real con el CISO, informa el estado del bloqueo y responde consultas técnicas de contención.
+
+---
+
+## ⏱️ 5. Línea de Tiempo de Respuesta a Incidentes (SOC War-Room)
 
 ```text
  [T+0.00s]  [INGRESS]     Hostile actor launches SQLi payload: "admin' OR '1'='1 --" to HAProxy VIP
@@ -96,23 +115,29 @@ $$\text{Criterio de Disparo} = \left( \mathrm{Confianza}_{\text{SQLi}} \ge 0.75 
 
 ---
 
-## 📐 5. Filosofía de Diseño: Modernismo Suizo & Minimalismo Lógico
+## 🎨 6. Simbolismo del Emblema KRONOS SENTINEL
 
-El isotipo e identidad visual de **KRONOS SENTINEL** fueron concebidos bajo los principios del diseño modernista internacional (*Swiss Style*), balance de espacio negativo y sobriedad técnica de alta gama:
-* **Monolito Geométrico de Alta Precisión:** Representa la solidez estructural de **pfSense** y la inspección atómica en ring-buffer mediante **Suricata en modo Inline Netmap**.
-* **Quilla Central de Corte `pfctl`:** Simboliza la purga instantánea en kernel (`Kill States`) y el aislamiento dinámico de vectores hostiles.
-* **Iris Óptico Centinela:** Núcleo autónomo en cian de alta fidelidad (`#00E5FF`), representando el motor de correlación heurística y procesamiento de telemetría continua.
-* **Ranuras Laterales de Audio & Voz:** Representan la telemetría de voz bidireccional en tiempo real entre el **Agente Gemini Live**, la centralita **Asterisk PBX** y el CISO.
+El isotipo corporativo fue diseñado bajo una estética ciberpunk y militar de alta tecnología:
+* **Escudo Angular de Titanio y Alas Mecha:** Representa la robustez perimetral de **pfSense** y la inspección sin latencia de **Suricata en modo Netmap**.
+* **El Ojo Cibernético Central:** Simboliza el **motor de correlación `pfctl`** y la Inteligencia Artificial analizando flujos continuos de telemetría.
+* **Ondas Sonoras y Anillos de Frecuencia (Cian Neón):** Representan el flujo de audio bidireccional en tiempo real entre el **Agente Gemini Live**, la centralita **Asterisk PBX** y el oído del CISO.
+* **Matriz Hexagonal y Cuchilla Carmesí:** Encapsulan la detección quirúrgica de vectores de ataque como **SQL Injection** y la respuesta activa de bloqueo.
 
-## 📂 6. Estructura del Repositorio y Entregables Académicos
+---
+
+## 📂 7. Estructura del Repositorio y Entregables Académicos
 
 ```bash
 Proyecto-Portafolio/
-├── assets/                                     # Logotipos vectoriales y diagramas arquitectónicos
-│   ├── sentinel_shield_logo.png
-│   ├── sentinel_shield_logo.svg
-│   ├── architecture_diagram.png
-│   └── architecture_diagram.svg
+├── assets/                                     # Logotipos vectoriales y diagramas ilustrativos de procesos
+│   ├── sentinel_shield_logo.png                # Isotipo de alta resolución 4K
+│   ├── sentinel_shield_logo.svg                # Isotipo vectorial maestro
+│   ├── architecture_diagram.png                # Topología de arquitectura global 4K
+│   ├── architecture_diagram.svg                # Vectorial de arquitectura global
+│   ├── pfctl_decision_flow.png                 # Diagrama de procesos de decisión pfctl 4K
+│   ├── pfctl_decision_flow.svg                 # Vectorial de procesos pfctl
+│   ├── voice_soar_flow.png                     # Diagrama de flujo de voz IA y Asterisk 4K
+│   └── voice_soar_flow.svg                     # Vectorial de flujo de voz IA y Asterisk
 ├── docs/                                       # Entregables Académicos Duoc UC (Portafolio de Título)
 │   ├── Fase_1_Definicion_Proyecto_APT/
 │   │   ├── Autoevaluacion_Competencias/        # Pautas 1.1 de autoevaluación (Docx y Markdown)
