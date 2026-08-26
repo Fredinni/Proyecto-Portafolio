@@ -167,8 +167,20 @@ Proyecto-Portafolio/
 │   │   └── Informacion_EA2/
 │   ├── Fase_3_Presentacion_Proyecto_APT/
 │   │   ├── Diario_Reflexion_Fase_3/
-│   │   ├── Espacio_Consultas_Fase_3/
-│   │   └── Informacion_EA3/
+│   │   ├── roles/                                  # Manuales operativos y guías por integrante
+│   │   ├── 01_Bruno_Urrea_Lider_Ciberseguridad_pfctl_Gemini/
+│   │   │   └── ROL_Y_PASOS_BRUNO_URREA.md
+│   │   ├── 02_Freddy_Vasquez_Routing_Switching_VoIP_Asterisk/
+│   │   │   └── ROL_Y_PASOS_FREDDY_VASQUEZ.md
+│   │   ├── 03_Cristobal_Quezada_Web_HAProxy_DMZ_DVWA/
+│   │   │   └── ROL_Y_PASOS_CRISTOBAL_QUEZADA.md
+│   │   └── 04_Kevin_Retamales_Hardening_pfBlockerNG_QA/
+│   │       └── ROL_Y_PASOS_KEVIN_RETAMALES.md
+│   ├── knowledge_base/                         # Base de conocimiento general y defensa presencial
+│   │   ├── 01_TECNOLOGIAS_Y_FLUJO_INTEGRAL.md
+│   │   ├── 02_INNOVACION_FACTOR_HUMANO_Y_SOAR_VOZ.md
+│   │   └── 03_GUIA_ESTRATEGICA_DEFENSA_DUOC.md
+│   ├── MANUAL_ROLES_Y_BASE_CONOCIMIENTO_KRONOS.pdf # Manual de Roles y Base de Conocimiento en PDF
 │   ├── Manual_Configuracion_pfSense_KRONOS_SENTINEL.pdf # Manual Oficial en PDF (Portafolio de Título)
 │   ├── Manual_Configuracion_pfSense_KRONOS_SENTINEL.md  # Manual Oficial en Markdown
 │   ├── TUTORIAL_PASO_A_PASO_CONFIGURACION_PFSENSE_MOCKUPS.pdf # Tutorial Maestro Paso a Paso (8 Páginas con Mockups WebGUI)
