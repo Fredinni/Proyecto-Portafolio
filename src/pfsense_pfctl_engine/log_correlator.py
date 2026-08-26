@@ -118,7 +118,10 @@ class PfctlLogCorrelator:
         logging.info(f"Alerta detectada: [{signature}] de {src_ip} -> {dest_ip}")
         
         # 1. Filtro heurístico de falsos positivos
-        is_real_attack, attack_type, confidence = self.filter.analyze(event)
+        analysis = self.filter.analyze(event)
+        is_real_attack = analysis.get("is_real_attack", False)
+        attack_type = analysis.get("attack_type", "UNKNOWN")
+        confidence = analysis.get("confidence_score", 0.0)
         
         if not is_real_attack or confidence < self.config.get("confidence_threshold", 0.75):
             logging.info(f"-> [RUIDO SUPRIMIDO] Score: {confidence:.2f} | Tipo: {attack_type} - Sin escalamiento.")
@@ -126,11 +129,11 @@ class PfctlLogCorrelator:
             
         logging.warning(f"-> [ATAQUE REAL CONFIRMADO] Tipo: {attack_type} | Confianza: {confidence:.2f}")
         
-        # 2. Correlación atómica con kernel FreeBSD pfctl (tabla snort2c)
+        # 2. Correlación atómica con kernel FreeBSD pfctl (tabla snort2c y kill states)
         is_blocked_in_pfctl = self.pfctl.is_ip_blocked(src_ip)
         
         if not is_blocked_in_pfctl:
-            logging.warning(f"-> IP {src_ip} no aislada en snort2c. Ejecutando DROP perimetral...")
+            logging.warning(f"-> IP {src_ip} no aislada en snort2c. Ejecutando DROP perimetral y purga de estados...")
             self.pfctl.block_ip(src_ip)
             is_blocked_in_pfctl = True
             
@@ -147,7 +150,7 @@ class PfctlLogCorrelator:
             "http_method": http_data.get("http_method", "GET"),
             "pfctl_table": "snort2c",
             "pfctl_blocked": is_blocked_in_pfctl,
-            "action_taken": "DROP & BLOCK en Firewall pfSense (Kernel pfctl)",
+            "action_taken": "DROP & BLOCK en Firewall pfSense (Kernel pfctl State Kill)",
             "geo_country": self.filter.get_geoip(src_ip)
         }
         
@@ -172,6 +175,7 @@ class PfctlLogCorrelator:
 if __name__ == "__main__":
     correlator = PfctlLogCorrelator()
     print("=================================================================")
-    print("  KRONOS SENTINEL - FREEBSD PFCTL LOG CORRELATION ENGINE ACTIVE  ")
+    print("      KRONOS HEURISTIC CORRELATION ENGINE ACTIVE (PYTHON 3.12)   ")
+    print("  FreeBSD Kernel pfctl State Management & snort2c Integration    ")
     print("=================================================================")
     correlator.tail_eve_log()

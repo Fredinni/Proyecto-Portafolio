@@ -32,7 +32,7 @@ En las infraestructuras corporativas modernas, los Centros de Operaciones de Seg
 
 **KRONOS SENTINEL** es una arquitectura de defensa en profundidad y respuesta autónoma ante incidentes (**SOAR**) que:
 * Inspecciona el tráfico en tiempo real mediante **pfSense** y **Suricata en modo Inline IPS (Netmap)**.
-* Ejecuta un **motor de correlación heurística en kernel (`pfctl Engine`)** que valida ataques reales en la capa web expuesta por **HAProxy**, verificando la inserción de la IP hostil en la tabla `snort2c` de FreeBSD y descartando el 100% del ruido inocuo.
+* Ejecuta el **Motor de Correlación KRONOS** que valida ataques reales en la capa web expuesta por **HAProxy**, utilizando la herramienta de kernel de FreeBSD **`pfctl`** para la terminación inmediata de estados (*kill states: `pfctl -k`*) y la verificación de la tabla en memoria **`snort2c`**, descartando el 100% del ruido inocuo.
 * Dispara una llamada telefónica de emergencia en tiempo real vía **Asterisk PBX**, donde un **Agente de IA Multimodal (Google Gemini Live Flash 3.1)** interactúa por voz con el CISO, entregando un *debriefing* táctico inmediato (IP, país GeoIP, payload SQLi, bloqueo en firewall) y proponiendo mitigaciones estratégicas en vivo.
 
 ---
@@ -51,13 +51,13 @@ En las infraestructuras corporativas modernas, los Centros de Operaciones de Seg
 | **Prevención de Intrusos** | `Suricata 7.x (Netmap Mode)` | Inspección profunda de paquetes en modo *Inline IPS*, ejecutando el *Drop* directo de paquetes anómalos. |
 | **Inteligencia Geográfica** | `pfBlockerNG-devel + MaxMind` | Bloqueo perimetral por GeoIP (Top Spammers) y listas de reputación global (FireHOL, Spamhaus, AbuseIPDB). |
 | **Proxy Inverso & DMZ** | `HAProxy + DVWA Docker` | Terminación SSL/TLS, balanceo y publicación segura del entorno vulnerable controlado (DVWA) en DMZ. |
-| **Motor de Correlación** | `Python 3.12 + FreeBSD pfctl` | Parser de `eve.json`, supresor de falsos positivos (>50%) y validación de tablas dinámicas `snort2c`. |
+| **Motor de Correlación KRONOS** | `Python 3.12 + FreeBSD pfctl` | Ingesta de `eve.json`, supresión heurística de falsos positivos (>50%), orquestación SOAR y terminación de estados con pfctl. |
 | **Telefonía VoIP PBX** | `Asterisk 20 LTS (Docker)` | Generación automática de llamadas telefónicas SIP hacia el CISO / SOC Lead mediante canales PJSIP. |
 | **Agente de Voz IA** | `Gemini Live API Flash 3.1` | Streaming de voz bidireccional de ultrabaja latencia para interlocución táctica y asesoría de mitigación. |
 
 ---
 
-## ⚡ 3. Diagrama de Procesos: Motor `pfctl` y Supresión de Falsos Positivos
+## ⚡ 3. Diagrama de Procesos: Motor de Correlación KRONOS, Kernel pfctl y Supresión de Falsos Positivos
 
 Para erradicar la sobrecarga de alertas innecesarias, **KRONOS SENTINEL** implementa un modelo de decisión en 3 fases:
 
@@ -72,11 +72,11 @@ flowchart TD
     A["Petición Externa hacia HAProxy"] --> B{"¿Suricata detecta anomalía?"}
     B -- No --> C["Tráfico Permitido"]
     B -- Sí --> D["Ingesta de Alerta en eve.json"]
-    D --> E["Motor Heurístico KRONOS"]
+    D --> E["Motor de Correlación KRONOS"]
     E --> F{"¿Payload SQLi / RCE Válido?"}
     F -- No --> G["Falso Positivo / Ruido Descartado - Sin Escalamiento"]
     F -- Sí --> H{"¿IP Bloqueada en tabla snort2c?"}
-    H -- No --> I["Forzar Drop en pfctl y Terminar Estados"]
+    H -- No --> I["Forzar Drop en Kernel con pfctl (Kill States + snort2c)"]
     H -- Sí --> J["Confirmación de Ataque Real Mitigado"]
     I --> J
     J --> K["Disparo de Webhook a Despachador de Voz"]
@@ -96,7 +96,7 @@ Cuando un ataque es validado y contenido en el firewall, el subsistema de voz ej
 
 ### 📞 Fases de la Interacción por Voz
 
-1. **Disparo Inmediato (Webhook):** El motor `pfctl` envía un payload JSON al despachador local con la IP, país GeoIP, payload del vector y regla disparada.
+1. **Disparo Inmediato (Webhook):** El **Motor de Correlación KRONOS** envía un payload JSON al despachador local tras validar el ataque y purgar estados vía `pfctl` con la IP, país GeoIP, payload del vector y regla disparada.
 2. **Auto-Dialer Asterisk (AMI):** Asterisk genera una llamada instantánea hacia el softphone del CISO (`PJSIP/1001`).
 3. **Bridge de Audio Multimodal:** Se conecta el flujo RTP hacia **Google Gemini Live Flash 3.1** mediante WebSocket (PCM 24kHz).
 4. **Debriefing Táctico & Mitigación:** El agente dialoga en tiempo real con el CISO, informa el estado del bloqueo y responde consultas técnicas de contención.
@@ -108,7 +108,7 @@ Cuando un ataque es validado y contenido en el firewall, el subsistema de voz ej
 ```text
  [T+0.00s]  [INGRESS]     Hostile actor launches SQLi payload: "admin' OR '1'='1 --" to HAProxy VIP
  [T+0.04s]  [NETMAP IPS]  Suricata 7.x inline ring-buffer catches payload -> Drops packet & logs to eve.json
- [T+0.08s]  [FREEBSD PF]  Kernel dynamically updates 'snort2c' table -> Enforces total IP blackholing
+ [T+0.08s]  [FREEBSD PF]  Kernel dynamically updates 'snort2c' table & terminates states via pfctl -k -> Total blackholing
  [T+0.12s]  [KRONOS CORE] log_correlator tails eve.json -> Heuristic analyzer validates SQLi confidence (0.94)
  [T+0.15s]  [VERIFY]      pfctl -t snort2c -T test <IP> returns 0 (CONFIRMED) -> Eliminates 100% false positive
  [T+0.21s]  [SOAR HOOK]   Webhook POST /incident payload dispatched to local Voice Dispatcher daemon
@@ -127,7 +127,7 @@ Cuando un ataque es validado y contenido en el firewall, el subsistema de voz ej
 
 El isotipo corporativo fue diseñado bajo una estética ciberpunk y militar de alta tecnología:
 * **Escudo Angular de Titanio y Alas Mecha:** Representa la robustez perimetral de **pfSense** y la inspección sin latencia de **Suricata en modo Netmap**.
-* **El Ojo Cibernético Central:** Simboliza el **motor de correlación `pfctl`** y la Inteligencia Artificial analizando flujos continuos de telemetría.
+* **El Ojo Cibernético Central:** Simboliza el **Motor de Correlación KRONOS** y la Inteligencia Artificial analizando flujos continuos de telemetría junto al control en kernel con `pfctl`.
 * **Ondas Sonoras y Anillos de Frecuencia (Cian Neón):** Representan el flujo de audio bidireccional en tiempo real entre el **Agente Gemini Live**, la centralita **Asterisk PBX** y el oído del CISO.
 * **Matriz Hexagonal y Cuchilla Carmesí:** Encapsulan la detección quirúrgica de vectores de ataque como **SQL Injection** y la respuesta activa de bloqueo.
 
@@ -242,7 +242,7 @@ export GEMINI_API_KEY="tu-api-key-de-gemini-live"
 python dispatcher.py
 ```
 
-### 4. Iniciar el Motor de Correlación pfctl & Suricata
+### 4. Iniciar el Motor de Correlación KRONOS (Python 3.12)
 
 ```bash
 cd src/pfsense_pfctl_engine
@@ -253,7 +253,7 @@ python log_correlator.py
 
 ## 👥 9. Equipo de Desarrollo (Duoc UC)
 
-* **Bruno Urrea Ortiz:** *Líder de Arquitectura de Ciberseguridad, Motor de Correlación pfctl e Integración Gemini Live API.*
+* **Bruno Urrea Ortiz:** *Líder de Arquitectura de Ciberseguridad, Motor de Correlación KRONOS (FreeBSD pfctl) e Integración Gemini Live API.*
 * **Freddy Vásquez Cortés:** *Ingeniería de Routing, Switching perimetral y Configuración de Telefonía VoIP Asterisk.*
 * **Cristóbal Quezada:** *Administración de Servicios Web, Proxy Inverso HAProxy y Laboratorio DVWA.*
 * **Kevin Retamales:** *Hardening Perimetral, Listas de Inteligencia de Amenazas pfBlockerNG y Control de Calidad.*

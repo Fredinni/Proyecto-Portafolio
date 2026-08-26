@@ -110,7 +110,7 @@
     </text>
     <text x="0" y="24" font-family="'Consolas', monospace" font-size="13" font-weight="bold" 
           letter-spacing="3" fill="#00F5FF" text-anchor="middle" filter="url(#glowCyan)">
-      INLINE IPS NETMAP &#8226; MOTOR pfctl ANTIRUIDO &#8226; AGENTE DE VOZ IA GEMINI LIVE &#8226; ASTERISK PBX
+      INLINE IPS NETMAP • MOTOR DE CORRELACIÓN KRONOS • GESTIÓN DE ESTADOS PFCTL • GEMINI LIVE • ASTERISK
     </text>
   </g>
   <line x1="60" y1="88" x2="1240" y2="88" stroke="#1E293B" stroke-width="2" />
@@ -198,7 +198,6 @@
     <text x="16" y="66" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#34D399">HAProxy Reverse Proxy</text>
     <text x="16" y="86" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#94A3B8">Terminación SSL + Stick-Tables</text>
     <text x="16" y="106" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#94A3B8">Rate-Limiting (Anti-Fuzzing)</text>
-
     <text x="16" y="136" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#FBBF24">DVWA Web Container</text>
     <text x="16" y="156" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#94A3B8">Objetivo Vulnerable de Prueba</text>
 
@@ -207,25 +206,25 @@
     <text x="125" y="195" font-family="'Consolas', monospace" font-size="12" font-weight="bold" fill="#6EE7B7" text-anchor="middle">VLAN 20 AISLADA</text>
   </g>
 
-  <!-- CARD 04: MOTOR pfctl CORRELATOR (EL CEREBRO) -->
+  <!-- CARD 04: MOTOR DE CORRELACIÓN KRONOS -->
   <g transform="translate(230, 405)">
     <rect width="390" height="235" rx="10" fill="url(#cardBg4)" stroke="#F59E0B" stroke-width="2" filter="url(#glowAmber)" />
     <!-- Header -->
     <path d="M 0 10 Q 0 0 10 0 L 380 0 Q 390 0 390 10 L 390 40 L 0 40 Z" fill="#92400E" />
-    <text x="195" y="26" font-family="'Orbitron', sans-serif" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle">04. MOTOR pfctl CORRELATOR</text>
+    <text x="195" y="26" font-family="'Orbitron', sans-serif" font-size="14.5" font-weight="bold" fill="#FFFFFF" text-anchor="middle">04. MOTOR DE CORRELACIÓN KRONOS</text>
 
     <!-- Text items with high contrast -->
     <text x="18" y="68" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#FBBF24">&#8226; Parser Continuo de eve.json (Suricata)</text>
-    <text x="18" y="94" font-family="'Segoe UI', sans-serif" font-size="13.5" font-weight="bold" fill="#34D399">&#8226; Supresi&#243;n de Falsos Positivos (&gt;50%)</text>
-    <text x="36" y="114" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">Filtro heur&#237;stico de SQLi, RCE y descarte de ruido</text>
-    <text x="18" y="140" font-family="'Segoe UI', sans-serif" font-size="13.5" font-weight="bold" fill="#38BDF8">&#8226; Verificaci&#243;n At&#243;mica en Kernel pfctl</text>
-    <text x="36" y="160" font-family="'Consolas', monospace" font-size="12" fill="#F8FAFC">pfctl -t snort2c -T test &lt;IP&gt; == 0</text>
+    <text x="18" y="94" font-family="'Segoe UI', sans-serif" font-size="13.5" font-weight="bold" fill="#34D399">&#8226; Supresión de Falsos Positivos (&gt;50%)</text>
+    <text x="36" y="114" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">Filtro heurístico de SQLi, RCE y descarte de ruido</text>
+    <text x="18" y="140" font-family="'Segoe UI', sans-serif" font-size="13.5" font-weight="bold" fill="#38BDF8">&#8226; Control de Estados en Kernel pfctl (-k)</text>
+    <text x="36" y="160" font-family="'Consolas', monospace" font-size="12" fill="#F8FAFC">pfctl -k &lt;IP&gt; &amp;&amp; pfctl -t snort2c -T test &lt;IP&gt;</text>
 
     <!-- Decision Formula Box -->
     <rect x="18" y="174" width="354" height="46" rx="6" fill="#1C1103" stroke="#F59E0B" stroke-width="1.5" />
     <text x="195" y="193" font-family="'Consolas', monospace" font-size="11.5" font-weight="bold" fill="#FDE68A" text-anchor="middle">SI (SQLi_Confirmado &amp;&amp; IP_in_snort2c):</text>
-    <text x="195" y="210" font-family="'Consolas', monospace" font-size="11.5" font-weight="bold" fill="#10B981" text-anchor="middle">&#8680; DISPARAR LLAMADA TELEF&#211;NICA DE EMERGENCIA</text>
-  </g>
+    <text x="195" y="210" font-family="'Consolas', monospace" font-size="11.5" font-weight="bold" fill="#10B981" text-anchor="middle">&#8680; DISPARAR LLAMADA TELEFÓNICA DE EMERGENCIA</text>
+  </g>/g>
 
   <!-- CARD 05: SOAR VOZ IA & ASTERISK PBX -->
   <g transform="translate(700, 405)">
