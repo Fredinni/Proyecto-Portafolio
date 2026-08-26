@@ -1,9 +1,17 @@
 <p align="center">
-  <video src="assets/kronos_sentinel_intro.mp4" autoplay loop muted playsinline width="100%"></video>
+  <img src="assets/kronos_sentinel_intro.gif" alt="KRONOS SENTINEL Cinematic Introduction" width="100%">
 </p>
 
-<h1 align="center">KRONOS SENTINEL</h1>
-<h3 align="center">Autonomous AI-IPS & Real-Time Incident Voice Response SOAR Architecture</h3>
+```ansi
+[1;36m██╗  ██╗██████╗  ██████╗ ███╗   ██╗ ██████╗ ███████╗   ███████╗███████╗███╗   ██╗████████╗██╗███╗   ██╗███████╗██╗     
+██║ ██╔╝██╔══██╗██╔═══██╗████╗  ██║██╔═══██╗██╔════╝   ██╔════╝██╔════╝████╗  ██║╚══██╔══╝██║████╗  ██║██╔════╝██║     
+█████╔╝ ██████╔╝██║   ██║██╔██╗ ██║██║   ██║███████╗   ███████╗█████╗  ██╔██╗ ██║   ██║   ██║██╔██╗ ██║█████╗  ██║     
+██╔═██╗ ██╔══██╗██║   ██║██║╚██╗██║██║   ██║╚════██║   ╚════██║██╔══╝  ██║╚██╗██║   ██║   ██║██║╚██╗██║██╔══╝  ██║     
+██║  ██╗██║  ██║╚██████╔╝██║ ╚████║╚██████╔╝███████║   ███████║███████╗██║ ╚████║   ██║   ██║██║ ╚████║███████╗███████╗
+╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚══════╝   ╚══════╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝╚═╝  ╚═══╝╚══════╝╚══════╝[0m
+[1;32m// [SYSTEM]: AUTONOMOUS AI-IPS & REAL-TIME INCIDENT VOICE RESPONSE SOAR ARCHITECTURE
+// [TARGET]: DUOC UC SAN JOAQUÍN • PORTAFOLIO DE TÍTULO APT122 • KERNEL HARDENING FREEBSD 14 / PFSENSE 2.9.0[0m
+```
 
 <p align="center">
   <strong>Proyecto de Portafolio de Título (APT122) — Ingeniería en Conectividad y Redes</strong><br>
