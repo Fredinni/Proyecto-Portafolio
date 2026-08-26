@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/sentinel_shield_logo.png" alt="KRONOS SENTINEL Emblem" width="360px">
+  <img src="assets/kronos_sentinel_intro.gif" alt="KRONOS SENTINEL Introduction" width="100%">
 </p>
 
 <h1 align="center">KRONOS SENTINEL</h1>
