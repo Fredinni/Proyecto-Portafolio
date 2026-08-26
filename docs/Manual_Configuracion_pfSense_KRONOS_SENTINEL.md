@@ -171,6 +171,33 @@
 
 ---
 
+### MÓDULO 6: RECOLECCIÓN Y CENTRALIZACIÓN DE LOGS (TELEMETRÍA LAN, WAN, DMZ Y SYSLOG REMOTO)
+
+Para que el motor **KRONOS SENTINEL** y los analistas del SOC obtengan visibilidad completa de amenazas perimetrales (Norte-Sur) y movimiento lateral interno (Este-Oeste), se implementa una arquitectura de telemetría multi-capa:
+
+#### 6.1 Inspección Suricata en Interfaces Internas (LAN y DMZ)
+1. Navegar a **Services > Suricata > Interfaces** y hacer clic en **+ Add**.
+2. Crear instancia para **LAN (`vtnet1.10`)** y **DMZ (`vtnet1.20`)**:
+   * **Propósito:** Captura la IP de origen real del atacante o host comprometido **antes de cualquier traslación NAT o proxying**.
+   * **Detección Interna:** Movimiento lateral, escaneo de puertos interno, balizas de Command & Control (C2) y exfiltración de datos.
+3. En **EVE JSON Log Settings**:
+   * EVE Log: `Enabled` | Output: `FILE` (`/var/log/suricata/eve.json`).
+   * Información registrada: `ALERTS`, `HTTP`, `TLS`, `DNS`, `SSH`, `DROP`.
+
+#### 6.2 Configuración de Syslog Remoto Centralizado (SIEM / SIEM Forwarder)
+1. Ir a **Status > System Logs > Settings**.
+2. En la sección **Remote Logging Options**:
+   * **Enable Remote Logging:** Marcar casilla.
+   * **Remote Log Servers:** Ingresar IP y puerto del servidor de ingesta / colector KRONOS (ej. `192.168.99.100:514` o `127.0.0.1:5140`).
+   * **Remote Syslog Contents:**
+     * Marcar `Firewall Events` (Eventos de filtrado `filterlog`).
+     * Marcar `DHCP Service Events` (Mapeo dinámico de IPs a MACs).
+     * Marcar `HAProxy` (Peticiones HTTP L7 y códigos de estado).
+     * Marcar `DNS Resolver Events` (Consultas Unbound DNS para detección de dominios DGA).
+3. Guardar y **Apply Changes**.
+
+---
+
 # PARTE 2: GUÍA AVANZADA MEDIANTE CLI / SHELL DE FREEBSD
 
 ---
@@ -234,4 +261,22 @@ load_rc_config $name
 : ${kronos_sentinel_enable:="YES"}
 
 run_rc_command "$1"
+```
+
+---
+
+### 2.4 Diagnóstico y Captura de Logs en Kernel (`pflog` & `eve.json`)
+
+```bash
+# 1. Monitoreo en vivo de paquetes bloqueados en la interfaz LAN (vtnet1.10):
+tcpdump -nei pflog0 -vv 'action block and inbound and in_iface vtnet1.10'
+
+# 2. Volcado en tiempo real de eventos EVE JSON de Suricata (LAN & WAN):
+tail -F /var/log/suricata/eve.json | jq 'select(.event_type=="alert") | {timestamp, in_iface, src_ip, dest_ip, alert: .alert.signature}'
+
+# 3. Inspección del archivo de logs estructurado del firewall (filterlog):
+tail -F /var/log/filter.log | awk -F',' '{print "Regla: "$1" | Interfaz: "$5" | Acción: "$7" | Origen: "$10" -> Destino: "$11}'
+
+# 4. Verificación de conectividad Syslog remota UDP hacia el colector KRONOS:
+nc -u -z -v -w 2 192.168.99.100 514
 ```

@@ -1,0 +1,17 @@
+# System & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*.tmp
+*.log
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local Context Rules (Keep private)
+AGENTS.md
+GEMINI.md

@@ -346,6 +346,16 @@ def build_pfsense_pdf_manual(output_filename: str):
         ('BOTTOMPADDING', (0,0), (-1,-1), 3),
     ]))
     story.append(t_rules)
+    
+    # MÓDULO 6
+    story.append(Spacer(1, 10))
+    story.append(Paragraph("MÓDULO 6: RECOLECCIÓN Y CENTRALIZACIÓN DE LOGS (TELEMETRÍA LAN, WAN, DMZ Y SYSLOG REMOTO)", h2_style))
+    story.append(HRFlowable(width="100%", thickness=1, color=CYAN_ACCENT, spaceAfter=8))
+    story.append(Paragraph("Para otorgar visibilidad perimetral (Norte-Sur) y detectar movimiento lateral interno (Este-Oeste), se orquesta la recolección multi-capa:", body_style))
+    story.append(Paragraph("<b>1. Suricata Multi-Interfaz (LAN & DMZ):</b> Instancias en <code>vtnet1.10</code> y <code>vtnet1.20</code> capturan la IP real de clientes internos antes de NAT/Proxying, registrando alertas en <code>/var/log/suricata/eve.json</code>.<br/>"
+                           "<b>2. Syslog Remoto Centralizado:</b> En <b>Status > System Logs > Settings</b> activar <i>Remote Logging</i> hacia el colector KRONOS (UDP 514 / TCP 6514), transmitiendo <i>Firewall Events</i>, <i>DHCP Service</i>, <i>HAProxy L7</i> y <i>DNS Unbound</i>.<br/>"
+                           "<b>3. Pipeline de Ingesta en Memoria:</b> El demonio KRONOS procesa eventos EVE JSON y logs estructurados RFC 5424 con latencia inferior a 50 milisegundos.", body_style))
+
     story.append(PageBreak())
 
     # =========================================================================
@@ -399,6 +409,18 @@ def build_pfsense_pdf_manual(output_filename: str):
         "run_rc_command \"$1\""
     )
     story.append(Preformatted(code_rc, code_style))
+
+    story.append(Spacer(1, 4))
+    story.append(Paragraph("2.4 Diagnóstico y Captura de Logs en Kernel (<code>pflog</code> & <code>eve.json</code>)", h3_style))
+    code_logs = (
+        "# 1. Monitoreo en vivo de paquetes bloqueados en LAN (vtnet1.10):\n"
+        "tcpdump -nei pflog0 -vv 'action block and inbound and in_iface vtnet1.10'\n\n"
+        "# 2. Volcado en tiempo real de alertas EVE JSON de Suricata:\n"
+        "tail -F /var/log/suricata/eve.json | jq 'select(.event_type==\"alert\")'\n\n"
+        "# 3. Verificación de conectividad Syslog remota UDP hacia colector KRONOS:\n"
+        "nc -u -z -v -w 2 192.168.99.100 514"
+    )
+    story.append(Preformatted(code_logs, code_style))
 
     doc.build(story, canvasmaker=NumberedCanvas, onFirstPage=draw_background, onLaterPages=draw_background)
     print(f"Master PDF generated successfully: {output_filename}")
