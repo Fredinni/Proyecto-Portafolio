@@ -1,17 +1,9 @@
 <p align="center">
-  <img src="assets/kronos_sentinel_intro.gif" alt="KRONOS SENTINEL Cinematic Introduction" width="100%">
+  <img src="assets/kronos_sentinel_intro.gif" alt="KRONOS SENTINEL Introduction" width="100%">
 </p>
 
-```ansi
-[1;36m██╗  ██╗██████╗  ██████╗ ███╗   ██╗ ██████╗ ███████╗   ███████╗███████╗███╗   ██╗████████╗██╗███╗   ██╗███████╗██╗     
-██║ ██╔╝██╔══██╗██╔═══██╗████╗  ██║██╔═══██╗██╔════╝   ██╔════╝██╔════╝████╗  ██║╚══██╔══╝██║████╗  ██║██╔════╝██║     
-█████╔╝ ██████╔╝██║   ██║██╔██╗ ██║██║   ██║███████╗   ███████╗█████╗  ██╔██╗ ██║   ██║   ██║██╔██╗ ██║█████╗  ██║     
-██╔═██╗ ██╔══██╗██║   ██║██║╚██╗██║██║   ██║╚════██║   ╚════██║██╔══╝  ██║╚██╗██║   ██║   ██║██║╚██╗██║██╔══╝  ██║     
-██║  ██╗██║  ██║╚██████╔╝██║ ╚████║╚██████╔╝███████║   ███████║███████╗██║ ╚████║   ██║   ██║██║ ╚████║███████╗███████╗
-╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚══════╝   ╚══════╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝╚═╝  ╚═══╝╚══════╝╚══════╝[0m
-[1;32m// [SYSTEM]: AUTONOMOUS AI-IPS & REAL-TIME INCIDENT VOICE RESPONSE SOAR ARCHITECTURE
-// [TARGET]: DUOC UC SAN JOAQUÍN • PORTAFOLIO DE TÍTULO APT122 • KERNEL HARDENING FREEBSD 14 / PFSENSE 2.9.0[0m
-```
+<h1 align="center">KRONOS SENTINEL</h1>
+<h3 align="center">Autonomous AI-IPS & Real-Time Incident Voice Response SOAR Architecture</h3>
 
 <p align="center">
   <strong>Proyecto de Portafolio de Título (APT122) — Ingeniería en Conectividad y Redes</strong><br>
@@ -26,12 +18,6 @@
   <img src="https://img.shields.io/badge/Voice_Telephony-Asterisk%20PBX%2020-D97706?style=for-the-badge&logo=asterisk&logoColor=white" alt="Asterisk">
   <img src="https://img.shields.io/badge/Reverse_Proxy-HAProxy%20SSL-00A86B?style=for-the-badge&logo=haproxy&logoColor=white" alt="HAProxy">
   <img src="https://img.shields.io/badge/Threat_Feeds-pfBlockerNG%20%2B%20MaxMind-8B5CF6?style=for-the-badge&logo=gnometerminal&logoColor=white" alt="pfBlockerNG">
-</p>
-
----
-
-<p align="center">
-  <img src="assets/kronos_sentinel_flow_build.gif" alt="KRONOS SENTINEL Architecture &amp; Logo Convergence Animation" width="100%">
 </p>
 
 ---
