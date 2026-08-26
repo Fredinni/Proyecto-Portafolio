@@ -13,14 +13,15 @@ from reportlab.platypus import (
 )
 from reportlab.pdfgen import canvas
 
-BG_COLOR = colors.HexColor("#080C14")
-CYAN_ACCENT = colors.HexColor("#00F5FF")
-CRIMSON_BADGE = colors.HexColor("#FF1E56")
+BG_COLOR = colors.HexColor("#070A11")
+CYAN_ACCENT = colors.HexColor("#00E5FF")
+CRIMSON_BADGE = colors.HexColor("#F43F5E")
 BORDER_COLOR = colors.HexColor("#1E293B")
-TEXT_MUTED = colors.HexColor("#94A3B8")
+BORDER_MUTED = colors.HexColor("#334155")
+TEXT_MUTED = colors.HexColor("#64748B")
 TEXT_LIGHT = colors.HexColor("#E2E8F0")
 TEXT_HEADING = colors.HexColor("#F8FAFC")
-CODE_BG = colors.HexColor("#050811")
+CODE_BG = colors.HexColor("#0A0F1D")
 CODE_TEXT = colors.HexColor("#38BDF8")
 
 class NumberedCanvas(canvas.Canvas):
@@ -44,35 +45,39 @@ class NumberedCanvas(canvas.Canvas):
         self.saveState()
         # Header (pages > 1)
         if self._pageNumber > 1:
-            self.setFont("Helvetica-Bold", 8)
-            self.setFillColor(CRIMSON_BADGE)
-            self.drawString(40, 760, "TOP SECRET // SEC-OPS CLEARANCE LVL 4 // APT122")
-            
-            self.setFont("Helvetica-Bold", 8)
+            self.setFont("Helvetica-Bold", 7.5)
             self.setFillColor(CYAN_ACCENT)
-            self.drawRightString(572, 760, "KRONOS SENTINEL : MANUAL DE CONFIGURACIÓN")
+            self.drawString(40, 762, "KRONOS SENTINEL")
+            
+            self.setFont("Helvetica", 7.5)
+            self.setFillColor(TEXT_MUTED)
+            self.drawString(130, 762, "//  pfSense CE 2.7.2 & Netmap IPS Engineering Manual")
+            
+            self.setFont("Helvetica-Bold", 7.5)
+            self.setFillColor(TEXT_LIGHT)
+            self.drawRightString(572, 762, "DUOC UC SAN JOAQUÍN")
             
             self.setStrokeColor(BORDER_COLOR)
-            self.setLineWidth(0.8)
-            self.line(40, 752, 572, 752)
+            self.setLineWidth(0.5)
+            self.line(40, 754, 572, 754)
             
         # Footer
-        self.setFont("Helvetica", 8)
+        self.setFont("Helvetica", 7.5)
         self.setFillColor(TEXT_MUTED)
-        self.drawString(40, 30, "DUOC UC — SAN JOAQUÍN | AUTOR: BRUNO URREA ORTIZ")
+        self.drawString(40, 28, "KRONOS SENTINEL (APT122) • AUTOR: BRUNO URREA ORTIZ")
         
-        self.setFont("Helvetica-Bold", 8)
+        self.setFont("Helvetica-Bold", 7.5)
         self.setFillColor(CYAN_ACCENT)
-        self.drawRightString(572, 30, f"PÁGINA {self._pageNumber} DE {page_count}")
+        self.drawRightString(572, 28, f"PÁGINA {self._pageNumber} / {page_count}")
         
         self.setStrokeColor(BORDER_COLOR)
-        self.setLineWidth(0.8)
-        self.line(40, 42, 572, 42)
+        self.setLineWidth(0.5)
+        self.line(40, 38, 572, 38)
         
         self.restoreState()
 
 def draw_background(canvas_obj, doc):
-    """Draws full-page dark background before Platypus flowables render."""
+    """Draws full-page matte slate background."""
     canvas_obj.saveState()
     canvas_obj.setFillColor(BG_COLOR)
     canvas_obj.rect(0, 0, doc.pagesize[0], doc.pagesize[1], fill=True, stroke=False)
@@ -84,31 +89,33 @@ def build_pfsense_pdf_manual(output_filename: str):
         pagesize=letter,
         leftMargin=40,
         rightMargin=40,
-        topMargin=55,
-        bottomMargin=55
+        topMargin=50,
+        bottomMargin=50
     )
 
     styles = getSampleStyleSheet()
     
-    # Custom SecOps Styles
+    # Modernist Editorial Styles
     title_style = ParagraphStyle(
         'CoverTitle',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=24,
-        leading=28,
-        textColor=colors.HexColor("#FFFFFF"),
-        alignment=1
+        fontSize=22,
+        leading=26,
+        textColor=TEXT_HEADING,
+        alignment=1,
+        letterSpacing=1.2
     )
     
     badge_style = ParagraphStyle(
         'CoverBadge',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=9.5,
-        leading=13,
-        textColor=CRIMSON_BADGE,
-        alignment=1
+        fontSize=8.5,
+        leading=12,
+        textColor=CYAN_ACCENT,
+        alignment=1,
+        letterSpacing=1.5
     )
     
     subtitle_style = ParagraphStyle(
@@ -196,15 +203,15 @@ def build_pfsense_pdf_manual(output_filename: str):
     story = []
 
     # =========================================================================
-    # PÁGINA 1: PORTADA CORPORATIVA / SECOPS MILITAR
+    # PÁGINA 1: PORTADA CORPORATIVA / MINIMALISTA SUIZO
     # =========================================================================
     story.append(Spacer(1, 15))
-    story.append(Paragraph("TOP SECRET // SEC-OPS CLEARANCE LEVEL 4", badge_style))
-    story.append(Spacer(1, 10))
-    story.append(Paragraph("KRONOS <font color='#00F5FF'>SENTINEL</font>", title_style))
+    story.append(Paragraph("SECURITY OPERATIONS &amp; THREAT INTELLIGENCE SPECIFICATION", badge_style))
     story.append(Spacer(1, 8))
-    story.append(Paragraph("MANUAL MAESTRO DE CONFIGURACIÓN Y HARDENING PERIMETRAL<br/>FIREWALL pfSense CE 2.7.2 & SUB-SISTEMA pfctl / SURICATA IPS", subtitle_style))
-    story.append(Spacer(1, 15))
+    story.append(Paragraph("KRONOS <font color='#00E5FF'>SENTINEL</font>", title_style))
+    story.append(Spacer(1, 6))
+    story.append(Paragraph("MANUAL MAESTRO DE CONFIGURACIÓN Y HARDENING PERIMETRAL<br/>FIREWALL pfSense CE 2.7.2 &amp; SUB-SISTEMA pfctl / SURICATA IPS", subtitle_style))
+    story.append(Spacer(1, 14))
     
     # Shield Logo
     logo_path = "assets/sentinel_shield_logo.png"
@@ -212,23 +219,23 @@ def build_pfsense_pdf_manual(output_filename: str):
         img = Image(logo_path, width=105, height=105)
         img.hAlign = 'CENTER'
         story.append(img)
-        story.append(Spacer(1, 15))
+        story.append(Spacer(1, 14))
 
-    # Meta Box Table (Without Mentor Académico)
+    # Meta Box Table (Modernist Minimal Grid)
     meta_data = [
         [Paragraph("<b>PROYECTO:</b>", body_style), Paragraph("KRONOS SENTINEL (APT122 - Portafolio de Título)", body_style)],
         [Paragraph("<b>AUTOR:</b>", body_style), Paragraph("Bruno Urrea Ortiz (Futuro Ing. en Conectividad y Redes)", body_style)],
         [Paragraph("<b>INSTITUCIÓN:</b>", body_style), Paragraph("Duoc UC — Sede San Joaquín", body_style)],
-        [Paragraph("<b>SISTEMA OPERATIVO:</b>", body_style), Paragraph("FreeBSD 14.0-CURRENT / pfSense CE 2.7.2 (amd64)", body_style)],
-        [Paragraph("<b>ARQUITECTURA:</b>", body_style), Paragraph("Inline Netmap IPS + HAProxy SSL + pfBlockerNG + Gemini Live", body_style)],
-        [Paragraph("<b>CLASIFICACIÓN:</b>", body_style), Paragraph("<font color='#00F5FF'><b>SEC-OPS VERIFIED & FIELD READY</b></font>", body_style)]
+        [Paragraph("<b>SISTEMA BASE:</b>", body_style), Paragraph("FreeBSD 14.0-CURRENT / pfSense CE 2.7.2 (amd64)", body_style)],
+        [Paragraph("<b>ARQUITECTURA:</b>", body_style), Paragraph("Inline Netmap IPS + HAProxy SSL + pfBlockerNG + Gemini Live Flash 3.1", body_style)],
+        [Paragraph("<b>ESTADO:</b>", body_style), Paragraph("<font color='#10B981'><b>ENTERPRISE VERIFIED &amp; FIELD PRODUCTION READY</b></font>", body_style)]
     ]
-    t_meta = Table(meta_data, colWidths=[140, 392])
+    t_meta = Table(meta_data, colWidths=[130, 402])
     t_meta.setStyle(TableStyle([
-        ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#0D1322")),
+        ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#0D131F")),
         ('TEXTCOLOR', (0,0), (-1,-1), TEXT_LIGHT),
         ('INNERGRID', (0,0), (-1,-1), 0.5, BORDER_COLOR),
-        ('BOX', (0,0), (-1,-1), 1.5, CYAN_ACCENT),
+        ('BOX', (0,0), (-1,-1), 1, colors.HexColor("#2563EB")),
         ('TOPPADDING', (0,0), (-1,-1), 5),
         ('BOTTOMPADDING', (0,0), (-1,-1), 5),
         ('LEFTPADDING', (0,0), (-1,-1), 10),

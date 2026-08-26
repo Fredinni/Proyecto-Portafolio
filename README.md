@@ -80,17 +80,31 @@ $$\text{Criterio de Disparo} = \left( \mathrm{Confianza}_{\text{SQLi}} \ge 0.75 
 
 ---
 
-## 🎨 4. Simbolismo del Emblema KRONOS SENTINEL
+## ⏱️ 4. Línea de Tiempo de Respuesta a Incidentes (SOC War-Room)
 
-El isotipo corporativo fue diseñado bajo una estética ciberpunk y militar de alta tecnología:
-* **Escudo Angular de Titanio y Alas Mecha:** Representa la robustez perimetral de **pfSense** y la inspección sin latencia de **Suricata en modo Netmap**.
-* **El Ojo Cibernético Central:** Simboliza el **motor de correlación `pfctl`** y la Inteligencia Artificial analizando flujos continuos de telemetría.
-* **Ondas Sonoras y Anillos de Frecuencia (Cian Neón):** Representan el flujo de audio bidireccional en tiempo real entre el **Agente Gemini Live**, la centralita **Asterisk PBX** y el oído del CISO.
-* **Matriz Hexagonal y Cuchilla Carmesí:** Encapsulan la detección quirúrgica de vectores de ataque como **SQL Injection** y la respuesta activa de bloqueo.
+```text
+ [T+0.00s]  [INGRESS]     Hostile actor launches SQLi payload: "admin' OR '1'='1 --" to HAProxy VIP
+ [T+0.04s]  [NETMAP IPS]  Suricata 7.x inline ring-buffer catches payload -> Drops packet & logs to eve.json
+ [T+0.08s]  [FREEBSD PF]  Kernel dynamically updates 'snort2c' table -> Enforces total IP blackholing
+ [T+0.12s]  [KRONOS CORE] log_correlator tails eve.json -> Heuristic analyzer validates SQLi confidence (0.94)
+ [T+0.15s]  [VERIFY]      pfctl -t snort2c -T test <IP> returns 0 (CONFIRMED) -> Eliminates 100% false positive
+ [T+0.21s]  [SOAR HOOK]   Webhook POST /incident payload dispatched to local Voice Dispatcher daemon
+ [T+0.45s]  [VOIP DIAL]   Asterisk AMI executes Originate -> Rings CISO mobile via PJSIP/1001 trunk
+ [T+1.10s]  [AUDIO BRIDGE]CISO answers -> Gemini Live Flash 3.1 initiates bidirectional low-latency audio stream
+ [T+1.40s]  [IA BRIEFING] "Alerta Crítica: Se ha neutralizado un ataque SQL Injection proveniente de Rusia..."
+```
 
 ---
 
-## 📂 5. Estructura del Repositorio y Entregables Académicos
+## 📐 5. Filosofía de Diseño: Modernismo Suizo & Minimalismo Lógico
+
+El isotipo e identidad visual de **KRONOS SENTINEL** fueron concebidos bajo los principios del diseño modernista internacional (*Swiss Style*), balance de espacio negativo y sobriedad técnica de alta gama:
+* **Monolito Geométrico de Alta Precisión:** Representa la solidez estructural de **pfSense** y la inspección atómica en ring-buffer mediante **Suricata en modo Inline Netmap**.
+* **Quilla Central de Corte `pfctl`:** Simboliza la purga instantánea en kernel (`Kill States`) y el aislamiento dinámico de vectores hostiles.
+* **Iris Óptico Centinela:** Núcleo autónomo en cian de alta fidelidad (`#00E5FF`), representando el motor de correlación heurística y procesamiento de telemetría continua.
+* **Ranuras Laterales de Audio & Voz:** Representan la telemetría de voz bidireccional en tiempo real entre el **Agente Gemini Live**, la centralita **Asterisk PBX** y el CISO.
+
+## 📂 6. Estructura del Repositorio y Entregables Académicos
 
 ```bash
 Proyecto-Portafolio/
@@ -152,7 +166,7 @@ Proyecto-Portafolio/
 
 ---
 
-## 🛠️ 6. Despliegue y Puesta en Marcha Rápida
+## 🛠️ 7. Despliegue y Puesta en Marcha Rápida
 
 ### 1. Iniciar Entorno de Pruebas DMZ (DVWA)
 ```bash
@@ -181,9 +195,10 @@ python log_correlator.py
 
 ---
 
-## 👥 7. Equipo de Desarrollo
+## 👥 8. Equipo de Desarrollo
 
 * **Bruno Urrea Ortiz:** *Líder de Arquitectura de Ciberseguridad, Motor de Correlación pfctl e Integración Gemini Live API.*
 * **Freddy Vásquez Cortés:** *Ingeniería de Routing, Switching perimetral y Configuración de Telefonía VoIP Asterisk.*
 * **Cristóbal Quezada:** *Administración de Servicios Web, Proxy Inverso HAProxy y Laboratorio DVWA.*
 * **Kevin Retamales:** *Hardening Perimetral, Listas de Inteligencia de Amenazas pfBlockerNG y Control de Calidad.*
+

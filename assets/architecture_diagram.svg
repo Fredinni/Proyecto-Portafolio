@@ -1,129 +1,227 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 650" width="100%" height="100%">
   <defs>
-    <linearGradient id="boxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#141C2B" />
+    <!-- Modern Neutral Slate Surface Gradients -->
+    <linearGradient id="cardSurface" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#111827" />
       <stop offset="100%" stop-color="#0B0F19" />
     </linearGradient>
-    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#FF1E56" />
-      <stop offset="100%" stop-color="#990033" />
+
+    <linearGradient id="cardSurfaceHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#151E2E" />
+      <stop offset="100%" stop-color="#0D131F" />
     </linearGradient>
-    <linearGradient id="cyanBoxGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#00F5FF" />
-      <stop offset="100%" stop-color="#0077B6" />
-    </linearGradient>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="3" result="blur" />
-      <feMerge>
-        <feMergeNode in="blur" />
-        <feMergeNode in="SourceGraphic" />
-      </feMerge>
+
+    <!-- Subtle Elevation Shadow (Zero Cliché Glow) -->
+    <filter id="subtleCardShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.5" />
     </filter>
+
+    <!-- Marker Arrowheads -->
+    <marker id="arrowCyan" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <polygon points="0 1, 7 4, 0 7" fill="#00E5FF" />
+    </marker>
+    <marker id="arrowAmber" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <polygon points="0 1, 7 4, 0 7" fill="#F59E0B" />
+    </marker>
+    <marker id="arrowCrimson" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <polygon points="0 1, 7 4, 0 7" fill="#F43F5E" />
+    </marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <polygon points="0 1, 7 4, 0 7" fill="#3B82F6" />
+    </marker>
+    <marker id="arrowEmerald" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <polygon points="0 1, 7 4, 0 7" fill="#10B981" />
+    </marker>
   </defs>
 
-  <!-- Background -->
-  <rect width="1200" height="650" fill="#06090F" />
-  
-  <!-- Title -->
-  <text x="600" y="45" font-family="'Segoe UI', sans-serif" font-size="22" font-weight="900" fill="#FFFFFF" text-anchor="middle" letter-spacing="4">
-    KRONOS SENTINEL: ARQUITECTURA DE DEFENSAS Y RESPUESTA POR VOZ IA
-  </text>
-  <text x="600" y="70" font-family="monospace" font-size="12" fill="#00F5FF" text-anchor="middle" letter-spacing="2">
-    FLUJO DE TELEMETRIA EN TIEMPO REAL &#8226; FILTRADO DE FALSOS POSITIVOS &#8226; DISPARO DE LLAMADA AL CISO
-  </text>
+  <!-- Deep Slate Technical Canvas -->
+  <rect width="1200" height="650" fill="#070A11" />
 
-  <!-- 1. Attacker Box -->
-  <g transform="translate(50, 120)">
-    <rect width="180" height="150" rx="10" fill="url(#boxGrad)" stroke="#FF1E56" stroke-width="2" filter="url(#glow)" />
-    <rect width="180" height="35" rx="10" fill="url(#headerGrad)" />
-    <text x="90" y="24" font-family="sans-serif" font-size="14" font-weight="bold" fill="#FFF" text-anchor="middle">AMENAZA EXTERNA</text>
-    <text x="90" y="65" font-family="monospace" font-size="11" fill="#FF809B" text-anchor="middle">&#8226; SQL Injection (SQLi)</text>
-    <text x="90" y="85" font-family="monospace" font-size="11" fill="#FF809B" text-anchor="middle">&#8226; Exploit Payloads</text>
-    <text x="90" y="105" font-family="monospace" font-size="11" fill="#FF809B" text-anchor="middle">&#8226; Port Scanners / Noise</text>
-    <text x="90" y="130" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">[ WAN Interface ]</text>
+  <!-- Subtle Modular Technical Grid (40px) -->
+  <g stroke="#1E293B" stroke-width="0.5" stroke-opacity="0.35">
+    <line x1="0" y1="40" x2="1200" y2="40" />
+    <line x1="0" y1="80" x2="1200" y2="80" />
+    <line x1="0" y1="120" x2="1200" y2="120" />
+    <line x1="0" y1="360" x2="1200" y2="360" />
+    <line x1="0" y1="600" x2="1200" y2="600" />
+    <line x1="40" y1="0" x2="40" y2="650" />
+    <line x1="280" y1="0" x2="280" y2="650" />
+    <line x1="580" y1="0" x2="580" y2="650" />
+    <line x1="880" y1="0" x2="880" y2="650" />
+    <line x1="1160" y1="0" x2="1160" y2="650" />
   </g>
 
-  <!-- Arrow 1 -> 2 -->
-  <path d="M 230 195 L 290 195" stroke="#FF1E56" stroke-width="3" fill="none" />
-  <polygon points="290,195 280,190 280,200" fill="#FF1E56" />
+  <!-- ================= MASTER HEADER ================= -->
+  <g transform="translate(60, 48)">
+    <circle cx="0" cy="-6" r="4" fill="#00E5FF" />
+    <text x="14" y="-2" font-family="'Inter', -apple-system, sans-serif" font-size="16" font-weight="700" letter-spacing="0.12em" fill="#F8FAFC">
+      KRONOS SENTINEL
+    </text>
+    <text x="195" y="-2" font-family="'Geist Mono', 'SF Mono', monospace" font-size="11" font-weight="500" letter-spacing="0.05em" fill="#64748B">
+      // HIGH-PRECISION AUTONOMOUS IPS &amp; LIVE VOICE TELEMETRY TOPOLOGY
+    </text>
+    <text x="1080" y="-2" font-family="'Geist Mono', 'SF Mono', monospace" font-size="10" font-weight="600" fill="#10B981" text-anchor="end">
+      &#9679; PRODUCTION SPECIFICATION v3.1
+    </text>
+  </g>
+  <line x1="60" y1="64" x2="1140" y2="64" stroke="#1E293B" stroke-width="1" />
 
-  <!-- 2. pfSense Box -->
-  <g transform="translate(300, 100)">
-    <rect width="250" height="200" rx="10" fill="url(#boxGrad)" stroke="#00F5FF" stroke-width="2" filter="url(#glow)" />
-    <rect width="250" height="35" rx="10" fill="url(#cyanBoxGrad)" />
-    <text x="125" y="24" font-family="sans-serif" font-size="14" font-weight="bold" fill="#000" text-anchor="middle">FIREWALL pfSense CE</text>
-    <text x="125" y="65" font-family="sans-serif" font-size="11" font-weight="bold" fill="#00F5FF" text-anchor="middle">1. pfBlockerNG-devel</text>
-    <text x="125" y="82" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">MaxMind GeoIP + Threat Feeds</text>
-    <text x="125" y="105" font-family="sans-serif" font-size="11" font-weight="bold" fill="#00F5FF" text-anchor="middle">2. Suricata (Inline IPS / Netmap)</text>
-    <text x="125" y="122" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">Packet Drop &amp; eve.json Alerting</text>
-    <text x="125" y="145" font-family="sans-serif" font-size="11" font-weight="bold" fill="#00F5FF" text-anchor="middle">3. FreeBSD pfctl State Table</text>
-    <text x="125" y="162" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">snort2c Dynamic Drop List</text>
-    <text x="125" y="185" font-family="monospace" font-size="10" fill="#10B981" text-anchor="middle">[ Active Drop State ]</text>
+  <!-- ================= ORTHOGONAL TELEMETRY BUS & CONNECTORS ================= -->
+  <!-- Ingress to pfSense (WAN) -->
+  <path d="M 230 195 L 290 195" stroke="#F43F5E" stroke-width="1.8" fill="none" marker-end="url(#arrowCrimson)" />
+  <rect x="238" y="178" width="46" height="14" rx="2" fill="#18111A" stroke="#F43F5E" stroke-width="0.8" />
+  <text x="261" y="188" font-family="'Geist Mono', monospace" font-size="8" font-weight="600" fill="#F43F5E" text-anchor="middle">WAN IN</text>
+
+  <!-- pfSense to HAProxy (LAN/DMZ) -->
+  <path d="M 570 195 L 630 195" stroke="#00E5FF" stroke-width="1.8" fill="none" marker-end="url(#arrowCyan)" />
+  <rect x="578" y="178" width="46" height="14" rx="2" fill="#0B1924" stroke="#00E5FF" stroke-width="0.8" />
+  <text x="601" y="188" font-family="'Geist Mono', monospace" font-size="8" font-weight="600" fill="#00E5FF" text-anchor="middle">DMZ L7</text>
+
+  <!-- pfSense Netmap/Suricata down to pfctl Correlation Engine -->
+  <path d="M 430 300 L 430 380" stroke="#00E5FF" stroke-width="1.8" stroke-dasharray="4 3" fill="none" marker-end="url(#arrowCyan)" />
+  <rect x="440" y="328" width="86" height="18" rx="2" fill="#09131F" stroke="#1E293B" stroke-width="0.8" />
+  <text x="483" y="340" font-family="'Geist Mono', monospace" font-size="8" font-weight="500" fill="#94A3B8" text-anchor="middle">eve.json + pfctl IPC</text>
+
+  <!-- Correlation Engine to Asterisk Cloud PBX -->
+  <path d="M 600 485 L 670 485" stroke="#F59E0B" stroke-width="1.8" fill="none" marker-end="url(#arrowAmber)" />
+  <rect x="610" y="468" width="52" height="14" rx="2" fill="#1E160A" stroke="#F59E0B" stroke-width="0.8" />
+  <text x="636" y="478" font-family="'Geist Mono', monospace" font-size="8" font-weight="600" fill="#F59E0B" text-anchor="middle">REST HOOK</text>
+
+  <!-- Asterisk PBX to CISO Mobile Receiver -->
+  <path d="M 940 485 L 1000 485" stroke="#10B981" stroke-width="1.8" fill="none" marker-end="url(#arrowEmerald)" />
+  <rect x="948" y="468" width="46" height="14" rx="2" fill="#0A1D16" stroke="#10B981" stroke-width="0.8" />
+  <text x="971" y="478" font-family="'Geist Mono', monospace" font-size="8" font-weight="600" fill="#10B981" text-anchor="middle">SIP / GSM</text>
+
+  <!-- ================= TOPOLOGY NODES / CARDS ================= -->
+
+  <!-- CARD 01: EXTERNAL THREAT ORIGIN -->
+  <g transform="translate(60, 100)" filter="url(#subtleCardShadow)">
+    <rect width="170" height="200" rx="6" fill="url(#cardSurface)" stroke="#1E293B" stroke-width="1" />
+    <rect width="170" height="3" rx="1" fill="#F43F5E" />
+    
+    <text x="16" y="24" font-family="'Geist Mono', monospace" font-size="9" font-weight="600" letter-spacing="0.1em" fill="#F43F5E">01 / UNTRUSTED</text>
+    <text x="16" y="44" font-family="'Inter', sans-serif" font-size="13" font-weight="700" fill="#F8FAFC">Threat Actor</text>
+    <line x1="16" y1="56" x2="154" y2="56" stroke="#1E293B" stroke-width="1" />
+
+    <text x="16" y="78" font-family="'Inter', sans-serif" font-size="10.5" fill="#CBD5E1">&#8226; SQL Injection Payloads</text>
+    <text x="16" y="98" font-family="'Inter', sans-serif" font-size="10.5" fill="#CBD5E1">&#8226; Automated Scanners</text>
+    <text x="16" y="118" font-family="'Inter', sans-serif" font-size="10.5" fill="#CBD5E1">&#8226; Botnet Exploits</text>
+    <text x="16" y="138" font-family="'Inter', sans-serif" font-size="10.5" fill="#64748B">&#8226; Network Noise / FP</text>
+
+    <!-- Badge -->
+    <rect x="16" y="162" width="138" height="22" rx="3" fill="#18111A" stroke="#331924" stroke-width="1" />
+    <text x="85" y="176" font-family="'Geist Mono', monospace" font-size="9" font-weight="600" fill="#FDA4AF" text-anchor="middle">ATTACK INGRESS</text>
   </g>
 
-  <!-- Arrow 2 -> 3 (HAProxy / DVWA) -->
-  <path d="M 550 195 L 610 195" stroke="#00F5FF" stroke-width="3" fill="none" />
-  <polygon points="610,195 600,190 600,200" fill="#00F5FF" />
+  <!-- CARD 02: pfSense BORDER DEFENSE & IPS CORE -->
+  <g transform="translate(290, 90)" filter="url(#subtleCardShadow)">
+    <rect width="280" height="220" rx="6" fill="url(#cardSurfaceHighlight)" stroke="#2563EB" stroke-width="1.2" />
+    <rect width="280" height="3" rx="1" fill="#00E5FF" />
 
-  <!-- 3. HAProxy & DVWA Box -->
-  <g transform="translate(620, 120)">
-    <rect width="200" height="150" rx="10" fill="url(#boxGrad)" stroke="#10B981" stroke-width="2" />
-    <rect width="200" height="35" rx="10" fill="#10B981" />
-    <text x="100" y="24" font-family="sans-serif" font-size="14" font-weight="bold" fill="#000" text-anchor="middle">DMZ &amp; APLICACION</text>
-    <text x="100" y="65" font-family="sans-serif" font-size="11" font-weight="bold" fill="#FFF" text-anchor="middle">HAProxy Reverse Proxy</text>
-    <text x="100" y="82" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">SSL Term / Health Checks</text>
-    <text x="100" y="108" font-family="sans-serif" font-size="11" font-weight="bold" fill="#F59E0B" text-anchor="middle">DVWA Lab Container</text>
-    <text x="100" y="125" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">Entorno Vulnerable Controlado</text>
+    <text x="16" y="24" font-family="'Geist Mono', monospace" font-size="9" font-weight="600" letter-spacing="0.1em" fill="#00E5FF">02 / PERIMETER IPS</text>
+    <text x="16" y="44" font-family="'Inter', sans-serif" font-size="14" font-weight="700" fill="#F8FAFC">pfSense Security Engine</text>
+    <line x1="16" y1="56" x2="264" y2="56" stroke="#1E293B" stroke-width="1" />
+
+    <!-- Sub-module 1 -->
+    <rect x="16" y="68" width="248" height="34" rx="3" fill="#0B1320" stroke="#1E293B" stroke-width="0.8" />
+    <text x="26" y="83" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#F1F5F9">pfBlockerNG-devel</text>
+    <text x="26" y="95" font-family="'Geist Mono', monospace" font-size="8.5" fill="#64748B">MaxMind GeoIP + Spamhaus / AbuseIPDB</text>
+
+    <!-- Sub-module 2 -->
+    <rect x="16" y="108" width="248" height="34" rx="3" fill="#0B1320" stroke="#1E293B" stroke-width="0.8" />
+    <text x="26" y="123" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#00E5FF">Suricata Inline IPS (Netmap)</text>
+    <text x="26" y="135" font-family="'Geist Mono', monospace" font-size="8.5" fill="#64748B">Live Packet Inspection &amp; eve.json Alert Stream</text>
+
+    <!-- Sub-module 3 -->
+    <rect x="16" y="148" width="248" height="34" rx="3" fill="#0B1320" stroke="#1E293B" stroke-width="0.8" />
+    <text x="26" y="163" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#F1F5F9">FreeBSD pfctl Kernel</text>
+    <text x="26" y="175" font-family="'Geist Mono', monospace" font-size="8.5" fill="#64748B">Dynamic snort2c Table State Enforcement</text>
+
+    <!-- Status indicator -->
+    <circle cx="26" cy="199" r="3" fill="#10B981" />
+    <text x="35" y="202" font-family="'Geist Mono', monospace" font-size="8.5" font-weight="600" fill="#10B981">NETMAP BYPASS: ZERO LATENCY</text>
   </g>
 
-  <!-- Downward Line from pfSense to pfctl Correlation Engine -->
-  <path d="M 425 300 L 425 380" stroke="#00F5FF" stroke-width="3" stroke-dasharray="6 4" fill="none" />
-  <polygon points="425,380 420,370 430,370" fill="#00F5FF" />
+  <!-- CARD 03: DMZ & REVERSE PROXY -->
+  <g transform="translate(630, 100)" filter="url(#subtleCardShadow)">
+    <rect width="210" height="200" rx="6" fill="url(#cardSurface)" stroke="#1E293B" stroke-width="1" />
+    <rect width="210" height="3" rx="1" fill="#3B82F6" />
 
-  <!-- 4. pfctl Correlation Engine Box -->
-  <g transform="translate(250, 390)">
-    <rect width="350" height="210" rx="10" fill="url(#boxGrad)" stroke="#F59E0B" stroke-width="2" filter="url(#glow)" />
-    <rect width="350" height="35" rx="10" fill="#D97706" />
-    <text x="175" y="24" font-family="sans-serif" font-size="14" font-weight="bold" fill="#FFF" text-anchor="middle">MOTOR LOG CORRELATOR (pfctl + EVE)</text>
-    <text x="175" y="65" font-family="sans-serif" font-size="11" font-weight="bold" fill="#FBBF24" text-anchor="middle">&#8226; Supresion de Falsos Positivos (&gt;50%)</text>
-    <text x="175" y="85" font-family="sans-serif" font-size="11" fill="#E2E8F0" text-anchor="middle">&#8226; Analisis Heuristico de Payload SQLi</text>
-    <text x="175" y="105" font-family="sans-serif" font-size="11" fill="#E2E8F0" text-anchor="middle">&#8226; Validacion en Tabla snort2c de pfctl</text>
-    <text x="175" y="125" font-family="sans-serif" font-size="11" fill="#E2E8F0" text-anchor="middle">&#8226; Verificacion de Ataque Real Confirmado</text>
-    <rect x="30" y="145" width="290" height="45" rx="5" fill="#1E293B" />
-    <text x="175" y="163" font-family="monospace" font-size="10" font-weight="bold" fill="#10B981" text-anchor="middle">SI (SQLi Confirmado &amp;&amp; IP_Blocked):</text>
-    <text x="175" y="178" font-family="monospace" font-size="10" fill="#00F5FF" text-anchor="middle">Disparar Webhook de Emergencia a PBX</text>
+    <text x="16" y="24" font-family="'Geist Mono', monospace" font-size="9" font-weight="600" letter-spacing="0.1em" fill="#3B82F6">03 / APPLICATION DMZ</text>
+    <text x="16" y="44" font-family="'Inter', sans-serif" font-size="13" font-weight="700" fill="#F8FAFC">HAProxy &amp; DVWA</text>
+    <line x1="16" y1="56" x2="194" y2="56" stroke="#1E293B" stroke-width="1" />
+
+    <text x="16" y="78" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#F1F5F9">HAProxy Reverse Proxy</text>
+    <text x="16" y="93" font-family="'Geist Mono', monospace" font-size="8.5" fill="#64748B">SSL Termination &amp; Health Probe</text>
+
+    <text x="16" y="118" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#F1F5F9">DVWA Lab Container</text>
+    <text x="16" y="133" font-family="'Geist Mono', monospace" font-size="8.5" fill="#64748B">Controlled SQLi Attack Surface</text>
+
+    <rect x="16" y="156" width="178" height="24" rx="3" fill="#0A1424" stroke="#1E293B" stroke-width="1" />
+    <text x="105" y="171" font-family="'Geist Mono', monospace" font-size="8.5" font-weight="600" fill="#93C5FD" text-anchor="middle">DMZ ISOLATION: VLAN 50</text>
   </g>
 
-  <!-- Arrow 4 -> 5 (Asterisk & Gemini Voice Agent) -->
-  <path d="M 600 495 L 680 495" stroke="#F59E0B" stroke-width="3" fill="none" />
-  <polygon points="680,495 670,490 670,500" fill="#F59E0B" />
+  <!-- CARD 04: pfctl LOG CORRELATOR & FP SUPPRESSION (THE BRAIN) -->
+  <g transform="translate(250, 390)" filter="url(#subtleCardShadow)">
+    <rect width="350" height="205" rx="6" fill="url(#cardSurfaceHighlight)" stroke="#F59E0B" stroke-width="1.2" />
+    <rect width="350" height="3" rx="1" fill="#F59E0B" />
 
-  <!-- 5. Asterisk + Gemini Live Voice Agent Box -->
-  <g transform="translate(690, 390)">
-    <rect width="250" height="210" rx="10" fill="url(#boxGrad)" stroke="#8B5CF6" stroke-width="2" filter="url(#glow)" />
-    <rect width="250" height="35" rx="10" fill="#7C3AED" />
-    <text x="125" y="24" font-family="sans-serif" font-size="14" font-weight="bold" fill="#FFF" text-anchor="middle">VOZ IA &amp; CLOUD ASTERISK</text>
-    <text x="125" y="65" font-family="sans-serif" font-size="11" font-weight="bold" fill="#A78BFA" text-anchor="middle">1. Asterisk PBX (Docker)</text>
-    <text x="125" y="82" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">Auto-Dialer SIP / PJSIP Extensiones</text>
-    <text x="125" y="105" font-family="sans-serif" font-size="11" font-weight="bold" fill="#A78BFA" text-anchor="middle">2. Gemini Live API Flash 3.1</text>
-    <text x="125" y="122" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">Agente de Voz Bidireccional</text>
-    <text x="125" y="145" font-family="sans-serif" font-size="11" font-weight="bold" fill="#A78BFA" text-anchor="middle">3. Debriefing &amp; Mitigaciones</text>
-    <text x="125" y="162" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">IP, Pais, Vector y Telemetria</text>
-    <text x="125" y="188" font-family="monospace" font-size="10" fill="#00F5FF" text-anchor="middle">[ Llamada Telefonica Activa ]</text>
+    <text x="16" y="24" font-family="'Geist Mono', monospace" font-size="9" font-weight="600" letter-spacing="0.1em" fill="#F59E0B">04 / INTELLIGENCE ENGINE</text>
+    <text x="16" y="44" font-family="'Inter', sans-serif" font-size="14" font-weight="700" fill="#F8FAFC">pfctl Correlator &amp; FP Filter</text>
+    <line x1="16" y1="56" x2="334" y2="56" stroke="#1E293B" stroke-width="1" />
+
+    <text x="16" y="78" font-family="'Inter', sans-serif" font-size="10.5" fill="#E2E8F0">&#8226; Continuous JSON tailing on <tspan font-family="'Geist Mono', monospace" fill="#00E5FF">/var/log/suricata/eve.json</tspan></text>
+    <text x="16" y="98" font-family="'Inter', sans-serif" font-size="10.5" fill="#E2E8F0">&#8226; Heuristic payload verification (Eliminates &gt;50% FP)</text>
+    <text x="16" y="118" font-family="'Inter', sans-serif" font-size="10.5" fill="#E2E8F0">&#8226; Kernel validation: Cross-references <tspan font-family="'Geist Mono', monospace" fill="#FBBF24">pfctl -t snort2c -T show</tspan></text>
+
+    <!-- Logic Evaluation Box -->
+    <rect x="16" y="136" width="318" height="48" rx="3" fill="#141108" stroke="#382C10" stroke-width="1" />
+    <text x="26" y="153" font-family="'Geist Mono', monospace" font-size="9" font-weight="600" fill="#F59E0B">DECISION MATRIX:</text>
+    <text x="26" y="169" font-family="'Geist Mono', monospace" font-size="8.5" fill="#E2E8F0">IF (Verified_SQLi == TRUE &amp;&amp; IP_in_snort2c) &#8594; <tspan fill="#10B981" font-weight="700">TRIGGER_SOAR</tspan></text>
   </g>
 
-  <!-- Arrow 5 -> 6 (CISO / SOC Lead) -->
-  <path d="M 940 495 L 1010 495" stroke="#8B5CF6" stroke-width="3" fill="none" />
-  <polygon points="1010,495 1000,490 1000,500" fill="#8B5CF6" />
+  <!-- CARD 05: CLOUD ASTERISK & GEMINI LIVE VOICE SOAR -->
+  <g transform="translate(670, 390)" filter="url(#subtleCardShadow)">
+    <rect width="270" height="205" rx="6" fill="url(#cardSurfaceHighlight)" stroke="#8B5CF6" stroke-width="1.2" />
+    <rect width="270" height="3" rx="1" fill="#8B5CF6" />
 
-  <!-- 6. CISO / Operador SOC -->
-  <g transform="translate(1020, 420)">
-    <rect width="140" height="150" rx="10" fill="url(#boxGrad)" stroke="#10B981" stroke-width="2" filter="url(#glow)" />
-    <rect width="140" height="35" rx="10" fill="#059669" />
-    <text x="70" y="24" font-family="sans-serif" font-size="13" font-weight="bold" fill="#FFF" text-anchor="middle">CISO / SOC LEAD</text>
-    <text x="70" y="65" font-family="sans-serif" font-size="11" fill="#FFF" text-anchor="middle">Recepcion de</text>
-    <text x="70" y="82" font-family="sans-serif" font-size="11" font-weight="bold" fill="#10B981" text-anchor="middle">Llamada de Voz</text>
-    <text x="70" y="110" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">Interaccion en vivo</text>
-    <text x="70" y="125" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">con Agente de IA</text>
+    <text x="16" y="24" font-family="'Geist Mono', monospace" font-size="9" font-weight="600" letter-spacing="0.1em" fill="#C4B5FD">05 / SOAR &amp; VOICE AI</text>
+    <text x="16" y="44" font-family="'Inter', sans-serif" font-size="14" font-weight="700" fill="#F8FAFC">Asterisk &amp; Gemini Live 3.1</text>
+    <line x1="16" y1="56" x2="254" y2="56" stroke="#1E293B" stroke-width="1" />
+
+    <text x="16" y="78" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#F1F5F9">Asterisk PBX (Docker Compose)</text>
+    <text x="16" y="93" font-family="'Geist Mono', monospace" font-size="8.5" fill="#64748B">Auto-Dialer Engine &#8226; PJSIP Ext 1000</text>
+
+    <text x="16" y="118" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#C4B5FD">Gemini Live API (Flash 3.1)</text>
+    <text x="16" y="133" font-family="'Geist Mono', monospace" font-size="8.5" fill="#64748B">Real-time Bidirectional Audio Dialogue</text>
+
+    <rect x="16" y="152" width="238" height="32" rx="3" fill="#130C22" stroke="#2D1B4E" stroke-width="1" />
+    <text x="26" y="167" font-family="'Geist Mono', monospace" font-size="8.5" fill="#A78BFA">&#9679; Incident IP, Geolocation, SQLi Vector</text>
+    <text x="26" y="177" font-family="'Geist Mono', monospace" font-size="8.5" fill="#A78BFA">&#9679; CISO Debrief &amp; Live Mitigation Q&amp;A</text>
+  </g>
+
+  <!-- CARD 06: HUMAN INCIDENT COMMAND / CISO -->
+  <g transform="translate(1000, 390)" filter="url(#subtleCardShadow)">
+    <rect width="140" height="205" rx="6" fill="url(#cardSurface)" stroke="#10B981" stroke-width="1" />
+    <rect width="140" height="3" rx="1" fill="#10B981" />
+
+    <text x="14" y="24" font-family="'Geist Mono', monospace" font-size="9" font-weight="600" letter-spacing="0.08em" fill="#10B981">06 / COMMAND</text>
+    <text x="14" y="44" font-family="'Inter', sans-serif" font-size="13" font-weight="700" fill="#F8FAFC">CISO Mobile</text>
+    <line x1="14" y1="56" x2="126" y2="56" stroke="#1E293B" stroke-width="1" />
+
+    <text x="14" y="78" font-family="'Inter', sans-serif" font-size="10" fill="#CBD5E1">&#8226; Live Phone Call</text>
+    <text x="14" y="96" font-family="'Inter', sans-serif" font-size="10" fill="#CBD5E1">&#8226; Zero Latency</text>
+    <text x="14" y="114" font-family="'Inter', sans-serif" font-size="10" fill="#CBD5E1">&#8226; Spoken Briefing</text>
+    <text x="14" y="132" font-family="'Inter', sans-serif" font-size="10" fill="#CBD5E1">&#8226; Policy Approval</text>
+
+    <rect x="14" y="156" width="112" height="24" rx="3" fill="#0A1D16" stroke="#133827" stroke-width="1" />
+    <text x="70" y="171" font-family="'Geist Mono', monospace" font-size="8.5" font-weight="600" fill="#6EE7B7" text-anchor="middle">CALL ACTIVE</text>
+  </g>
+
+  <!-- ================= FOOTER PROTOCOL MATRIX ================= -->
+  <g transform="translate(60, 620)">
+    <text x="0" y="0" font-family="'Geist Mono', monospace" font-size="9" fill="#475569">
+      STACK: FreeBSD 15-CURRENT / pfSense CE &#8226; Suricata 7.0.x (Netmap Inline) &#8226; Asterisk 20 LTS &#8226; Google Gemini Live Flash 3.1 &#8226; HAProxy 2.8
+    </text>
   </g>
 </svg>
