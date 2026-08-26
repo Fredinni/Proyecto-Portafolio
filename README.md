@@ -22,13 +22,14 @@
 
 ---
 
-## 🛡️ 1. Resumen Ejecutivo y Problemática
+<h2><font color="#00F5FF">🛡️ 1. Resumen Ejecutivo y Problemática</font></h2>
 
 En las infraestructuras corporativas modernas, los Centros de Operaciones de Seguridad (**SOC**) y los firewalls perimetrales enfrentan dos grandes cuellos de botella:
 1. **La Crisis de Falsos Positivos e Hiper-Alerta:** Motores de inspección profunda como Suricata o Snort generan más de un **50% de alertas ruidosas**, causadas por escaneos triviales de puertos, crawlers automatizados o firmas genéricas no explotables.
 2. **Latencia Crítica en la Notificación a Decisores:** Ante intrusiones reales dirigidas y críticas (ej. inyecciones SQL automatizadas o bypasses perimetrales), las alertas tradicionales vía correo electrónico o canales de chat se diluyen en bandejas saturadas, retrasando la contención manual por parte del **CISO** (Chief Information Security Officer).
 
-### 🚀 La Solución: KRONOS SENTINEL
+<h3><font color="#38BDF8">🚀 La Solución: KRONOS SENTINEL</font></h3>
+
 **KRONOS SENTINEL** es una arquitectura de defensa en profundidad y respuesta autónoma ante incidentes (**SOAR**) que:
 * Inspecciona el tráfico en tiempo real mediante **pfSense** y **Suricata en modo Inline IPS (Netmap)**.
 * Ejecuta un **motor de correlación heurística en kernel (`pfctl Engine`)** que valida ataques reales en la capa web expuesta por **HAProxy**, verificando la inserción de la IP hostil en la tabla `snort2c` de FreeBSD y descartando el 100% del ruido inocuo.
@@ -36,13 +37,14 @@ En las infraestructuras corporativas modernas, los Centros de Operaciones de Seg
 
 ---
 
-## 🏛️ 2. Arquitectura Global del Sistema
+<h2><font color="#00E5FF">🏛️ 2. Arquitectura Global del Sistema</font></h2>
 
 <p align="center">
   <img src="assets/architecture_diagram.png" alt="Diagrama de Arquitectura Global KRONOS SENTINEL" width="100%">
 </p>
 
-### Matriz de Componentes Técnicos
+<h3><font color="#38BDF8">📋 Matriz de Componentes Técnicos ($0 CLP)</font></h3>
+
 | Módulo Arquitectónico | Tecnología Implementada | Rol Táctico en KRONOS SENTINEL |
 | :--- | :--- | :--- |
 | **Defensa Perimetral** | `pfSense CE 2.9.0 (FreeBSD)` | Firewall perimetral, segmentación L2/L3 en VLANs (Corp 10, DMZ 20, VoIP 30, Mgmt 99). |
@@ -55,7 +57,7 @@ En las infraestructuras corporativas modernas, los Centros de Operaciones de Seg
 
 ---
 
-## ⚡ 3. Diagrama de Procesos: Motor `pfctl` y Supresión de Falsos Positivos
+<h2><font color="#00E5FF">⚡ 3. Diagrama de Procesos: Motor `pfctl` y Supresión de Falsos Positivos</font></h2>
 
 Para erradicar la sobrecarga de alertas innecesarias, **KRONOS SENTINEL** implementa un modelo de decisión en 3 fases:
 
@@ -63,7 +65,8 @@ Para erradicar la sobrecarga de alertas innecesarias, **KRONOS SENTINEL** implem
   <img src="assets/pfctl_decision_flow.png" alt="Diagrama Teórico de Procesamiento pfctl" width="100%">
 </p>
 
-### Lógica Matemática y Heurística de Decisión:
+<h3><font color="#38BDF8">🔬 Lógica Matemática y Heurística de Decisión</font></h3>
+
 ```mermaid
 flowchart TD
     A["Petición Externa hacia HAProxy"] --> B{"¿Suricata detecta anomalía?"}
@@ -83,7 +86,7 @@ $$\text{Criterio de Disparo} = \left( \mathrm{Confianza}_{\text{SQLi}} \ge 0.75 
 
 ---
 
-## 🎙️ 4. Diagrama de Flujo: Orquestación SOAR & Telefonía IA
+<h2><font color="#00E5FF">🎙️ 4. Diagrama de Flujo: Orquestación SOAR & Telefonía IA</font></h2>
 
 Cuando un ataque es validado y contenido en el firewall, el subsistema de voz ejecuta el enlace con el operador CISO:
 
@@ -91,7 +94,8 @@ Cuando un ataque es validado y contenido en el firewall, el subsistema de voz ej
   <img src="assets/voice_soar_flow.png" alt="Diagrama de Flujo SOAR Voz IA y Asterisk" width="100%">
 </p>
 
-### Fases de la Interacción por Voz:
+<h3><font color="#38BDF8">📞 Fases de la Interacción por Voz</font></h3>
+
 1. **Disparo Inmediato (Webhook):** El motor `pfctl` envía un payload JSON al despachador local con la IP, país GeoIP, payload del vector y regla disparada.
 2. **Auto-Dialer Asterisk (AMI):** Asterisk genera una llamada instantánea hacia el softphone del CISO (`PJSIP/1001`).
 3. **Bridge de Audio Multimodal:** Se conecta el flujo RTP hacia **Google Gemini Live Flash 3.1** mediante WebSocket (PCM 24kHz).
@@ -99,7 +103,7 @@ Cuando un ataque es validado y contenido en el firewall, el subsistema de voz ej
 
 ---
 
-## ⏱️ 5. Línea de Tiempo de Respuesta a Incidentes (SOC War-Room)
+<h2><font color="#F59E0B">⏱️ 5. Línea de Tiempo de Respuesta a Incidentes (SOC War-Room)</font></h2>
 
 ```text
  [T+0.00s]  [INGRESS]     Hostile actor launches SQLi payload: "admin' OR '1'='1 --" to HAProxy VIP
@@ -115,7 +119,7 @@ Cuando un ataque es validado y contenido en el firewall, el subsistema de voz ej
 
 ---
 
-## 🎨 6. Simbolismo del Emblema KRONOS SENTINEL
+<h2><font color="#FF1E56">🎨 6. Simbolismo del Emblema KRONOS SENTINEL</font></h2>
 
 <p align="center">
   <img src="assets/sentinel_shield_logo.png" alt="Emblema KRONOS SENTINEL Transparente" width="420px">
@@ -129,7 +133,7 @@ El isotipo corporativo fue diseñado bajo una estética ciberpunk y militar de a
 
 ---
 
-## 📂 7. Estructura del Repositorio y Entregables Académicos
+<h2><font color="#00E5FF">📂 7. Estructura del Repositorio y Entregables Académicos</font></h2>
 
 ```bash
 Proyecto-Portafolio/
@@ -165,6 +169,8 @@ Proyecto-Portafolio/
 │   │   └── Informacion_EA3/
 │   ├── Manual_Configuracion_pfSense_KRONOS_SENTINEL.pdf # Manual Oficial en PDF (Portafolio de Título)
 │   ├── Manual_Configuracion_pfSense_KRONOS_SENTINEL.md  # Manual Oficial en Markdown
+│   ├── TUTORIAL_PASO_A_PASO_CONFIGURACION_PFSENSE_MOCKUPS.pdf # Tutorial Paso a Paso con Simulación WebGUI
+│   ├── TUTORIAL_PASO_A_PASO_CONFIGURACION_PFSENSE_MOCKUPS.md  # Tutorial Paso a Paso en Markdown
 │   ├── COMPENDIO_TECNOLOGIAS_Y_ARQUITECTURA_KRONOS.pdf  # Compendio Maestro de las 10 Tecnologías ($0 CLP)
 │   ├── COMPENDIO_TECNOLOGIAS_Y_ARQUITECTURA_KRONOS.md   # Compendio Maestro en Markdown
 │   ├── PROBLEMATICAS_ENCONTRADAS_IP_Y_ALTERNATIVAS_EXPOSICION.pdf # Informe Técnico de CGNAT y Exposición WAN
@@ -198,28 +204,32 @@ Proyecto-Portafolio/
 
 ---
 
-## 🛠️ 7. Despliegue y Puesta en Marcha Rápida
+<h2><font color="#10B981">🛠️ 8. Despliegue y Puesta en Marcha Rápida</font></h2>
 
-### 1. Iniciar Entorno de Pruebas DMZ (DVWA)
+<h3><font color="#38BDF8">1. Iniciar Entorno de Pruebas DMZ (DVWA)</font></h3>
+
 ```bash
 cd src/haproxy_dvwa
 docker compose -f docker-compose.dvwa.yml up -d
 ```
 
-### 2. Desplegar Centralita Asterisk PBX
+<h3><font color="#38BDF8">2. Desplegar Centralita Asterisk PBX</font></h3>
+
 ```bash
 cd src/asterisk_pbx
 docker compose up -d --build
 ```
 
-### 3. Iniciar el Servidor Despachador de Voz
+<h3><font color="#38BDF8">3. Iniciar el Servidor Despachador de Voz</font></h3>
+
 ```bash
 cd src/ai_voice_agent
 export GEMINI_API_KEY="tu-api-key-de-gemini-live"
 python dispatcher.py
 ```
 
-### 4. Iniciar el Motor de Correlación pfctl & Suricata
+<h3><font color="#38BDF8">4. Iniciar el Motor de Correlación pfctl &amp; Suricata</font></h3>
+
 ```bash
 cd src/pfsense_pfctl_engine
 python log_correlator.py
@@ -227,7 +237,7 @@ python log_correlator.py
 
 ---
 
-## 👥 8. Equipo de Desarrollo
+<h2><font color="#38BDF8">👥 9. Equipo de Desarrollo (Duoc UC)</font></h2>
 
 * **Bruno Urrea Ortiz:** *Líder de Arquitectura de Ciberseguridad, Motor de Correlación pfctl e Integración Gemini Live API.*
 * **Freddy Vásquez Cortés:** *Ingeniería de Routing, Switching perimetral y Configuración de Telefonía VoIP Asterisk.*
