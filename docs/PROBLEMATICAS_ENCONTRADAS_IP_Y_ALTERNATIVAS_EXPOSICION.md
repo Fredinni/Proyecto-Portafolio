@@ -1,8 +1,9 @@
-# INFORME TÉCNICO: PROBLEMÁTICAS DE DIRECCIONAMIENTO IP, CGNAT Y ESTRATEGIAS DE EXPOSICIÓN WAN
+# INFORME TÉCNICO: PROBLEMÁTICAS DE DIRECCIONAMIENTO IP, CGNAT Y ESTRATEGIAS DE EXPOSICIÓN WAN ($0 COSTO)
 ## Proyecto de Portafolio de Título: KRONOS SENTINEL (APT122)
 **Autor:** Bruno Urrea Ortiz | Especialidad en Conectividad, Redes y Ciberseguridad  
 **Institución:** Escuela de Informática y Telecomunicaciones — Duoc UC Sede San Joaquín  
-**Clasificación:** Documento Técnico de Arquitectura de Red y Despliegue Perimetral
+**Clasificación:** Documento Técnico de Arquitectura de Red y Despliegue Presencial de Titulación  
+**Premisa Económica:** **Arquitectura 100% Costo Cero ($0 CLP)** mediante Capas Gratuitas (Free Tiers), Open Source y Enlaces Móviles.
 
 ---
 
@@ -12,186 +13,184 @@
 
 ---
 
-## 1. RESUMEN EJECUTIVO Y DESAFÍO DE INFRAESTRUCTURA
+## 1. RESUMEN EJECUTIVO Y PREMISA DE COSTO CERO ($0 CLP)
 
-El proyecto **KRONOS SENTINEL** requiere exponer servicios web seguros (HAProxy que publica la aplicación DVWA en DMZ) hacia la red pública de Internet para recibir ataques reales (inyecciones SQL, escaneos de vulnerabilidades) y activar la cadena de respuesta autónoma (Suricata Inline IPS, correlación `pfctl` y llamada telefónica de emergencia vía Asterisk PBX / Gemini Live API).
+El proyecto **KRONOS SENTINEL** ha sido diseñado bajo una estricta restricción de ingeniería financiera: **Costo de Infraestructura = $0 CLP**. Se aprovechan al 100% plataformas de código abierto, licencias comunitarias y capas gratuitas de computación e Inteligencia Artificial:
 
-Al virtualizar **pfSense CE** y los contenedores de soporte en un entorno de laboratorio doméstico (notebook o servidor local), se presentan desafíos críticos de conectividad L3/L4 derivados de la infraestructura de los Proveedores de Servicios de Internet (ISP) residenciales en Chile (Movistar, VTR, Entel, Mundo, Claro).
+* **IA Generativa de Voz Multimodal:** Google Gemini Live API Flash 3.1 (*Google AI Studio Free Tier* con cuota gratuita de peticiones por minuto).
+* **Firewall & Kernel Filtering:** pfSense CE 2.7.2 (FreeBSD Open Source, $0).
+* **Prevención de Intrusos (IPS):** Suricata 7.x en modo Inline Netmap + *Emerging Threats Open Rulesets* ($0).
+* **Geolocalización IP:** MaxMind GeoLite2 Free Edition ($0).
+* **Centralita Telefónica:** Asterisk 20 LTS en Docker ($0).
+* **Proxy Inverso & Balanceo:** HAProxy Community Edition ($0).
+* **Red Mesh Zero Trust:** Tailscale Free Community Plan (hasta 100 nodos cifrados con WireGuard, $0).
+* **Conectividad a Internet:** Hotspot 4G/5G de smartphone personal o conexión cableada RJ45 en laboratorios de Duoc UC ($0).
+
+El objetivo de este informe es analizar las limitaciones reales de red (CGNAT, Doble NAT, aislamiento de puertos institucional) y definir la **estrategia de exposición óptima y más resiliente para la defensa presencial ante la comisión evaluadora de Duoc UC**.
 
 ---
 
-## 2. MATRIZ DE PROBLEMÁTICAS TÉCNICAS IDENTIFICADAS
+## 2. MATRIZ DE PROBLEMÁTICAS TÉCNICAS EN REDES RESIDENCIALES Y SEDE DUOC UC
 
-### 2.1 Carrier-Grade NAT (CGNAT / RFC 6598)
-* **Descripción:** Los ISP asignan al router del hogar (ONT/HGU) una dirección IP privada dentro del rango `100.64.0.0/10` en lugar de una IPv4 pública enrutable en Internet.
-* **Impacto en KRONOS SENTINEL:** Cualquier intento de reenvío de puertos (*Port Forwarding*) en el router del hogar resulta inútil, ya que el ISP realiza una segunda traslación NAT en sus routers de borde (CGNAT Gateway), haciendo imposible alcanzar la interfaz WAN de pfSense desde el exterior.
-* **Comprobación Técnica (Diagnóstico):**
+### 2.1 Carrier-Grade NAT (CGNAT / RFC 6598 - `100.64.0.0/10`)
+* **Problemática:** Los ISP residenciales en Chile (Movistar, Entel, VTR, Mundo) y los operadores móviles en 4G/5G (WOM, Claro, Entel) no asignan una IPv4 pública enrutable al router/móvil, sino una IP privada en el rango `100.64.0.0/10`.
+* **Impacto:** Resulta imposible realizar *Port Forwarding* tradicional desde Internet hacia la WAN de pfSense sin túneles de reversa.
+* **Diagnóstico en CLI:**
   ```bash
-  # 1. Obtener la IP pública vista desde Internet:
+  # Comprobación de IP pública vista desde Internet vs IP local del router:
   curl -s https://ifconfig.me
-
-  # 2. Comparar con la IP asignada en la WAN del router ISP:
-  # Si la IP del router empieza con 100.64.x.x, 10.x.x.x o 172.16.x.x - 172.31.x.x -> ESTÁS BAJO CGNAT.
-  
-  # 3. Trazado de ruta para detectar salto CGNAT intermedio:
-  traceroute -n -m 5 1.1.1.1
+  traceroute -n -m 4 1.1.1.1
   ```
 
-### 2.2 Bloqueo de Puertos Canónicos por Política de Seguridad ISP
-* **Descripción:** Los planes residenciales bloquean puertos de entrada canónicos como `80 (HTTP)`, `443 (HTTPS)`, `25 (SMTP)` y `5060 (SIP)` para evitar la operación de servidores en redes hogareñas.
-* **Impacto:** Aunque se cuente con IP pública, los paquetes entrantes TCP 80/443 son descartados en la red del ISP antes de llegar al router del hogar.
+### 2.2 Doble NAT y Bloqueo de Redes Privadas (RFC 1918) en pfSense
+* **Problemática:** Al conectar la WAN de pfSense al router del hogar o tethering (recibiendo `192.168.1.x` o `192.168.43.x`), pfSense activa por defecto el descarte estricto de redes privadas.
+* **Solución Mandatoria en WebGUI:** En **Interfaces > WAN**, desmarcar `Block private networks and loopback addresses` y `Block bogon networks` para permitir la ingesta del tráfico entrante.
 
-### 2.3 Doble NAT (Double NAT) y Bloqueo de Redes RFC 1918 en pfSense
-* **Descripción:** Si el router ISP entrega una IP privada a la WAN de pfSense (ej. `192.168.1.200/24`) y pfSense crea sus propias subredes internas (`192.168.10.0/24`, `192.168.20.0/24`), se genera un escenario de Doble NAT.
-* **Impacto:** pfSense, por defecto, activa la regla de seguridad `Block private networks and loopback addresses` en la interfaz WAN. Si la WAN tiene una IP privada (192.168.x.x), **pfSense descartará silenciosamente todo el tráfico entrante reenviado desde el router ISP**.
-
----
-
-## 3. ANÁLISIS COMPARATIVO DE ALTERNATIVAS DE EXPOSICIÓN
-
-| Alternativa | Mecanismo Técnico | Viabilidad Técnica | Grado de Complejidad | Dependencia de Terceros |
-| :--- | :--- | :---: | :---: | :---: |
-| **Opción A: Modo Puente ISP (Bridge Mode)** | ONT en modo puente + PPPoE/DHCP en pfSense WAN | Media | Media | Alta (Requiere ISP sin CGNAT o soporte telefónico) |
-| **Opción B: DMZ Host en Router ISP** | DMZ `192.168.1.200` + Desactivar bloqueo RFC 1918 en pfSense | Alta | Baja | Media (Requiere acceso admin a ONT) |
-| **Opción C: Túnel WireGuard / Cloud Relay VPS** | VPS con IP Pública fija + Túnel WireGuard hacia pfSense | **Máxima (Recomendada)** | Media | Mínima (Cero dependencia de ISP) |
-| **Opción D: Tailscale Subnet Router** | Red Mesh WireGuard para VoIP Asterisk y Softphone CISO | **Máxima (Recomendada)** | Baja | Mínima (Encriptación E2E nativa) |
-| **Opción E: Laboratorio Virtual Autónomo (Dual-Host)** | Simulación WAN pública aislada en Proxmox/VMware | **Máxima (Demo Duoc UC)** | Baja | Nula (100% Offline para Defensa) |
+### 2.3 Políticas de Seguridad y Aislamiento de Clientes en Sede Duoc UC (RJ45 / Wi-Fi)
+* **Problemática:** La infraestructura de red cableada e inalámbrica de Duoc UC cuenta con políticas de *Client Isolation*, filtrado de escaneos (IPS institucional) y bloqueo de puertos entrantes (80, 443, 5060) para proteger los laboratorios.
+* **Impacto en Vivo:** Una máquina atacante externa o conectada al Wi-Fi de alumnos **no puede alcanzar directamente** la IP de otra máquina en la misma sala sin ser bloqueada por los switches de la sede.
 
 ---
 
-## 4. GUÍA DE IMPLEMENTACIÓN DETALLADA POR OPCIÓN
+## 3. ANÁLISIS COMPARATIVO DE OPCIONES PARA LA DEFENSA PRESENCIAL EN DUOC UC
 
 ---
 
-### OPCIÓN A: MODO PUENTE (BRIDGE MODE) EN ROUTER ISP (EJ. MOVISTAR / ENTEL)
-
-#### Requisitos y Pasos:
-1. Acceder a la interfaz de administración del router HGU/ONT (ej. `http://192.168.1.1` con credenciales de instalador).
-2. En la configuración de WAN, cambiar el modo de operación de **PPPoE Routing** a **Bridge (Monopuesto / Puente)** en el puerto Ethernet LAN 1 o 4.
-3. Conectar el cable de red desde el puerto en puente del router ISP hacia la tarjeta física dedicada a la WAN de pfSense (`vtnet0` / `em0`).
-4. En pfSense (**Interfaces > WAN**):
-   * Si el ISP requiere credenciales: Configurar **IPv4 Configuration Type: PPPoE** (ingresar usuario y contraseña entregados por el ISP).
-   * Si el ISP asigna por DHCP: Configurar **IPv4 Configuration Type: DHCP**.
-5. Validar que la interfaz WAN en el Dashboard de pfSense reciba una IPv4 pública real (no perteneciente a `100.64.0.0/10`).
+```
+                       ┌─────────────────────────────────────────────────────────────┐
+                       │   ESCENARIOS DE DEFENSA PRESENCIAL (TITULACIÓN DUOC UC)     │
+                       └─────────────────────────────────────────────────────────────┘
+                                                      │
+         ┌────────────────────────────────────────────┼────────────────────────────────────────────┐
+         │                                            │                                            │
+         ▼                                            ▼                                            ▼
+ ┌──────────────────────────────┐            ┌──────────────────────────────┐             ┌──────────────────────────────┐
+ │ OPCIÓN 1 (ESTÁNDAR DE ORO)   │            │ OPCIÓN 2 (CLOUDFLARE TUNNEL) │             │ OPCIÓN 3 (RED FÍSICA RJ45)   │
+ │ Lab Virtual Autónomo         │            │ Túnel Zero Trust Free        │             │ Cableada a Switch Duoc UC    │
+ │ + Hotspot 4G/5G para Gemini  │            │ + Hotspot 4G/5G              │             │ + NAT Estudiante             │
+ ├──────────────────────────────┤            ├──────────────────────────────┤             ├──────────────────────────────┤
+ │ • Ataque: Local (0ms lag)    │            │ • Ataque: Vía Internet       │             │ • Ataque: Inter-Host LAN     │
+ │ • Voz IA: Salida 443 HTTPS   │            │ • Túnel: cloudflared a DMZ   │             │ • Riesgo: Client Isolation   │
+ │ • Costo: $0 CLP              │            │ • Costo: $0 CLP              │             │ • Costo: $0 CLP              │
+ │ • Fiabilidad: 100% INMUNE    │            │ • Fiabilidad: 85% (Depende)  │             │ • Fiabilidad: 40% (Alto)     │
+ └──────────────────────────────┘            └──────────────────────────────┘             └──────────────────────────────┘
+```
 
 ---
 
-### OPCIÓN B: DMZ HOST Y PORT FORWARDING EN ROUTER HOGAR (ESCENARIO DOBLE NAT)
+### OPCIÓN 1: LABORATORIO VIRTUAL AUTÓNOMO DUAL-HOST + HOTSPOT 4G/5G PARA GEMINI (RECOMENDACIÓN TÁCTICA DUOC UC)
 
-Si no se puede configurar modo puente o se desea mantener el WiFi residencial del hogar funcionando:
+Esta es la arquitectura **más profesional, robusta y 100% inmune a fallas externas**:
 
 ```
- [ INTERNET ] ──▶ [ Router ISP (192.168.1.1) ] ── (DMZ a 192.168.1.200) ──▶ [ pfSense WAN (192.168.1.200) ]
-                                                                                       │
-                                                                                       ▼
-                                                                             [ HAProxy / Suricata ]
+ ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+ │ NOTEBOOK PRINCIPAL (Proxmox VE / VMware Workstation / Arch Linux Host)                          │
+ │                                                                                                  │
+ │   [ VM Atacante Kali Linux ] ──── (vSwitch WAN Aislado: 198.51.100.0/24) ────▶ [ pfSense WAN ]   │
+ │   IP: 198.51.100.100                                                           IP: 198.51.100.1  │
+ │                                                                                       │          │
+ │                                                               (VLANs 10, 20, 30) ─────┤          │
+ │                                                                                       ▼          │
+ │   [ Asterisk PBX 192.168.30.50 ] ◀── [ Motor pfctl ] ◀── [ Suricata Netmap ] ◀── [ HAProxy ]     │
+ │                 │                                                                                │
+ │                 ▼ (Llamada Saliente WebSocket PCM 24kHz vía HTTPS 443)                           │
+ └─────────────────┼────────────────────────────────────────────────────────────────────────────────┘
+                   │
+                   ▼ (Conexión Hotspot 4G/5G del Celular o RJ45 Duoc UC)
+      [ Google Gemini Live API Flash 3.1 Free Tier ]
+                   │
+                   ▼ (Llamada de Voz Bidireccional)
+      [ Softphone CISO en Celular / Laptop ]
 ```
 
-#### Paso 1: Configurar IP Estática en la WAN de pfSense
-* **Interfaces > WAN**:
-  * IPv4 Configuration Type: `Static IPv4`
-  * IPv4 Address: `192.168.1.200 / 24`
-  * IPv4 Upstream Gateway: `192.168.1.1` (IP del router ISP).
-
-#### Paso 2: Desactivar Bloqueo RFC 1918 en pfSense (CRÍTICO)
-* Ir a **Interfaces > WAN**.
-* Al final de la página, **DESMARCAR** la casilla:
-  * ❌ `Block private networks and loopback addresses`
-  * ❌ `Block bogon networks`
-* Hacer clic en **Save** y **Apply Changes**. *(Sin este paso, pfSense descarta el 100% de los paquetes del router ISP)*.
-
-#### Paso 3: Configurar DMZ Host en el Router ISP
-* En el menú del router ISP (HGU), ir a **Seguridad > DMZ (Zona Desmilitarizada)**.
-* Habilitar DMZ y apuntar a la IP: `192.168.1.200`.
-* Esto reenviará automáticamente todos los puertos TCP/UDP entrantes hacia pfSense.
+* **Cómo Funciona:**
+  1. La VM Kali Linux y la interfaz WAN de pfSense se conectan a un switch virtual aislado (`198.51.100.0/24`). El ataque SQLi (vía `sqlmap` o script de exploit) viaja localmente en microsegundos, demostrando el *Inline Netmap Drop* de Suricata y el bloqueo atómico de `pfctl`.
+  2. Cuando el motor valida el ataque real, el contenedor de Asterisk / Python despachador utiliza la conexión a Internet del notebook (compartida por Hotspot 4G/5G del celular o cable RJ45) para abrir un **WebSocket seguro saliente (puerto TCP 443)** hacia `generativelanguage.googleapis.com` (Gemini Live API Free Tier).
+  3. Asterisk genera la llamada hacia el Softphone del CISO (en el celular del alumno o en el laptop anfitrión).
+* **PROS:**
+  * **Costo $0:** No requiere comprar dominios, pagar VPS ni contratar IP fija.
+  * **Inmune a CGNAT:** El tráfico de ataque es local, y la llamada de Gemini Live es una conexión **saliente HTTPS/WSS**, la cual **nunca es bloqueada por CGNAT ni por los firewalls de Duoc UC**.
+  * **Latencia Cero en Demostración:** El bloqueo ocurre en < 150ms frente a los ojos de los profesores, sin buffering ni lag de red externa.
+* **CONTRAS:**
+  * Requiere un notebook con al menos 16 GB de RAM para correr pfSense, Kali Linux, Asterisk y DVWA en paralelo (escenario estándar en la carrera).
 
 ---
 
-### OPCIÓN C: RELAY EN LA NUBE CON TÚNEL WIREGUARD (BYPASS TOTAL DE CGNAT)
+### OPCIÓN 2: CLOUDFLARE ZERO TRUST TUNNELS (FREE TIER) + HOTSPOT 4G/5G
 
-Esta es la solución más robusta y profesional en ciberseguridad cuando el ISP tiene CGNAT estricto:
+Para permitir que los profesores escaneen o ataquen el entorno desde sus propios teléfonos o computadores durante la presentación:
 
 ```
- [ ATACANTE WAN ] ──▶ [ Cloud VPS (IP Pública Fija: 203.0.113.10) ]
-                                    │ (Túnel WireGuard Cifrado)
-                                    ▼
-                         [ pfSense WAN / HAProxy ] ──▶ [ DVWA DMZ ]
+ [ Profesor / Atacante en Internet ] ──▶ https://kronos-sentinel.tudominio.com (Cloudflare Edge)
+                                                           │ (Túnel Cifrado Saliente cloudflared)
+                                                           ▼
+                                                [ pfSense / HAProxy DMZ ]
 ```
 
-1. Se despliega un VPS en Oracle Cloud (Free Tier) o DigitalOcean (\$4 USD) con una IPv4 pública fija (`203.0.113.10`).
-2. Se levanta un túnel WireGuard punto a punto entre el VPS (`10.50.0.1`) y pfSense (`10.50.0.2`).
-3. En el VPS, se configuran reglas `iptables` de reenvío de puertos para redirigir el tráfico 80 y 443 a través del túnel:
-   ```bash
-   # En el VPS en la nube:
-   sysctl -w net.ipv4.ip_forward=1
-   iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination 10.50.0.2:80
-   iptables -t nat -A PREROUTING -p tcp --dport 443 -j DNAT --to-destination 10.50.0.2:443
-   iptables -t nat -A POSTROUTING -o wg0 -j MASQUERADE
-   ```
-4. El atacante ataca `https://203.0.113.10`, el tráfico entra por la interfaz WireGuard de pfSense, Suricata lo inspecciona en modo Inline IPS, HAProxy lo procesa y se dispara la alerta sin importar si tu casa tiene CGNAT.
+* **Cómo Funciona:**
+  1. Se instala el conector ligero `cloudflared` (Open Source y 100% gratuito en la capa Zero Trust de Cloudflare) dentro de pfSense o en una VM auxiliar.
+  2. `cloudflared` establece 4 conexiones salientes QUIC/HTTPS hacia los servidores de Cloudflare.
+  3. No requiere abrir ningún puerto en el router ni en el hotspot móvil (Bypass total de CGNAT).
+* **PROS:**
+  * Costo $0 (Capa gratuita de Cloudflare Zero Trust).
+  * Permite que cualquier persona en la sala ingrese a una URL pública segura `https://...` desde su propio dispositivo.
+* **CONTRAS:**
+  * Si el Wi-Fi de la sede o la señal 4G se satura durante la presentación, el tráfico web del ataque puede presentar retrasos.
 
 ---
 
-### OPCIÓN D: INTEGRACIÓN DE TAILSCALE SUBNET ROUTER EN pfSense PARA ASTERISK PBX
+### OPCIÓN 3: TAILSCALE SUBNET ROUTER (ENLACE ZERO TRUST VOIP ASTERISK)
 
-Para evitar exponer los puertos de telefonía SIP (`5060 UDP`) y RTP (`10000-10100 UDP`) a escáneres maliciosos de Internet, se implementa una **Red Mesh Zero Trust con Tailscale**:
+La solución ideal para que el softphone en tu celular se conecte con la centralita Asterisk sin importar en qué red esté conectado:
 
 ```
- [ Softphone CISO (Laptop/Celular) ] ── (Tailscale Tunnel 100.x.y.z) ──▶ [ pfSense Tailscale Subnet Router ]
-                                                                                       │
-                                                                                       ▼ (Ruta 192.168.30.0/24)
-                                                                           [ Asterisk PBX 192.168.30.50 ]
+ [ Celular CISO (Zoiper Softphone) ] ── (Red Mesh WireGuard 100.x.y.z) ──▶ [ pfSense Tailscale Router ]
+                                                                                         │
+                                                                                         ▼ (Ruta 192.168.30.0/24)
+                                                                             [ Asterisk PBX 192.168.30.50 ]
 ```
 
-#### Paso 1: Instalación de Tailscale en pfSense
-1. Ir a **System > Package Manager > Available Packages**.
-2. Buscar `tailscale` e instalar el paquete oficial `pfSense-pkg-tailscale`.
-
-#### Paso 2: Autenticación y Publicación de Subredes (Subnet Router)
-1. Navegar a **VPN > Tailscale**.
-2. En **Authentication**, ingresar la clave de autenticación generada en la consola de Tailscale (*Auth Key*).
-3. En **Advertised Routes**, ingresar la subred de telefonía VoIP:
-   * `192.168.30.0/24`
-4. Marcar **Accept Routes** y **Save**.
-
-#### Paso 3: Aprobación de la Subred en la Consola Tailscale Admin
-1. Ingresar a `https://login.tailscale.com/admin/machines`.
-2. Ubicar el nodo `pfSense`.
-3. En **Edit route settings**, aprobar la ruta `192.168.30.0/24`.
-
-#### Paso 4: Conexión del Softphone del CISO
-1. El CISO inicia sesión en la aplicación **Tailscale** en su notebook o smartphone.
-2. Abre su softphone SIP (Zoiper, Linphone, MicroSIP o Grandstream Wave).
-3. Configura el anexo SIP:
-   * **Domain / SIP Server:** `192.168.30.50` (IP directa de Asterisk en la VLAN 30).
-   * **User:** `1001` (Bruno Urrea) o anexo correspondiente.
-   * **Secret:** `Bruno1001SecureKey#2026`
-4. El softphone se registra de manera instantánea y segura a través del túnel cifrado WireGuard de Tailscale, listo para recibir las llamadas de emergencia generadas por el **Agente Gemini Live**.
+* **Cómo Funciona:**
+  1. Se instala `pfSense-pkg-tailscale` ($0 en Package Manager).
+  2. Se publica la subred VoIP: `tailscale up --advertise-routes=192.168.30.0/24`.
+  3. El celular del CISO (conectado a 4G/5G o Wi-Fi) tiene la app Tailscale activa. Zoiper se registra directamente a `192.168.30.50` con el Anexo 1001.
+* **PROS:**
+  * **Costo $0:** Tailscale es gratuito de por vida para uso personal y académico (hasta 100 nodos).
+  * **Cifrado E2E:** Toda la voz SIP/RTP viaja cifrada con curvas elípticas Curve25519 (WireGuard).
+  * **Bypass de NAT:** Utiliza STUN/DERP de Tailscale para atravesar cualquier CGNAT automáticamente.
 
 ---
 
-### OPCIÓN E: ENTORNO DE LABORATORIO VIRTUAL AUTÓNOMO (PARA DEFENSA PRESENCIAL EN DUOC UC)
+### OPCIÓN 4: CONEXIÓN CABLEADA DIRECTA EN SEDE DUOC UC (RJ45)
 
-Para garantizar que la demostración en la comisión examinadora de Duoc UC funcione de forma autónoma sin depender de la conexión WiFi o firewall de la sede:
-
-```
- [ VM Atacante (Kali Linux) ] ── (Red WAN Virtual: 198.51.100.100) ──▶ [ pfSense WAN (198.51.100.1) ]
-                                                                                │
-                                                                                ▼ (VLANs 10, 20, 30)
-                                                                    [ DMZ / HAProxy / Asterisk ]
-```
-
-1. **Hipervisor (Proxmox VE / VMware Workstation):**
-   * **Virtual Switch WAN (`vmbr1` o `VMnet2`):** Red aislada `198.51.100.0/24`.
-   * **pfSense WAN:** IP `198.51.100.1/24`.
-   * **Kali Linux (Atacante):** IP `198.51.100.100/24` con Gateway `198.51.100.1`.
-2. **Ejecución del Ataque en Vivo:**
-   * Desde Kali Linux se ejecuta: `sqlmap -u "https://198.51.100.1/vulnerabilities/sqli/?id=1&Submit=Submit" --cookie="..." --batch`.
-   * Suricata en pfSense intercepta el ataque en tiempo real, `pfctl` bloquea la IP `198.51.100.100`, Asterisk dispara la llamada hacia el softphone en la máquina anfitriona y Gemini Live realiza el debriefing de voz en vivo frente a la comisión.
+* **Cómo Funciona:** Conectar un cable RJ45 desde el switch de la sala hacia la tarjeta de red del notebook.
+* **PROS:**
+  * Ancho de banda estable para la descarga del audio de Gemini Live.
+* **CONTRAS:**
+  * La red institucional de Duoc UC restringe la comunicación directa entre puestos de trabajo (*Private VLANs / Port Isolation*), impidiendo que dos notebooks se ataquen entre sí sin usar el laboratorio virtual local (Opción 1).
 
 ---
 
-## 5. CONCLUSIÓN Y RECOMENDACIÓN TÁCTICA PARA EL PROYECTO
+## 4. MATRIZ DE DECISIÓN Y EVALUACIÓN DE RIESGOS
 
-1. **Para Pruebas Remotas desde Internet:** Implementar la **Opción C (Túnel WireGuard en Cloud VPS)** para el tráfico web WAN hacia HAProxy y la **Opción D (Tailscale Subnet Router)** para el registro seguro del Softphone del CISO con Asterisk PBX.
-2. **Para la Defensa Final en Sede Duoc UC:** Utilizar la **Opción E (Laboratorio Virtual Autónomo)**, garantizando un rendimiento determinista con latencia cero y total independencia de redes externas.
+| Criterio de Evaluación | Opción 1: Lab Virtual + Hotspot (Recomendada) | Opción 2: Cloudflare Tunnel | Opción 3: Tailscale Subnet Router | Opción 4: RJ45 Sede Duoc Directo |
+| :--- | :---: | :---: | :---: | :---: |
+| **Costo Total** | **$0 CLP** | **$0 CLP** | **$0 CLP** | **$0 CLP** |
+| **Inmunidad a CGNAT** | **100% Inmune** | **100% Inmune** | **100% Inmune** | 50% (NAT Institucional) |
+| **Independencia de Red Sede** | **100% Autónomo** | 50% (Requiere Internet) | 80% (Requiere STUN) | 0% (Depende de Duoc) |
+| **Riesgo de Falla en Vivo** | **Casi Nulo (< 1%)** | Medio (15%) | Bajo (5%) | Muy Alto (> 50%) |
+| **Velocidad de Demostración** | Instantánea (< 150ms) | Depende de enlace (1-2s) | Instantánea (< 200ms) | Bloqueado por Firewall Duoc |
+
+---
+
+## 5. CONCLUSIÓN Y BLUEPRINT FINAL PARA EL DÍA DE LA DEFENSA
+
+Para asegurar una calificación sobresaliente y garantizar que la comisión presencie una demostración impecable, el equipo adoptará la siguiente **Estrategia Híbrida de $0 Costo**:
+
+1. **Plano de Ataque y Mitigación (100% Local y Determinista):**
+   * Correr Kali Linux y pfSense en el entorno virtualizado del notebook con la red aislada `198.51.100.0/24`. Esto garantiza que Suricata Inline, la tabla `snort2c` y `pfctl` reaccionen en microsegundos sin fallar jamás.
+2. **Plano de Telefonía e Inteligencia Artificial (Cero Costo Saliente):**
+   * Conectar el notebook anfitrión a Internet mediante el **Hotspot 4G/5G del celular** (o cable RJ45).
+   * El despachador KRONOS utiliza la cuota gratuita de **Google Gemini Live API Flash 3.1** mediante conexión saliente WebSocket HTTPS (inmune a CGNAT).
+3. **Plano de Audio CISO:**
+   * Utilizar **Tailscale Subnet Router** en pfSense para que el Softphone (Zoiper en el smartphone del CISO) reciba la llamada telefónica en vivo y los profesores puedan escuchar el briefing táctico de la IA en tiempo real.

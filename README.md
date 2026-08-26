@@ -191,8 +191,6 @@ Proyecto-Portafolio/
 │   └── pfblocker_threatfeeds/                  # GeoIP MaxMind y listas de reputación IP
 │       ├── maxmind_geoip_setup.md
 │       └── threat_feeds_config.txt
-├── AGENTS.md                                   # Contexto técnico para agentes de programación
-├── GEMINI.md                                   # Reglas persistentes de desarrollo
 └── README.md                                   # Documentación corporativa principal
 ```
 
