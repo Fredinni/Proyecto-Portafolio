@@ -88,21 +88,6 @@ def convert():
     # 4. Voice SOAR & Asterisk AI Protocol Flow Diagram (4K 13:7.5 - 3900x2250)
     render_svg("assets/voice_soar_flow.svg", "assets/voice_soar_flow.png", 3900, 2250, "#03010A")
 
-    # 5. Header Banners (High-DPI Retina Banners - 1700x152)
-    headers_list = [
-        "header_01_resumen",
-        "header_02_arquitectura",
-        "header_03_pfctl",
-        "header_04_soar",
-        "header_05_timeline",
-        "header_06_emblema",
-        "header_07_entregables",
-        "header_08_despliegue",
-        "header_09_equipo"
-    ]
-    for h in headers_list:
-        render_svg(f"assets/headers/{h}.svg", f"assets/headers/{h}.png", 1700, 152, "transparent")
-
 if __name__ == "__main__":
     convert()
 

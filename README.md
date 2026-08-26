@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="assets/kronos_sentinel_flow_build.gif" alt="KRONOS SENTINEL Autonomous Pipeline Animation & Logo Birth" width="100%">
+  <img src="assets/sentinel_shield_logo.png" alt="KRONOS SENTINEL Logo" width="380px">
 </p>
 
 <h1 align="center">KRONOS SENTINEL</h1>
-<h3 align="center">Autonomous AI-Driven IPS, False-Positive Elimination Engine & Real-Time Incident Voice Response</h3>
+<h3 align="center">Autonomous AI-IPS & Real-Time Incident Voice Response SOAR Architecture</h3>
 
 <p align="center">
-  <strong>Proyecto de Portafolio de Título (APT122) — Escuela de Informática y Telecomunicaciones</strong><br>
+  <strong>Proyecto de Portafolio de Título (APT122) — Ingeniería en Conectividad y Redes</strong><br>
   <strong>Duoc UC, Sede San Joaquín</strong>
 </p>
 
@@ -23,8 +23,12 @@
 ---
 
 <p align="center">
-  <img src="assets/headers/header_01_resumen.png" alt="01 - Resumen Ejecutivo y Problemática" width="100%">
+  <img src="assets/kronos_sentinel_flow_build.gif" alt="KRONOS SENTINEL Architecture &amp; Logo Convergence Animation" width="100%">
 </p>
+
+---
+
+## 🛡️ 1. Resumen Ejecutivo y Problemática
 
 En las infraestructuras corporativas modernas, los Centros de Operaciones de Seguridad (**SOC**) y los firewalls perimetrales enfrentan dos grandes cuellos de botella:
 1. **La Crisis de Falsos Positivos e Hiper-Alerta:** Motores de inspección profunda como Suricata o Snort generan más de un **50% de alertas ruidosas**, causadas por escaneos triviales de puertos, crawlers automatizados o firmas genéricas no explotables.
@@ -39,9 +43,7 @@ En las infraestructuras corporativas modernas, los Centros de Operaciones de Seg
 
 ---
 
-<p align="center">
-  <img src="assets/headers/header_02_arquitectura.png" alt="02 - Arquitectura Global del Sistema" width="100%">
-</p>
+## 🏛️ 2. Arquitectura Global del Sistema
 
 <p align="center">
   <img src="assets/architecture_diagram.png" alt="Diagrama de Arquitectura Global KRONOS SENTINEL" width="100%">
@@ -61,9 +63,7 @@ En las infraestructuras corporativas modernas, los Centros de Operaciones de Seg
 
 ---
 
-<p align="center">
-  <img src="assets/headers/header_03_pfctl.png" alt="03 - Motor de Correlación y Supresión pfctl" width="100%">
-</p>
+## ⚡ 3. Diagrama de Procesos: Motor `pfctl` y Supresión de Falsos Positivos
 
 Para erradicar la sobrecarga de alertas innecesarias, **KRONOS SENTINEL** implementa un modelo de decisión en 3 fases:
 
@@ -92,9 +92,7 @@ $$\text{Criterio de Disparo} = \left( \mathrm{Confianza}_{\text{SQLi}} \ge 0.75 
 
 ---
 
-<p align="center">
-  <img src="assets/headers/header_04_soar.png" alt="04 - Orquestación SOAR y Telefonía IA" width="100%">
-</p>
+## 🎙️ 4. Diagrama de Flujo: Orquestación SOAR & Telefonía IA
 
 Cuando un ataque es validado y contenido en el firewall, el subsistema de voz ejecuta el enlace con el operador CISO:
 
@@ -111,9 +109,7 @@ Cuando un ataque es validado y contenido en el firewall, el subsistema de voz ej
 
 ---
 
-<p align="center">
-  <img src="assets/headers/header_05_timeline.png" alt="05 - Línea de Tiempo de Respuesta a Incidentes" width="100%">
-</p>
+## ⏱️ 5. Línea de Tiempo de Respuesta a Incidentes (SOC War-Room)
 
 ```text
  [T+0.00s]  [INGRESS]     Hostile actor launches SQLi payload: "admin' OR '1'='1 --" to HAProxy VIP
@@ -129,9 +125,7 @@ Cuando un ataque es validado y contenido en el firewall, el subsistema de voz ej
 
 ---
 
-<p align="center">
-  <img src="assets/headers/header_06_emblema.png" alt="06 - Simbolismo del Emblema KRONOS SENTINEL" width="100%">
-</p>
+## 🎨 6. Simbolismo del Emblema KRONOS SENTINEL
 
 <p align="center">
   <img src="assets/sentinel_shield_logo.png" alt="Emblema KRONOS SENTINEL Transparente" width="420px">
@@ -145,15 +139,13 @@ El isotipo corporativo fue diseñado bajo una estética ciberpunk y militar de a
 
 ---
 
-<p align="center">
-  <img src="assets/headers/header_07_entregables.png" alt="07 - Estructura del Repositorio y Entregables Académicos" width="100%">
-</p>
+## 📂 7. Estructura del Repositorio y Entregables Académicos
 
 ```bash
 Proyecto-Portafolio/
 ├── assets/                                     # Logotipos vectoriales y diagramas ilustrativos de procesos
 │   ├── kronos_sentinel_flow_build.gif          # Animación GIF del flujo construyéndose y nacimiento del logo
-│   ├── sentinel_shield_logo.png                # Isotipo de alta resolución 4K
+│   ├── sentinel_shield_logo.png                # Isotipo de alta resolución 4K transparente
 │   ├── sentinel_shield_logo.svg                # Isotipo vectorial maestro
 │   ├── architecture_diagram.png                # Topología de arquitectura global 4K
 │   ├── architecture_diagram.svg                # Vectorial de arquitectura global
@@ -183,8 +175,8 @@ Proyecto-Portafolio/
 │   │   └── Informacion_EA3/
 │   ├── Manual_Configuracion_pfSense_KRONOS_SENTINEL.pdf # Manual Oficial en PDF (Portafolio de Título)
 │   ├── Manual_Configuracion_pfSense_KRONOS_SENTINEL.md  # Manual Oficial en Markdown
-│   ├── TUTORIAL_PASO_A_PASO_CONFIGURACION_PFSENSE_MOCKUPS.pdf # Tutorial Paso a Paso con Simulación WebGUI
-│   ├── TUTORIAL_PASO_A_PASO_CONFIGURACION_PFSENSE_MOCKUPS.md  # Tutorial Paso a Paso en Markdown
+│   ├── TUTORIAL_PASO_A_PASO_CONFIGURACION_PFSENSE_MOCKUPS.pdf # Tutorial Maestro Paso a Paso (8 Páginas con Mockups WebGUI)
+│   ├── TUTORIAL_PASO_A_PASO_CONFIGURACION_PFSENSE_MOCKUPS.md  # Tutorial Maestro en Markdown
 │   ├── COMPENDIO_TECNOLOGIAS_Y_ARQUITECTURA_KRONOS.pdf  # Compendio Maestro de las 10 Tecnologías ($0 CLP)
 │   ├── COMPENDIO_TECNOLOGIAS_Y_ARQUITECTURA_KRONOS.md   # Compendio Maestro en Markdown
 │   ├── PROBLEMATICAS_ENCONTRADAS_IP_Y_ALTERNATIVAS_EXPOSICION.pdf # Informe Técnico de CGNAT y Exposición WAN
@@ -218,9 +210,7 @@ Proyecto-Portafolio/
 
 ---
 
-<p align="center">
-  <img src="assets/headers/header_08_despliegue.png" alt="08 - Despliegue y Puesta en Marcha Rápida" width="100%">
-</p>
+## 🛠️ 8. Despliegue y Puesta en Marcha Rápida
 
 ### 1. Iniciar Entorno de Pruebas DMZ (DVWA)
 
@@ -244,7 +234,7 @@ export GEMINI_API_KEY="tu-api-key-de-gemini-live"
 python dispatcher.py
 ```
 
-### 4. Iniciar el Motor de Correlación pfctl &amp; Suricata
+### 4. Iniciar el Motor de Correlación pfctl & Suricata
 
 ```bash
 cd src/pfsense_pfctl_engine
@@ -253,12 +243,9 @@ python log_correlator.py
 
 ---
 
-<p align="center">
-  <img src="assets/headers/header_09_equipo.png" alt="09 - Equipo de Desarrollo (Duoc UC)" width="100%">
-</p>
+## 👥 9. Equipo de Desarrollo (Duoc UC)
 
 * **Bruno Urrea Ortiz:** *Líder de Arquitectura de Ciberseguridad, Motor de Correlación pfctl e Integración Gemini Live API.*
 * **Freddy Vásquez Cortés:** *Ingeniería de Routing, Switching perimetral y Configuración de Telefonía VoIP Asterisk.*
 * **Cristóbal Quezada:** *Administración de Servicios Web, Proxy Inverso HAProxy y Laboratorio DVWA.*
 * **Kevin Retamales:** *Hardening Perimetral, Listas de Inteligencia de Amenazas pfBlockerNG y Control de Calidad.*
-
