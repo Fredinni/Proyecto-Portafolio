@@ -164,7 +164,9 @@ Proyecto-Portafolio/
 │   │   ├── Espacio_Consultas_Fase_3/
 │   │   └── Informacion_EA3/
 │   ├── Manual_Configuracion_pfSense_KRONOS_SENTINEL.pdf # Manual Oficial en PDF (SecOps Nivel 4)
-│   └── Manual_Configuracion_pfSense_KRONOS_SENTINEL.md  # Manual Oficial en Markdown
+│   ├── Manual_Configuracion_pfSense_KRONOS_SENTINEL.md  # Manual Oficial en Markdown
+│   ├── PROBLEMATICAS_ENCONTRADAS_IP_Y_ALTERNATIVAS_EXPOSICION.pdf # Informe Técnico de CGNAT y Exposición WAN
+│   └── PROBLEMATICAS_ENCONTRADAS_IP_Y_ALTERNATIVAS_EXPOSICION.md  # Informe Técnico en Markdown
 ├── src/                                        # Código fuente e infraestructura como código
 │   ├── pfsense_pfctl_engine/                   # Motor de correlación en Python y wrapper pfctl
 │   │   ├── log_correlator.py
