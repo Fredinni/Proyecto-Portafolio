@@ -2,7 +2,7 @@
 ## Proyecto: KRONOS SENTINEL (APT122) — Autonomous AI-IPS & Voice SOAR
 **Autor:** Bruno Urrea Ortiz | Especialidad en Conectividad, Redes y Ciberseguridad  
 **Institución:** Escuela de Informática y Telecomunicaciones — Duoc UC Sede San Joaquín  
-**Documento Técnico:** Clasificación SecOps Nivel 4 // Documento Maestro de Despliegue Perimetral
+**Documento Técnico:** Portafolio de Título APT122 // Manual de Despliegue y Configuración de Laboratorio
 
 ---
 

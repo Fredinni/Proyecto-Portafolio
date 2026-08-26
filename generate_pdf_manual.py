@@ -228,7 +228,7 @@ def build_pfsense_pdf_manual(output_filename: str):
         [Paragraph("<b>INSTITUCIÓN:</b>", body_style), Paragraph("Duoc UC — Sede San Joaquín", body_style)],
         [Paragraph("<b>SISTEMA BASE:</b>", body_style), Paragraph("FreeBSD 14.0-CURRENT / pfSense CE 2.7.2 (amd64)", body_style)],
         [Paragraph("<b>ARQUITECTURA:</b>", body_style), Paragraph("Inline Netmap IPS + HAProxy SSL + pfBlockerNG + Gemini Live Flash 3.1", body_style)],
-        [Paragraph("<b>ESTADO:</b>", body_style), Paragraph("<font color='#10B981'><b>ENTERPRISE VERIFIED &amp; FIELD PRODUCTION READY</b></font>", body_style)]
+        [Paragraph("<b>ESTADO:</b>", body_style), Paragraph("<font color='#00E5FF'><b>PROTOTIPO FUNCIONAL EN DESARROLLO Y VALIDACIÓN (PORTAFOLIO DE TÍTULO)</b></font>", body_style)]
     ]
     t_meta = Table(meta_data, colWidths=[130, 402])
     t_meta.setStyle(TableStyle([
