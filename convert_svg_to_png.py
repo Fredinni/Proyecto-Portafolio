@@ -65,6 +65,7 @@ def convert():
                 "--headless=new",
                 "--disable-gpu",
                 "--hide-scrollbars",
+                "--default-background-color=00000000",
                 f"--window-size={width},{height}",
                 f"--screenshot={png_abs}",
                 tmp_url
@@ -75,8 +76,8 @@ def convert():
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
 
-    # 1. Logo (4K 1:1 - 3840x3840)
-    render_svg("assets/sentinel_shield_logo.svg", "assets/sentinel_shield_logo.png", 3840, 3840, "#020305")
+    # 1. Logo (4K 1:1 - 3840x3840, Pure Transparent Cutout)
+    render_svg("assets/sentinel_shield_logo.svg", "assets/sentinel_shield_logo.png", 3840, 3840, "transparent")
 
     # 2. Architecture Master Diagram (4K 13:7.2 - 3900x2160)
     render_svg("assets/architecture_diagram.svg", "assets/architecture_diagram.png", 3900, 2160, "#020408")

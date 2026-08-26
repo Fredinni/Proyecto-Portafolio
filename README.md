@@ -117,6 +117,10 @@ Cuando un ataque es validado y contenido en el firewall, el subsistema de voz ej
 
 ## 🎨 6. Simbolismo del Emblema KRONOS SENTINEL
 
+<p align="center">
+  <img src="assets/sentinel_shield_logo.png" alt="Emblema KRONOS SENTINEL Transparente" width="420px">
+</p>
+
 El isotipo corporativo fue diseñado bajo una estética ciberpunk y militar de alta tecnología:
 * **Escudo Angular de Titanio y Alas Mecha:** Representa la robustez perimetral de **pfSense** y la inspección sin latencia de **Suricata en modo Netmap**.
 * **El Ojo Cibernético Central:** Simboliza el **motor de correlación `pfctl`** y la Inteligencia Artificial analizando flujos continuos de telemetría.
