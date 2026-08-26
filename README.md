@@ -43,10 +43,9 @@ En las infraestructuras corporativas modernas, los Centros de Operaciones de Seg
 </p>
 
 ### Matriz de Componentes Técnicos
-
-| Componente | Tecnología | Rol en la Arquitectura |
+| Módulo Arquitectónico | Tecnología Implementada | Rol Táctico en KRONOS SENTINEL |
 | :--- | :--- | :--- |
-| **Perímetro & Firewall** | `pfSense CE 2.7.2` | Ruteo perimetral, segmentación de VLANs (WAN, LAN, DMZ, MGMT) y filtrado a nivel de kernel FreeBSD. |
+| **Defensa Perimetral** | `pfSense CE 2.7.2 (FreeBSD)` | Firewall perimetral, segmentación L2/L3 en VLANs (Corp 10, DMZ 20, VoIP 30, Mgmt 99). |
 | **Prevención de Intrusos** | `Suricata 7.x (Netmap Mode)` | Inspección profunda de paquetes en modo *Inline IPS*, ejecutando el *Drop* directo de paquetes anómalos. |
 | **Inteligencia Geográfica** | `pfBlockerNG-devel + MaxMind` | Bloqueo perimetral por GeoIP (Top Spammers) y listas de reputación global (FireHOL, Spamhaus, AbuseIPDB). |
 | **Proxy Inverso & DMZ** | `HAProxy + DVWA Docker` | Terminación SSL/TLS, balanceo y publicación segura del entorno vulnerable controlado (DVWA) en DMZ. |
@@ -62,22 +61,22 @@ El núcleo diferenciador de KRONOS SENTINEL radica en su lógica de doble verifi
 
 ```mermaid
 flowchart TD
-    A[Petición Externa hacia HAProxy] --> B{¿Suricata detecta anomalía?}
-    B -- No --> C[Tráfico Permitido]
-    B -- Sí --> D[Ingesta de Alerta en eve.json]
-    D --> E[Motor Heurístico KRONOS]
-    E --> F{¿Payload SQLi / RCE Válido?}
-    F -- No --> G[Falso Positivo / Ruido Descartado - Sin Escalamiento]
-    F -- Sí --> H{¿IP Bloqueada en tabla snort2c?}
-    H -- No --> I[Forzar Drop en pfctl & Terminar Estados]
-    H -- Sí --> J[Confirmación de Ataque Real Mitigado]
+    A["Petición Externa hacia HAProxy"] --> B{"¿Suricata detecta anomalía?"}
+    B -- No --> C["Tráfico Permitido"]
+    B -- Sí --> D["Ingesta de Alerta en eve.json"]
+    D --> E["Motor Heurístico KRONOS"]
+    E --> F{"¿Payload SQLi / RCE Válido?"}
+    F -- No --> G["Falso Positivo / Ruido Descartado - Sin Escalamiento"]
+    F -- Sí --> H{"¿IP Bloqueada en tabla snort2c?"}
+    H -- No --> I["Forzar Drop en pfctl y Terminar Estados"]
+    H -- Sí --> J["Confirmación de Ataque Real Mitigado"]
     I --> J
-    J --> K[Disparo de Webhook a Despachador de Voz]
-    K --> L[Asterisk PBX Llama al Teléfono del CISO]
-    L --> M[Gemini Live API Ejecuta Debriefing por Voz en Vivo]
+    J --> K["Disparo de Webhook a Despachador de Voz"]
+    K --> L["Asterisk PBX Llama al Teléfono del CISO"]
+    L --> M["Gemini Live API Ejecuta Debriefing por Voz en Vivo"]
 ```
 
-$$\text{Criterio de Disparo} = \left( \text{SQLi\_Confidence} \ge 0.75 \right) \;\land\; \left( \text{pfctl\_table}(\text{snort2c}) == \text{BLOCKED} \right) \;\land\; \left( \text{Noise\_Filter} == \text{PASSED} \right)$$
+$$\text{Criterio de Disparo} = \left( \mathrm{Confianza}_{\text{SQLi}} \ge 0.75 \right) \land \left( \mathrm{Estado}_{\text{snort2c}} = \text{BLOCKED} \right) \land \left( \mathrm{Filtro}_{\text{Ruido}} = \text{PASSED} \right)$$
 
 ---
 
@@ -96,7 +95,9 @@ El isotipo corporativo fue diseñado bajo una estética ciberpunk y militar de a
 ```bash
 Proyecto-Portafolio/
 ├── assets/                                     # Logotipos vectoriales y diagramas arquitectónicos
+│   ├── sentinel_shield_logo.png
 │   ├── sentinel_shield_logo.svg
+│   ├── architecture_diagram.png
 │   └── architecture_diagram.svg
 ├── docs/                                       # Entregables Académicos Duoc UC (Portafolio de Título)
 │   ├── Fase_1_Definicion_Proyecto_APT/
@@ -114,10 +115,12 @@ Proyecto-Portafolio/
 │   │   │   └── Urrea_Bruno_2.1_APT122_DiarioReflexionFase2.md
 │   │   ├── Espacio_Consultas_Fase_2/
 │   │   └── Informacion_EA2/
-│   └── Fase_3_Presentacion_Proyecto_APT/
-│       ├── Diario_Reflexion_Fase_3/
-│       ├── Espacio_Consultas_Fase_3/
-│       └── Informacion_EA3/
+│   ├── Fase_3_Presentacion_Proyecto_APT/
+│   │   ├── Diario_Reflexion_Fase_3/
+│   │   ├── Espacio_Consultas_Fase_3/
+│   │   └── Informacion_EA3/
+│   ├── Manual_Configuracion_pfSense_KRONOS_SENTINEL.pdf # Manual Oficial en PDF (SecOps Nivel 4)
+│   └── Manual_Configuracion_pfSense_KRONOS_SENTINEL.md  # Manual Oficial en Markdown
 ├── src/                                        # Código fuente e infraestructura como código
 │   ├── pfsense_pfctl_engine/                   # Motor de correlación en Python y wrapper pfctl
 │   │   ├── log_correlator.py
@@ -130,8 +133,11 @@ Proyecto-Portafolio/
 │   │   └── dispatcher.py
 │   ├── asterisk_pbx/                           # Telefonía VoIP y auto-dialer al CISO
 │   │   ├── Dockerfile
+│   │   ├── docker-compose.yml
 │   │   ├── extensions.conf
 │   │   ├── pjsip.conf
+│   │   ├── rtp.conf
+│   │   ├── gemini_audio_bridge.py
 │   │   └── call_trigger.py
 │   ├── haproxy_dvwa/                           # Proxy inverso y contenedor DMZ de pruebas
 │   │   ├── haproxy.cfg
@@ -157,8 +163,7 @@ docker compose -f docker-compose.dvwa.yml up -d
 ### 2. Desplegar Centralita Asterisk PBX
 ```bash
 cd src/asterisk_pbx
-docker build -t kronos-asterisk:latest .
-docker run -d --name kronos_pbx --net=host kronos-asterisk:latest
+docker compose up -d --build
 ```
 
 ### 3. Iniciar el Servidor Despachador de Voz
@@ -176,12 +181,9 @@ python log_correlator.py
 
 ---
 
-## 👥 7. Equipo de Desarrollo & Mentoría Académica
+## 👥 7. Equipo de Desarrollo
 
 * **Bruno Urrea Ortiz:** *Líder de Arquitectura de Ciberseguridad, Motor de Correlación pfctl e Integración Gemini Live API.*
 * **Freddy Vásquez Cortés:** *Ingeniería de Routing, Switching perimetral y Configuración de Telefonía VoIP Asterisk.*
 * **Cristóbal Quezada:** *Administración de Servicios Web, Proxy Inverso HAProxy y Laboratorio DVWA.*
 * **Kevin Retamales:** *Hardening Perimetral, Listas de Inteligencia de Amenazas pfBlockerNG y Control de Calidad.*
-
-**Mentor Académico:**  
-*Prof. Mauricio Carrera — Especialista en Ciberseguridad, Redes Avanzadas e Infraestructura de Conectividad.*

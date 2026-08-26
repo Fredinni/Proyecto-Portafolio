@@ -29,7 +29,7 @@
     KRONOS SENTINEL: ARQUITECTURA DE DEFENSAS Y RESPUESTA POR VOZ IA
   </text>
   <text x="600" y="70" font-family="monospace" font-size="12" fill="#00F5FF" text-anchor="middle" letter-spacing="2">
-    FLUJO DE TELEMETRÍA EN TIEMPO REAL &bull; FILTRADO DE FALSOS POSITIVOS &bull; DISPARO DE LLAMADA AL CISO
+    FLUJO DE TELEMETRIA EN TIEMPO REAL &#8226; FILTRADO DE FALSOS POSITIVOS &#8226; DISPARO DE LLAMADA AL CISO
   </text>
 
   <!-- 1. Attacker Box -->
@@ -37,14 +37,14 @@
     <rect width="180" height="150" rx="10" fill="url(#boxGrad)" stroke="#FF1E56" stroke-width="2" filter="url(#glow)" />
     <rect width="180" height="35" rx="10" fill="url(#headerGrad)" />
     <text x="90" y="24" font-family="sans-serif" font-size="14" font-weight="bold" fill="#FFF" text-anchor="middle">AMENAZA EXTERNA</text>
-    <text x="90" y="65" font-family="monospace" font-size="11" fill="#FF809B" text-anchor="middle">&bull; SQL Injection (SQLi)</text>
-    <text x="90" y="85" font-family="monospace" font-size="11" fill="#FF809B" text-anchor="middle">&bull; Exploit Payloads</text>
-    <text x="90" y="105" font-family="monospace" font-size="11" fill="#FF809B" text-anchor="middle">&bull; Port Scanners / Noise</text>
+    <text x="90" y="65" font-family="monospace" font-size="11" fill="#FF809B" text-anchor="middle">&#8226; SQL Injection (SQLi)</text>
+    <text x="90" y="85" font-family="monospace" font-size="11" fill="#FF809B" text-anchor="middle">&#8226; Exploit Payloads</text>
+    <text x="90" y="105" font-family="monospace" font-size="11" fill="#FF809B" text-anchor="middle">&#8226; Port Scanners / Noise</text>
     <text x="90" y="130" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">[ WAN Interface ]</text>
   </g>
 
   <!-- Arrow 1 -> 2 -->
-  <path d="M 230 195 L 290 195" stroke="#FF1E56" stroke-width="3" fill="none" marker-end="url(#arrow)" />
+  <path d="M 230 195 L 290 195" stroke="#FF1E56" stroke-width="3" fill="none" />
   <polygon points="290,195 280,190 280,200" fill="#FF1E56" />
 
   <!-- 2. pfSense Box -->
@@ -69,7 +69,7 @@
   <g transform="translate(620, 120)">
     <rect width="200" height="150" rx="10" fill="url(#boxGrad)" stroke="#10B981" stroke-width="2" />
     <rect width="200" height="35" rx="10" fill="#10B981" />
-    <text x="100" y="24" font-family="sans-serif" font-size="14" font-weight="bold" fill="#000" text-anchor="middle">DMZ &amp; APLICACIÓN</text>
+    <text x="100" y="24" font-family="sans-serif" font-size="14" font-weight="bold" fill="#000" text-anchor="middle">DMZ &amp; APLICACION</text>
     <text x="100" y="65" font-family="sans-serif" font-size="11" font-weight="bold" fill="#FFF" text-anchor="middle">HAProxy Reverse Proxy</text>
     <text x="100" y="82" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">SSL Term / Health Checks</text>
     <text x="100" y="108" font-family="sans-serif" font-size="11" font-weight="bold" fill="#F59E0B" text-anchor="middle">DVWA Lab Container</text>
@@ -85,10 +85,10 @@
     <rect width="350" height="210" rx="10" fill="url(#boxGrad)" stroke="#F59E0B" stroke-width="2" filter="url(#glow)" />
     <rect width="350" height="35" rx="10" fill="#D97706" />
     <text x="175" y="24" font-family="sans-serif" font-size="14" font-weight="bold" fill="#FFF" text-anchor="middle">MOTOR LOG CORRELATOR (pfctl + EVE)</text>
-    <text x="175" y="65" font-family="sans-serif" font-size="11" font-weight="bold" fill="#FBBF24" text-anchor="middle">&bull; Supresión de Falsos Positivos (>50%)</text>
-    <text x="175" y="85" font-family="sans-serif" font-size="11" fill="#E2E8F0" text-anchor="middle">&bull; Análisis Heurístico de Payload SQLi</text>
-    <text x="175" y="105" font-family="sans-serif" font-size="11" fill="#E2E8F0" text-anchor="middle">&bull; Validación en Tabla `snort2c` de pfctl</text>
-    <text x="175" y="125" font-family="sans-serif" font-size="11" fill="#E2E8F0" text-anchor="middle">&bull; Verificación de Ataque Real Confirmado</text>
+    <text x="175" y="65" font-family="sans-serif" font-size="11" font-weight="bold" fill="#FBBF24" text-anchor="middle">&#8226; Supresion de Falsos Positivos (&gt;50%)</text>
+    <text x="175" y="85" font-family="sans-serif" font-size="11" fill="#E2E8F0" text-anchor="middle">&#8226; Analisis Heuristico de Payload SQLi</text>
+    <text x="175" y="105" font-family="sans-serif" font-size="11" fill="#E2E8F0" text-anchor="middle">&#8226; Validacion en Tabla snort2c de pfctl</text>
+    <text x="175" y="125" font-family="sans-serif" font-size="11" fill="#E2E8F0" text-anchor="middle">&#8226; Verificacion de Ataque Real Confirmado</text>
     <rect x="30" y="145" width="290" height="45" rx="5" fill="#1E293B" />
     <text x="175" y="163" font-family="monospace" font-size="10" font-weight="bold" fill="#10B981" text-anchor="middle">SI (SQLi Confirmado &amp;&amp; IP_Blocked):</text>
     <text x="175" y="178" font-family="monospace" font-size="10" fill="#00F5FF" text-anchor="middle">Disparar Webhook de Emergencia a PBX</text>
@@ -104,12 +104,12 @@
     <rect width="250" height="35" rx="10" fill="#7C3AED" />
     <text x="125" y="24" font-family="sans-serif" font-size="14" font-weight="bold" fill="#FFF" text-anchor="middle">VOZ IA &amp; CLOUD ASTERISK</text>
     <text x="125" y="65" font-family="sans-serif" font-size="11" font-weight="bold" fill="#A78BFA" text-anchor="middle">1. Asterisk PBX (Docker)</text>
-    <text x="125" y="82" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">Auto-Dialer SIP / ARI Bridge</text>
+    <text x="125" y="82" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">Auto-Dialer SIP / PJSIP Extensiones</text>
     <text x="125" y="105" font-family="sans-serif" font-size="11" font-weight="bold" fill="#A78BFA" text-anchor="middle">2. Gemini Live API Flash 3.1</text>
     <text x="125" y="122" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">Agente de Voz Bidireccional</text>
     <text x="125" y="145" font-family="sans-serif" font-size="11" font-weight="bold" fill="#A78BFA" text-anchor="middle">3. Debriefing &amp; Mitigaciones</text>
-    <text x="125" y="162" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">IP, País, Vector y Telemetría</text>
-    <text x="125" y="188" font-family="monospace" font-size="10" fill="#00F5FF" text-anchor="middle">[ Llamada Telefónica Activa ]</text>
+    <text x="125" y="162" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">IP, Pais, Vector y Telemetria</text>
+    <text x="125" y="188" font-family="monospace" font-size="10" fill="#00F5FF" text-anchor="middle">[ Llamada Telefonica Activa ]</text>
   </g>
 
   <!-- Arrow 5 -> 6 (CISO / SOC Lead) -->
@@ -121,9 +121,9 @@
     <rect width="140" height="150" rx="10" fill="url(#boxGrad)" stroke="#10B981" stroke-width="2" filter="url(#glow)" />
     <rect width="140" height="35" rx="10" fill="#059669" />
     <text x="70" y="24" font-family="sans-serif" font-size="13" font-weight="bold" fill="#FFF" text-anchor="middle">CISO / SOC LEAD</text>
-    <text x="70" y="65" font-family="sans-serif" font-size="11" fill="#FFF" text-anchor="middle">Recepción de</text>
+    <text x="70" y="65" font-family="sans-serif" font-size="11" fill="#FFF" text-anchor="middle">Recepcion de</text>
     <text x="70" y="82" font-family="sans-serif" font-size="11" font-weight="bold" fill="#10B981" text-anchor="middle">Llamada de Voz</text>
-    <text x="70" y="110" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">Interacción en vivo</text>
+    <text x="70" y="110" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">Interaccion en vivo</text>
     <text x="70" y="125" font-family="sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">con Agente de IA</text>
   </g>
 </svg>

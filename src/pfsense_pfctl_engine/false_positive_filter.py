@@ -37,58 +37,73 @@ class FalsePositiveFilter:
             "SURICATA HTTP suspicious User-Agent",
             "ET INFO Generic Protocol Handler"
         ]
+        self.known_false_positive_patterns = [
+            re.compile(r"ET POLICY Suspicious inbound to MSSQL port", re.IGNORECASE),
+            re.compile(r"ET SCAN Potential SSH Scan", re.IGNORECASE),
+            re.compile(r"GPL SCAN PING \*NIX", re.IGNORECASE)
+        ]
 
-    def analyze(self, event: Dict[str, Any]) -> Tuple[bool, str, float]:
+    def analyze(self, event: Dict[str, Any]) -> Dict[str, Any]:
         """
         Analiza el evento Suricata para separar ruido de ataques críticos reales.
-        Retorna: (es_ataque_real: bool, tipo_ataque: str, confianza: float)
+        Retorna: (dict con resultados de análisis)
         """
-        alert = event.get("alert", {})
-        signature = alert.get("signature", "")
-        severity = alert.get("severity", 3)
-        http = event.get("http", {})
+        alert = event.get("alert") or {}
+        http = event.get("http") or {}
+        src_ip = event.get("src_ip", "")
         
-        url = http.get("url", "")
-        body = http.get("http_request_body", "") or event.get("payload_printable", "")
+        signature = alert.get("signature") or ""
+        url = http.get("url") or ""
+        body = http.get("http_request_body") or event.get("payload_printable") or ""
         
-        # Desofuscación iterativa de URL
-        decoded_url = urllib.parse.unquote(url)
+        # 1. Desofuscar y decodificar URLs
+        decoded_url = urllib.parse.unquote(url) if isinstance(url, str) else ""
         decoded_body = urllib.parse.unquote(body) if isinstance(body, str) else ""
-        combined_payload = f"{decoded_url} {decoded_body}"
+        full_payload = f"{signature} {decoded_url} {decoded_body}"
         
-        # 1. Descarte inmediato de firmas ruidosas de escaneo L3/L4 sin contexto HTTP
-        for noisy_sig in self.noisy_signatures:
-            if noisy_sig.lower() in signature.lower() and not http:
-                return (False, "RUIDO_ESCANEO_TRIVIAL_SUPRIMIDO", 0.05)
-                
-        # 2. Detección y clasificación de SQL Injection
-        sqli_matches = 0
-        for pattern in self.sqli_patterns:
-            if pattern.search(combined_payload):
-                sqli_matches += 1
-                
-        if sqli_matches >= 1:
-            confidence = min(0.70 + (sqli_matches * 0.15), 0.99)
-            return (True, "CRITICAL_SQL_INJECTION", confidence)
+        # 2. Descartar Escaneos Triviales y Ruido Conocido
+        for fp_pattern in self.known_false_positive_patterns:
+            if fp_pattern.search(full_payload):
+                return {
+                    "is_real_attack": False,
+                    "confidence_score": 0.1,
+                    "attack_type": "NOISE / SCANNER",
+                    "reason": f"Patrón de ruido o fuzzer detectado: {fp_pattern.pattern}",
+                    "src_ip": src_ip
+                }
+        
+        # 3. Detectar Inyecciones SQL (SQLi)
+        sqli_matches = [p.pattern for p in self.sqli_patterns if p.search(full_payload)]
+        rce_matches = [p.pattern for p in self.rce_patterns if p.search(full_payload)]
+        
+        confidence = 0.0
+        attack_type = "UNKNOWN"
+        
+        if sqli_matches:
+            attack_type = "SQL_INJECTION"
+            confidence = min(1.0, 0.6 + (0.2 * len(sqli_matches)))
+        elif rce_matches:
+            attack_type = "REMOTE_CODE_EXECUTION"
+            confidence = min(1.0, 0.7 + (0.15 * len(rce_matches)))
             
-        if severity == 1 and ("sql" in signature.lower() or "injection" in signature.lower()):
-            return (True, "SURICATA_CONFIRMED_SQLI", 0.85)
-
-        # 3. Detección de Command Injection / RCE
-        for pattern in self.rce_patterns:
-            if pattern.search(combined_payload):
-                return (True, "COMMAND_INJECTION_RCE", 0.95)
-                
-        if severity == 1 and ("rce" in signature.lower() or "remote code" in signature.lower() or "exploit" in signature.lower()):
-            return (True, "CRITICAL_EXPLOIT_PAYLOAD", 0.90)
-
-        # 4. Tráfico sin severidad crítica (suprimir escalamiento)
-        return (False, "LOW_CONFIDENCE_NOISE_SUPPRESSED", 0.20)
+        is_real = confidence >= 0.75
+        
+        return {
+            "is_real_attack": is_real,
+            "confidence_score": confidence,
+            "attack_type": attack_type,
+            "matches": sqli_matches or rce_matches,
+            "src_ip": src_ip,
+            "http_endpoint": url,
+            "geo_origin": self.get_geoip(src_ip)
+        }
 
     def get_geoip(self, ip: str) -> str:
-        """Resolución de geolocalización IP (MaxMind GeoLite2)"""
-        if ip.startswith("192.168.") or ip.startswith("10.") or ip.startswith("172."):
-            return "Red Privada / Laboratorio DMZ (Simulado WAN)"
+        """Simulación / Consulta GeoIP MaxMind"""
+        if not ip or not isinstance(ip, str):
+            return "Origen Desconocido"
+        if ip.startswith("192.168.") or ip.startswith("10.") or ip.startswith("172.16."):
+            return "Red Privada / Laboratorio Local"
         if ip.startswith("185.") or ip.startswith("198."):
             return "Federación Rusa (Nodo Hostil Detectado)"
         return "Origen Internacional No Confiable (MaxMind GeoIP)"

@@ -114,7 +114,7 @@
     <circle cx="520" cy="230" r="4" fill="#FF1E56" />
   </g>
 
-  <!-- Technical Branding & Callouts -->
+  <!-- Technical Branding & Callouts (Valid XML with Unicode Bullets) -->
   <text x="400" y="705" font-family="'Orbitron', 'Segoe UI', 'Arial Black', sans-serif" font-size="34" font-weight="900" 
         letter-spacing="12" fill="#FFFFFF" text-anchor="middle">
     KRONOS SENTINEL
@@ -122,11 +122,11 @@
   
   <text x="400" y="735" font-family="'Consolas', 'Courier New', monospace" font-size="13" font-weight="bold" 
         letter-spacing="5" fill="#00F5FF" text-anchor="middle" filter="url(#neonGlowCyan)">
-    AUTONOMOUS AI-IPS &bull; LIVE VOICE SOAR &bull; pfSense
+    AUTONOMOUS AI-IPS &#8226; LIVE VOICE SOAR &#8226; pfSense
   </text>
 
   <text x="400" y="760" font-family="'Consolas', 'Courier New', monospace" font-size="10" 
         letter-spacing="2" fill="#64748B" text-anchor="middle">
-    DUOC UC SAN JOAQUÍN &bull; INGENIERÍA EN CONECTIVIDAD Y REDES
+    DUOC UC SAN JOAQU&#205;N &#8226; INGENIER&#205;A EN CONECTIVIDAD Y REDES
   </text>
 </svg>

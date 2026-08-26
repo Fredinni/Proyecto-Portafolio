@@ -113,9 +113,9 @@ def create_diario_reflexion_fase1_docx(filename):
 
     sections = [
         ("1. Asignaturas y certificados de mayor motivación:",
-         "¿Cuáles son las asignaturas o certificados que más motivaron tu aprendizaje y se relacionan con tus intereses profesionales? ¿Por qué?",
+         "¿Cuáles son las asignaturas o certificados que más motivaron tu aprendizaje y se relacionan con tus intereses profesionales?",
          "Las asignaturas que mayor impacto y motivación han generado en mi formación son aquellas orientadas a la Ciberseguridad Defensiva y Ofensiva, Seguridad Perimetral, Routing & Switching avanzado (CCNA / Cisco Networking Academy), Sistemas Operativos tipo Unix/Linux y Arquitectura de Redes.\n\n"
-         "Bajo la exigente mentoría académica del profesor Mauricio Carrera, profundicé en la concepción de que una red no solo debe ser funcional y de alta disponibilidad, sino inherentemente segura (Security by Design). Esto despertó mi pasión por la construcción de laboratorios complejos (Home Lab con Proxmox VE y GNS3), la administración de firewalls pfSense y la detección/prevención de intrusiones con Suricata IPS, orientando mi perfil hacia la ingeniería de seguridad perimetral y respuesta autónoma ante incidentes."),
+         "A lo largo de mi formación académica y práctica, profundicé en la concepción de que una red no solo debe ser funcional y de alta disponibilidad, sino inherentemente segura por diseño (Security by Design). Esto despertó mi pasión por la construcción de laboratorios complejos (Home Lab bare-metal con Proxmox VE y emulación con GNS3), la administración avanzada de firewalls pfSense y la detección/prevención de intrusiones con Suricata IPS, orientando mi perfil hacia la ingeniería de seguridad perimetral, la respuesta autónoma ante incidentes (SOAR) y la fortificación de infraestructuras críticas."),
         
         ("2. Análisis de competencias (Fortalezas y Oportunidades de Mejora):",
          "¿Cuáles consideras que tienes más desarrolladas y te sientes más seguro aplicando? ¿En cuáles te sientes más débil y requieren ser fortalecidas?\nSumado a lo anterior, ¿Hay alguna competencia que hayas desarrollado de forma autodidacta en alguna actividad extracurricular que quieras destacar?",

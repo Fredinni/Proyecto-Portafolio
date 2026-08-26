@@ -2,7 +2,6 @@
 ## Proyecto: KRONOS SENTINEL (APT122) — Autonomous AI-IPS & Voice SOAR
 **Autor:** Bruno Urrea Ortiz | Especialidad en Conectividad, Redes y Ciberseguridad  
 **Institución:** Escuela de Informática y Telecomunicaciones — Duoc UC Sede San Joaquín  
-**Mentoría Académica:** Prof. Mauricio Carrera  
 **Documento Técnico:** Clasificación SecOps Nivel 4 // Documento Maestro de Despliegue Perimetral
 
 ---
@@ -35,10 +34,10 @@
 | **VLAN 99** | `vtnet1` | `VLAN99_MGMT` | `192.168.99.0/24` | `192.168.99.1` | Administración Out-of-Band (SSH pfSense, Proxmox, WebGUI). |
 
 3. En **Interfaces > Assignments > Interface Assignments**, mapear los adaptadores virtuales a los nombres lógicos:
-   * `OPT1` $\rightarrow$ `VLAN10_CORP` en `vtnet1.10`
-   * `OPT2` $\rightarrow$ `VLAN20_DMZ` en `vtnet1.20`
-   * `OPT3` $\rightarrow$ `VLAN30_VOIP` en `vtnet1.30`
-   * `OPT4` $\rightarrow$ `VLAN99_MGMT` en `vtnet1.99`
+   * `OPT1` → `VLAN10_CORP` en `vtnet1.10`
+   * `OPT2` → `VLAN20_DMZ` en `vtnet1.20`
+   * `OPT3` → `VLAN30_VOIP` en `vtnet1.30`
+   * `OPT4` → `VLAN99_MGMT` en `vtnet1.99`
 4. Habilitar cada interfaz marcando **Enable Interface**, asignar **IPv4 Configuration Type: Static IPv4**, definir la IP estática y máscara `/24`. Guardar y **Apply Changes**.
 
 #### 1.3 Configuración de Servidores DHCP

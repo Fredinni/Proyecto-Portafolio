@@ -12,7 +12,7 @@
 
 Las asignaturas que mayor impacto y motivación han generado en mi formación son aquellas orientadas a la **Ciberseguridad Defensiva y Ofensiva, Seguridad Perimetral, Routing & Switching avanzado (CCNA / Cisco Networking Academy), Sistemas Operativos tipo Unix/Linux y Arquitectura de Redes**.
 
-Bajo la exigente mentoría académica del profesor Mauricio Carrera, profundicé en la concepción de que una red no solo debe ser funcional y de alta disponibilidad, sino **inherentemente segura por diseño (*Security by Design*)**. Esto despertó mi pasión por la construcción de laboratorios complejos (Home Lab bare-metal con Proxmox VE y emulación con GNS3), la administración avanzada de firewalls **pfSense** y la detección/prevención de intrusiones con **Suricata IPS**, orientando mi perfil hacia la ingeniería de seguridad perimetral, la respuesta autónoma ante incidentes (SOAR) y la fortificación de infraestructuras críticas.
+A lo largo de mi formación académica y práctica, profundicé en la concepción de que una red no solo debe ser funcional y tolerante a fallos, sino intrínsecamente segura mediante arquitecturas de defensa en profundidad y segmentación estricta (*Zero Trust*). Esta visión transformó mi perspectiva desde la simple administración hacia el aseguramiento proactivo y la respuesta autónoma ante incidentes. Esto despertó mi pasión por la construcción de laboratorios complejos (Home Lab bare-metal con Proxmox VE y emulación con GNS3), la administración avanzada de firewalls **pfSense** y la detección/prevención de intrusiones con **Suricata IPS**, orientando mi perfil hacia la ingeniería de seguridad perimetral, la respuesta autónoma ante incidentes (SOAR) y la fortificación de infraestructuras críticas.
 
 ---
 

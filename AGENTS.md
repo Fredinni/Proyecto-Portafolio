@@ -7,7 +7,7 @@ Este archivo define el contexto técnico, entorno de trabajo, stack tecnológico
 ## 1. Identidad y Perfil Profesional
 * **Nombre:** Bruno Urrea Ortiz
 * **Especialidad:** Futuro Ingeniero en Conectividad y Redes (Duoc UC, Sede San Joaquín).
-* **Áreas de Enfoque:** Ciberseguridad ofensiva/defensiva, infraestructura de hacking ético, despliegue de entornos OT/IT, arquitectura de redes complejas y securización perimetral (bajo influencia y mentoría académica del Prof. Mauricio Carrera).
+* **Áreas de Enfoque:** Ciberseguridad ofensiva/defensiva, infraestructura de hacking ético, despliegue de entornos OT/IT, arquitectura de redes complejas y securización perimetral.
 
 ---
 

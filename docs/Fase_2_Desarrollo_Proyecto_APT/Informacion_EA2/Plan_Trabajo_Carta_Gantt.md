@@ -27,19 +27,19 @@
 gantt
     title Cronograma de Implementación KRONOS SENTINEL (Semanas 5 a 15)
     dateFormat  YYYY-MM-DD
-    section Infraestructura & Red
-    pfSense & VLANs en Proxmox        :done, s5, 2026-03-01, 7d
+    section Infraestructura y Red
+    pfSense y VLANs en Proxmox        :done, s5, 2026-03-01, 7d
     Suricata Inline IPS (Netmap)      :done, s6, 2026-03-08, 7d
-    pfBlockerNG & GeoIP MaxMind       :done, s7, 2026-03-15, 7d
-    HAProxy & Contenedor DVWA         :done, s8, 2026-03-22, 7d
-    section Desarrollo & Correlación
-    Motor pfctl & Parser eve.json     :done, s9, 2026-03-29, 7d
-    Supresión de Falsos Positivos     :done, s10, 2026-04-05, 7d
-    section Telefonía & Agente de Voz
-    Asterisk PBX Docker & PJSIP       :done, s11, 2026-04-12, 7d
+    pfBlockerNG y GeoIP MaxMind       :done, s7, 2026-03-15, 7d
+    HAProxy y Contenedor DVWA         :done, s8, 2026-03-22, 7d
+    section Desarrollo y Correlacion
+    Motor pfctl y Parser eve.json     :done, s9, 2026-03-29, 7d
+    Supresion de Falsos Positivos     :done, s10, 2026-04-05, 7d
+    section Telefonia y Agente de Voz
+    Asterisk PBX Docker y PJSIP       :done, s11, 2026-04-12, 7d
     Gemini Live API Flash 3.1         :done, s12, 2026-04-19, 7d
-    section Testing & Integración
-    Simulación de Inyección SQL       :done, s13, 2026-04-26, 7d
+    section Testing e Integracion
+    Simulacion de Inyeccion SQL       :done, s13, 2026-04-26, 7d
     Afinamiento de Latencia y Voice   :done, s14, 2026-05-03, 7d
     Entrega Informe Fase 2            :done, s15, 2026-05-10, 7d
 ```
