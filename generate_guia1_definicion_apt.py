@@ -40,7 +40,7 @@ MARKDOWN_CONTENT = """# Guía 1. Definición Proyecto APT
 | Campo | Información Solicitada |
 | :--- | :--- |
 | **Nombre estudiante** | Bruno Urrea Ortiz |
-| **Rut** | 21.345.678-9 |
+| **Rut** | 21.543.637-3 |
 | **Carrera** | Ingeniería en Conectividad y Redes |
 | **Sede** | San Joaquín |
 | **Integrantes del Equipo (Grupal)** | • Bruno Urrea Ortiz (Líder de Ciberseguridad, Motor KRONOS y Gemini Live)<br>• Freddy Vásquez Cortés (Routing, Switching y Telefonía Asterisk PBX)<br>• Cristóbal Quezada (Servicios Web, HAProxy SSL y DMZ DVWA)<br>• Kevin Retamales (Hardening Perimetral, pfBlockerNG y QA) |
@@ -243,7 +243,7 @@ def generate_docx(output_path: str):
     t_pers.alignment = WD_TABLE_ALIGNMENT.CENTER
     pers_data = [
         ("Nombre estudiante", "Bruno Urrea Ortiz"),
-        ("Rut", "21.345.678-9"),
+        ("Rut", "21.543.637-3"),
         ("Carrera", "Ingeniería en Conectividad y Redes"),
         ("Sede", "San Joaquín"),
         ("Integrantes del Equipo (Grupal)", "• Bruno Urrea Ortiz (Líder de Ciberseguridad, Motor KRONOS y Gemini Live)\n• Freddy Vásquez Cortés (Routing, Switching y Telefonía Asterisk PBX)\n• Cristóbal Quezada (Servicios Web, HAProxy SSL y DMZ DVWA)\n• Kevin Retamales (Hardening Perimetral, pfBlockerNG y QA)")
@@ -670,7 +670,7 @@ def generate_pdf(output_path: str):
     story.append(Paragraph("1. ANTECEDENTES PERSONALES", h1_style))
     pers_data = [
         [Paragraph("<b>Nombre estudiante</b>", body_style), Paragraph("Bruno Urrea Ortiz", body_style)],
-        [Paragraph("<b>Rut</b>", body_style), Paragraph("21.345.678-9", body_style)],
+        [Paragraph("<b>Rut</b>", body_style), Paragraph("21.543.637-3", body_style)],
         [Paragraph("<b>Carrera / Sede</b>", body_style), Paragraph("Ingeniería en Conectividad y Redes / San Joaquín", body_style)],
         [Paragraph("<b>Equipo de Trabajo</b>", body_style), Paragraph("• Bruno Urrea Ortiz (Líder Ciberseguridad) • Freddy Vásquez (Routing & VoIP)<br/>• Cristóbal Quezada (Web & DMZ) • Kevin Retamales (Hardening & QA)", body_style)]
     ]

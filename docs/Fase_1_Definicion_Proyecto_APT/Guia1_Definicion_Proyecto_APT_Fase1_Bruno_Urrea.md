@@ -14,7 +14,7 @@
 | Campo | Información Solicitada |
 | :--- | :--- |
 | **Nombre estudiante** | Bruno Urrea Ortiz |
-| **Rut** | 21.345.678-9 |
+| **Rut** | 21.543.637-3 |
 | **Carrera** | Ingeniería en Conectividad y Redes |
 | **Sede** | San Joaquín |
 | **Integrantes del Equipo (Grupal)** | • Bruno Urrea Ortiz (Líder de Ciberseguridad, Motor KRONOS y Gemini Live)<br>• Freddy Vásquez Cortés (Routing, Switching y Telefonía Asterisk PBX)<br>• Cristóbal Quezada (Servicios Web, HAProxy SSL y DMZ DVWA)<br>• Kevin Retamales (Hardening Perimetral, pfBlockerNG y QA) |
