@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+  KRONOS SENTINEL - Fragmento de Configuración pfSense CE 2.9.0
+  Actividad Gantt: A1 - Setup Base pfSense & Netmap Tuning
+  Responsable: Bruno Urrea Ortiz (Líder Ciberseguridad & Kernel)
+-->
+<pfsense>
+  <system>
+    <hostname>kronos-firewall</hostname>
+    <domain>kronos.local</domain>
+    <timeservers>0.pfsense.pool.ntp.org</timeservers>
+    <!-- Hardware Offloading Tuning (Requerido para Netmap Inline IPS) -->
+    <disablechecksumoffloading>yes</disablechecksumoffloading>
+    <disablesegmentationoffloading>yes</disablesegmentationoffloading>
+    <disablelargereceiveoffloading>yes</disablelargereceiveoffloading>
+    <enablessh>enabled</enablessh>
+    <ssh>
+      <port>2222</port>
+      <sshdkeyonly>enabled</sshdkeyonly>
+    </ssh>
+  </system>
+  <system_tunables>
+    <tunable>
+      <tunable>net.inet.ip.fastforwarding</tunable>
+      <value>0</value>
+      <descr>Desactivar IP Fastforwarding para forzar paso por Packet Filter y Netmap</descr>
+    </tunable>
+    <tunable>
+      <tunable>kern.ipc.nmbclusters</tunable>
+      <value>1000000</value>
+      <descr>Ampliar buffers mbuf para prevenir agotamiento por ráfagas de red</descr>
+    </tunable>
+    <tunable>
+      <tunable>net.pf.states_hashsize</tunable>
+      <value>131072</value>
+      <descr>Hashsize de estados de pf para alta concurrencia de conexiones</descr>
+    </tunable>
+  </system_tunables>
+</pfsense>

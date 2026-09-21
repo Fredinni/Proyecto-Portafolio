@@ -1,0 +1,49 @@
+{
+  "responsable": "Bruno Urrea Ortiz",
+  "actividad": "A1 - Setup Base pfSense & Netmap Tuning",
+  "fase": "Fase 1 / Inicio Fase 2",
+  "estado_general": "PASS",
+  "items": [
+    {
+      "parametro": "net.inet.ip.fastforwarding",
+      "valor_obtenido": "0",
+      "valor_esperado": "0",
+      "cumplimiento": true,
+      "justificacion": "Fastforwarding hace bypass de inspección en Packet Filter (pf) y corrompe el flujo Netmap."
+    },
+    {
+      "parametro": "net.inet.ip.intr_queue_maxlen",
+      "valor_obtenido": "4096",
+      "valor_esperado": "4096",
+      "cumplimiento": true,
+      "justificacion": "Cola de entrada de red dimensionada para absorber ráfagas de paquetes."
+    },
+    {
+      "parametro": "net.pf.states_hashsize",
+      "valor_obtenido": "131072",
+      "valor_esperado": "131072",
+      "cumplimiento": true,
+      "justificacion": "Tabla de hash de estados de pf optimizada para alta concurrencia."
+    },
+    {
+      "componente": "Hardware Checksum Offload",
+      "estado": "Desactivado",
+      "cumplimiento": true
+    },
+    {
+      "componente": "Hardware TCP Segmentation Offload (TSO)",
+      "estado": "Desactivado",
+      "cumplimiento": true
+    },
+    {
+      "componente": "Hardware Large Receive Offload (LRO)",
+      "estado": "Desactivado",
+      "cumplimiento": true
+    }
+  ],
+  "netmap_tuning": {
+    "mbuf_clusters": "1000000",
+    "ring_size": "4096",
+    "mode": "Inline IPS Ready"
+  }
+}

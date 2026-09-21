@@ -12,6 +12,7 @@ __pycache__/
 *.swp
 *.swo
 
-# Local Context Rules (Keep private)
+# Local Context Rules & Tools (Keep private)
 AGENTS.md
 GEMINI.md
+.build_tools/
