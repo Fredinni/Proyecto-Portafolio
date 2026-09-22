@@ -16,3 +16,4 @@ __pycache__/
 AGENTS.md
 GEMINI.md
 .build_tools/
+.venv/

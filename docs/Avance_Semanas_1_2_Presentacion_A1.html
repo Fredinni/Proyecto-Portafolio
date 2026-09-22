@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KRONOS SENTINEL - Avance Semanas 1 a 2 (Actividad A1)</title>
+<style>
+  :root {
+    --bg-dark: #070913;
+    --card-bg: rgba(19, 14, 38, 0.85);
+    --card-border: #4C1D95;
+    --accent-cyan: #00F5FF;
+    --accent-purple: #8B5CF6;
+    --accent-green: #10B981;
+    --accent-amber: #F59E0B;
+    --text-white: #F8FAFC;
+    --text-muted: #94A3B8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-white);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Presentation Container (16:9) */
+  .deck-container {
+    flex: 1;
+    position: relative;
+    width: 100vw;
+    height: calc(100vh - 60px);
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    padding: 40px 70px;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    background: radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.12) 0%, transparent 60%),
+                radial-gradient(circle at 20% 80%, rgba(0, 245, 255, 0.08) 0%, transparent 50%),
+                #070913;
+  }
+  .slide.active { display: flex; }
+
+  /* Navigation Bar */
+  .nav-bar {
+    height: 60px;
+    background: #0B0819;
+    border-top: 1px solid #1E1442;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+  .nav-controls button {
+    background: #1E1442;
+    border: 1px solid #4C1D95;
+    color: #FFF;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 8px;
+    transition: all 0.2s;
+  }
+  .nav-controls button:hover {
+    background: var(--accent-purple);
+    border-color: var(--accent-cyan);
+  }
+
+  /* Slide Typography */
+  .slide-header {
+    margin-bottom: 25px;
+  }
+  .slide-tag {
+    font-family: 'Consolas', monospace;
+    font-size: 13px;
+    color: var(--accent-cyan);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .slide-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-top: 5px;
+  }
+  .slide-subtitle {
+    font-size: 16px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* Cards & Grid */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    flex: 1;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    flex: 1;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  .card h3 {
+    font-size: 18px;
+    color: var(--accent-cyan);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card p, .card li {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: #CBD5E1;
+  }
+  .card ul { list-style: none; }
+  .card ul li { margin-bottom: 10px; position: relative; padding-left: 20px; }
+  .card ul li::before {
+    content: "•";
+    color: var(--accent-purple);
+    font-size: 20px;
+    position: absolute;
+    left: 0;
+    top: -3px;
+  }
+
+  /* Stat Pills & Highlights */
+  .stat-badge {
+    display: inline-block;
+    background: rgba(0, 245, 255, 0.1);
+    border: 1px solid var(--accent-cyan);
+    color: var(--accent-cyan);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: 'Consolas', monospace;
+  }
+
+  /* Code / Terminal Block */
+  .terminal {
+    background: #04050A;
+    border: 1px solid #1E293B;
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Consolas', monospace;
+    font-size: 13px;
+    color: #38BDF8;
+    line-height: 1.5;
+    overflow-x: auto;
+  }
+  .terminal .pass { color: #10B981; font-weight: bold; }
+  .terminal .warn { color: #F59E0B; }
+  .terminal .cmd { color: #FFFFFF; }
+
+  /* Table styling */
+  table.spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin-top: 10px;
+  }
+  table.spec-table th {
+    background: #1E1242;
+    color: var(--accent-cyan);
+    text-align: left;
+    padding: 10px 14px;
+    border: 1px solid #372068;
+  }
+  table.spec-table td {
+    padding: 10px 14px;
+    border: 1px solid #231347;
+    color: #E2E8F0;
+  }
+  table.spec-table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+
+  /* Cover Slide */
+  .cover {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 100px;
+  }
+  .cover h1 {
+    font-size: 44px;
+    font-weight: 900;
+    color: #FFF;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+  }
+  .cover h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--accent-cyan);
+    margin-bottom: 30px;
+  }
+  .cover-meta {
+    background: rgba(19, 14, 38, 0.9);
+    border: 1px solid var(--card-border);
+    padding: 24px 40px;
+    border-radius: 12px;
+    display: inline-block;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  @media print {
+    body { overflow: visible; height: auto; }
+    .deck-container { height: auto; overflow: visible; }
+    .slide { display: flex !important; position: relative; page-break-after: always; height: 100vh; }
+    .nav-bar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck-container">
+
+  <!-- SLIDE 1: PORTADA OFICIAL -->
+  <div class="slide cover active" id="slide-1">
+    <div class="slide-tag">DUOC UC • ESCUELA DE INFORMÁTICA Y TELECOMUNICACIONES • SEDE SAN JOAQUÍN</div>
+    <h1>KRONOS SENTINEL</h1>
+    <h2>Defensa Perimetral Autónoma SOAR &amp; AI-IPS</h2>
+    <div class="cover-meta">
+      <strong>Asignatura:</strong> Portafolio de Título (APT122) — Capstone<br>
+      <strong>Hito Evaluativo:</strong> Avance Semanas 1 a 2 (Actividad A1: Setup Base pfSense &amp; Netmap Tuning)<br>
+      <strong>Integrantes Responsables:</strong> Bruno Urrea Ortiz (Líder Ciberseguridad) &amp; Freddy Vásquez Cortés (Networking)<br>
+      <strong>Carrera:</strong> Ingeniería en Conectividad y Redes<br>
+      <strong>Fecha:</strong> Septiembre 2026
+    </div>
+  </div>
+
+  <!-- SLIDE 2: ENMARQUE EN LA CARTA GANTT -->
+  <div class="slide" id="slide-2">
+    <div class="slide-header">
+      <div class="slide-tag">01. ALCANCE Y PLANIFICACIÓN</div>
+      <div class="slide-title">Enmarque en Carta Gantt: Actividad A1 (Semanas 1 - 2)</div>
+      <div class="slide-subtitle">División técnica de trabajo y cumplimiento del cronograma académico oficial.</div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>🎯 Objetivo del Hito Semanas 1 - 2</h3>
+        <p>Aprovisionar la plataforma perimetral base en pfSense CE 2.9.0 (FreeBSD 14) asegurando la conectividad de red fundamental y ejecutando el <strong>tuning profundo de kernel</strong> necesario para soportar la futura prevención de intrusiones en hardware con Netmap.</p>
+        <br>
+        <div class="stat-badge">ESTADO: 100% COMPLETADO DENTRO DE PLAZO</div>
+        <br><br>
+        <ul>
+          <li><strong>Duración Planificada:</strong> Semanas 1 a 2 del semestre académico.</li>
+          <li><strong>Costo de Implementación:</strong> $0 CLP (Software libre y arquitectura comunitaria).</li>
+          <li><strong>Siguiente Hito Inmediato:</strong> Actividad A2 (Segmentación VLANs 802.1Q).</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>👥 Distribución de Roles en la Actividad A1</h3>
+        <ul>
+          <li>
+            <strong>Freddy Vásquez Cortés (Ingeniero de Redes):</strong><br>
+            Despliegue de la máquina virtual pfSense en hipervisor, asignación de interfaces WAN/LAN, configuración del gateway predeterminado y pruebas de conectividad exterior.
+          </li>
+          <li>
+            <strong>Bruno Urrea Ortiz (Líder de Ciberseguridad &amp; Kernel):</strong><br>
+            Hardening del sistema operativo FreeBSD 14, configuración de parámetros de memoria y ring-buffers para <code>netmap(4)</code>, desactivación de hardware offloading y script de auditoría.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: INFRAESTRUCTURA DE RED BASE (PARTE FREDDY) -->
+  <div class="slide" id="slide-3">
+    <div class="slide-header">
+      <div class="slide-tag">02. INFRAESTRUCTURA Y CONECTIVIDAD</div>
+      <div class="slide-title">Despliegue Base pfSense CE 2.9.0 &amp; Conectividad WAN/LAN</div>
+      <div class="slide-subtitle">Aprovisionamiento realizado en el entorno de laboratorio.</div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>🌐 Parámetros de Networking Base</h3>
+        <table class="spec-table">
+          <tr><th>Interfaz</th><th>Dispositivo</th><th>Direccionamiento IP</th><th>Propósito</th></tr>
+          <tr><td><strong>WAN</strong></td><td>vtnet0 / em0</td><td>DHCP / Bridged WAN</td><td>Salida a Internet y feeds</td></tr>
+          <tr><td><strong>LAN</strong></td><td>vtnet1 / em1</td><td>192.168.1.1/24</td><td>Red de administración inicial</td></tr>
+          <tr><td><strong>DNS</strong></td><td>System DNS</td><td>1.1.1.1 / 8.8.8.8</td><td>Resolución de paquetes y reglas</td></tr>
+          <tr><td><strong>NTP</strong></td><td>Network Time</td><td>pool.ntp.org</td><td>Sincronización forense exacta</td></tr>
+        </table>
+        <br>
+        <p>Se configuró el firewall en el hipervisor (Proxmox VE / VMware Workstation) validando el acceso administrativo seguro vía HTTPS (puerto 443) y SSH en puerto restringido (2222).</p>
+      </div>
+      <div class="card">
+        <h3>🔒 Políticas Iniciales de Seguridad Perimetral</h3>
+        <ul>
+          <li><strong>Regla Anti-Lockout Protegida:</strong> Acceso administrativo a WebGUI confinado únicamente a la interfaz LAN autorizada.</li>
+          <li><strong>Bloqueo de Redes Bogon &amp; Privadas en WAN:</strong> Activación de reglas para descartar tráfico entrante no enrutable (RFC 1918 / RFC 5735).</li>
+          <li><strong>Filtrado Default Deny:</strong> Política Zero Trust estricta en interfaz WAN (todo tráfico entrante no solicitado es descartado).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: EL DESAFÍO TÉCNICO DE KERNEL (PARTE BRUNO) -->
+  <div class="slide" id="slide-4">
+    <div class="slide-header">
+      <div class="slide-tag">03. ARQUITECTURA DE KERNEL FREEBSD</div>
+      <div class="slide-title">El Desafío Crítico: ¿Por qué Tunear FreeBSD para Netmap?</div>
+      <div class="slide-subtitle">Resolución de un problema técnico fundamental antes de desplegar Suricata Inline IPS.</div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>⚠️ La Problemática en Entornos Virtuales</h3>
+        <p>Por defecto, los cortafuegos delegan el cálculo de checksums y la segmentación de paquetes a la tarjeta de red (Hardware Offloading):</p>
+        <br>
+        <ul>
+          <li><strong>TSO (TCP Segmentation Offload):</strong> Crea paquetes mayores a MTU 1500 (hasta 64KB). Si Netmap recibe esto, <em>desborda la memoria compartida y crashea</em>.</li>
+          <li><strong>LRO (Large Receive Offload):</strong> Agrupa paquetes antes de que el IPS pueda verlos individualmente, <em>rompiendo la detección de firmas SQLi</em>.</li>
+          <li><strong>IP Fastforwarding:</strong> Salta el procesamiento de Packet Filter (`pf`), impidiendo que la tabla <code>&lt;snort2c&gt;</code> bloquee a los atacantes.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🛡️ La Solución de Ingeniería Implementada</h3>
+        <p>Se desactivaron en hardware las características de offloading y se dimensionó el kernel en <code>/boot/loader.conf.local</code>:</p>
+        <br>
+        <div class="terminal">
+<span class="cmd"># Configuración aplicada en pfSense (System > Advanced > Networking):</span>
+• Disable Hardware Checksum Offload:  <span class="pass">CHECKED (Yes)</span>
+• Disable TCP Segmentation Offload:    <span class="pass">CHECKED (Yes)</span>
+• Disable Large Receive Offload:       <span class="pass">CHECKED (Yes)</span>
+
+<span class="cmd"># Variable de ruteo de kernel:</span>
+net.inet.ip.fastforwarding = <span class="pass">0</span> (Inspección Packet Filter forzada)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: PARÁMETROS TÉCNICOS APLICADOS -->
+  <div class="slide" id="slide-5">
+    <div class="slide-header">
+      <div class="slide-tag">04. ESPECIFICACIÓN TÉCNICA DE KERNEL</div>
+      <div class="slide-title">Ajustes de Memoria &amp; Ring-Buffers en FreeBSD 14</div>
+      <div class="slide-subtitle">Parámetros inyectados en loader.conf.local y sysctl.conf para alta concurrencia.</div>
+    </div>
+    <table class="spec-table">
+      <tr>
+        <th>Variable de Kernel</th>
+        <th>Valor Configurado</th>
+        <th>Valor por Defecto</th>
+        <th>Impacto Crítico en KRONOS SENTINEL</th>
+      </tr>
+      <tr>
+        <td><code>kern.ipc.nmbclusters</code></td>
+        <td><strong>1,000,000</strong></td>
+        <td>65,536</td>
+        <td>Previene el colapso del firewall (Kernel Panic) ante ráfagas masivas de tráfico o ataques DoS.</td>
+      </tr>
+      <tr>
+        <td><code>hw.netmap.ring_size</code></td>
+        <td><strong>4,096</strong></td>
+        <td>1,024</td>
+        <td>Cuadruplica los descriptores en los anillos RX/TX para descarte en hardware sin latencia.</td>
+      </tr>
+      <tr>
+        <td><code>hw.netmap.buf_size</code></td>
+        <td><strong>2,048 bytes</strong></td>
+        <td>2,048 bytes</td>
+        <td>Estandariza los buffers de memoria compartida entre la NIC y los hilos de Suricata.</td>
+      </tr>
+      <tr>
+        <td><code>net.pf.states_hashsize</code></td>
+        <td><strong>131,072</strong></td>
+        <td>32,768</td>
+        <td>Aumenta la tabla hash de conexiones concurrentes en memoria RAM para rastreo en tiempo real.</td>
+      </tr>
+      <tr>
+        <td><code>net.inet.ip.fastforwarding</code></td>
+        <td><strong>0</strong></td>
+        <td>1 (algunas distros)</td>
+        <td>Garantiza que todo paquete cruce obligatoriamente el motor <code>pf</code> y la tabla de bloqueo <code>&lt;snort2c&gt;</code>.</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- SLIDE 6: DEMOSTRACIÓN OPERATIVA Y AUDITORÍA -->
+  <div class="slide" id="slide-6">
+    <div class="slide-header">
+      <div class="slide-tag">05. EVIDENCIA DE AVANCE Y AUDITORÍA TÉCNICA</div>
+      <div class="slide-title">Validación en Vivo: Auditoría Automatizada de Kernel</div>
+      <div class="slide-subtitle">Ejecución de la herramienta técnica verify_kernel_hardening.py desarrollada por el equipo.</div>
+    </div>
+    <div class="grid-2">
+      <div class="terminal">
+<span class="cmd">$ python src/pfsense_setup/verify_kernel_hardening.py</span>
+======================================================================
+ KRONOS SENTINEL // AUDITORÍA DE KERNEL &amp; TUNING NETMAP
+ Responsable: Bruno Urrea Ortiz | Actividad A1 (Semanas 1-2)
+======================================================================
+
+[1] Verificación de Parámetros de Kernel (sysctl):
+  - net.inet.ip.fastforwarding: 0       -> <span class="pass">[PASS]</span>
+  - net.inet.ip.intr_queue_maxlen: 4096 -> <span class="pass">[PASS]</span>
+  - net.pf.states_hashsize: 131072      -> <span class="pass">[PASS]</span>
+
+[2] Verificación de Hardware Offloading:
+  - Hardware Checksum Offload: Desactivado -> <span class="pass">[CONFIGURADO]</span>
+  - TCP Segmentation Offload:  Desactivado -> <span class="pass">[CONFIGURADO]</span>
+  - Large Receive Offload:     Desactivado -> <span class="pass">[CONFIGURADO]</span>
+
+[3] Dimensionamiento de Memoria para Netmap:
+  - kern.ipc.nmbclusters: 1,000,000 (Buffer disponible para ráfagas)
+  - hw.netmap.ring_size:  4,096     (Anillo sin latencia)
+
+======================================================================
+ RESULTADO TÉCNICO: PLATAFORMA LISTA PARA SURICATA INLINE
+======================================================================
+[OK] Evidencia exportada: src/pfsense_setup/evidencia_avance_A1_bruno.json
+      </div>
+      <div class="card">
+        <h3>📦 Artefactos de Evidencia Generados</h3>
+        <ul>
+          <li>
+            <strong><code>kernel_netmap_tuning.sh</code>:</strong> Script shell para inyección desatendida de parámetros en la consola de pfSense.
+          </li>
+          <li>
+            <strong><code>pfsense_tuning_patch.xml</code>:</strong> Fragmento XML compatible con pfSense WebGUI para restauración rápida.
+          </li>
+          <li>
+            <strong><code>evidencia_avance_A1_bruno.json</code>:</strong> Reporte estructurado con fecha, autor y estados de prueba.
+          </li>
+          <li>
+            <strong><code>README.md</code> Técnico:</strong> Documento de ingeniería formal con justificación teórica y referencias BSD.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: CONCLUSIÓN Y PRÓXIMO PASO -->
+  <div class="slide" id="slide-7">
+    <div class="slide-header">
+      <div class="slide-tag">06. CONCLUSIÓN &amp; ROADMAP</div>
+      <div class="slide-title">Conclusión del Avance Semanas 1 - 2 y Próximos Pasos</div>
+      <div class="slide-subtitle">Cumplimiento estricto de la Carta Gantt sin adelantar fases futuras.</div>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <h3>✔ Hito A1 Finalizado</h3>
+        <p>La plataforma perimetral pfSense CE 2.9.0 se encuentra desplegada, comunicada y con el kernel FreeBSD adaptado para la prevención de intrusiones en ring-buffer.</p>
+      </div>
+      <div class="card">
+        <h3>🔜 Siguiente Paso: A2</h3>
+        <p><strong>Semanas 3 a 4 (Freddy Vásquez):</strong><br>
+        Creación de las 4 subredes VLAN 802.1Q (Corp 10, DMZ 20, VoIP 30 y Mgmt 99) y servidores DHCP locales.</p>
+      </div>
+      <div class="card">
+        <h3>🔜 Siguiente Paso: A3</h3>
+        <p><strong>Semanas 5 a 6 (Bruno / Kevin):</strong><br>
+        Instalación de Suricata 7.x en modo Inline IPS sobre los descriptores Netmap configurados en este hito.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation Footer -->
+<div class="nav-bar">
+  <div>
+    <strong>KRONOS SENTINEL</strong> | Portafolio de Título APT122 — Hito Avance Semanas 1 a 2
+  </div>
+  <div class="nav-controls">
+    <span id="slide-indicator" style="margin-right: 15px; font-weight: bold; color: var(--accent-cyan);">1 / 7</span>
+    <button onclick="prevSlide()">◀ Anterior</button>
+    <button onclick="nextSlide()">Siguiente ▶</button>
+  </div>
+</div>
+
+<script>
+  let currentSlide = 1;
+  const totalSlides = 7;
+
+  function showSlide(n) {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    document.getElementById(`slide-${n}`).classList.add('active');
+    document.getElementById('slide-indicator').innerText = `${n} / ${totalSlides}`;
+  }
+
+  function nextSlide() {
+    if (currentSlide < totalSlides) {
+      currentSlide++;
+      showSlide(currentSlide);
+    }
+  }
+
+  function prevSlide() {
+    if (currentSlide > 1) {
+      currentSlide--;
+      showSlide(currentSlide);
+    }
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+      nextSlide();
+    } else if (e.key === 'ArrowLeft') {
+      prevSlide();
+    } else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  });
+</script>
+</body>
+</html>
