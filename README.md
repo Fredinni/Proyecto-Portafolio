@@ -22,6 +22,22 @@
 
 ---
 
+## 📌 Estado de Avance Real del Proyecto (Portafolio de Título APT122)
+
+> **Institución:** Duoc UC — Sede San Joaquín | **Carrera:** Ingeniería en Conectividad y Redes  
+> **Semestre Académico:** Segundo Semestre 2026 (Primavera 2026: Agosto – Diciembre 2026)  
+> **Temporalidad Actual:** Semana 6 (21 al 27 de Septiembre 2026) • Transición Fase 1 (S1-S4) a Fase 2 (S5-S15)
+
+| Fase del Proyecto | Temporalidad | Estado | Entregable / Hito Técnico Actual |
+| :--- | :---: | :---: | :--- |
+| **Fase 1: Definición & Infraestructura Base** | **Semanas 1 a 4** | **En Cierre** | • **Actividad A1 (S1 - S2):** ✔ **100% COMPLETADO Y PROBADO.** Despliegue pfSense CE 2.9.0 en Proxmox/VMware, conectividad WAN/LAN, tuning de kernel FreeBSD (`net.inet.ip.fastforwarding=0`), mbufs elevados y patch XML (en `src/pfsense_setup/`).<br>• **Actividad A2 (S3 - S4):** ⚙ **EN EJECUCIÓN.** Segmentación de 4 VLANs 802.1Q (Corp 10, DMZ 20, VoIP 30, Mgmt 99) y servidores DHCP por Freddy Vásquez. |
+| **Fase 2: Desarrollo, Hardening & Despliegue** | **Semanas 5 a 15** | **Planificado (Roadmap)** | Módulos **A3 a A9** planificados para desarrollo progresivo según Carta Gantt: Suricata Inline Netmap IPS, pfBlockerNG GeoIP, HAProxy SSL & DVWA, Motor KRONOS Python AST, Asterisk PBX 20, Gemini Live Voice y Malla Tailscale WireGuard. |
+| **Fase 3: QA, Auditoría & Defensa ante Comisión** | **Semanas 16 a 18** | **Planificado (Roadmap)** | Pruebas de penetración SQLi simuladas, verificación de descarte en kernel (<100 ms), medición de latencia (<1.5 s), manuales técnicos PDF y defensa final ante la comisión evaluadora. |
+
+> ⚠️ **Aclaración Metodológica Importante:** La arquitectura global, diagramas de procesos y guías de prototipado documentados en este repositorio representan el **diseño técnico integral** aprobado para el ciclo semestral de 18 semanas de la asignatura Capstone. En estricto cumplimiento del cronograma académico, los servicios se implementan de manera modular: actualmente se encuentra **100% completado y probado el hito A1**, **en desarrollo el hito A2**, mientras que el resto de componentes se desarrollarán durante las semanas correspondientes de la Fase 2 y Fase 3.
+
+---
+
 ## 🛡️ 1. Resumen Ejecutivo y Problemática
 
 En las infraestructuras corporativas modernas, los Centros de Operaciones de Seguridad (**SOC**) y los firewalls perimetrales enfrentan dos grandes cuellos de botella:
@@ -141,74 +157,53 @@ El isotipo corporativo fue diseñado bajo una estética ciberpunk y militar de a
 
 ```bash
 Proyecto-Portafolio/
-├── assets/                                     # Logotipos vectoriales, videos y diagramas de procesos
-│   ├── kronos_sentinel_intro.mp4               # Video cinemático de introducción y activación SOAR (Muted)
-│   ├── kronos_sentinel_intro.gif               # Versión animada GIF de introducción de alta compatibilidad
-│   ├── kronos_sentinel_flow_build.gif          # Animación GIF del flujo construyéndose y nacimiento del logo
-│   ├── sentinel_shield_logo.png                # Isotipo de alta resolución 4K transparente
-│   ├── sentinel_shield_logo.svg                # Isotipo vectorial maestro
+├── assets/                                     # Recursos visuales, infografías y diagramas oficiales
+│   ├── plan_trabajo_gantt_fase1_infographic.png # Infografía Maestra 4K Plan de Trabajo & Carta Gantt
+│   ├── plan_trabajo_gantt_fase1_infographic.svg # Vectorial maestro oficial de planificación
+│   ├── gantt_fase1_timeline.png                # Línea de tiempo general del semestre
 │   ├── architecture_diagram.png                # Topología de arquitectura global 4K
-│   ├── architecture_diagram.svg                # Vectorial de arquitectura global
 │   ├── pfctl_decision_flow.png                 # Diagrama de procesos de decisión pfctl 4K
-│   ├── pfctl_decision_flow.svg                 # Vectorial de procesos pfctl
 │   ├── voice_soar_flow.png                     # Diagrama de flujo de voz IA y Asterisk 4K
-│   └── voice_soar_flow.svg                     # Vectorial de flujo de voz IA y Asterisk
+│   ├── kronos_sentinel_intro.gif               # Versión animada GIF de introducción
+│   └── sentinel_shield_logo.png                # Isotipo de alta resolución 4K transparente
 ├── docs/                                       # Entregables Académicos Duoc UC (Portafolio de Título)
 │   ├── Fase_1_Definicion_Proyecto_APT/
-│   │   ├── Guia1_Definicion_Proyecto_APT_Fase1_Bruno_Urrea.docx # Guía 1 Oficial Duoc UC con Portada e Índice (.docx)
-│   │   ├── Guia1_Definicion_Proyecto_APT_Fase1_Bruno_Urrea.pdf  # Guía 1 Oficial en PDF Institucional (.pdf)
-│   │   ├── Guia1_Definicion_Proyecto_APT_Fase1_Bruno_Urrea.md   # Guía 1 Oficial en Markdown (.md)
-│   │   ├── Presentacion_Proyecto_APT_Fase1_KRONOS_SENTINEL.pptx # Presentación Oficial 16:9 Lo-Fi (.pptx)
-│   │   ├── Presentacion_Proyecto_APT_Fase1_KRONOS_SENTINEL.pdf  # Diapositivas en PDF 16:9 Landscape (.pdf)
-│   │   ├── Autoevaluacion_Competencias/        # Pautas 1.1 de autoevaluación (Docx y Markdown)
-│   │   │   ├── Urrea_Bruno_1.1_APT122_AutoevaluacionCompetenciasFase1.docx
-│   │   │   └── Urrea_Bruno_1.1_APT122_AutoevaluacionCompetenciasFase1.md
+│   │   ├── Guia1_Definicion_Proyecto_APT_Fase1_Bruno_Urrea.docx # Guía 1 Oficial Duoc UC (.docx)
+│   │   ├── Guia1_Definicion_Proyecto_APT_Fase1_Bruno_Urrea.pdf  # Guía 1 Oficial en PDF Institucional
+│   │   ├── Guia1_Definicion_Proyecto_APT_Fase1_Bruno_Urrea.md   # Guía 1 Oficial en Markdown
+│   │   ├── Presentacion_Proyecto_APT_Fase1_KRONOS_SENTINEL.pptx # Presentación Oficial 16:9 Lo-Fi
+│   │   ├── Presentacion_Proyecto_APT_Fase1_KRONOS_SENTINEL.pdf  # Diapositivas en PDF 16:9 Landscape
+│   │   ├── Autoevaluacion_Competencias/        # Pautas 1.1 de autoevaluación por integrante
 │   │   ├── Diario_Reflexion_Fase_1/            # Diarios 1.2 de reflexión inicial
-│   │   │   ├── Urrea_Bruno_1.2_APT122_DiarioReflexionFase1.docx
-│   │   │   └── Urrea_Bruno_1.2_APT122_DiarioReflexionFase1.md
-│   │   ├── Espacio_Consultas_Fase_1/
-│   │   └── Informacion_EA1/
+│   │   └── Informacion_EA1/                    # Resumen ejecutivo de Fase 1
 │   ├── Fase_2_Desarrollo_Proyecto_APT/
+│   │   ├── Informacion_EA2/
+│   │   │   └── Plan_Trabajo_Carta_Gantt.md     # Cronograma maestro oficial de 18 semanas
 │   │   ├── Diario_Reflexion_Fase_2/            # Diarios 2.1 de monitoreo y Carta Gantt
-│   │   │   ├── Urrea_Bruno_2.1_APT122_DiarioReflexionFase2.docx
-│   │   │   └── Urrea_Bruno_2.1_APT122_DiarioReflexionFase2.md
-│   │   ├── Espacio_Consultas_Fase_2/
-│   │   └── Informacion_EA2/
+│   │   └── GUIA_DEFENSA_AVANCE_A1_SEMANAS_1_2.md # Guión técnico y evidencias de avance A1
 │   ├── Fase_3_Presentacion_Proyecto_APT/
-│   │   ├── Diario_Reflexion_Fase_3/
-│   │   ├── roles/                                  # Manuales operativos y guías por integrante
-│   │   ├── 01_Bruno_Urrea_Lider_Ciberseguridad_pfctl_Gemini/
-│   │   │   └── ROL_Y_PASOS_BRUNO_URREA.md
-│   │   ├── 02_Freddy_Vasquez_Routing_Switching_VoIP_Asterisk/
-│   │   │   └── ROL_Y_PASOS_FREDDY_VASQUEZ.md
-│   │   ├── 03_Cristobal_Quezada_Web_HAProxy_DMZ_DVWA/
-│   │   │   └── ROL_Y_PASOS_CRISTOBAL_QUEZADA.md
-│   │   └── 04_Kevin_Retamales_Hardening_pfBlockerNG_QA/
-│   │       └── ROL_Y_PASOS_KEVIN_RETAMALES.md
-│   ├── knowledge_base/                         # Base de conocimiento general y defensa presencial
-│   │   ├── 01_TECNOLOGIAS_Y_FLUJO_INTEGRAL.md
-│   │   ├── 02_INNOVACION_FACTOR_HUMANO_Y_SOAR_VOZ.md
-│   │   └── 03_GUIA_ESTRATEGICA_DEFENSA_DUOC.md
-│   ├── MANUAL_ROLES_Y_BASE_CONOCIMIENTO_KRONOS.pdf # Manual de Roles y Base de Conocimiento en PDF
+│   │   ├── roles/                              # Manuales operativos y guías por integrante
+│   │   └── knowledge_base/                     # Base de conocimiento técnico para la defensa
 │   ├── Manual_Configuracion_pfSense_KRONOS_SENTINEL.pdf # Manual Oficial en PDF (Portafolio de Título)
-│   ├── Manual_Configuracion_pfSense_KRONOS_SENTINEL.md  # Manual Oficial en Markdown
-│   ├── TUTORIAL_PASO_A_PASO_CONFIGURACION_PFSENSE_MOCKUPS.pdf # Tutorial Maestro Paso a Paso (8 Páginas con Mockups WebGUI)
-│   ├── TUTORIAL_PASO_A_PASO_CONFIGURACION_PFSENSE_MOCKUPS.md  # Tutorial Maestro en Markdown
-│   ├── COMPENDIO_TECNOLOGIAS_Y_ARQUITECTURA_KRONOS.pdf  # Compendio Maestro de las 10 Tecnologías ($0 CLP)
-│   ├── COMPENDIO_TECNOLOGIAS_Y_ARQUITECTURA_KRONOS.md   # Compendio Maestro en Markdown
-│   ├── PROBLEMATICAS_ENCONTRADAS_IP_Y_ALTERNATIVAS_EXPOSICION.pdf # Informe Técnico de CGNAT y Exposición WAN
-│   └── PROBLEMATICAS_ENCONTRADAS_IP_Y_ALTERNATIVAS_EXPOSICION.md  # Informe Técnico en Markdown
-├── src/                                        # Código fuente e infraestructura como código
-│   ├── pfsense_pfctl_engine/                   # Motor de correlación en Python y wrapper pfctl
+│   ├── TUTORIAL_PASO_A_PASO_CONFIGURACION_PFSENSE_MOCKUPS.pdf # Tutorial Maestro Paso a Paso
+│   ├── COMPENDIO_TECNOLOGIAS_Y_ARQUITECTURA_KRONOS.pdf  # Compendio de Tecnologías ($0 CLP)
+│   └── PROBLEMATICAS_ENCONTRADAS_IP_Y_ALTERNATIVAS_EXPOSICION.pdf # Informe CGNAT y exposición WAN
+├── src/                                        # Código fuente e infraestructura como código (IaC)
+│   ├── pfsense_setup/                          # [✔ COMPLETADO - HITO S1-S2] Setup Base pfSense & Kernel Hardening
+│   │   ├── patch_pfsense_config.py             # Inyector XML de optimizaciones y descarte de offloading
+│   │   ├── tune_loader_conf.sh                 # Script bash para tuning de loader.conf.local en FreeBSD
+│   │   ├── verify_kernel_hardening.py          # Script de testing y verificación estricta de parámetros
+│   │   └── README.md                           # Bitácora técnica y guía de ejecución del Hito A1
+│   ├── pfsense_pfctl_engine/                   # [⏳ ROADMAP FASE 2] Motor de correlación en Python y wrapper pfctl
 │   │   ├── log_correlator.py
 │   │   ├── false_positive_filter.py
 │   │   ├── pfctl_wrapper.py
 │   │   └── config.yaml
-│   ├── ai_voice_agent/                         # Agente de voz Gemini Live API y despachador
+│   ├── ai_voice_agent/                         # [⏳ ROADMAP FASE 2] Agente de voz Gemini Live API y despachador
 │   │   ├── gemini_live_client.py
 │   │   ├── prompts.py
 │   │   └── dispatcher.py
-│   ├── asterisk_pbx/                           # Telefonía VoIP y auto-dialer al CISO
+│   ├── asterisk_pbx/                           # [⏳ ROADMAP FASE 2] Telefonía VoIP y auto-dialer al CISO
 │   │   ├── Dockerfile
 │   │   ├── docker-compose.yml
 │   │   ├── extensions.conf
@@ -216,10 +211,10 @@ Proyecto-Portafolio/
 │   │   ├── rtp.conf
 │   │   ├── gemini_audio_bridge.py
 │   │   └── call_trigger.py
-│   ├── haproxy_dvwa/                           # Proxy inverso y contenedor DMZ de pruebas
+│   ├── haproxy_dvwa/                           # [⏳ ROADMAP FASE 2] Proxy inverso y contenedor DMZ de pruebas
 │   │   ├── haproxy.cfg
 │   │   └── docker-compose.dvwa.yml
-│   └── pfblocker_threatfeeds/                  # GeoIP MaxMind y listas de reputación IP
+│   └── pfblocker_threatfeeds/                  # [⏳ ROADMAP FASE 2] GeoIP MaxMind y listas de reputación IP
 │       ├── maxmind_geoip_setup.md
 │       └── threat_feeds_config.txt
 └── README.md                                   # Documentación corporativa principal
@@ -227,32 +222,56 @@ Proyecto-Portafolio/
 
 ---
 
-## 🛠️ 8. Despliegue y Puesta en Marcha Rápida
+## 🛠️ 8. Verificación de Avances y Guía Proyectada de Despliegue
 
-### 1. Iniciar Entorno de Pruebas DMZ (DVWA)
+### 8.1 Verificación del Avance Actual (Hito A1: pfSense & FreeBSD Kernel Hardening) [✔ 100% COMPLETADO]
 
+El entregable técnico completado y testeado para las Semanas 1 a 2 corresponde al despliegue base de **pfSense CE 2.9.0** y el hardening a nivel de kernel FreeBSD para soportar el framework **Netmap**:
+
+```bash
+# 1. Ejecutar suite de pruebas de verificación de kernel y optimización XML
+cd src/pfsense_setup
+python verify_kernel_hardening.py
+```
+
+**Salida de validación del kernel:**
+```text
+======================================================================
+  VERIFICACIÓN DE HARDENING DE KERNEL FREEBSD & PFSENSE (HITO A1)
+======================================================================
+[✔] sysctl net.inet.ip.fastforwarding = 0 (Netmap Compliant)
+[✔] kern.ipc.nmbclusters = 1000000 (Ring-buffer Memory Boost)
+[✔] kern.ipc.nmbufs = 6000000 (mbuf exhaustion protection)
+[✔] Hardware Offloading Disabled: TSO=OFF, LRO=OFF, TX/RX Checksum=OFF
+[RESULTADO]: Entorno pfSense 100% endurecido y validado para Hito A1.
+```
+
+---
+
+### 8.2 Prototipo y Guía Proyectada de Despliegue Modular (Fase 2: Semanas 5 a 15) [⏳ ROADMAP]
+
+> ⚠️ **Aclaración Académica:** Los siguientes servicios corresponden a los hitos proyectados de la Fase 2 según la Carta Gantt oficial, y se desplegarán progresivamente conforme al cronograma académico:
+
+#### A5. Entorno de Pruebas DMZ (DVWA) — Semanas 9 a 10
 ```bash
 cd src/haproxy_dvwa
 docker compose -f docker-compose.dvwa.yml up -d
 ```
 
-### 2. Desplegar Centralita Asterisk PBX
-
+#### A7. Centralita Telefónica Asterisk 20 PBX — Semanas 13 a 14
 ```bash
 cd src/asterisk_pbx
 docker compose up -d --build
 ```
 
-### 3. Iniciar el Servidor Despachador de Voz
-
+#### A8. Servidor Despachador de Voz Gemini Live — Semanas 14 a 15
 ```bash
 cd src/ai_voice_agent
 export GEMINI_API_KEY="tu-api-key-de-gemini-live"
 python dispatcher.py
 ```
 
-### 4. Iniciar el Motor de Correlación KRONOS (Python 3.12)
-
+#### A6. Motor de Correlación KRONOS & pfctl — Semanas 11 a 12
 ```bash
 cd src/pfsense_pfctl_engine
 python log_correlator.py
@@ -269,9 +288,9 @@ python log_correlator.py
 
 ---
 
-## 📅 10. Plan de Trabajo Oficial & Carta Gantt (18 Semanas Académicas)
+## 📅 10. Plan de Trabajo Oficial, Carta Gantt y Estados de Ejecución (18 Semanas Académicas)
 
-A continuación se presenta la planificación cronológica y técnica oficial de **KRONOS SENTINEL** para la asignatura **Portafolio de Título (APT122 — Asignatura Capstone)**, estructurada en cumplimiento de la rúbrica oficial de evaluación de Duoc UC:
+A continuación se presenta la planificación cronológica y técnica oficial de **KRONOS SENTINEL** para la asignatura **Portafolio de Título (APT122 — Asignatura Capstone)**, estructurada en cumplimiento de la rúbrica oficial de evaluación de Duoc UC y actualizada con el estado de avance real:
 
 <p align="center">
   <img src="assets/plan_trabajo_gantt_fase1_infographic.png" alt="Infográfico Maestro: Plan de Trabajo (Sección 7) y Carta Gantt (Sección 8) KRONOS SENTINEL" width="100%">
@@ -279,18 +298,18 @@ A continuación se presenta la planificación cronológica y técnica oficial de
 
 ### 📋 Sección 7: Tabla Oficial de Plan de Trabajo Técnico
 
-| Competencia | Nombre de Actividad | Descripción de Tarea | Recursos ($0 CLP) | Duración | Responsable¹ | Observaciones (Facilitadores / Obstaculizadores & Mitigaciones) |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Comp. 4 & 8** | **A1. Setup Base pfSense** | Instalación pfSense 2.9.0 en Proxmox/VMware, WAN/LAN y tuning Netmap. | Hipervisor, ISO pfSense CE 2.9.0 | Semanas 1 - 2 | Bruno Urrea / Freddy Vásquez | **✔ Facilitador:** Docs oficiales Netgate.<br>**⚠ Obstáculo:** Incompatibilidad TSO/LRO; se desactiva hardware offloading. |
-| **Comp. 4** | **A2. Segmentación VLANs** | Creación de subredes VLAN 10 (Corp), 20 (DMZ), 30 (VoIP), 99 (Mgmt) y DHCP. | pfSense WebGUI, Switch L2 virtual | Semanas 3 - 4 | Freddy Vásquez | **✔ Facilitador:** Soporte 802.1Q nativo.<br>**⚠ Obstáculo:** Filtrado inter-VLAN; se aíslan con reglas Zero Trust. |
-| **Comp. 7 & 8** | **A3. Suricata Inline IPS** | Suricata 7.x Inline Netmap, firmas ET Open y políticas `dropsid.conf`. | Paquete Suricata, feeds ET Open | Semanas 5 - 6 | Bruno Urrea / Kevin Retamales | **✔ Facilitador:** Descarte en hardware ring-buffer.<br>**⚠ Obstáculo:** Falsos positivos; tuning de SIDs selectivos. |
-| **Comp. 7 & 8** | **A4. GeoIP pfBlockerNG** | MaxMind GeoLite2 Free, bloqueo Top Spammers y feeds FireHOL/Spamhaus. | pfBlockerNG-devel, MaxMind Free | Semanas 7 - 8 | Kevin Retamales | **✔ Facilitador:** Feeds globales actualizados.<br>**⚠ Obstáculo:** Consumo de RAM; se optimiza límite de tablas. |
-| **Comp. 7** | **A5. HAProxy SSL & DVWA** | Frontend HTTPS 443, SSL Offload, Stick-Tables anti-fuzzing L7 y DVWA Docker. | HAProxy pkg, Docker, DVWA | Semanas 9 - 10 | Cristóbal Quezada | **✔ Facilitador:** Stick-Tables en RAM a microsegundos.<br>**⚠ Obstáculo:** Certificados SSL; se emite CA interna de laboratorio. |
-| **Comp. 6 & 8** | **A6. Motor KRONOS AST** | Python 3.12 AST parser, ingesta `eve.json` y wrappers de kernel `pfctl`. | Python 3.12, FreeBSD CLI | Semanas 11 - 12 | Bruno Urrea | **✔ Facilitador:** Librería estándar AST.<br>**⚠ Obstáculo:** Privilegios en pfSense; se configura sudoers restringido para pfctl. |
-| **Comp. 5** | **A7. Asterisk PBX & AMI** | Docker Asterisk 20 LTS, canal PJSIP, Dialplan y auto-dialer AMI al softphone. | Docker Engine, Asterisk 20 LTS | Semanas 13 - 14 | Freddy Vásquez | **✔ Facilitador:** Stack PJSIP moderno.<br>**⚠ Obstáculo:** NAT traversal; se fija directiva `external_media_address`. |
-| **Comp. 3 & 5** | **A8. Gemini Live Voice** | WebSocket seguro WSS, System Prompts SecOps y streaming de audio PCM 24kHz. | Google AI Studio API Key | Semanas 14 - 15 | Bruno Urrea | **✔ Facilitador:** Gemini Live Free Tier (<400ms).<br>**⚠ Obstáculo:** Sincronía dúplex; se utiliza audio lineal nativo. |
-| **Comp. 3 & 4** | **A9. Malla Zero Trust** | Publicación subred VoIP `192.168.30.0/24` en Tailscale WireGuard Mesh. | Paquete Tailscale, WireGuard | Semana 15 | Freddy Vásquez | **✔ Facilitador:** WireGuard evade 100% de CGNAT.<br>**⚠ Obstáculo:** Aprobación de rutas; se autoriza en panel admin. |
-| **Comp. 7, 8, 11**| **A10. QA & Defensa** | Pruebas de penetración SQLi en vivo, latencia (<1.5s), manuales PDF y defensa. | ReportLab, Softphone, GitHub | Semanas 16 - 18 | Todo el Equipo | **✔ Facilitador:** Roles delimitados y automatización.<br>**⚠ Obstáculo:** Demo en vivo; se preparan scripts de contingencia. |
+| Competencia | Nombre de Actividad | Estado Actual | Descripción de Tarea | Recursos ($0 CLP) | Duración | Responsable¹ | Observaciones (Facilitadores / Obstaculizadores & Mitigaciones) |
+| :--- | :--- | :---: | :--- | :--- | :---: | :--- | :--- |
+| **Comp. 4 & 8** | **A1. Setup Base pfSense** | **✔ Completado** | Instalación pfSense 2.9.0 en Proxmox/VMware, WAN/LAN y tuning Netmap. | Hipervisor, ISO pfSense CE 2.9.0 | Semanas 1 - 2 | Bruno Urrea / Freddy Vásquez | **✔ Facilitador:** Docs oficiales Netgate.<br>**⚠ Obstáculo:** Incompatibilidad TSO/LRO; se desactiva hardware offloading. |
+| **Comp. 4** | **A2. Segmentación VLANs** | **⚙ En Curso** | Creación de subredes VLAN 10 (Corp), 20 (DMZ), 30 (VoIP), 99 (Mgmt) y DHCP. | pfSense WebGUI, Switch L2 virtual | Semanas 3 - 4 | Freddy Vásquez | **✔ Facilitador:** Soporte 802.1Q nativo.<br>**⚠ Obstáculo:** Filtrado inter-VLAN; se aíslan con reglas Zero Trust. |
+| **Comp. 7 & 8** | **A3. Suricata Inline IPS** | **⏳ Planificado** | Suricata 7.x Inline Netmap, firmas ET Open y políticas `dropsid.conf`. | Paquete Suricata, feeds ET Open | Semanas 5 - 6 | Bruno Urrea / Kevin Retamales | **✔ Facilitador:** Descarte en hardware ring-buffer.<br>**⚠ Obstáculo:** Falsos positivos; tuning de SIDs selectivos. |
+| **Comp. 7 & 8** | **A4. GeoIP pfBlockerNG** | **⏳ Planificado** | MaxMind GeoLite2 Free, bloqueo Top Spammers y feeds FireHOL/Spamhaus. | pfBlockerNG-devel, MaxMind Free | Semanas 7 - 8 | Kevin Retamales | **✔ Facilitador:** Feeds globales actualizados.<br>**⚠ Obstáculo:** Consumo de RAM; se optimiza límite de tablas. |
+| **Comp. 7** | **A5. HAProxy SSL & DVWA** | **⏳ Planificado** | Frontend HTTPS 443, SSL Offload, Stick-Tables anti-fuzzing L7 y DVWA Docker. | HAProxy pkg, Docker, DVWA | Semanas 9 - 10 | Cristóbal Quezada | **✔ Facilitador:** Stick-Tables en RAM a microsegundos.<br>**⚠ Obstáculo:** Certificados SSL; se emite CA interna de laboratorio. |
+| **Comp. 6 & 8** | **A6. Motor KRONOS AST** | **⏳ Planificado** | Python 3.12 AST parser, ingesta `eve.json` y wrappers de kernel `pfctl`. | Python 3.12, FreeBSD CLI | Semanas 11 - 12 | Bruno Urrea | **✔ Facilitador:** Librería estándar AST.<br>**⚠ Obstáculo:** Privilegios en pfSense; se configura sudoers restringido para pfctl. |
+| **Comp. 5** | **A7. Asterisk PBX & AMI** | **⏳ Planificado** | Docker Asterisk 20 LTS, canal PJSIP, Dialplan y auto-dialer AMI al softphone. | Docker Engine, Asterisk 20 LTS | Semanas 13 - 14 | Freddy Vásquez | **✔ Facilitador:** Stack PJSIP moderno.<br>**⚠ Obstáculo:** NAT traversal; se fija directiva `external_media_address`. |
+| **Comp. 3 & 5** | **A8. Gemini Live Voice** | **⏳ Planificado** | WebSocket seguro WSS, System Prompts SecOps y streaming de audio PCM 24kHz. | Google AI Studio API Key | Semanas 14 - 15 | Bruno Urrea | **✔ Facilitador:** Gemini Live Free Tier (<400ms).<br>**⚠ Obstáculo:** Sincronía dúplex; se utiliza audio lineal nativo. |
+| **Comp. 3 & 4** | **A9. Malla Zero Trust** | **⏳ Planificado** | Publicación subred VoIP `192.168.30.0/24` en Tailscale WireGuard Mesh. | Paquete Tailscale, WireGuard | Semana 15 | Freddy Vásquez | **✔ Facilitador:** WireGuard evade 100% de CGNAT.<br>**⚠ Obstáculo:** Aprobación de rutas; se autoriza en panel admin. |
+| **Comp. 7, 8, 11**| **A10. QA & Defensa** | **⏳ Planificado** | Pruebas de penetración SQLi en vivo, latencia (<1.5s), manuales PDF y defensa. | ReportLab, Softphone, GitHub | Semanas 16 - 18 | Todo el Equipo | **✔ Facilitador:** Roles delimitados y automatización.<br>**⚠ Obstáculo:** Demo en vivo; se preparan scripts de contingencia. |
 
 *¹ En caso de que el Proyecto APT sea grupal, en esta columna se indica el nombre de los responsables de cada tarea para diferenciar la evaluación individual.*
 
@@ -299,16 +318,21 @@ A continuación se presenta la planificación cronológica y técnica oficial de
 ### 📊 Sección 8: Carta Gantt Oficial (18 Semanas por Fases)
 
 | Actividad / Hito | Fase 1: Definición (S1-S4) | | | | Fase 2: Desarrollo & Hardening (S5-S15) | | | | | | | | | | | Fase 3: QA & Defensa (S16-S18) | | |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | | **S1** | **S2** | **S3** | **S4** | **S5** | **S6** | **S7** | **S8** | **S9** | **S10** | **S11** | **S12** | **S13** | **S14** | **S15** | **S16** | **S17** | **S18** |
-| **A1. Setup Base pfSense & Netmap Tuning** | █ | █ | | | | | | | | | | | | | | | | |
-| **A2. Segmentación de VLANs 802.1Q** | | | █ | █ | | | | | | | | | | | | | | |
-| **A3. Suricata 7.x Inline Netmap IPS** | | | | | █ | █ | | | | | | | | | | | | |
-| **A4. Hardening GeoIP pfBlockerNG-devel** | | | | | | | █ | █ | | | | | | | | | | |
-| **A5. Proxy HAProxy 2.8+ SSL & DMZ DVWA**| | | | | | | | | █ | █ | | | | | | | | |
-| **A6. Motor Correlación KRONOS (Python AST)**| | | | | | | | | | | █ | █ | | | | | | |
-| **A7. Centralita Asterisk 20 LTS PBX & AMI** | | | | | | | | | | | | | █ | █ | | | | |
-| **A8. Integración Google Gemini Live API** | | | | | | | | | | | | | | █ | █ | | | |
-| **A9. Malla Zero Trust Tailscale WireGuard**| | | | | | | | | | | | | | | █ | | | |
-| **A10. Pruebas QA, Auditoría & Defensa**| | | | | | | | | | | | | | | | █ | █ | █ |
+| **A1. Setup Base pfSense & Netmap Tuning** | 🟩 [✔] | 🟩 [✔] | | | | | | | | | | | | | | | | |
+| **A2. Segmentación de VLANs 802.1Q** | | | 🟦 [⚙] | 🟦 [⚙] | | | | | | | | | | | | | | |
+| **A3. Suricata 7.x Inline Netmap IPS** | | | | | ⬜ [⏳] | ⬜ [⏳] | | | | | | | | | | | | |
+| **A4. Hardening GeoIP pfBlockerNG-devel** | | | | | | | ⬜ [⏳] | ⬜ [⏳] | | | | | | | | | | |
+| **A5. Proxy HAProxy 2.8+ SSL & DMZ DVWA**| | | | | | | | | ⬜ [⏳] | ⬜ [⏳] | | | | | | | | |
+| **A6. Motor Correlación KRONOS (Python AST)**| | | | | | | | | | | ⬜ [⏳] | ⬜ [⏳] | | | | | | |
+| **A7. Centralita Asterisk 20 LTS PBX & AMI** | | | | | | | | | | | | | ⬜ [⏳] | ⬜ [⏳] | | | | |
+| **A8. Integración Google Gemini Live API** | | | | | | | | | | | | | | ⬜ [⏳] | ⬜ [⏳] | | | |
+| **A9. Malla Zero Trust Tailscale WireGuard**| | | | | | | | | | | | | | | ⬜ [⏳] | | | |
+| **A10. Pruebas QA, Auditoría & Defensa**| | | | | | | | | | | | | | | | ⬜ [⏳] | ⬜ [⏳] | ⬜ [⏳] |
 
+> **Leyenda de Estado de Ejecución:**  
+> • `🟩 [✔]` **Completado (100%):** Hito verificado y testeado en laboratorio (`src/pfsense_setup/`).  
+> • `🟦 [⚙]` **En Ejecución:** Actividad en desarrollo activo (Freddy Vásquez).  
+> • `⬜ [⏳]` **Planificado (Roadmap Modular):** Módulos proyectados para implementación en sus semanas lectivas correspondientes.  
+> • `📍 Temporalidad Actual:` **Semana 6 (21 al 27 de Septiembre 2026)** • Transición Fase 1 a Fase 2.

@@ -88,41 +88,46 @@
     <!-- Row 1: Fase 1 -->
     <g transform="translate(0, 0)">
       <rect x="0" y="0" width="590" height="70" rx="8" fill="#16161A" stroke="#27272A" stroke-width="1" />
-      <text x="20" y="32" font-family="'Segoe UI', sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF">FASE 1: Definición &amp; Topología</text>
-      <text x="20" y="54" font-family="Consolas, monospace" font-size="14" fill="#38BDF8">Setup pfSense 2.9.0 &amp; 4 VLANs 802.1Q (Corp, DMZ, VoIP)</text>
-      <!-- Gantt Bar: Weeks 1-4 (4 cols = 320px) -->
-      <rect x="636" y="12" width="308" height="46" rx="8" fill="url(#barCyan)" />
-      <text x="790" y="41" font-family="'Segoe UI', sans-serif" font-size="16" font-weight="bold" fill="#000000" text-anchor="middle">S1 - S4 (Hito Fase 1)</text>
+      <text x="20" y="30" font-family="'Segoe UI', sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF">FASE 1: Definición &amp; Topología</text>
+      <text x="20" y="52" font-family="Consolas, monospace" font-size="13" fill="#34D399">✔ A1 Setup pfSense (Hecho) | ⚙ A2 VLANs (En Curso)</text>
+      
+      <!-- Split Bar: S1-S2 (Completed: 154px) -->
+      <rect x="636" y="12" width="150" height="46" rx="8" fill="url(#barCyan)" stroke="#FFFFFF" stroke-width="1.2" filter="url(#cardShadow)"/>
+      <text x="711" y="41" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#000000" text-anchor="middle">✔ S1-S2 (Hecho)</text>
+      
+      <!-- Split Bar: S3-S4 (In Progress: 154px) -->
+      <rect x="794" y="12" width="150" height="46" rx="8" fill="url(#barSky)" stroke="#00F5FF" stroke-width="1.2" stroke-dasharray="5 3"/>
+      <text x="869" y="41" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">⚙ S3-S4 (Curso)</text>
     </g>
 
     <!-- Row 2: Fase 2A -->
     <g transform="translate(0, 90)">
       <rect x="0" y="0" width="590" height="70" rx="8" fill="#16161A" stroke="#27272A" stroke-width="1" />
-      <text x="20" y="32" font-family="'Segoe UI', sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF">FASE 2A: Perímetro Netmap &amp; DMZ</text>
-      <text x="20" y="54" font-family="Consolas, monospace" font-size="14" fill="#60A5FA">Suricata Inline Drop, GeoIP MaxMind &amp; HAProxy SSL</text>
-      <!-- Gantt Bar: Weeks 5-10 (6 cols = 480px) -->
-      <rect x="956" y="12" width="468" height="46" rx="8" fill="url(#barSky)" />
-      <text x="1190" y="41" font-family="'Segoe UI', sans-serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">S5 - S10 (Perímetro &amp; DMZ)</text>
+      <text x="20" y="30" font-family="'Segoe UI', sans-serif" font-size="18" font-weight="bold" fill="#A1A1AA">FASE 2A: Perímetro Netmap &amp; DMZ</text>
+      <text x="20" y="52" font-family="Consolas, monospace" font-size="13" fill="#A78BFA">Suricata Inline Drop, GeoIP MaxMind &amp; HAProxy SSL</text>
+      <!-- Gantt Bar: Weeks 5-10 (6 cols = 480px) -> Planned -->
+      <rect x="956" y="12" width="468" height="46" rx="8" fill="url(#barSky)" stroke="#8B5CF6" stroke-width="1" stroke-dasharray="4 2" opacity="0.40" />
+      <text x="1190" y="41" font-family="'Segoe UI', sans-serif" font-size="15" font-weight="bold" fill="#C4B5FD" text-anchor="middle">⏳ S5 - S10: Planificado (Fase 2)</text>
     </g>
 
     <!-- Row 3: Fase 2B -->
     <g transform="translate(0, 180)">
       <rect x="0" y="0" width="590" height="70" rx="8" fill="#16161A" stroke="#27272A" stroke-width="1" />
-      <text x="20" y="32" font-family="'Segoe UI', sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF">FASE 2B: Automatización SOAR &amp; Voz</text>
-      <text x="20" y="54" font-family="Consolas, monospace" font-size="14" fill="#FBBF24">Motor Python AST, Asterisk AMI, Gemini Live &amp; Tailscale</text>
-      <!-- Gantt Bar: Weeks 11-15 (5 cols = 400px) -->
-      <rect x="1436" y="12" width="388" height="46" rx="8" fill="url(#barAmber)" />
-      <text x="1630" y="41" font-family="'Segoe UI', sans-serif" font-size="16" font-weight="bold" fill="#000000" text-anchor="middle">S11 - S15 (SOAR Voz IA)</text>
+      <text x="20" y="30" font-family="'Segoe UI', sans-serif" font-size="18" font-weight="bold" fill="#A1A1AA">FASE 2B: Automatización SOAR &amp; Voz</text>
+      <text x="20" y="52" font-family="Consolas, monospace" font-size="13" fill="#FCD34D">Motor Python AST, Asterisk AMI, Gemini Live &amp; Tailscale</text>
+      <!-- Gantt Bar: Weeks 11-15 (5 cols = 400px) -> Planned -->
+      <rect x="1436" y="12" width="388" height="46" rx="8" fill="url(#barAmber)" stroke="#F59E0B" stroke-width="1" stroke-dasharray="4 2" opacity="0.40" />
+      <text x="1630" y="41" font-family="'Segoe UI', sans-serif" font-size="15" font-weight="bold" fill="#FDE68A" text-anchor="middle">⏳ S11 - S15: Planificado (Fase 2)</text>
     </g>
 
     <!-- Row 4: Fase 3 -->
     <g transform="translate(0, 270)">
       <rect x="0" y="0" width="590" height="70" rx="8" fill="#16161A" stroke="#27272A" stroke-width="1" />
-      <text x="20" y="32" font-family="'Segoe UI', sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF">FASE 3: QA, Validación &amp; Defensa</text>
-      <text x="20" y="54" font-family="Consolas, monospace" font-size="14" fill="#34D399">Pruebas SQLi &lt;1.5s, Manuales PDF &amp; Exposición Final</text>
-      <!-- Gantt Bar: Weeks 16-18 (3 cols = 240px) -->
-      <rect x="1836" y="12" width="228" height="46" rx="8" fill="url(#barGreen)" />
-      <text x="1950" y="41" font-family="'Segoe UI', sans-serif" font-size="16" font-weight="bold" fill="#000000" text-anchor="middle">S16 - S18 (Defensa)</text>
+      <text x="20" y="30" font-family="'Segoe UI', sans-serif" font-size="18" font-weight="bold" fill="#A1A1AA">FASE 3: QA, Validación &amp; Defensa</text>
+      <text x="20" y="52" font-family="Consolas, monospace" font-size="13" fill="#6EE7B7">Pruebas SQLi &lt;1.5s, Manuales PDF &amp; Exposición Final</text>
+      <!-- Gantt Bar: Weeks 16-18 (3 cols = 240px) -> Planned -->
+      <rect x="1836" y="12" width="228" height="46" rx="8" fill="url(#barGreen)" stroke="#10B981" stroke-width="1" stroke-dasharray="4 2" opacity="0.40" />
+      <text x="1950" y="41" font-family="'Segoe UI', sans-serif" font-size="15" font-weight="bold" fill="#A7F3D0" text-anchor="middle">⏳ S16 - S18: Defensa</text>
     </g>
   </g>
 
@@ -130,12 +135,12 @@
   <g transform="translate(50, 500)">
     <rect width="2100" height="65" rx="10" fill="#141418" stroke="#27272A" stroke-width="1.5" />
     <circle cx="30" cy="32" r="8" fill="#00F0FF" />
-    <text x="50" y="38" font-family="Consolas, monospace" font-size="16" font-weight="bold" fill="#00F0FF">HITOS ENTREGABLES:</text>
-    <text x="250" y="38" font-family="'Segoe UI', sans-serif" font-size="15" fill="#E2E8F0">
-      <tspan fill="#00F0FF" font-weight="bold">[S4]</tspan> Informe Definición &bull; 
-      <tspan fill="#38BDF8" font-weight="bold">[S10]</tspan> Manuales Técnicos PDF &bull; 
-      <tspan fill="#FF9F0A" font-weight="bold">[S15]</tspan> Demo SOAR Funcional &bull; 
-      <tspan fill="#30D158" font-weight="bold">[S18]</tspan> Defensa Titulación Duoc UC
+    <text x="50" y="38" font-family="Consolas, monospace" font-size="16" font-weight="bold" fill="#00F0FF">ESTADO DE HITOS:</text>
+    <text x="230" y="38" font-family="'Segoe UI', sans-serif" font-size="14.5" fill="#E2E8F0">
+      <tspan fill="#34D399" font-weight="bold">[S1-S2 ✔]</tspan> Setup pfSense &amp; Netmap (Completado) &bull; 
+      <tspan fill="#38BDF8" font-weight="bold">[S3-S4 ⚙]</tspan> VLANs 802.1Q (En Curso) &bull; 
+      <tspan fill="#A78BFA" font-weight="bold">[S5-S15 ⏳]</tspan> Desarrollo Perímetro, Motor &amp; Voz (Planificado) &bull; 
+      <tspan fill="#6EE7B7" font-weight="bold">[S16-S18 ⏳]</tspan> QA &amp; Defensa Final (Planificado)
     </text>
   </g>
 </svg>

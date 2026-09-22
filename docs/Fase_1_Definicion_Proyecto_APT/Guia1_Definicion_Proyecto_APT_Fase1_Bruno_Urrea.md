@@ -139,20 +139,20 @@ Se aplicará una **Metodología de Ingeniería en Ciclo Iterativo e Incremental*
 
 ---
 
-## 7. Plan de Trabajo
+### 7. Plan de Trabajo
 
-| Competencia o unidades de competencias | Nombre de Actividades/Tareas | Descripción Actividades/Tareas | Recursos | Duración de la actividad | Responsable¹ | Observaciones (Dificultades / Facilitadores) |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Comp. 4 & 8** | A1. Diseño y Setup Base pfSense | Instalación de pfSense CE 2.9.0, configuración WAN/LAN y tuning de hardware offloading para Netmap. | Hipervisor Proxmox/VMware, ISO pfSense CE 2.9.0 | Semanas 1 - 2 | Bruno Urrea / Freddy Vásquez | *Facilitador:* Documentación oficial Netgate.<br>*Dificultad:* Incompatibilidad de Netmap con TSO/LRO; se resuelve desactivando hardware offloading. |
-| **Comp. 4** | A2. Segmentación de VLANs 802.1Q | Creación de subredes VLAN 10 (Corp), 20 (DMZ), 30 (VoIP) y 99 (Mgmt) y servidores DHCP locales. | pfSense WebGUI, Switch L2 virtual, perfiles VLAN | Semanas 3 - 4 | Freddy Vásquez | *Facilitador:* Soporte nativo 802.1Q en pfSense.<br>*Dificultad:* Filtrado inter-VLAN; se soluciona con reglas Zero Trust por interfaz. |
-| **Comp. 7 & 8** | A3. Despliegue de Suricata Inline IPS | Instalación de Suricata 7.x, activación de modo Inline Netmap, reglas ET Open y configuración `dropsid.conf`. | Paquete Suricata, feeds ET Open, consola pfSense | Semanas 5 - 6 | Bruno Urrea / Kevin Retamales | *Facilitador:* Netmap permite descarte en ring-buffer sin latencia.<br>*Dificultad:* Ajuste de falsos positivos; se mitiga con reglas SID selectivas. |
-| **Comp. 7 & 8** | A4. Hardening GeoIP con pfBlockerNG | Configuración de cuenta MaxMind Free, bloqueo Top Spammers y feeds FireHOL L1 / Spamhaus DROP. | pfBlockerNG-devel, cuenta MaxMind GeoLite2 | Semanas 7 - 8 | Kevin Retamales | *Facilitador:* Listas de reputación globales actualizadas.<br>*Dificultad:* Sobrecarga de memoria RAM; se optimiza el límite de tablas en pfSense. |
-| **Comp. 7** | A5. Proxy Inverso HAProxy & DVWA | Configuración de Frontend HTTPS VIP 443, SSL Offloading, Stick-Tables anti-fuzzing y contenedor DVWA. | Paquete HAProxy, Docker Engine, imagen DVWA | Semanas 9 - 10 | Cristóbal Quezada | *Facilitador:* Stick-Tables en RAM procesan peticiones a nivel microsegundo.<br>*Dificultad:* Certificados autofirmados; se emite CA interna para el laboratorio. |
-| **Comp. 6 & 8** | A6. Motor de Correlación KRONOS | Programación en Python 3.12 del parser `eve.json`, filtro heurístico AST y wrapper de kernel FreeBSD `pfctl`. | Python 3.12, librería PyYAML, FreeBSD CLI | Semanas 11 - 12 | Bruno Urrea | *Facilitador:* Librería estándar AST de Python.<br>*Dificultad:* Privilegios de ejecución en pfSense; se configura sudoers restringido para pfctl. |
-| **Comp. 5** | A7. Centralita VoIP Asterisk PBX | Construcción de imagen Docker Asterisk 20 LTS, configuración de `pjsip.conf`, `extensions.conf` y auto-dialer AMI. | Docker Engine, Asterisk 20 LTS, AMI, softphone | Semanas 13 - 14 | Freddy Vásquez | *Facilitador:* Canal PJSIP moderno y ligero.<br>*Dificultad:* NAT traversal en VoIP; se resuelve con directivas `local_net` y `external_media_address`. |
-| **Comp. 3 & 5** | A8. Integración Gemini Live Voice | Desarrollo de cliente WebSocket seguro, diseño de System Prompts tácticos y conexión de audio PCM con Asterisk. | Google AI Studio API Key, Python websockets | Semanas 14 - 15 | Bruno Urrea | *Facilitador:* Google Gemini Live Flash 3.1 Free Tier con baja latencia.<br>*Dificultad:* Sincronización dúplex de audio; se utiliza códec PCM lineal 24kHz. |
-| **Comp. 3 & 4** | A9. Enlace Zero Trust Tailscale | Publicación de subred VoIP `192.168.30.0/24` en Tailscale para softphones móviles remotos sin abrir puertos. | Paquete Tailscale, túnel WireGuard Mesh | Semana 15 | Freddy Vásquez | *Facilitador:* WireGuard supera cualquier CGNAT o firewall intermedio.<br>*Dificultad:* Enrutamiento de subredes; se aprueba la ruta en el panel admin. |
-| **Comp. 7, 8 & 11** | A10. Pruebas QA, Auditoría & Defensa | Ejecución de matrices de prueba de penetración, medición de tiempos (<1.5 s), manuales PDF y preparación de defensa. | Repositorio GitHub, softphone, ReportLab | Semanas 16 - 18 | Todo el Equipo | *Facilitador:* Roles bien delimitados y automatización previa.<br>*Dificultad:* Coordinación de demostración en vivo; se preparan scripts de contingencia. |
+| Competencia o unidades de competencias | Nombre de Actividades/Tareas | Estado de Ejecución | Descripción Actividades/Tareas | Recursos | Duración de la actividad | Responsable¹ | Observaciones (Dificultades / Facilitadores) |
+| :--- | :--- | :---: | :--- | :--- | :---: | :--- | :--- |
+| **Comp. 4 & 8** | A1. Diseño y Setup Base pfSense | **Completado (100%)** | Instalación de pfSense CE 2.9.0, configuración WAN/LAN y tuning de hardware offloading para Netmap. | Hipervisor Proxmox/VMware, ISO pfSense CE 2.9.0 | Semanas 1 - 2 | Bruno Urrea / Freddy Vásquez | *Facilitador:* Documentación oficial Netgate.<br>*Dificultad:* Incompatibilidad de Netmap con TSO/LRO; se resuelve desactivando hardware offloading. |
+| **Comp. 4** | A2. Segmentación de VLANs 802.1Q | **En Ejecución** | Creación de subredes VLAN 10 (Corp), 20 (DMZ), 30 (VoIP) y 99 (Mgmt) y servidores DHCP locales. | pfSense WebGUI, Switch L2 virtual, perfiles VLAN | Semanas 3 - 4 | Freddy Vásquez | *Facilitador:* Soporte nativo 802.1Q en pfSense.<br>*Dificultad:* Filtrado inter-VLAN; se soluciona con reglas Zero Trust por interfaz. |
+| **Comp. 7 & 8** | A3. Despliegue de Suricata Inline IPS | **Planificado** | Instalación de Suricata 7.x, activación de modo Inline Netmap, reglas ET Open y configuración `dropsid.conf`. | Paquete Suricata, feeds ET Open, consola pfSense | Semanas 5 - 6 | Bruno Urrea / Kevin Retamales | *Facilitador:* Netmap permite descarte en ring-buffer sin latencia.<br>*Dificultad:* Ajuste de falsos positivos; se mitiga con reglas SID selectivas. |
+| **Comp. 7 & 8** | A4. Hardening GeoIP con pfBlockerNG | **Planificado** | Configuración de cuenta MaxMind Free, bloqueo Top Spammers y feeds FireHOL L1 / Spamhaus DROP. | pfBlockerNG-devel, cuenta MaxMind GeoLite2 | Semanas 7 - 8 | Kevin Retamales | *Facilitador:* Listas de reputación globales actualizadas.<br>*Dificultad:* Sobrecarga de memoria RAM; se optimiza el límite de tablas en pfSense. |
+| **Comp. 7** | A5. Proxy Inverso HAProxy & DVWA | **Planificado** | Configuración de Frontend HTTPS VIP 443, SSL Offloading, Stick-Tables anti-fuzzing y contenedor DVWA. | Paquete HAProxy, Docker Engine, imagen DVWA | Semanas 9 - 10 | Cristóbal Quezada | *Facilitador:* Stick-Tables en RAM procesan peticiones a nivel microsegundo.<br>*Dificultad:* Certificados autofirmados; se emite CA interna para el laboratorio. |
+| **Comp. 6 & 8** | A6. Motor de Correlación KRONOS | **Planificado** | Programación en Python 3.12 del parser `eve.json`, filtro heurístico AST y wrapper de kernel FreeBSD `pfctl`. | Python 3.12, librería PyYAML, FreeBSD CLI | Semanas 11 - 12 | Bruno Urrea | *Facilitador:* Librería estándar AST de Python.<br>*Dificultad:* Privilegios de ejecución en pfSense; se configura sudoers restringido para pfctl. |
+| **Comp. 5** | A7. Centralita VoIP Asterisk PBX | **Planificado** | Construcción de imagen Docker Asterisk 20 LTS, configuración de `pjsip.conf`, `extensions.conf` y auto-dialer AMI. | Docker Engine, Asterisk 20 LTS, AMI, softphone | Semanas 13 - 14 | Freddy Vásquez | *Facilitador:* Canal PJSIP moderno y ligero.<br>*Dificultad:* NAT traversal en VoIP; se resuelve con directivas `local_net` y `external_media_address`. |
+| **Comp. 3 & 5** | A8. Integración Gemini Live Voice | **Planificado** | Desarrollo de cliente WebSocket seguro, diseño de System Prompts tácticos y conexión de audio PCM con Asterisk. | Google AI Studio API Key, Python websockets | Semanas 14 - 15 | Bruno Urrea | *Facilitador:* Google Gemini Live Flash 3.1 Free Tier con baja latencia.<br>*Dificultad:* Sincronización dúplex de audio; se utiliza códec PCM lineal 24kHz. |
+| **Comp. 3 & 4** | A9. Enlace Zero Trust Tailscale | **Planificado** | Publicación de subred VoIP `192.168.30.0/24` en Tailscale para softphones móviles remotos sin abrir puertos. | Paquete Tailscale, túnel WireGuard Mesh | Semana 15 | Freddy Vásquez | *Facilitador:* WireGuard supera cualquier CGNAT o firewall intermedio.<br>*Dificultad:* Enrutamiento de subredes; se aprueba la ruta en el panel admin. |
+| **Comp. 7, 8 & 11** | A10. Pruebas QA, Auditoría & Defensa | **Planificado** | Ejecución de matrices de prueba de penetración, medición de tiempos (<1.5 s), manuales PDF y preparación de defensa. | Repositorio GitHub, softphone, ReportLab | Semanas 16 - 18 | Todo el Equipo | *Facilitador:* Roles bien delimitados y automatización previa.<br>*Dificultad:* Coordinación de demostración en vivo; se preparan scripts de contingencia. |
 
 *¹ En caso de que el Proyecto APT sea grupal, en esta columna se indica el nombre de los responsables de cada tarea o actividad para permitir diferenciar la evaluación por cada integrante.*
 
@@ -161,15 +161,21 @@ Se aplicará una **Metodología de Ingeniería en Ciclo Iterativo e Incremental*
 ## 8. Carta Gantt
 
 | Actividad / Hito | Fase 1 (S1-S4) | | | | Fase 2 (S5-S15) | | | | | | | | | | | Fase 3 (S16-S18) | | |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | | **S1** | **S2** | **S3** | **S4** | **S5** | **S6** | **S7** | **S8** | **S9** | **S10** | **S11** | **S12** | **S13** | **S14** | **S15** | **S16** | **S17** | **S18** |
-| **A1. Setup Base pfSense & Tuning** | **X** | **X** | | | | | | | | | | | | | | | | |
-| **A2. Segmentación VLANs 802.1Q** | | | **X** | **X** | | | | | | | | | | | | | | |
-| **A3. Suricata Inline Netmap IPS** | | | | | **X** | **X** | | | | | | | | | | | | |
-| **A4. Hardening GeoIP pfBlockerNG** | | | | | | | **X** | **X** | | | | | | | | | | |
-| **A5. HAProxy SSL & Laboratorio DVWA**| | | | | | | | | **X** | **X** | | | | | | | | |
-| **A6. Motor de Correlación KRONOS**| | | | | | | | | | | **X** | **X** | | | | | | |
-| **A7. Telefonía Asterisk PBX & AMI** | | | | | | | | | | | | | **X** | **X** | | | | |
-| **A8. Integración Gemini Live Voice** | | | | | | | | | | | | | | **X** | **X** | | | |
-| **A9. Malla Zero Trust Tailscale** | | | | | | | | | | | | | | | **X** | | | |
-| **A10. Pruebas QA, Auditoría & Defensa**| | | | | | | | | | | | | | | | **X** | **X** | **X** |
+| **A1. Setup Base pfSense & Tuning** | [✔] | [✔] | | | | | | | | | | | | | | | | |
+| **A2. Segmentación VLANs 802.1Q** | | | [⚙] | [⚙] | | | | | | | | | | | | | | |
+| **A3. Suricata Inline Netmap IPS** | | | | | [·] | [·] | | | | | | | | | | | | |
+| **A4. Hardening GeoIP pfBlockerNG** | | | | | | | [·] | [·] | | | | | | | | | | |
+| **A5. HAProxy SSL & Laboratorio DVWA**| | | | | | | | | [·] | [·] | | | | | | | | |
+| **A6. Motor de Correlación KRONOS**| | | | | | | | | | | [·] | [·] | | | | | | |
+| **A7. Telefonía Asterisk PBX & AMI** | | | | | | | | | | | | | [·] | [·] | | | | |
+| **A8. Integración Gemini Live Voice** | | | | | | | | | | | | | | [·] | [·] | | | |
+| **A9. Malla Zero Trust Tailscale** | | | | | | | | | | | | | | | [·] | | | |
+| **A10. Pruebas QA, Auditoría & Defensa**| | | | | | | | | | | | | | | | [·] | [·] | [·] |
+
+> **Leyenda de Estado de Ejecución:**  
+> • `[✔]` **Completado (100%):** Hito A1 desarrollado, probado y verificado en laboratorio Proxmox VE.  
+> • `[⚙]` **En Ejecución:** Hito A2 en desarrollo activo durante el periodo actual (Freddy Vásquez).  
+> • `[·]` **Planificado (Roadmap Modular):** Hitos proyectados para implementación en sus semanas correspondientes según cronograma semestral.  
+> • **Semana Académica Actual:** Semana 6 (21 al 27 de Septiembre 2026) • Transición Fase 1 a Fase 2.

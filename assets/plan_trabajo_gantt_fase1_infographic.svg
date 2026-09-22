@@ -1,5 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 1620" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 1600" width="100%" height="100%">
   <defs>
+    <!-- Background Gradient -->
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#06030F"/>
       <stop offset="40%" stop-color="#0F0924"/>
@@ -7,31 +8,33 @@
       <stop offset="100%" stop-color="#080314"/>
     </linearGradient>
 
+    <!-- Card Background Gradient -->
     <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#180E38" stop-opacity="0.90"/>
       <stop offset="100%" stop-color="#0E0824" stop-opacity="0.96"/>
     </linearGradient>
 
     <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.6"/>
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.6"/>
     </filter>
   </defs>
 
   <style>
-    .title { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-weight: 800; fill: #FFFFFF; }
-    .subtitle { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-weight: 600; fill: #A78BFA; }
-    .header-tag { font-family: 'Consolas', 'Courier New', monospace; font-size: 17px; font-weight: bold; }
-    .sec-title { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 26px; font-weight: 700; fill: #00F5FF; }
-    .card-title { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 20px; font-weight: 700; fill: #F8FAFC; }
-    .card-meta { font-family: 'Consolas', monospace; font-size: 15px; font-weight: 600; }
-    .card-body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 14.5px; fill: #CBD5E1; }
-    .gantt-text { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 15.5px; font-weight: 600; fill: #E2E8F0; }
-    .gantt-week { font-family: 'Consolas', monospace; font-size: 14px; font-weight: bold; fill: #94A3B8; text-anchor: middle; }
-    .gantt-bar-text { font-family: 'Consolas', monospace; font-size: 13.5px; font-weight: bold; fill: #FFFFFF; }
+    .hero-title { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 32px; font-weight: 800; fill: #FFFFFF; letter-spacing: 0.5px; }
+    .hero-sub { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 18px; font-weight: 600; fill: #A78BFA; }
+    .header-tag { font-family: 'Consolas', 'Courier New', monospace; font-size: 16px; font-weight: bold; }
+    .sec-title { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 24px; font-weight: 700; fill: #00F5FF; }
+    .card-title { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 17px; font-weight: 700; fill: #F8FAFC; }
+    .card-meta { font-family: 'Consolas', monospace; font-size: 13.5px; font-weight: 600; }
+    .card-body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 13.5px; fill: #CBD5E1; }
+    .gantt-row-title { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 700; fill: #F1F5F9; }
+    .gantt-row-sub { font-family: 'Consolas', monospace; font-size: 12px; fill: #94A3B8; }
+    .gantt-week { font-family: 'Consolas', monospace; font-size: 13.5px; font-weight: bold; fill: #94A3B8; text-anchor: middle; }
+    .gantt-bar-text { font-family: 'Consolas', monospace; font-size: 13px; font-weight: bold; fill: #FFFFFF; }
   </style>
 
   <!-- Background Canvas -->
-  <rect width="2400" height="1620" fill="url(#bgGrad)"/>
+  <rect width="2400" height="1600" fill="url(#bgGrad)"/>
 
   <!-- Perspective Ambient Grid -->
   <g opacity="0.08" stroke="#8B5CF6" stroke-width="1">
@@ -50,385 +53,477 @@
   </g>
 
   <!-- ========================================================================= -->
-  <!-- 1. HEADER HERO SECTION -->
+  <!-- 1. HEADER HERO SECTION (y = 40) -->
   <!-- ========================================================================= -->
-  <g transform="translate(80, 50)">
-    <rect x="0" y="0" width="2240" height="120" rx="16" fill="url(#cardGrad)" stroke="#4C1D95" stroke-width="1.5" filter="url(#cardShadow)"/>
-    <text x="35" y="48" class="title" font-size="34">KRONOS SENTINEL // PLAN DE TRABAJO &amp; CARTA GANTT OFICIAL</text>
-    <text x="35" y="85" class="subtitle" font-size="19">Portafolio de Título (APT122) • Duoc UC Sede San Joaquín • Estudiante: Bruno Urrea Ortiz (RUT: 21.543.637-3)</text>
+  <g transform="translate(80, 40)">
+    <rect x="0" y="0" width="2240" height="105" rx="14" fill="url(#cardGrad)" stroke="#4C1D95" stroke-width="1.5" filter="url(#cardShadow)"/>
+    <text x="35" y="44" class="hero-title">KRONOS SENTINEL // PLAN DE TRABAJO &amp; CARTA GANTT OFICIAL</text>
+    <text x="35" y="78" class="hero-sub">Portafolio de Título (APT122) • Duoc UC Sede San Joaquín • Bruno Urrea Ortiz (RUT: 21.543.637-3)</text>
     
-    <g transform="translate(1440, 42)">
-      <rect x="0" y="0" width="170" height="38" rx="8" fill="#1E1242" stroke="#8B5CF6" stroke-width="1.2"/>
-      <text x="85" y="24" class="header-tag" fill="#A78BFA" text-anchor="middle">18 SEMANAS</text>
+    <!-- Pills Informativas a la Derecha -->
+    <g transform="translate(1460, 34)">
+      <rect x="0" y="0" width="165" height="38" rx="8" fill="#1E1242" stroke="#8B5CF6" stroke-width="1.2"/>
+      <text x="82" y="24" class="header-tag" fill="#A78BFA" text-anchor="middle">18 SEMANAS</text>
       
-      <rect x="190" y="0" width="170" height="38" rx="8" fill="#0A2540" stroke="#00F5FF" stroke-width="1.2"/>
-      <text x="275" y="24" class="header-tag" fill="#00F5FF" text-anchor="middle">864H GRUPAL</text>
+      <rect x="185" y="0" width="175" height="38" rx="8" fill="#0A2540" stroke="#00F5FF" stroke-width="1.2"/>
+      <text x="272" y="24" class="header-tag" fill="#00F5FF" text-anchor="middle">864H GRUPAL</text>
 
-      <rect x="380" y="0" width="170" height="38" rx="8" fill="#063520" stroke="#10B981" stroke-width="1.2"/>
-      <text x="465" y="24" class="header-tag" fill="#10B981" text-anchor="middle">$0 CLP LIBRE</text>
+      <rect x="380" y="0" width="175" height="38" rx="8" fill="#063520" stroke="#10B981" stroke-width="1.2"/>
+      <text x="467" y="24" class="header-tag" fill="#10B981" text-anchor="middle">$0 CLP LIBRE</text>
 
-      <rect x="570" y="0" width="170" height="38" rx="8" fill="#3D1A24" stroke="#EC4899" stroke-width="1.2"/>
-      <text x="655" y="24" class="header-tag" fill="#EC4899" text-anchor="middle">4 ROLES</text>
+      <rect x="575" y="0" width="165" height="38" rx="8" fill="#3D1A24" stroke="#EC4899" stroke-width="1.2"/>
+      <text x="657" y="24" class="header-tag" fill="#EC4899" text-anchor="middle">4 ROLES</text>
     </g>
   </g>
 
   <!-- ========================================================================= -->
-  <!-- 2. SECCIÓN 7: PLAN DE TRABAJO (10 ACTIVIDADES CLAVE) -->
+  <!-- 2. SECCIÓN 7: PLAN DE TRABAJO TÉCNICO (y = 175) -->
   <!-- ========================================================================= -->
-  <g transform="translate(80, 205)">
-    <text x="0" y="0" class="sec-title">📋 SECCIÓN 7: PLAN DE TRABAJO TÉCNICO Y GESTIÓN DE RECURSOS</text>
-    <text x="750" y="-3" font-family="'Segoe UI', sans-serif" font-size="16" fill="#94A3B8">(Competencias, Responsables, Recursos y Observaciones con Factores Clave)</text>
+  <g transform="translate(80, 175)">
+    <text x="0" y="0" class="sec-title">📋 SECCIÓN 7: PLAN DE TRABAJO TÉCNICO (10 ACTIVIDADES CLAVE)</text>
+    <text x="820" y="-1" font-family="'Segoe UI', sans-serif" font-size="15" fill="#94A3B8">• Competencias, Responsables, Recursos y Mitigación de Factores Críticos</text>
 
-    <!-- COLUMNA IZQUIERDA: A1 a A5 -->
-    <!-- A1 -->
+    <!-- Contenedor de Tarjetas de Actividades -->
     <g transform="translate(0, 20)">
-      <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
-      <rect x="0" y="0" width="8" height="110" rx="4" fill="#8B5CF6"/>
-      <text x="25" y="32" class="card-title">A1. Diseño y Setup Base pfSense CE 2.9.0</text>
-      <text x="490" y="32" class="card-meta" fill="#A78BFA">[Semanas 1 - 2] • Comp. 4 &amp; 8</text>
-      <text x="830" y="32" class="card-meta" fill="#00F5FF">Resp: B. Urrea / F. Vásquez</text>
-      <text x="25" y="62" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Instalación en Proxmox/VMware, configuración WAN/LAN y tuning de hardware offloading para Netmap.</text>
-      <text x="25" y="90" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Docs Netgate. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Incompatibilidad TSO/LRO con Netmap; se resuelve desactivando hardware offloading.</text>
-    </g>
+      <!-- COLUMNA IZQUIERDA: A1 a A5 (width: 1100) -->
+      <!-- A1 -->
+      <g transform="translate(0, 0)">
+        <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
+        <rect x="0" y="0" width="8" height="110" rx="4" fill="#10B981"/>
+        <text x="25" y="30" class="card-title">A1. Diseño y Setup Base pfSense CE 2.9.0</text>
+        <text x="440" y="30" class="card-meta" fill="#A78BFA">[Semanas 1 - 2] • Comp. 4 &amp; 8</text>
+        <text x="710" y="30" class="card-meta" fill="#00F5FF">Resp: B. Urrea / F. Vásquez</text>
+        <rect x="940" y="12" width="140" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+        <text x="1010" y="29" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#34D399" text-anchor="middle">✔ COMPLETADO</text>
+        <text x="25" y="60" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Instalación en Proxmox/VMware, configuración WAN/LAN y tuning de hardware offloading para Netmap.</text>
+        <text x="25" y="88" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Docs Netgate. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Incompatibilidad TSO/LRO con Netmap; se resuelve desactivando offloading.</text>
+      </g>
 
-    <!-- A2 -->
-    <g transform="translate(0, 145)">
-      <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
-      <rect x="0" y="0" width="8" height="110" rx="4" fill="#8B5CF6"/>
-      <text x="25" y="32" class="card-title">A2. Segmentación de VLANs 802.1Q</text>
-      <text x="420" y="32" class="card-meta" fill="#A78BFA">[Semanas 3 - 4] • Comp. 4</text>
-      <text x="830" y="32" class="card-meta" fill="#00F5FF">Resp: Freddy Vásquez</text>
-      <text x="25" y="62" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Creación de subredes VLAN 10 (Corp), 20 (DMZ), 30 (VoIP), 99 (Mgmt) y servidores DHCP locales.</text>
-      <text x="25" y="90" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Soporte nativo 802.1Q. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Filtrado inter-VLAN; se soluciona con reglas Zero Trust estrictas por interfaz.</text>
-    </g>
+      <!-- A2 -->
+      <g transform="translate(0, 122)">
+        <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
+        <rect x="0" y="0" width="8" height="110" rx="4" fill="#3B82F6"/>
+        <text x="25" y="30" class="card-title">A2. Segmentación de VLANs 802.1Q</text>
+        <text x="390" y="30" class="card-meta" fill="#A78BFA">[Semanas 3 - 4] • Comp. 4</text>
+        <text x="710" y="30" class="card-meta" fill="#00F5FF">Resp: Freddy Vásquez</text>
+        <rect x="940" y="12" width="140" height="26" rx="6" fill="#1E3A8A" stroke="#3B82F6" stroke-width="1.2"/>
+        <text x="1010" y="29" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#60A5FA" text-anchor="middle">⚙ EN CURSO</text>
+        <text x="25" y="60" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Creación de subredes VLAN 10 (Corp), 20 (DMZ), 30 (VoIP), 99 (Mgmt) y servidores DHCP locales.</text>
+        <text x="25" y="88" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Soporte nativo 802.1Q. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Filtrado inter-VLAN; se soluciona con reglas Zero Trust por interfaz.</text>
+      </g>
 
-    <!-- A3 -->
-    <g transform="translate(0, 270)">
-      <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
-      <rect x="0" y="0" width="8" height="110" rx="4" fill="#3B82F6"/>
-      <text x="25" y="32" class="card-title">A3. Despliegue de Suricata 7.x Inline Netmap IPS</text>
-      <text x="500" y="32" class="card-meta" fill="#38BDF8">[Semanas 5 - 6] • Comp. 7 &amp; 8</text>
-      <text x="830" y="32" class="card-meta" fill="#00F5FF">Resp: B. Urrea / K. Retamales</text>
-      <text x="25" y="62" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Activación de modo Inline Netmap, reglas ET Open y configuración de políticas automáticas dropsid.conf.</text>
-      <text x="25" y="90" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Descarte en hardware ring-buffer. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Falsos positivos de firmas; se ajustan SIDs selectivos.</text>
-    </g>
+      <!-- A3 -->
+      <g transform="translate(0, 244)">
+        <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
+        <rect x="0" y="0" width="8" height="110" rx="4" fill="#8B5CF6"/>
+        <text x="25" y="30" class="card-title">A3. Despliegue de Suricata Inline IPS</text>
+        <text x="430" y="30" class="card-meta" fill="#38BDF8">[Semanas 5 - 6] • Comp. 7 &amp; 8</text>
+        <text x="710" y="30" class="card-meta" fill="#00F5FF">Resp: B. Urrea / K. Retamales</text>
+        <rect x="940" y="12" width="140" height="26" rx="6" fill="#231347" stroke="#7C3AED" stroke-width="1.2"/>
+        <text x="1010" y="29" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#C4B5FD" text-anchor="middle">⏳ PLANIFICADO</text>
+        <text x="25" y="60" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Activación de modo Inline Netmap, reglas ET Open y configuración de políticas automáticas dropsid.conf.</text>
+        <text x="25" y="88" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Descarte en ring-buffer de memoria. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Falsos positivos de firmas; ajuste con SIDs selectivos.</text>
+      </g>
 
-    <!-- A4 -->
-    <g transform="translate(0, 395)">
-      <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
-      <rect x="0" y="0" width="8" height="110" rx="4" fill="#3B82F6"/>
-      <text x="25" y="32" class="card-title">A4. Hardening GeoIP con pfBlockerNG-devel</text>
-      <text x="475" y="32" class="card-meta" fill="#38BDF8">[Semanas 7 - 8] • Comp. 7 &amp; 8</text>
-      <text x="830" y="32" class="card-meta" fill="#00F5FF">Resp: Kevin Retamales</text>
-      <text x="25" y="62" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Integración de MaxMind GeoLite2 Free, listas Top Spammers y feeds FireHOL L1 / Spamhaus DROP.</text>
-      <text x="25" y="90" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Feeds globales actualizados. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Consumo de RAM; se optimiza el límite de tablas en pfSense.</text>
-    </g>
+      <!-- A4 -->
+      <g transform="translate(0, 366)">
+        <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
+        <rect x="0" y="0" width="8" height="110" rx="4" fill="#8B5CF6"/>
+        <text x="25" y="30" class="card-title">A4. Hardening GeoIP con pfBlockerNG</text>
+        <text x="430" y="30" class="card-meta" fill="#38BDF8">[Semanas 7 - 8] • Comp. 7 &amp; 8</text>
+        <text x="710" y="30" class="card-meta" fill="#00F5FF">Resp: Kevin Retamales</text>
+        <rect x="940" y="12" width="140" height="26" rx="6" fill="#231347" stroke="#7C3AED" stroke-width="1.2"/>
+        <text x="1010" y="29" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#C4B5FD" text-anchor="middle">⏳ PLANIFICADO</text>
+        <text x="25" y="60" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Integración de MaxMind GeoLite2 Free, listas Top Spammers y feeds FireHOL L1 / Spamhaus DROP.</text>
+        <text x="25" y="88" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Feeds globales actualizados. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Consumo de RAM; se optimiza el límite de tablas en pfSense.</text>
+      </g>
 
-    <!-- A5 -->
-    <g transform="translate(0, 520)">
-      <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
-      <rect x="0" y="0" width="8" height="110" rx="4" fill="#3B82F6"/>
-      <text x="25" y="32" class="card-title">A5. Proxy Inverso HAProxy 2.8+ SSL &amp; DMZ DVWA</text>
-      <text x="500" y="32" class="card-meta" fill="#38BDF8">[Semanas 9 - 10] • Comp. 7</text>
-      <text x="830" y="32" class="card-meta" fill="#00F5FF">Resp: Cristóbal Quezada</text>
-      <text x="25" y="62" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Frontend HTTPS 443, SSL Offloading, Stick-Tables anti-fuzzing L7 y contenedor vulnerable de pruebas.</text>
-      <text x="25" y="90" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Stick-Tables en RAM a microsegundos. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Certificados SSL; se emite CA interna de laboratorio.</text>
-    </g>
+      <!-- A5 -->
+      <g transform="translate(0, 488)">
+        <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
+        <rect x="0" y="0" width="8" height="110" rx="4" fill="#8B5CF6"/>
+        <text x="25" y="30" class="card-title">A5. Proxy Inverso HAProxy SSL &amp; DMZ DVWA</text>
+        <text x="450" y="30" class="card-meta" fill="#38BDF8">[Semanas 9 - 10] • Comp. 7</text>
+        <text x="710" y="30" class="card-meta" fill="#00F5FF">Resp: Cristóbal Quezada</text>
+        <rect x="940" y="12" width="140" height="26" rx="6" fill="#231347" stroke="#7C3AED" stroke-width="1.2"/>
+        <text x="1010" y="29" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#C4B5FD" text-anchor="middle">⏳ PLANIFICADO</text>
+        <text x="25" y="60" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Frontend HTTPS 443, SSL Offloading, Stick-Tables anti-fuzzing L7 y contenedor vulnerable de pruebas.</text>
+        <text x="25" y="88" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Stick-Tables en RAM a microsegundos. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Certificados SSL; se emite CA interna de laboratorio.</text>
+      </g>
 
-    <!-- COLUMNA DERECHA: A6 a A10 -->
-    <!-- A6 -->
-    <g transform="translate(1140, 20)">
-      <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
-      <rect x="0" y="0" width="8" height="110" rx="4" fill="#F59E0B"/>
-      <text x="25" y="32" class="card-title">A6. Motor de Correlación KRONOS (Python AST)</text>
-      <text x="510" y="32" class="card-meta" fill="#FCD34D">[Semanas 11 - 12] • Comp. 6 &amp; 8</text>
-      <text x="830" y="32" class="card-meta" fill="#00F5FF">Resp: Bruno Urrea</text>
-      <text x="25" y="62" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Parser eve.json, filtro sintáctico AST (&gt;50% supresión) y wrappers pfctl (kill states y tabla snort2c).</text>
-      <text x="25" y="90" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Librería estándar AST. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Privilegios en pfSense; se configura sudoers restringido para pfctl.</text>
-    </g>
+      <!-- COLUMNA DERECHA: A6 a A10 (width: 1100, x: 1140) -->
+      <!-- A6 -->
+      <g transform="translate(1140, 0)">
+        <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
+        <rect x="0" y="0" width="8" height="110" rx="4" fill="#F59E0B"/>
+        <text x="25" y="30" class="card-title">A6. Motor Correlación KRONOS (Python AST)</text>
+        <text x="460" y="30" class="card-meta" fill="#FCD34D">[Semanas 11 - 12] • Comp. 6 &amp; 8</text>
+        <text x="740" y="30" class="card-meta" fill="#00F5FF">Resp: Bruno Urrea</text>
+        <rect x="940" y="12" width="140" height="26" rx="6" fill="#3D1A24" stroke="#F59E0B" stroke-width="1.2"/>
+        <text x="1010" y="29" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#FCD34D" text-anchor="middle">⏳ PLANIFICADO</text>
+        <text x="25" y="60" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Parser eve.json, filtro sintáctico AST (&gt;50% supresión) y wrappers pfctl (kill states y tabla snort2c).</text>
+        <text x="25" y="88" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Módulo AST nativo de Python. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Privilegios en pfSense; se configura sudoers para pfctl.</text>
+      </g>
 
-    <!-- A7 -->
-    <g transform="translate(1140, 145)">
-      <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
-      <rect x="0" y="0" width="8" height="110" rx="4" fill="#F59E0B"/>
-      <text x="25" y="32" class="card-title">A7. Centralita Asterisk 20 LTS PBX &amp; Auto-Dialer AMI</text>
-      <text x="530" y="32" class="card-meta" fill="#FCD34D">[Semanas 13 - 14] • Comp. 5</text>
-      <text x="830" y="32" class="card-meta" fill="#00F5FF">Resp: Freddy Vásquez</text>
-      <text x="25" y="62" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Docker Asterisk 20 LTS, canal PJSIP, Dialplan de emergencia y disparador AMI hacia el softphone.</text>
-      <text x="25" y="90" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Stack PJSIP moderno. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> NAT traversal; se fija directiva external_media_address.</text>
-    </g>
+      <!-- A7 -->
+      <g transform="translate(1140, 122)">
+        <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
+        <rect x="0" y="0" width="8" height="110" rx="4" fill="#F59E0B"/>
+        <text x="25" y="30" class="card-title">A7. Centralita Asterisk 20 LTS PBX &amp; AMI</text>
+        <text x="450" y="30" class="card-meta" fill="#FCD34D">[Semanas 13 - 14] • Comp. 5</text>
+        <text x="740" y="30" class="card-meta" fill="#00F5FF">Resp: Freddy Vásquez</text>
+        <rect x="940" y="12" width="140" height="26" rx="6" fill="#3D1A24" stroke="#F59E0B" stroke-width="1.2"/>
+        <text x="1010" y="29" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#FCD34D" text-anchor="middle">⏳ PLANIFICADO</text>
+        <text x="25" y="60" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Docker Asterisk 20 LTS, canal PJSIP, Dialplan de emergencia y disparador AMI hacia el softphone.</text>
+        <text x="25" y="88" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Stack PJSIP moderno. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> NAT traversal; se fija directiva external_media_address.</text>
+      </g>
 
-    <!-- A8 -->
-    <g transform="translate(1140, 270)">
-      <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
-      <rect x="0" y="0" width="8" height="110" rx="4" fill="#F59E0B"/>
-      <text x="25" y="32" class="card-title">A8. Integración Google Gemini Live Voice API</text>
-      <text x="510" y="32" class="card-meta" fill="#FCD34D">[Semanas 14 - 15] • Comp. 3 &amp; 5</text>
-      <text x="830" y="32" class="card-meta" fill="#00F5FF">Resp: Bruno Urrea</text>
-      <text x="25" y="62" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Conexión WebSocket seguro, System Prompts tácticos SecOps y streaming de audio bidireccional PCM 24kHz.</text>
-      <text x="25" y="90" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Gemini Live Free Tier (&lt;400ms). <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Sincronización dúplex; se usa audio lineal nativo.</text>
-    </g>
+      <!-- A8 -->
+      <g transform="translate(1140, 244)">
+        <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
+        <rect x="0" y="0" width="8" height="110" rx="4" fill="#F43F5E"/>
+        <text x="25" y="30" class="card-title">A8. Integración Google Gemini Live Voice API</text>
+        <text x="450" y="30" class="card-meta" fill="#FDA4AF">[Semanas 14 - 15] • Comp. 3 &amp; 5</text>
+        <text x="740" y="30" class="card-meta" fill="#00F5FF">Resp: Bruno Urrea</text>
+        <rect x="940" y="12" width="140" height="26" rx="6" fill="#3D1A24" stroke="#F43F5E" stroke-width="1.2"/>
+        <text x="1010" y="29" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#FDA4AF" text-anchor="middle">⏳ PLANIFICADO</text>
+        <text x="25" y="60" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Conexión WebSocket seguro, System Prompts tácticos SecOps y streaming de audio bidireccional PCM 24kHz.</text>
+        <text x="25" y="88" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Gemini Live Free Tier (&lt;400ms). <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Sincronización dúplex; se usa audio lineal nativo.</text>
+      </g>
 
-    <!-- A9 -->
-    <g transform="translate(1140, 395)">
-      <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
-      <rect x="0" y="0" width="8" height="110" rx="4" fill="#EC4899"/>
-      <text x="25" y="32" class="card-title">A9. Enlace Seguro Zero Trust con Tailscale WireGuard</text>
-      <text x="550" y="32" class="card-meta" fill="#F472B6">[Semana 15] • Comp. 3 &amp; 4</text>
-      <text x="830" y="32" class="card-meta" fill="#00F5FF">Resp: Freddy Vásquez</text>
-      <text x="25" y="62" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Publicación de la subred VoIP 192.168.30.0/24 para registro de softphones remotos sin abrir puertos.</text>
-      <text x="25" y="90" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> WireGuard evade 100% de CGNAT. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Aprobación de rutas; se autoriza en panel admin.</text>
-    </g>
+      <!-- A9 -->
+      <g transform="translate(1140, 366)">
+        <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
+        <rect x="0" y="0" width="8" height="110" rx="4" fill="#C084FC"/>
+        <text x="25" y="30" class="card-title">A9. Enlace Zero Trust Tailscale WireGuard</text>
+        <text x="450" y="30" class="card-meta" fill="#E9D5FF">[Semana 15] • Comp. 3 &amp; 4</text>
+        <text x="740" y="30" class="card-meta" fill="#00F5FF">Resp: Freddy Vásquez</text>
+        <rect x="940" y="12" width="140" height="26" rx="6" fill="#2A0E35" stroke="#C084FC" stroke-width="1.2"/>
+        <text x="1010" y="29" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#E9D5FF" text-anchor="middle">⏳ PLANIFICADO</text>
+        <text x="25" y="60" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Publicación de la subred VoIP 192.168.30.0/24 para registro de softphones remotos sin abrir puertos.</text>
+        <text x="25" y="88" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> WireGuard evade 100% de CGNAT. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Aprobación de rutas; se autoriza en panel admin.</text>
+      </g>
 
-    <!-- A10 -->
-    <g transform="translate(1140, 520)">
-      <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
-      <rect x="0" y="0" width="8" height="110" rx="4" fill="#10B981"/>
-      <text x="25" y="32" class="card-title">A10. Pruebas QA, Auditoría Forense &amp; Defensa</text>
-      <text x="500" y="32" class="card-meta" fill="#6EE7B7">[Semanas 16 - 18] • Comp. 7, 8, 11</text>
-      <text x="830" y="32" class="card-meta" fill="#00F5FF">Resp: Todo el Equipo</text>
-      <text x="25" y="62" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Pruebas de estrés, auditoría de tiempos (&lt;1.5 s), generación de manuales PDF y preparación de defensa.</text>
-      <text x="25" y="90" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Roles delimitados y automatización. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Demo en vivo; se alistan scripts de respaldo.</text>
+      <!-- A10 -->
+      <g transform="translate(1140, 488)">
+        <rect width="1100" height="110" rx="12" fill="url(#cardGrad)" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
+        <rect x="0" y="0" width="8" height="110" rx="4" fill="#10B981"/>
+        <text x="25" y="30" class="card-title">A10. Pruebas QA, Auditoría Forense &amp; Defensa</text>
+        <text x="460" y="30" class="card-meta" fill="#6EE7B7">[Semanas 16 - 18] • Comp. 7, 8, 11</text>
+        <text x="740" y="30" class="card-meta" fill="#00F5FF">Resp: Todo el Equipo</text>
+        <rect x="940" y="12" width="140" height="26" rx="6" fill="#063520" stroke="#059669" stroke-width="1.2"/>
+        <text x="1010" y="29" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#6EE7B7" text-anchor="middle">⏳ PLANIFICADO</text>
+        <text x="25" y="60" class="card-body"><tspan fill="#F1F5F9" font-weight="600">Descripción:</tspan> Pruebas de estrés, auditoría de tiempos (&lt;1.5 s), generación de manuales PDF y preparación de defensa.</text>
+        <text x="25" y="88" class="card-body"><tspan fill="#10B981" font-weight="600">✔ Facilitador:</tspan> Roles delimitados y automatización. <tspan fill="#F59E0B" font-weight="600">⚠ Obstáculo:</tspan> Demo en vivo; se alistan scripts de respaldo.</text>
+      </g>
     </g>
   </g>
 
   <!-- ========================================================================= -->
-  <!-- 3. SECCIÓN 8: CARTA GANTT PANORÁMICA (18 SEMANAS ACADÉMICAS) -->
+  <!-- 3. SECCIÓN 8: CARTA GANTT PANORÁMICA (y = 820) -->
   <!-- ========================================================================= -->
-  <g transform="translate(80, 905)">
-    <text x="0" y="0" class="sec-title">📅 SECCIÓN 8: CARTA GANTT PANORÁMICA OFICIAL (18 SEMANAS ACADÉMICAS)</text>
-    <text x="840" y="-3" font-family="'Segoe UI', sans-serif" font-size="16" fill="#94A3B8">(Temporalidad Académica: Fase 1 [S1-S4], Fase 2 [S5-S15], Fase 3 [S16-S18])</text>
+  <g transform="translate(80, 820)">
+    <text x="0" y="0" class="sec-title">📅 SECCIÓN 8: CARTA GANTT PANORÁMICA (18 SEMANAS)</text>
+    <text x="700" y="-1" font-family="'Segoe UI', sans-serif" font-size="15" fill="#94A3B8">• Fase 1: S1-S4 [Definición] • Fase 2: S5-S15 [Desarrollo] • Fase 3: S16-S18 [QA &amp; Defensa]</text>
 
-    <!-- Gantt Table Container -->
+    <!-- Leyenda de Estados de Ejecución -->
+    <g transform="translate(1810, -8)">
+      <rect x="0" y="-14" width="130" height="25" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+      <text x="65" y="3" fill="#34D399" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" text-anchor="middle">✔ COMPLETADO</text>
+      
+      <rect x="140" y="-14" width="125" height="25" rx="6" fill="#1E3A8A" stroke="#3B82F6" stroke-width="1.2"/>
+      <text x="202" y="3" fill="#60A5FA" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" text-anchor="middle">⚙ EN CURSO</text>
+      
+      <rect x="275" y="-14" width="140" height="25" rx="6" fill="#231347" stroke="#7C3AED" stroke-width="1.2"/>
+      <text x="345" y="3" fill="#C4B5FD" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" text-anchor="middle">⏳ PLANIFICADO</text>
+    </g>
+
+    <!-- Contenedor Maestro de la Tabla Gantt -->
     <g transform="translate(0, 20)">
-      <rect width="2240" height="600" rx="16" fill="url(#cardGrad)" stroke="#4C1D95" stroke-width="1.5" filter="url(#cardShadow)"/>
+      <rect width="2240" height="585" rx="14" fill="url(#cardGrad)" stroke="#4C1D95" stroke-width="1.5" filter="url(#cardShadow)"/>
 
-      <!-- Gantt Headers -->
-      <rect x="0" y="0" width="560" height="55" rx="16" fill="#130B29"/>
-      <text x="30" y="35" font-family="'Segoe UI', sans-serif" font-size="16" font-weight="bold" fill="#F8FAFC">ACTIVIDAD / RESPONSABLE</text>
+      <!-- Cabecera Izquierda: Actividad / Responsable -->
+      <rect x="0" y="0" width="560" height="55" rx="14" fill="#130B29"/>
+      <text x="30" y="35" font-family="'Segoe UI', sans-serif" font-size="16" font-weight="bold" fill="#F8FAFC">ACTIVIDAD / RESPONSABLE / ESTADO</text>
 
       <!-- Fases Superiores -->
-      <!-- Fase 1 Header (S1-S4: width 373.33) -->
+      <!-- Fase 1 (S1-S4: 373.33 px) -->
       <rect x="560" y="0" width="373.33" height="28" fill="#1C0F3F" stroke="#372068" stroke-width="0.8"/>
-      <text x="746.66" y="19" font-family="'Segoe UI', sans-serif" font-size="13" font-weight="bold" fill="#00F5FF" text-anchor="middle">FASE 1: DEFINICIÓN &amp; DISEÑO (S1 - S4)</text>
+      <text x="746.66" y="19" font-family="'Segoe UI', sans-serif" font-size="13" font-weight="bold" fill="#00F5FF" text-anchor="middle">FASE 1: DEFINICIÓN &amp; INFRAESTRUCTURA (S1 - S4)</text>
 
-      <!-- Fase 2 Header (S5-S15: width 1026.66) -->
+      <!-- Fase 2 (S5-S15: 1026.66 px) -->
       <rect x="933.33" y="0" width="1026.66" height="28" fill="#150C38" stroke="#372068" stroke-width="0.8"/>
       <text x="1446.66" y="19" font-family="'Segoe UI', sans-serif" font-size="13" font-weight="bold" fill="#A78BFA" text-anchor="middle">FASE 2: DESARROLLO, HARDENING &amp; DESPLIEGUE (S5 - S15)</text>
 
-      <!-- Fase 3 Header (S16-S18: width 280) -->
+      <!-- Fase 3 (S16-S18: 280 px) -->
       <rect x="1960" y="0" width="280" height="28" fill="#0D242E" stroke="#372068" stroke-width="0.8"/>
       <text x="2100" y="19" font-family="'Segoe UI', sans-serif" font-size="13" font-weight="bold" fill="#10B981" text-anchor="middle">FASE 3: QA &amp; DEFENSA (S16 - S18)</text>
 
-      <!-- Week Columns (S1 a S18) -->
+      <!-- Columnas Semanales (S1 a S18) -->
       
-        <rect x="560.0" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="606.6666666666666" y="47" class="gantt-week">S1</text>
+        <rect x="560.00" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="606.67" y="46" class="gantt-week">S1</text>
         
-        <rect x="653.3333333333334" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="700.0" y="47" class="gantt-week">S2</text>
+        <rect x="653.33" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="700.00" y="46" class="gantt-week">S2</text>
         
-        <rect x="746.6666666666666" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="793.3333333333333" y="47" class="gantt-week">S3</text>
+        <rect x="746.67" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="793.33" y="46" class="gantt-week">S3</text>
         
-        <rect x="840.0" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="886.6666666666666" y="47" class="gantt-week">S4</text>
+        <rect x="840.00" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="886.67" y="46" class="gantt-week">S4</text>
         
-        <rect x="933.3333333333333" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="979.9999999999999" y="47" class="gantt-week">S5</text>
+        <rect x="933.33" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="980.00" y="46" class="gantt-week">S5</text>
         
-        <rect x="1026.6666666666665" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="1073.3333333333333" y="47" class="gantt-week">S6</text>
+        <rect x="1026.67" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="1073.33" y="46" class="gantt-week">S6</text>
         
-        <rect x="1120.0" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="1166.6666666666667" y="47" class="gantt-week">S7</text>
+        <rect x="1120.00" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="1166.67" y="46" class="gantt-week">S7</text>
         
-        <rect x="1213.3333333333333" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="1260.0" y="47" class="gantt-week">S8</text>
+        <rect x="1213.33" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="1260.00" y="46" class="gantt-week">S8</text>
         
-        <rect x="1306.6666666666665" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="1353.3333333333333" y="47" class="gantt-week">S9</text>
+        <rect x="1306.67" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="1353.33" y="46" class="gantt-week">S9</text>
         
-        <rect x="1400.0" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="1446.6666666666667" y="47" class="gantt-week">S10</text>
+        <rect x="1400.00" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="1446.67" y="46" class="gantt-week">S10</text>
         
-        <rect x="1493.3333333333333" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="1540.0" y="47" class="gantt-week">S11</text>
+        <rect x="1493.33" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="1540.00" y="46" class="gantt-week">S11</text>
         
-        <rect x="1586.6666666666665" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="1633.3333333333333" y="47" class="gantt-week">S12</text>
+        <rect x="1586.67" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="1633.33" y="46" class="gantt-week">S12</text>
         
-        <rect x="1680.0" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="1726.6666666666667" y="47" class="gantt-week">S13</text>
+        <rect x="1680.00" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="1726.67" y="46" class="gantt-week">S13</text>
         
-        <rect x="1773.3333333333333" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="1820.0" y="47" class="gantt-week">S14</text>
+        <rect x="1773.33" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="1820.00" y="46" class="gantt-week">S14</text>
         
-        <rect x="1866.6666666666665" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="1913.3333333333333" y="47" class="gantt-week">S15</text>
+        <rect x="1866.67" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="1913.33" y="46" class="gantt-week">S15</text>
         
-        <rect x="1960.0" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="2006.6666666666667" y="47" class="gantt-week">S16</text>
+        <rect x="1960.00" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="2006.67" y="46" class="gantt-week">S16</text>
         
-        <rect x="2053.333333333333" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="2099.9999999999995" y="47" class="gantt-week">S17</text>
+        <rect x="2053.33" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="2100.00" y="46" class="gantt-week">S17</text>
         
-        <rect x="2146.6666666666665" y="28" width="93.33333333333333" height="27" fill="#0D0721" stroke="#25144A" stroke-width="0.8"/>
-        <text x="2193.333333333333" y="47" class="gantt-week">S18</text>
+        <rect x="2146.67" y="28" width="93.33" height="27" fill="#0E0722" stroke="#25144A" stroke-width="0.8"/>
+        <text x="2193.33" y="46" class="gantt-week">S18</text>
         
 
-      <!-- Rows and Bars -->
+      <!-- Filas de Actividades y Barras de Línea de Tiempo -->
       
         <g transform="translate(0, 55)">
-          <rect width="2240" height="54" fill="#130A2E" stroke="#231347" stroke-width="0.5"/>
-          <text x="30" y="24" class="gantt-text" font-weight="700">A1. Setup Base pfSense & Netmap Tuning</text>
-          <text x="30" y="44" font-family="'Consolas', monospace" font-size="13" fill="#A78BFA">👤 Bruno Urrea / Freddy Vásquez</text>
+          <rect width="2240" height="53" fill="#130A2E" stroke="#211044" stroke-width="0.6"/>
+          <text x="25" y="24" class="gantt-row-title">A1. Setup Base pfSense CE 2.9.0 & Netmap Tuning</text>
+          <text x="25" y="42" class="gantt-row-sub">👤 Bruno Urrea / Freddy Vásquez</text>
+          <rect x="415" y="13" width="130" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+          <text x="480" y="31" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#34D399" text-anchor="middle">✔ COMPLETADO</text>
         </g>
         
         <defs>
-          <linearGradient id="barGrad_0" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#8B5CF6"/>
+          <linearGradient id="ganttBarGrad_0" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#059669"/>
+            <stop offset="100%" stop-color="#10B981"/>
+          </linearGradient>
+        </defs>
+        <rect x="565.00" y="64" width="176.67" height="35" rx="8" fill="url(#ganttBarGrad_0)" stroke="#A7F3D0" stroke-width="1.5" opacity="1.0" filter="url(#cardShadow)"/>
+        <text x="653.33" y="86" class="gantt-bar-text" text-anchor="middle">✔ S1 - S2: COMPLETADO (100%)</text>
+        
+        <g transform="translate(0, 108)">
+          <rect width="2240" height="53" fill="#0D061F" stroke="#211044" stroke-width="0.6"/>
+          <text x="25" y="24" class="gantt-row-title">A2. Segmentación de VLANs 802.1Q & DHCP</text>
+          <text x="25" y="42" class="gantt-row-sub">👤 Freddy Vásquez</text>
+          <rect x="415" y="13" width="130" height="26" rx="6" fill="#1E3A8A" stroke="#3B82F6" stroke-width="1.2"/>
+          <text x="480" y="31" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#60A5FA" text-anchor="middle">⚙ EN CURSO</text>
+        </g>
+        
+        <defs>
+          <linearGradient id="ganttBarGrad_1" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#2563EB"/>
             <stop offset="100%" stop-color="#06B6D4"/>
           </linearGradient>
         </defs>
-        <rect x="566.0" y="65" width="174.66666666666666" height="34" rx="8" fill="url(#barGrad_0)" stroke="#FFFFFF" stroke-width="0.8" opacity="0.95" filter="url(#cardShadow)"/>
-        <text x="653.3333333333334" y="87" class="gantt-bar-text" text-anchor="middle">S1 - S2 (2 Sem.)</text>
+        <rect x="751.67" y="117" width="176.67" height="35" rx="8" fill="url(#ganttBarGrad_1)" stroke="#67E8F9" stroke-width="1.5" stroke-dasharray="6 3" opacity="0.95" filter="url(#cardShadow)"/>
+        <text x="840.00" y="139" class="gantt-bar-text" text-anchor="middle">⚙ S3 - S4: EN CURSO</text>
         
-        <g transform="translate(0, 109)">
-          <rect width="2240" height="54" fill="#0F0724" stroke="#231347" stroke-width="0.5"/>
-          <text x="30" y="24" class="gantt-text" font-weight="700">A2. Segmentación de VLANs 802.1Q</text>
-          <text x="30" y="44" font-family="'Consolas', monospace" font-size="13" fill="#A78BFA">👤 Freddy Vásquez</text>
+        <g transform="translate(0, 161)">
+          <rect width="2240" height="53" fill="#130A2E" stroke="#211044" stroke-width="0.6"/>
+          <text x="25" y="24" class="gantt-row-title">A3. Suricata 7.x Inline Netmap IPS</text>
+          <text x="25" y="42" class="gantt-row-sub">👤 Bruno Urrea / Kevin Retamales</text>
+          <rect x="415" y="13" width="130" height="26" rx="6" fill="#231347" stroke="#7C3AED" stroke-width="1.2"/>
+          <text x="480" y="31" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#C4B5FD" text-anchor="middle">⏳ PLANIFICADO</text>
         </g>
         
         <defs>
-          <linearGradient id="barGrad_1" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#8B5CF6"/>
-            <stop offset="100%" stop-color="#06B6D4"/>
-          </linearGradient>
-        </defs>
-        <rect x="752.6666666666666" y="119" width="174.66666666666666" height="34" rx="8" fill="url(#barGrad_1)" stroke="#FFFFFF" stroke-width="0.8" opacity="0.95" filter="url(#cardShadow)"/>
-        <text x="840.0" y="141" class="gantt-bar-text" text-anchor="middle">S3 - S4 (2 Sem.)</text>
-        
-        <g transform="translate(0, 163)">
-          <rect width="2240" height="54" fill="#130A2E" stroke="#231347" stroke-width="0.5"/>
-          <text x="30" y="24" class="gantt-text" font-weight="700">A3. Suricata 7.x Inline Netmap IPS</text>
-          <text x="30" y="44" font-family="'Consolas', monospace" font-size="13" fill="#A78BFA">👤 Bruno Urrea / Kevin Retamales</text>
-        </g>
-        
-        <defs>
-          <linearGradient id="barGrad_2" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#3B82F6"/>
+          <linearGradient id="ganttBarGrad_2" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#6D28D9"/>
             <stop offset="100%" stop-color="#8B5CF6"/>
           </linearGradient>
         </defs>
-        <rect x="939.3333333333333" y="173" width="174.66666666666666" height="34" rx="8" fill="url(#barGrad_2)" stroke="#FFFFFF" stroke-width="0.8" opacity="0.95" filter="url(#cardShadow)"/>
-        <text x="1026.6666666666665" y="195" class="gantt-bar-text" text-anchor="middle">S5 - S6 (2 Sem.)</text>
+        <rect x="938.33" y="170" width="176.67" height="35" rx="8" fill="url(#ganttBarGrad_2)" stroke="#7C3AED" stroke-width="1.2" stroke-dasharray="4 2" opacity="0.45" filter="url(#cardShadow)"/>
+        <text x="1026.67" y="192" class="gantt-bar-text" text-anchor="middle">⏳ S5 - S6: Planificado (Fase 2)</text>
         
-        <g transform="translate(0, 217)">
-          <rect width="2240" height="54" fill="#0F0724" stroke="#231347" stroke-width="0.5"/>
-          <text x="30" y="24" class="gantt-text" font-weight="700">A4. Hardening GeoIP pfBlockerNG-devel</text>
-          <text x="30" y="44" font-family="'Consolas', monospace" font-size="13" fill="#A78BFA">👤 Kevin Retamales</text>
+        <g transform="translate(0, 214)">
+          <rect width="2240" height="53" fill="#0D061F" stroke="#211044" stroke-width="0.6"/>
+          <text x="25" y="24" class="gantt-row-title">A4. Hardening GeoIP pfBlockerNG-devel</text>
+          <text x="25" y="42" class="gantt-row-sub">👤 Kevin Retamales</text>
+          <rect x="415" y="13" width="130" height="26" rx="6" fill="#231347" stroke="#7C3AED" stroke-width="1.2"/>
+          <text x="480" y="31" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#C4B5FD" text-anchor="middle">⏳ PLANIFICADO</text>
         </g>
         
         <defs>
-          <linearGradient id="barGrad_3" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#3B82F6"/>
+          <linearGradient id="ganttBarGrad_3" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#6D28D9"/>
             <stop offset="100%" stop-color="#8B5CF6"/>
           </linearGradient>
         </defs>
-        <rect x="1126.0" y="227" width="174.66666666666666" height="34" rx="8" fill="url(#barGrad_3)" stroke="#FFFFFF" stroke-width="0.8" opacity="0.95" filter="url(#cardShadow)"/>
-        <text x="1213.3333333333333" y="249" class="gantt-bar-text" text-anchor="middle">S7 - S8 (2 Sem.)</text>
+        <rect x="1125.00" y="223" width="176.67" height="35" rx="8" fill="url(#ganttBarGrad_3)" stroke="#7C3AED" stroke-width="1.2" stroke-dasharray="4 2" opacity="0.45" filter="url(#cardShadow)"/>
+        <text x="1213.33" y="245" class="gantt-bar-text" text-anchor="middle">⏳ S7 - S8: Planificado (Fase 2)</text>
         
-        <g transform="translate(0, 271)">
-          <rect width="2240" height="54" fill="#130A2E" stroke="#231347" stroke-width="0.5"/>
-          <text x="30" y="24" class="gantt-text" font-weight="700">A5. Proxy HAProxy 2.8+ SSL & DMZ DVWA</text>
-          <text x="30" y="44" font-family="'Consolas', monospace" font-size="13" fill="#A78BFA">👤 Cristóbal Quezada</text>
+        <g transform="translate(0, 267)">
+          <rect width="2240" height="53" fill="#130A2E" stroke="#211044" stroke-width="0.6"/>
+          <text x="25" y="24" class="gantt-row-title">A5. Proxy HAProxy 2.8+ SSL & DMZ DVWA</text>
+          <text x="25" y="42" class="gantt-row-sub">👤 Cristóbal Quezada</text>
+          <rect x="415" y="13" width="130" height="26" rx="6" fill="#231347" stroke="#7C3AED" stroke-width="1.2"/>
+          <text x="480" y="31" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#C4B5FD" text-anchor="middle">⏳ PLANIFICADO</text>
         </g>
         
         <defs>
-          <linearGradient id="barGrad_4" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#3B82F6"/>
+          <linearGradient id="ganttBarGrad_4" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#6D28D9"/>
             <stop offset="100%" stop-color="#8B5CF6"/>
           </linearGradient>
         </defs>
-        <rect x="1312.6666666666665" y="281" width="174.66666666666666" height="34" rx="8" fill="url(#barGrad_4)" stroke="#FFFFFF" stroke-width="0.8" opacity="0.95" filter="url(#cardShadow)"/>
-        <text x="1399.9999999999998" y="303" class="gantt-bar-text" text-anchor="middle">S9 - S10 (2 Sem.)</text>
+        <rect x="1311.67" y="276" width="176.67" height="35" rx="8" fill="url(#ganttBarGrad_4)" stroke="#7C3AED" stroke-width="1.2" stroke-dasharray="4 2" opacity="0.45" filter="url(#cardShadow)"/>
+        <text x="1400.00" y="298" class="gantt-bar-text" text-anchor="middle">⏳ S9 - S10: Planificado (Fase 2)</text>
         
-        <g transform="translate(0, 325)">
-          <rect width="2240" height="54" fill="#0F0724" stroke="#231347" stroke-width="0.5"/>
-          <text x="30" y="24" class="gantt-text" font-weight="700">A6. Motor Correlación KRONOS (Python AST)</text>
-          <text x="30" y="44" font-family="'Consolas', monospace" font-size="13" fill="#A78BFA">👤 Bruno Urrea</text>
+        <g transform="translate(0, 320)">
+          <rect width="2240" height="53" fill="#0D061F" stroke="#211044" stroke-width="0.6"/>
+          <text x="25" y="24" class="gantt-row-title">A6. Motor Correlación KRONOS (Python AST)</text>
+          <text x="25" y="42" class="gantt-row-sub">👤 Bruno Urrea</text>
+          <rect x="415" y="13" width="130" height="26" rx="6" fill="#3D1A24" stroke="#F59E0B" stroke-width="1.2"/>
+          <text x="480" y="31" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#FCD34D" text-anchor="middle">⏳ PLANIFICADO</text>
         </g>
         
         <defs>
-          <linearGradient id="barGrad_5" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#F59E0B"/>
-            <stop offset="100%" stop-color="#EC4899"/>
+          <linearGradient id="ganttBarGrad_5" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#B45309"/>
+            <stop offset="100%" stop-color="#F59E0B"/>
           </linearGradient>
         </defs>
-        <rect x="1499.3333333333333" y="335" width="174.66666666666666" height="34" rx="8" fill="url(#barGrad_5)" stroke="#FFFFFF" stroke-width="0.8" opacity="0.95" filter="url(#cardShadow)"/>
-        <text x="1586.6666666666665" y="357" class="gantt-bar-text" text-anchor="middle">S11 - S12 (2 Sem.)</text>
+        <rect x="1498.33" y="329" width="176.67" height="35" rx="8" fill="url(#ganttBarGrad_5)" stroke="#F59E0B" stroke-width="1.2" stroke-dasharray="4 2" opacity="0.45" filter="url(#cardShadow)"/>
+        <text x="1586.67" y="351" class="gantt-bar-text" text-anchor="middle">⏳ S11 - S12: Planificado (Fase 2)</text>
         
-        <g transform="translate(0, 379)">
-          <rect width="2240" height="54" fill="#130A2E" stroke="#231347" stroke-width="0.5"/>
-          <text x="30" y="24" class="gantt-text" font-weight="700">A7. Centralita Asterisk 20 LTS PBX & AMI</text>
-          <text x="30" y="44" font-family="'Consolas', monospace" font-size="13" fill="#A78BFA">👤 Freddy Vásquez</text>
+        <g transform="translate(0, 373)">
+          <rect width="2240" height="53" fill="#130A2E" stroke="#211044" stroke-width="0.6"/>
+          <text x="25" y="24" class="gantt-row-title">A7. Centralita Asterisk 20 LTS PBX & AMI</text>
+          <text x="25" y="42" class="gantt-row-sub">👤 Freddy Vásquez</text>
+          <rect x="415" y="13" width="130" height="26" rx="6" fill="#3D1A24" stroke="#F59E0B" stroke-width="1.2"/>
+          <text x="480" y="31" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#FCD34D" text-anchor="middle">⏳ PLANIFICADO</text>
         </g>
         
         <defs>
-          <linearGradient id="barGrad_6" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#F59E0B"/>
-            <stop offset="100%" stop-color="#EC4899"/>
+          <linearGradient id="ganttBarGrad_6" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#B45309"/>
+            <stop offset="100%" stop-color="#F59E0B"/>
           </linearGradient>
         </defs>
-        <rect x="1686.0" y="389" width="174.66666666666666" height="34" rx="8" fill="url(#barGrad_6)" stroke="#FFFFFF" stroke-width="0.8" opacity="0.95" filter="url(#cardShadow)"/>
-        <text x="1773.3333333333333" y="411" class="gantt-bar-text" text-anchor="middle">S13 - S14 (2 Sem.)</text>
+        <rect x="1685.00" y="382" width="176.67" height="35" rx="8" fill="url(#ganttBarGrad_6)" stroke="#F59E0B" stroke-width="1.2" stroke-dasharray="4 2" opacity="0.45" filter="url(#cardShadow)"/>
+        <text x="1773.33" y="404" class="gantt-bar-text" text-anchor="middle">⏳ S13 - S14: Planificado (Fase 2)</text>
         
-        <g transform="translate(0, 433)">
-          <rect width="2240" height="54" fill="#0F0724" stroke="#231347" stroke-width="0.5"/>
-          <text x="30" y="24" class="gantt-text" font-weight="700">A8. Integración Google Gemini Live API</text>
-          <text x="30" y="44" font-family="'Consolas', monospace" font-size="13" fill="#A78BFA">👤 Bruno Urrea</text>
+        <g transform="translate(0, 426)">
+          <rect width="2240" height="53" fill="#0D061F" stroke="#211044" stroke-width="0.6"/>
+          <text x="25" y="24" class="gantt-row-title">A8. Integración Google Gemini Live Voice API</text>
+          <text x="25" y="42" class="gantt-row-sub">👤 Bruno Urrea</text>
+          <rect x="415" y="13" width="130" height="26" rx="6" fill="#3D1A24" stroke="#F43F5E" stroke-width="1.2"/>
+          <text x="480" y="31" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#FDA4AF" text-anchor="middle">⏳ PLANIFICADO</text>
         </g>
         
         <defs>
-          <linearGradient id="barGrad_7" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#F59E0B"/>
-            <stop offset="100%" stop-color="#EC4899"/>
+          <linearGradient id="ganttBarGrad_7" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#BE185D"/>
+            <stop offset="100%" stop-color="#F43F5E"/>
           </linearGradient>
         </defs>
-        <rect x="1779.3333333333333" y="443" width="174.66666666666666" height="34" rx="8" fill="url(#barGrad_7)" stroke="#FFFFFF" stroke-width="0.8" opacity="0.95" filter="url(#cardShadow)"/>
-        <text x="1866.6666666666665" y="465" class="gantt-bar-text" text-anchor="middle">S14 - S15 (2 Sem.)</text>
+        <rect x="1778.33" y="435" width="176.67" height="35" rx="8" fill="url(#ganttBarGrad_7)" stroke="#F43F5E" stroke-width="1.2" stroke-dasharray="4 2" opacity="0.45" filter="url(#cardShadow)"/>
+        <text x="1866.67" y="457" class="gantt-bar-text" text-anchor="middle">⏳ S14 - S15: Planificado (Fase 2)</text>
         
-        <g transform="translate(0, 487)">
-          <rect width="2240" height="54" fill="#130A2E" stroke="#231347" stroke-width="0.5"/>
-          <text x="30" y="24" class="gantt-text" font-weight="700">A9. Malla Zero Trust Tailscale WireGuard</text>
-          <text x="30" y="44" font-family="'Consolas', monospace" font-size="13" fill="#A78BFA">👤 Freddy Vásquez</text>
+        <g transform="translate(0, 479)">
+          <rect width="2240" height="53" fill="#130A2E" stroke="#211044" stroke-width="0.6"/>
+          <text x="25" y="24" class="gantt-row-title">A9. Malla Zero Trust Tailscale WireGuard</text>
+          <text x="25" y="42" class="gantt-row-sub">👤 Freddy Vásquez</text>
+          <rect x="415" y="13" width="130" height="26" rx="6" fill="#2A0E35" stroke="#C084FC" stroke-width="1.2"/>
+          <text x="480" y="31" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#E9D5FF" text-anchor="middle">⏳ PLANIFICADO</text>
         </g>
         
         <defs>
-          <linearGradient id="barGrad_8" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#EC4899"/>
-            <stop offset="100%" stop-color="#8B5CF6"/>
+          <linearGradient id="ganttBarGrad_8" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#9333EA"/>
+            <stop offset="100%" stop-color="#C084FC"/>
           </linearGradient>
         </defs>
-        <rect x="1872.6666666666665" y="497" width="81.33333333333333" height="34" rx="8" fill="url(#barGrad_8)" stroke="#FFFFFF" stroke-width="0.8" opacity="0.95" filter="url(#cardShadow)"/>
-        <text x="1913.3333333333333" y="519" class="gantt-bar-text" text-anchor="middle">S15 - S15 (1 Sem.)</text>
+        <rect x="1871.67" y="488" width="83.33" height="35" rx="8" fill="url(#ganttBarGrad_8)" stroke="#C084FC" stroke-width="1.2" stroke-dasharray="4 2" opacity="0.45" filter="url(#cardShadow)"/>
+        <text x="1913.33" y="510" class="gantt-bar-text" text-anchor="middle">⏳ S15: Planificado (Fase 2)</text>
         
-        <g transform="translate(0, 541)">
-          <rect width="2240" height="54" fill="#0F0724" stroke="#231347" stroke-width="0.5"/>
-          <text x="30" y="24" class="gantt-text" font-weight="700">A10. Pruebas QA, Auditoría & Defensa</text>
-          <text x="30" y="44" font-family="'Consolas', monospace" font-size="13" fill="#A78BFA">👤 Todo el Equipo</text>
+        <g transform="translate(0, 532)">
+          <rect width="2240" height="53" fill="#0D061F" stroke="#211044" stroke-width="0.6"/>
+          <text x="25" y="24" class="gantt-row-title">A10. Pruebas QA, Auditoría Forense & Defensa</text>
+          <text x="25" y="42" class="gantt-row-sub">👤 Todo el Equipo</text>
+          <rect x="415" y="13" width="130" height="26" rx="6" fill="#063520" stroke="#059669" stroke-width="1.2"/>
+          <text x="480" y="31" font-family="'Segoe UI', sans-serif" font-size="11.5" font-weight="bold" fill="#6EE7B7" text-anchor="middle">⏳ PLANIFICADO</text>
         </g>
         
         <defs>
-          <linearGradient id="barGrad_9" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#10B981"/>
-            <stop offset="100%" stop-color="#06B6D4"/>
+          <linearGradient id="ganttBarGrad_9" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#047857"/>
+            <stop offset="100%" stop-color="#10B981"/>
           </linearGradient>
         </defs>
-        <rect x="1966.0" y="551" width="268.0" height="34" rx="8" fill="url(#barGrad_9)" stroke="#FFFFFF" stroke-width="0.8" opacity="0.95" filter="url(#cardShadow)"/>
-        <text x="2100.0" y="573" class="gantt-bar-text" text-anchor="middle">S16 - S18 (3 Sem.)</text>
+        <rect x="1965.00" y="541" width="270.00" height="35" rx="8" fill="url(#ganttBarGrad_9)" stroke="#059669" stroke-width="1.2" stroke-dasharray="4 2" opacity="0.45" filter="url(#cardShadow)"/>
+        <text x="2100.00" y="563" class="gantt-bar-text" text-anchor="middle">⏳ S16 - S18: Defensa (Fase 3)</text>
         
+
+      <!-- Marcador Vertical de Temporalidad Actual (Semana 6: S5-S6) -->
+      <line x1="1120" y1="0" x2="1120" y2="585" stroke="#EC4899" stroke-width="2.5" stroke-dasharray="6 4"/>
+      <rect x="1035" y="2" width="170" height="24" rx="5" fill="#BE185D" stroke="#F472B6" stroke-width="1.2"/>
+      <text x="1120" y="18" font-family="'Consolas', monospace" font-size="11.5" font-weight="bold" fill="#FFFFFF" text-anchor="middle">📍 HOY: SEMANA 6</text>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- 4. BANNER DE ESTADO Y ALINEACIÓN ACADÉMICA DUOC UC (y = 1485) -->
+  <!-- ========================================================================= -->
+  <g transform="translate(80, 1485)">
+    <rect width="2240" height="75" rx="12" fill="#100828" stroke="#372068" stroke-width="1.2" filter="url(#cardShadow)"/>
+    
+    <!-- Bloque 1: A1 Completado -->
+    <g transform="translate(30, 18)">
+      <circle cx="12" cy="20" r="10" fill="#059669"/>
+      <text x="12" y="24" font-family="'Segoe UI', sans-serif" font-size="12" font-weight="bold" fill="#FFFFFF" text-anchor="middle">✔</text>
+      <text x="32" y="16" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#34D399">Hito A1 (Semanas 1 - 2): 100% COMPLETADO &amp; PROBADO</text>
+      <text x="32" y="34" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">Setup pfSense CE 2.9.0 en Proxmox, interfaces WAN/LAN y kernel tuning FreeBSD.</text>
+    </g>
+
+    <!-- Bloque 2: A2 En Curso -->
+    <g transform="translate(780, 18)">
+      <circle cx="12" cy="20" r="10" fill="#2563EB"/>
+      <text x="12" y="24" font-family="'Segoe UI', sans-serif" font-size="12" font-weight="bold" fill="#FFFFFF" text-anchor="middle">⚙</text>
+      <text x="32" y="16" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#60A5FA">Hito A2 (Semanas 3 - 4): EN EJECUCIÓN (F. Vásquez)</text>
+      <text x="32" y="34" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">Segmentación 4 VLANs 802.1Q (Corp 10, DMZ 20, VoIP 30, Mgmt 99) y servidores DHCP.</text>
+    </g>
+
+    <!-- Bloque 3: Roadmap Fase 2 y 3 -->
+    <g transform="translate(1520, 18)">
+      <circle cx="12" cy="20" r="10" fill="#7C3AED"/>
+      <text x="12" y="24" font-family="'Segoe UI', sans-serif" font-size="12" font-weight="bold" fill="#FFFFFF" text-anchor="middle">⏳</text>
+      <text x="32" y="16" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#C4B5FD">Hitos A3 a A10 (S5 - S18): ROADMAP TÉCNICO PROYECTADO</text>
+      <text x="32" y="34" font-family="'Segoe UI', sans-serif" font-size="12.5" fill="#CBD5E1">Suricata Netmap, pfBlockerNG, HAProxy, Motor KRONOS AST, Asterisk y Gemini Live.</text>
     </g>
   </g>
 </svg>
