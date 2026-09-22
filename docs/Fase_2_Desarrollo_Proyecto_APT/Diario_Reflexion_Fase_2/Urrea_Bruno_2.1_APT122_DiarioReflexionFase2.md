@@ -10,10 +10,10 @@
 ### 1. Seguimiento de Carta Gantt y Cumplimiento de Cronograma
 > **¿Has podido cumplir todas las actividades en los tiempos definidos? ¿Qué factores han facilitado o dificultado el desarrollo de las actividades de tu plan de trabajo?**
 
-El cronograma establecido en la Carta Gantt se ha cumplido rigurosamente y dentro de los plazos proyectados para las semanas 5 a 15 de la asignatura.
+El cronograma establecido en la Carta Gantt oficial (Segundo Semestre 2026: Agosto a Diciembre 2026) se encuentra estructurado y ejecutándose rigurosamente dentro de los plazos proyectados. Tras culminar exitosamente la Fase 1 de Definición (Actividad A1: Setup Base pfSense y Netmap Tuning; Actividad A2: Segmentación VLANs 802.1Q), la Fase 2 de Desarrollo (Semanas 5 a 15) concentra la implementación del motor de prevención Suricata IPS, el proxy HAProxy, el Motor de Correlación KRONOS en Python y la centralita Asterisk PBX con Gemini Live.
 
 * **Factores facilitadores:** La amplia experiencia previa en virtualización con Proxmox VE y configuración de pfSense aceleró significativamente el despliegue del entorno base de laboratorio, la integración de HAProxy y el setup de Suricata en modo Inline IPS (Netmap).
-* **Factores de dificultad:** El principal desafío técnico consistió en afinar la correlación de eventos entre el archivo `eve.json` de Suricata y las tablas de estados de FreeBSD `pfctl`, debido a la alta tasa de ruido y firmas genéricas que generan falsas alertas en entornos de prueba web.
+* **Factores de dificultad:** El principal desafío técnico ha consistido en afinar la correlación de eventos entre el archivo `eve.json` de Suricata y las tablas de estados de FreeBSD `pfctl`, debido a la alta tasa de ruido y firmas genéricas que generan falsas alertas en entornos de prueba web.
 
 ---
 
