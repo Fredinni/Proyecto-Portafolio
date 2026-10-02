@@ -1,0 +1,8 @@
+Reinicio pfSense: 10:21:52
+WAN Engine started: 10:23:01
+Trunk Engine started: 10:23:02
+Prueba antes de estar listos: 3 marcadores HTTP404
+No fueron descartados: prueba FAIL
+Ventana observada: ~70 segundos, fail-open
+Después: tres descartes HTTP con EVE, controles200
+Diagnostico inicial corregido despues con el guard PF.

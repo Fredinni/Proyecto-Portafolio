@@ -1,71 +1,72 @@
-# Modulo de Tuning de Kernel y Setup Base pfSense CE 2.9.0
+# Auditoría de kernel y base pfSense — A1
 
-## Portafolio de Titulo (APT122) - Proyecto KRONOS SENTINEL
-* **Actividad segun Carta Gantt:** A1 - Setup Base pfSense & Netmap Tuning (Semanas 1 - 2)
-* **Responsable:** Bruno Urrea Ortiz (Lider de Ciberseguridad y Kernel)
-* **Colaborador:** Freddy Vasquez Cortes (Configuracion de Red e Interfaces)
+**Responsable:** Bruno Urrea Ortiz. **Colaborador:** Freddy Vasquez Cortes.
+Actividad: A1, Setup Base pfSense & Netmap Tuning, semanas 1–2.
 
----
+`verify_kernel_hardening.py` es una auditoría de lectura. Comprueba el sistema
+real; no modifica sysctl, interfaces ni el XML de pfSense. Ejecutarlo desde
+Windows o Linux devuelve `UNSUPPORTED` con código 2 y no genera valores
+simulados ni evidencia de éxito.
 
-## 1. Descripcion del Avance Tecnico
+## Comprobaciones
 
-En el marco de la **Actividad A1**, la responsabilidad del area de ciberseguridad consistio en acondicionar el sistema operativo FreeBSD 14 subyacente en pfSense CE 2.9.0 para soportar la operacion sin caidas ni degradacion de rendimiento de **Suricata 7.x en modo Inline IPS** mediante el subsistema de red `netmap(4)`.
+| Componente | Criterio | Fuente real |
+|---|---|---|
+| Cola de entrada IPv4 | `net.inet.ip.intr_queue_maxlen >= 4096` | `sysctl -n` |
+| Hash de estados pf | `net.pf.states_hashsize >= 131072` | `sysctl -n` |
+| Clusters mbuf | `kern.ipc.nmbclusters >= 1000000` | `sysctl -n` |
+| Checksum, TSO y LRO | Desactivados en configuración persistente | Flags de `system` en `/cf/conf/config.xml` |
+| Offloading de NIC | Sin RXCSUM/TXCSUM, TSO ni LRO habilitados | Campo **options** de `ifconfig`, nunca capabilities |
+| Netmap | `/dev/netmap` es un dispositivo de caracteres | `/bin/test -c /dev/netmap` |
+| Tunables históricos | fastforwarding=0, buf_size=2048, ring_size=4096 si existen | `sysctl -n` |
 
-El modo Inline tradicional en tarjetas de red virtuales suele fallar por corrupcion de paquetes cuando las caracteristicas de hardware offloading estan habilitadas. Este modulo provee la solucion tecnica formal implementada para el proyecto.
+Los OID históricos pueden estar ausentes en la versión instalada de
+FreeBSD/pfSense. Su ausencia explícita se registra como `UNSUPPORTED`, separada
+de `FAIL`; el resultado global es `PARTIAL`, nunca un PASS completo. Si existen
+con un valor incorrecto, fallan. Un error de permisos, timeout u otro fallo de
+comando también falla: no se confunde con un OID retirado. El perfil opcional
+`--require-legacy-oids` exige todos esos OID y convierte su ausencia en FAIL.
 
----
+Una tabla hash de 262144 cumple el mínimo sin reducirla a 131072. Los mínimos
+son el perfil de este proyecto; no son una garantía de rendimiento ni una
+recomendación universal de dimensionamiento. Cambios de memoria requieren
+revisar la RAM disponible y validar después del reboot.
 
-## 2. Ajustes de Kernel Aplicados
+## Ejecución en el pfSense desplegado
 
-### A. Desactivacion de Hardware Offloading
-Para habilitar el paso directo de paquetes hacia el ring-buffer de Netmap sin interferencias del driver o de la emulacion de hardware, se desactivaron las siguientes caracteristicas en pfSense (`System > Advanced > Networking`):
-1. **Hardware Checksum Offload (`disablechecksumoffloading: yes`):** Asegura que el checksum sea calculado por el stack y no por la NIC virtual, evitando falsos descartes.
-2. **Hardware TCP Segmentation Offload - TSO (`disablesegmentationoffloading: yes`):** Obligatorio para Netmap; si TSO esta activo, paquetes superiores a MTU 1500 rompen la memoria compartida del motor IPS.
-3. **Hardware Large Receive Offload - LRO (`disablelargereceiveoffloading: yes`):** Previene que la NIC agrupe paquetes entrantes antes de que Suricata pueda analizarlos individualmente.
-
-### B. Parametros de Boot Loader (`/boot/loader.conf.local`)
-* `kern.ipc.nmbclusters="1000000"`: Incrementa la reserva de clusters de memoria mbuf a 1 millon para tolerar rafagas de escaneos y ataques sin saturacion de memoria.
-* `hw.netmap.buf_size="2048"`: Estandariza los buffers de intercambio entre interfaz y Suricata.
-* `hw.netmap.ring_size="4096"`: Cuadruplica el tamano de los anillos RX/TX para eliminar latencia en el descarte de paquetes maliciosos.
-
-### C. Variables Dinamicas de Kernel (`sysctl`)
-* `net.inet.ip.fastforwarding=0`: Garantiza que ningun paquete IPv4 sea reenviado por ruta rapida sin cruzar el motor Packet Filter (`pf`) y la tabla `<snort2c>`.
-* `net.pf.states_hashsize=131072`: Dimensiona la tabla de hash de estados en memoria RAM para rastreo eficiente de conexiones.
-
----
-
-## 3. Archivos del Modulo
-
-* `kernel_netmap_tuning.sh`: Script en shell FreeBSD para automatizar la inyeccion de parametros en `/boot/loader.conf.local` y aplicar `sysctl` en caliente.
-* `pfsense_tuning_patch.xml`: Fragmento XML exportable para importar las politicas de hardware offloading y variables de sistema en pfSense WebGUI.
-* `verify_kernel_hardening.py`: Herramienta de auditoria tecnica que evalua el cumplimiento de cada parametro y exporta el reporte JSON de evidencia.
-* `evidencia_avance_A1_bruno.json`: Reporte de auditoria generado tras la ejecucion de pruebas tecnicas.
-
----
-
-## 4. Ejecucion y Verificacion
-
-Para verificar los parametros en consola de pfSense o en entorno de desarrollo:
-
-```bash
-python verify_kernel_hardening.py
+```sh
+python3.11 verify_kernel_hardening.py --interface vtnet0 --interface vtnet1
 ```
 
-Salida esperada:
-```text
-[1] Verificacion de Parametros de Kernel (sysctl):
-  - net.inet.ip.fastforwarding: 0 -> [PASS]
-  - net.inet.ip.intr_queue_maxlen: 4096 -> [PASS]
-  - net.pf.states_hashsize: 131072 -> [PASS]
+Sin `--interface`, se audita la WAN identificada en `config.xml`. Se pueden
+repetir las interfaces para comprobar también el trunk. Para exportar evidencia
+nueva explícitamente:
 
-[2] Verificacion de Hardware Offloading (Advanced > Networking):
-  - Hardware Checksum Offload: Desactivado -> [CONFIGURADO]
-  - Hardware TCP Segmentation Offload (TSO): Desactivado -> [CONFIGURADO]
-  - Hardware Large Receive Offload (LRO): Desactivado -> [CONFIGURADO]
-
-[3] Dimensionamiento de Memoria para Netmap:
-  - kern.ipc.nmbclusters: 1000000 (Buffer disponible para rafagas)
-  - hw.netmap.ring_size: 4096 (Anillo de descriptores sin latencia)
-
-[OK] Evidencia tecnica exportada: evidencia_avance_A1_bruno.json
+```sh
+python3.11 verify_kernel_hardening.py --interface vtnet0 --interface vtnet1 \
+  --json --output /root/kronos-a1-audit-20261001.json
 ```
+
+La salida JSON contiene observaciones, códigos de salida de los comandos y un
+resumen de PASS/FAIL/UNSUPPORTED. Nunca serializa el XML completo ni credenciales.
+Códigos de salida: **0** todas las comprobaciones PASS; **1** al menos un FAIL o
+error al escribir evidencia; **2** comprobaciones no soportadas sin otros fallos.
+No se escribe ningún archivo por defecto. Un destino existente se rechaza salvo
+que se indique `--overwrite`; la evidencia histórica del repositorio permanece
+intacta.
+
+## Alcance de la evidencia
+
+La auditoría verifica prerrequisitos de kernel/offloading y la presencia del
+dispositivo Netmap. **No verifica Suricata Inline, bloqueo de ataques, carga,
+latencia ni persistencia tras reiniciar.** Esas pruebas requieren evidencia
+separada sobre la VM desplegada. La versión de FreeBSD se obtiene en cada
+reporte y no se presupone a partir del número de versión de pfSense.
+
+`kernel_netmap_tuning.sh` y `pfsense_tuning_patch.xml` contienen el perfil
+histórico. Revisar compatibilidad antes de usarlos: no aplicar OID inexistentes
+ni asumir que incluir un valor en loader.conf significa que el kernel lo utiliza.
+`evidencia_avance_A1_bruno.json` es un artefacto histórico y no acredita por sí
+solo el estado actual; la versión anterior del verificador simulaba valores
+fuera de FreeBSD y declaraba offloading correcto sin medirlo. Se necesita una
+nueva ejecución real del verificador corregido.

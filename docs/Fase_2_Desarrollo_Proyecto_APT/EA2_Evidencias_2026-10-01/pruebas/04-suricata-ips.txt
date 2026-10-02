@@ -1,0 +1,11 @@
+After actual pfSense reboot: PASS
+Normal ICMP before:3/3 received
+Marker ICMP:0/3 received (expectedDROP)
+Normal ICMP after:3/3 received
+{"timestamp": "2026-10-01T20:18:28.940465-0300", "src_ip": "10.254.254.1", "dest_ip": "10.254.254.2", "alert": {"action": "blocked", "gid": 1, "signature_id": 1000001, "rev": 1, "signature": "KRONOS benign Netmap IPS test", "category": "", "severity": 3}, "verdict": {"action": "drop"}}
+{"timestamp": "2026-10-01T20:18:29.966163-0300", "src_ip": "10.254.254.1", "dest_ip": "10.254.254.2", "alert": {"action": "blocked", "gid": 1, "signature_id": 1000001, "rev": 1, "signature": "KRONOS benign Netmap IPS test", "category": "", "severity": 3}, "verdict": {"action": "drop"}}
+{"timestamp": "2026-10-01T20:18:30.990003-0300", "src_ip": "10.254.254.1", "dest_ip": "10.254.254.2", "alert": {"action": "blocked", "gid": 1, "signature_id": 1000001, "rev": 1, "signature": "KRONOS benign Netmap IPS test", "category": "", "severity": 3}, "verdict": {"action": "drop"}}
+80968 /usr/local/bin/suricata --netmap -D -c /usr/local/etc/suricata/suricata_49823_vtnet0/suricata.yaml --pidfile /var/run/suricata_vtnet049823.pid
+[100890 - Suricata-Main] 2026-10-01 20:17:00 Info: detect: 3 rule files processed. 22142 rules successfully loaded, 0 rules failed, 0 rules skipped
+[100890 - Suricata-Main] 2026-10-01 20:17:00 Info: detect: 22144 signatures processed. 0 are IP-only rules, 2191 are inspecting packet payload, 19755 inspect application layer, 110 are decoder event only
+[100890 - Suricata-Main] 2026-10-01 20:17:26 Notice: threads: Threads created -> RX: 2 W: 2 FM: 1 FR: 1   Engine started.

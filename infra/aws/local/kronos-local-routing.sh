@@ -74,6 +74,29 @@ net.ipv4.ip_forward=1
 net.ipv4.conf.all.rp_filter=2
 net.ipv4.conf.default.rp_filter=2
 SYSCTL
+    # wg-quick and this helper own table 51820 and policy priority 100.
+    # Ubuntu networkd must preserve those externally managed routes/rules
+    # when its DHCP uplink is renewed or networkd is restarted.
+    install -d -m 755 /etc/systemd/networkd.conf.d
+    cat > /etc/systemd/networkd.conf.d/90-kronos-policy-routing.conf <<'NETWORKD'
+[Network]
+ManageForeignRoutingPolicyRules=no
+ManageForeignRoutes=no
+NETWORKD
+    # Apply the drop-in before adding our policy. The dedicated guest keeps
+    # its existing netplan/DHCP configuration; its main gateway is unchanged.
+    if systemctl is-active --quiet systemd-networkd.service; then
+        systemctl restart systemd-networkd.service
+        for attempt in {1..30}; do
+            ip -4 route show default | awk -v expected="$UPLINK_IF" '
+              {for(i=1;i<=NF;i++) if($i=="dev" && $(i+1)==expected) found=1}
+              END {exit !found}' && break
+            sleep 1
+        done
+        ip -4 route show default | awk -v expected="$UPLINK_IF" '
+          {for(i=1;i<=NF;i++) if($i=="dev" && $(i+1)==expected) found=1}
+          END {exit !found}' || die 'DHCP uplink default route did not return after networkd restart.'
+    fi
     cat > /etc/systemd/system/kronos-local-routing.service <<'UNIT'
 [Unit]
 Description=KRONOS local WireGuard transit routing

@@ -1,0 +1,7 @@
+4 DHCP ACK correctos /24
+CORP .10.100 · DMZ .20.100
+VOIP .30.100 · MGMT .99.100
+Gateway y DNS de cada VLAN: .1
+3 controles negativos SSH: bloqueados
+5 accesos SSH desde MGMT: OK
+Resultado: 16 comprobaciones PASS

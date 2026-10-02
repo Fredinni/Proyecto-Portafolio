@@ -1,0 +1,17 @@
+DHCP: DISCOVER → OFFER → REQUEST → ACK (prueba real)
+[PASS] DMZ: DHCP DISCOVER/OFFER/REQUEST/ACK
+192.168.20.100/24; gateway/DNS ['192.168.20.1']; lease 3600s; RELEASE sent=True
+[PASS] VOIP: DHCP DISCOVER/OFFER/REQUEST/ACK
+192.168.30.100/24; gateway/DNS ['192.168.30.1']; lease 3600s; RELEASE sent=True
+[PASS] CORP: DHCP DISCOVER/OFFER/REQUEST/ACK
+192.168.10.100/24; gateway/DNS ['192.168.10.1']; lease 3600s; RELEASE sent=True
+[PASS] MGMT: DHCP DISCOVER/OFFER/REQUEST/ACK
+192.168.99.100/24; gateway/DNS ['192.168.99.1']; lease 3600s; RELEASE sent=True
+
+Aislamiento: pruebas TCP/22 con control positivo SSH
+[PASS] DMZ -> 192.168.99.10:22 denied
+TimeoutError: timed out; 4.0s; positive target SSH control=True
+[PASS] DMZ -> 192.168.10.50:22 denied
+TimeoutError: timed out; 4.0s; positive target SSH control=True
+[PASS] CORP -> 192.168.99.10:22 denied
+TimeoutError: timed out; 4.0s; positive target SSH control=True
