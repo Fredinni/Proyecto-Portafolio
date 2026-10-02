@@ -17,3 +17,17 @@ AGENTS.md
 GEMINI.md
 .build_tools/
 .venv/
+.kronos-secrets/
+secrets/
+*.private.key
+*.psk
+.env
+.env.*
+!.env.example
+credentials.json
+# Raw deployment evidence contains details of the production hypervisor.
+docs/AWS_EDGE_VALIDATION.txt
+infra/proxmox/evidence/*.txt
+infra/proxmox/inventory.json
+# Historical lab verifier bypassed TLS trust; keep it as private evidence.
+infra/proxmox/team-access/verify-pfsense-webgui-login.py

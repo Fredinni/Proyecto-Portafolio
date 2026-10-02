@@ -1,0 +1,134 @@
+{
+  "started_pc": "2026-10-02T19:25:19.143681+00:00",
+  "measured": {
+    "normal_before": {
+      "uri": "/login.php",
+      "rc": 0,
+      "http": "200",
+      "error": ""
+    },
+    "markers": [
+      {
+        "uri": "/.kronos-ips-test?run=20261002-0",
+        "rc": 28,
+        "http": "000",
+        "error": "curl: (28) Operation timed out after 5002 milliseconds with 0 bytes received"
+      },
+      {
+        "uri": "/.kronos-ips-test?run=20261002-1",
+        "rc": 28,
+        "http": "000",
+        "error": "curl: (28) Operation timed out after 5002 milliseconds with 0 bytes received"
+      },
+      {
+        "uri": "/.kronos-ips-test?run=20261002-2",
+        "rc": 28,
+        "http": "000",
+        "error": "curl: (28) Operation timed out after 5002 milliseconds with 0 bytes received"
+      }
+    ],
+    "normal_after": {
+      "uri": "/login.php",
+      "rc": 0,
+      "http": "200",
+      "error": ""
+    },
+    "gateway": "PING 192.168.99.1 (192.168.99.1) 56(84) bytes of data.\n64 bytes from 192.168.99.1: icmp_seq=1 ttl=64 time=0.549 ms\n64 bytes from 192.168.99.1: icmp_seq=2 ttl=64 time=0.725 ms\n\n--- 192.168.99.1 ping statistics ---\n2 packets transmitted, 2 received, 0% packet loss, time 1042ms\nrtt min/avg/max/mdev = 0.549/0.637/0.725/0.088 ms\n"
+  },
+  "fresh_eve": [
+    {
+      "timestamp": "2026-10-02T16:25:17.123813-0300",
+      "flow_id": 1655318472340167,
+      "in_iface": "vtnet1",
+      "event_type": "alert",
+      "vlan": [
+        99
+      ],
+      "src_ip": "192.168.99.10",
+      "src_port": 58454,
+      "dest_ip": "192.168.20.50",
+      "dest_port": 80,
+      "proto": "TCP",
+      "ip_v": 4,
+      "pkt_src": "wire/pcap",
+      "tx_id": 0,
+      "alert": {
+        "action": "blocked",
+        "gid": 1,
+        "signature_id": 1000002,
+        "rev": 1,
+        "signature": "KRONOS benign internal HTTP IPS test",
+        "category": "",
+        "severity": 3
+      },
+      "app_proto": "http",
+      "direction": "to_server",
+      "verdict": {
+        "action": "drop"
+      }
+    },
+    {
+      "timestamp": "2026-10-02T16:25:22.136494-0300",
+      "flow_id": 583019014644827,
+      "in_iface": "vtnet1",
+      "event_type": "alert",
+      "vlan": [
+        99
+      ],
+      "src_ip": "192.168.99.10",
+      "src_port": 58470,
+      "dest_ip": "192.168.20.50",
+      "dest_port": 80,
+      "proto": "TCP",
+      "ip_v": 4,
+      "pkt_src": "wire/pcap",
+      "tx_id": 0,
+      "alert": {
+        "action": "blocked",
+        "gid": 1,
+        "signature_id": 1000002,
+        "rev": 1,
+        "signature": "KRONOS benign internal HTTP IPS test",
+        "category": "",
+        "severity": 3
+      },
+      "app_proto": "http",
+      "direction": "to_server",
+      "verdict": {
+        "action": "drop"
+      }
+    },
+    {
+      "timestamp": "2026-10-02T16:25:27.151734-0300",
+      "flow_id": 2054483984814744,
+      "in_iface": "vtnet1",
+      "event_type": "alert",
+      "vlan": [
+        99
+      ],
+      "src_ip": "192.168.99.10",
+      "src_port": 51286,
+      "dest_ip": "192.168.20.50",
+      "dest_port": 80,
+      "proto": "TCP",
+      "ip_v": 4,
+      "pkt_src": "wire/pcap",
+      "tx_id": 0,
+      "alert": {
+        "action": "blocked",
+        "gid": 1,
+        "signature_id": 1000002,
+        "rev": 1,
+        "signature": "KRONOS benign internal HTTP IPS test",
+        "category": "",
+        "severity": 3
+      },
+      "app_proto": "http",
+      "direction": "to_server",
+      "verdict": {
+        "action": "drop"
+      }
+    }
+  ],
+  "status": "PASS"
+}

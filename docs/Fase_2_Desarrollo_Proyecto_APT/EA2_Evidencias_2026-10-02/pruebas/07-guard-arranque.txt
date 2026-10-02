@@ -1,0 +1,12 @@
+{
+  "checked_at": "2026-10-02T15:10:33.056867+00:00",
+  "summary": {
+    "samples": 27,
+    "boot_closed_samples": 10,
+    "uninspected_http200": 0,
+    "escaped_markers": 0,
+    "recovered": true,
+    "first_ready_after_reboot_seconds": 112.45
+  },
+  "status": "PASS"
+}

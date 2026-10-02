@@ -1,0 +1,55 @@
+[PASS] DMZ: IPv4 /24 + default gateway + gateway ping + DNS
+192.168.20.50/24; default ['192.168.20.1']; ping rc=0; DNS resolved
+
+[PASS] DMZ: DHCP DISCOVER/OFFER/REQUEST/ACK
+192.168.20.100/24; gateway/DNS ['192.168.20.1']; lease 3600s; RELEASE sent=True
+
+[PASS] VOIP: IPv4 /24 + default gateway + gateway ping + DNS
+192.168.30.50/24; default ['192.168.30.1']; ping rc=0; DNS resolved
+
+[PASS] VOIP: DHCP DISCOVER/OFFER/REQUEST/ACK
+192.168.30.100/24; gateway/DNS ['192.168.30.1']; lease 3600s; RELEASE sent=True
+
+[PASS] CORP: IPv4 /24 + default gateway + gateway ping + DNS
+192.168.10.50/24; default ['192.168.10.1']; ping rc=0; DNS resolved
+
+[PASS] CORP: DHCP DISCOVER/OFFER/REQUEST/ACK
+192.168.10.100/24; gateway/DNS ['192.168.10.1']; lease 3600s; RELEASE sent=True
+
+[PASS] MGMT: IPv4 /24 + default gateway + gateway ping + DNS
+192.168.99.10/24; default ['192.168.99.1']; ping rc=0; DNS resolved
+
+[PASS] MGMT: DHCP DISCOVER/OFFER/REQUEST/ACK
+192.168.99.100/24; gateway/DNS ['192.168.99.1']; lease 3600s; RELEASE sent=True
+
+[PASS] MGMT -> 192.168.10.50:22
+SSH-2.0-OpenSSH_9.6p1 Ubuntu-3ubuntu13.19
+
+
+
+[PASS] MGMT -> 192.168.20.50:22
+SSH-2.0-OpenSSH_9.6p1 Ubuntu-3ubuntu13.19
+
+
+
+[PASS] MGMT -> 192.168.30.50:22
+SSH-2.0-OpenSSH_9.6p1 Ubuntu-3ubuntu13.19
+
+
+
+[PASS] MGMT -> 10.254.254.1:22
+SSH-2.0-OpenSSH_9.6p1 Ubuntu-3ubuntu13.19
+
+
+
+[PASS] MGMT -> 192.168.99.1:8443
+TCP connected
+
+[PASS] DMZ -> 192.168.99.10:22 denied
+TimeoutError: timed out; 4.0s; positive target SSH control=True
+
+[PASS] DMZ -> 192.168.10.50:22 denied
+TimeoutError: timed out; 4.0s; positive target SSH control=True
+
+[PASS] CORP -> 192.168.99.10:22 denied
+TimeoutError: timed out; 4.0s; positive target SSH control=True

@@ -1,71 +1,110 @@
-# Modulo de Tuning de Kernel y Setup Base pfSense CE 2.9.0
+# Auditoría de kernel y base pfSense — A1
 
-## Portafolio de Titulo (APT122) - Proyecto KRONOS SENTINEL
-* **Actividad segun Carta Gantt:** A1 - Setup Base pfSense & Netmap Tuning (Semanas 1 - 2)
-* **Responsable:** Bruno Urrea Ortiz (Lider de Ciberseguridad y Kernel)
-* **Colaborador:** Freddy Vasquez Cortes (Configuracion de Red e Interfaces)
+**Responsable:** Bruno Urrea Ortiz. **Colaborador:** Freddy Vasquez Cortes.
+Actividad A1: Setup Base pfSense & Netmap Tuning, semanas 1–2.
 
----
+El verificador mide el kernel, el XML persistente y las opciones activas de
+las NIC. No aplica cambios, simula observaciones ni prueba el IPS por sí solo.
+La compatibilidad se declara por un perfil explícito; no se ocultan los
+resultados históricos para convertir una auditoría parcial en PASS.
 
-## 1. Descripcion del Avance Tecnico
+## Perfil actual: pfSense CE 2.9.0 / FreeBSD 16
 
-En el marco de la **Actividad A1**, la responsabilidad del area de ciberseguridad consistio en acondicionar el sistema operativo FreeBSD 14 subyacente en pfSense CE 2.9.0 para soportar la operacion sin caidas ni degradacion de rendimiento de **Suricata 7.x en modo Inline IPS** mediante el subsistema de red `netmap(4)`.
-
-El modo Inline tradicional en tarjetas de red virtuales suele fallar por corrupcion de paquetes cuando las caracteristicas de hardware offloading estan habilitadas. Este modulo provee la solucion tecnica formal implementada para el proyecto.
-
----
-
-## 2. Ajustes de Kernel Aplicados
-
-### A. Desactivacion de Hardware Offloading
-Para habilitar el paso directo de paquetes hacia el ring-buffer de Netmap sin interferencias del driver o de la emulacion de hardware, se desactivaron las siguientes caracteristicas en pfSense (`System > Advanced > Networking`):
-1. **Hardware Checksum Offload (`disablechecksumoffloading: yes`):** Asegura que el checksum sea calculado por el stack y no por la NIC virtual, evitando falsos descartes.
-2. **Hardware TCP Segmentation Offload - TSO (`disablesegmentationoffloading: yes`):** Obligatorio para Netmap; si TSO esta activo, paquetes superiores a MTU 1500 rompen la memoria compartida del motor IPS.
-3. **Hardware Large Receive Offload - LRO (`disablelargereceiveoffloading: yes`):** Previene que la NIC agrupe paquetes entrantes antes de que Suricata pueda analizarlos individualmente.
-
-### B. Parametros de Boot Loader (`/boot/loader.conf.local`)
-* `kern.ipc.nmbclusters="1000000"`: Incrementa la reserva de clusters de memoria mbuf a 1 millon para tolerar rafagas de escaneos y ataques sin saturacion de memoria.
-* `hw.netmap.buf_size="2048"`: Estandariza los buffers de intercambio entre interfaz y Suricata.
-* `hw.netmap.ring_size="4096"`: Cuadruplica el tamano de los anillos RX/TX para eliminar latencia en el descarte de paquetes maliciosos.
-
-### C. Variables Dinamicas de Kernel (`sysctl`)
-* `net.inet.ip.fastforwarding=0`: Garantiza que ningun paquete IPv4 sea reenviado por ruta rapida sin cruzar el motor Packet Filter (`pf`) y la tabla `<snort2c>`.
-* `net.pf.states_hashsize=131072`: Dimensiona la tabla de hash de estados en memoria RAM para rastreo eficiente de conexiones.
-
----
-
-## 3. Archivos del Modulo
-
-* `kernel_netmap_tuning.sh`: Script en shell FreeBSD para automatizar la inyeccion de parametros en `/boot/loader.conf.local` y aplicar `sysctl` en caliente.
-* `pfsense_tuning_patch.xml`: Fragmento XML exportable para importar las politicas de hardware offloading y variables de sistema en pfSense WebGUI.
-* `verify_kernel_hardening.py`: Herramienta de auditoria tecnica que evalua el cumplimiento de cada parametro y exporta el reporte JSON de evidencia.
-* `evidencia_avance_A1_bruno.json`: Reporte de auditoria generado tras la ejecucion de pruebas tecnicas.
-
----
-
-## 4. Ejecucion y Verificacion
-
-Para verificar los parametros en consola de pfSense o en entorno de desarrollo:
-
-```bash
-python verify_kernel_hardening.py
+```sh
+python3.11 verify_kernel_hardening.py --profile current \
+  --interface vtnet0 --interface vtnet1 --json
 ```
 
-Salida esperada:
-```text
-[1] Verificacion de Parametros de Kernel (sysctl):
-  - net.inet.ip.fastforwarding: 0 -> [PASS]
-  - net.inet.ip.intr_queue_maxlen: 4096 -> [PASS]
-  - net.pf.states_hashsize: 131072 -> [PASS]
+Este perfil comprueba primero `platform.system()`, `platform.release()` y el
+contenido real de `/etc/version`. Un sistema diferente, una versión distinta
+o un error de lectura produce FAIL; no existe un fallback de éxito.
 
-[2] Verificacion de Hardware Offloading (Advanced > Networking):
-  - Hardware Checksum Offload: Desactivado -> [CONFIGURADO]
-  - Hardware TCP Segmentation Offload (TSO): Desactivado -> [CONFIGURADO]
-  - Hardware Large Receive Offload (LRO): Desactivado -> [CONFIGURADO]
+| Componente | Criterio obligatorio | Fuente real |
+|---|---|---|
+| Routing IPv4 | `net.inet.ip.forwarding = 1` | `sysctl -n` |
+| Cola de entrada | `net.inet.ip.intr_queue_maxlen >= 4096` | `sysctl -n` |
+| Hash de estados | `net.pf.states_hashsize >= 131072` | `sysctl -n` |
+| Clusters mbuf | `kern.ipc.nmbclusters >= 1000000` | `sysctl -n` |
+| Buffer Netmap configurado | `dev.netmap.buf_size = 2048` | `sysctl -n` |
+| Buffer Netmap efectivo | `dev.netmap.buf_curr_size = 2048` | `sysctl -n` |
+| Objeto ring Netmap efectivo | `dev.netmap.ring_curr_size > 0` bytes | `sysctl -n` |
+| Checksum, TSO y LRO | Desactivados en configuración persistente | Flags `system` de `/cf/conf/config.xml` |
+| Offloading de NIC | Sin RXCSUM/TXCSUM, TSO ni LRO activos en cada NIC elegida | Campo `options` de `ifconfig`, nunca `capabilities` |
+| Dispositivo Netmap | `/dev/netmap` es un dispositivo de caracteres | `/bin/test -c /dev/netmap` |
 
-[3] Dimensionamiento de Memoria para Netmap:
-  - kern.ipc.nmbclusters: 1000000 (Buffer disponible para rafagas)
-  - hw.netmap.ring_size: 4096 (Anillo de descriptores sin latencia)
+Con WAN y trunk son **14 comprobaciones obligatorias**. Cualquier OID
+obligatorio ausente, valor incorrecto, comando fallido o XML inválido falla.
+El tamaño `dev.netmap.ring_size` se registra como diagnóstico en bytes:
+**no representa 4096 descriptores de NIC** y no se fuerza a ese valor.
+Los mínimos de recursos son criterios del laboratorio; no garantizan
+rendimiento, ausencia de pérdidas ni una capacidad universal de conexiones.
 
-[OK] Evidencia tecnica exportada: evidencia_avance_A1_bruno.json
+`net.inet.ip.fastforwarding`, `hw.netmap.buf_size` y `hw.netmap.ring_size`
+pertenecen al perfil histórico. En el perfil actual sus resultados reales
+quedan en `legacy_diagnostics`, fuera del conjunto de aceptación. Su ausencia
+no se convierte en un PASS, ni se escribe un nombre retirado en loader.conf.
+Tampoco se inventa un reemplazo `net.inet.ip.tryforwarding`. La protección
+real se verifica con Packet Filter y pruebas separadas de Suricata/Netmap.
+
+## Perfil histórico: compatibilidad de la evidencia
+
+```sh
+python3.11 verify_kernel_hardening.py --profile legacy \
+  --interface vtnet0 --interface vtnet1 --json
 ```
+
+`legacy` sigue siendo el perfil predeterminado para mantener comparables las
+auditorías anteriores. En el kernel desplegado puede producir 9 PASS y
+3 UNSUPPORTED: los tres OID históricos ausentes hacen el resultado PARTIAL.
+No se modifica esa evidencia. Si un OID existe con un valor incorrecto o el
+comando falla por permisos/timeout, se registra FAIL. `--require-legacy-oids`
+exige también esos nombres y solamente puede usarse con el perfil `legacy`.
+
+## Scripts y persistencia
+
+`kernel_netmap_tuning.sh` ahora es un punto de entrada **solo lectura** que
+ejecuta el verificador con `--profile current`; ya no añade bloques repetidos
+a `/boot/loader.conf.local`, escribe `/etc/sysctl.conf` ni anuncia cambios
+de offloading sin medirlos. Requiere `python3.11` y devuelve el código real
+de la auditoría.
+
+`pfsense_tuning_patch.xml` es un **fragmento de referencia**, no un respaldo
+restaurable. Contiene solamente flags de offloading y los tres mínimos de
+recursos, con la estructura nativa `sysctl/item`. No cambia hostname, SSH,
+gateway, reglas o asignaciones de interfaces. Aplicar valores por los
+controles nativos de pfSense después de un backup, preservando cualquier
+valor actual mayor que el mínimo. No impone los tamaños del allocator
+Netmap. Los controles son **System → Advanced → Networking** para
+offloading y **System → Advanced → System Tunables** para los tunables.
+La persistencia efectiva requiere medir nuevamente después de reiniciar.
+
+## Evidencia y códigos de salida
+
+```sh
+python3.11 verify_kernel_hardening.py --profile current \
+  --interface vtnet0 --interface vtnet1 --json \
+  --output /root/kronos-a1-current-audit.json
+```
+
+No se escribe evidencia por defecto. Un archivo existente se rechaza salvo
+`--overwrite`; los reportes contienen solo observaciones no secretas, nunca
+el XML completo. Códigos: **0** aceptación PASS; **1** algún FAIL o error al
+guardar; **2** perfil histórico con UNSUPPORTED sin otros fallos. El perfil
+actual devuelve FAIL en Windows/Linux; el histórico devuelve UNSUPPORTED.
+
+`evidencia_avance_A1_bruno.json` es histórica: la versión original simulaba
+valores fuera de FreeBSD y no medía offloading. No acredita el estado actual.
+
+## Pruebas del verificador y alcance
+
+```sh
+python -m unittest discover -s src/pfsense_setup/tests -v
+```
+
+Los tests cubren perfiles, OID obligatorio ausente, buffers diferentes,
+ring efectivo vacío, forwarding deshabilitado, valores inválidos, errores de
+comando, plataformas incompatibles y distinción entre capabilities y options.
+Son pruebas del parser/criterios, no evidencia de la VM. Un PASS de A1 no
+demuestra bloqueo de ataques, logs, carga, latencia o persistencia del IPS:
+esas comprobaciones requieren ejecutar el healthcheck y tráfico de prueba
+sobre las instancias reales WAN y trunk.
