@@ -1,39 +1,22 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
-  KRONOS SENTINEL - Fragmento de Configuración pfSense CE 2.9.0
-  Actividad Gantt: A1 - Setup Base pfSense & Netmap Tuning
-  Responsable: Bruno Urrea Ortiz (Líder Ciberseguridad & Kernel)
+  KRONOS A1 supported profile: pfSense CE 2.9.0 / FreeBSD 16.
+  REFERENCE FRAGMENT ONLY: NEVER restore this as a complete config.xml.
+  Merge only named settings through native pfSense controls after backing up
+  the existing configuration and checking runtime compatibility/RAM.
+  Keep any existing resource setting that exceeds these minima.
+  Netmap buffer/ring allocator values are measured, not overwritten here.
+  No host identity, SSH, gateway, firewall, or interface assignment changes.
 -->
 <pfsense>
   <system>
-    <hostname>kronos-firewall</hostname>
-    <domain>kronos.local</domain>
-    <timeservers>0.pfsense.pool.ntp.org</timeservers>
-    <!-- Hardware Offloading Tuning (Requerido para Netmap Inline IPS) -->
     <disablechecksumoffloading>yes</disablechecksumoffloading>
     <disablesegmentationoffloading>yes</disablesegmentationoffloading>
     <disablelargereceiveoffloading>yes</disablelargereceiveoffloading>
-    <enablessh>enabled</enablessh>
-    <ssh>
-      <port>2222</port>
-      <sshdkeyonly>enabled</sshdkeyonly>
-    </ssh>
   </system>
-  <system_tunables>
-    <tunable>
-      <tunable>net.inet.ip.fastforwarding</tunable>
-      <value>0</value>
-      <descr>Desactivar IP Fastforwarding para forzar paso por Packet Filter y Netmap</descr>
-    </tunable>
-    <tunable>
-      <tunable>kern.ipc.nmbclusters</tunable>
-      <value>1000000</value>
-      <descr>Ampliar buffers mbuf para prevenir agotamiento por ráfagas de red</descr>
-    </tunable>
-    <tunable>
-      <tunable>net.pf.states_hashsize</tunable>
-      <value>131072</value>
-      <descr>Hashsize de estados de pf para alta concurrencia de conexiones</descr>
-    </tunable>
-  </system_tunables>
+  <sysctl>
+    <item><tunable>net.inet.ip.intr_queue_maxlen</tunable><value>4096</value><descr>KRONOS A1 IPv4 input queue minimum</descr></item>
+    <item><tunable>kern.ipc.nmbclusters</tunable><value>1000000</value><descr>KRONOS A1 mbuf cluster minimum; validate available RAM</descr></item>
+    <item><tunable>net.pf.states_hashsize</tunable><value>131072</value><descr>KRONOS A1 state hash minimum; preserve higher existing values</descr></item>
+  </sysctl>
 </pfsense>

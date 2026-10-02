@@ -23,6 +23,17 @@ CRITICAL_SYSCTLS = {
     "hw.netmap.buf_size": {"expected": 2048, "optional": True},
     "hw.netmap.ring_size": {"expected": 4096, "optional": True},
 }
+CURRENT_SYSCTLS = {
+    "net.inet.ip.forwarding": {"expected": 1},
+    "net.inet.ip.intr_queue_maxlen": {"minimum": 4096},
+    "net.pf.states_hashsize": {"minimum": 131072},
+    "kern.ipc.nmbclusters": {"minimum": 1000000},
+    "dev.netmap.buf_size": {"expected": 2048},
+    "dev.netmap.buf_curr_size": {"expected": 2048},
+    "dev.netmap.ring_curr_size": {"minimum": 1},
+}
+LEGACY_OIDS = ("net.inet.ip.fastforwarding", "hw.netmap.buf_size",
+               "hw.netmap.ring_size")
 OFFLOAD_SETTINGS = {
     "checksum": "disablechecksumoffloading",
     "tso": "disablesegmentationoffloading",
@@ -86,24 +97,56 @@ def configured_offloads(config_path):
 
 
 def audit_kernel(config_path="/cf/conf/config.xml", interfaces=None,
-                 require_legacy=False):
+                 require_legacy=False, profile="legacy"):
+    if profile not in ("legacy", "current"):
+        raise ValueError("Unknown audit profile")
+    if profile == "current" and require_legacy:
+        raise ValueError("--require-legacy-oids applies only to --profile legacy")
     report = {
         "responsable": "Bruno Urrea Ortiz",
         "colaborador": "Freddy Vasquez Cortes",
         "actividad": "A1 - Setup Base pfSense & Netmap Tuning",
         "timestamp_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "system": platform.system(), "release": platform.release(),
+        "profile": profile,
         "items": [],
         "scope": "Kernel, offloading and Netmap device only; no Inline IPS test",
     }
     items = report["items"]
     if report["system"] != "FreeBSD":
         items.append(observation("platform", report["system"], "FreeBSD",
-                                 "UNSUPPORTED"))
+                                 "FAIL" if profile == "current" else "UNSUPPORTED"))
         summarize(report)
         return report
 
-    for key, spec in CRITICAL_SYSCTLS.items():
+    if profile == "current":
+        version = run_cmd(["/bin/cat", "/etc/version"])
+        report["pfsense_version"] = version["stdout"]
+        supported = (version["returncode"] == 0 and
+                     re.fullmatch(r"2\.9\.0(?:-[A-Za-z0-9._-]+)?", version["stdout"])
+                     is not None and
+                     re.match(r"^16\.", report["release"]) is not None)
+        items.append(observation("current profile platform",
+                                 {"pfsense": version["stdout"],
+                                  "FreeBSD": report["release"]},
+                                 "pfSense CE 2.9.0 on FreeBSD 16.x",
+                                 "PASS" if supported else "FAIL", command=version))
+        if not supported:
+            summarize(report)
+            return report
+        # These historical names do not define acceptance on this kernel.
+        # Keep their real command results, outside PASS/FAIL prerequisites.
+        report["legacy_diagnostics"] = [
+            {"oid": key, "command": run_cmd(["sysctl", "-n", key]),
+             "acceptance_requirement": False} for key in LEGACY_OIDS]
+        report["netmap_diagnostics"] = [{
+            "oid": "dev.netmap.ring_size", "unit": "bytes",
+            "command": run_cmd(["sysctl", "-n", "dev.netmap.ring_size"]),
+            "acceptance_requirement": False,
+            "note": "Allocator ring object size; not a NIC descriptor count or throughput guarantee",
+        }]
+    required_sysctls = CURRENT_SYSCTLS if profile == "current" else CRITICAL_SYSCTLS
+    for key, spec in required_sysctls.items():
         items.append(sysctl_check(key, spec, require_legacy))
 
     wan = None
@@ -167,6 +210,8 @@ def summarize(report):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", default="/cf/conf/config.xml")
+    parser.add_argument("--profile", choices=("legacy", "current"), default="legacy",
+                        help="legacy preserves historical reporting; current requires pfSense CE 2.9.0/FreeBSD 16")
     parser.add_argument("--interface", action="append", dest="interfaces",
                         help="Audit active NIC options (repeatable; default: WAN from XML)")
     parser.add_argument("--require-legacy-oids", action="store_true",
@@ -175,11 +220,15 @@ def main(argv=None):
     parser.add_argument("--output", help="Explicit evidence output path; existing files refused")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing --output file")
     args = parser.parse_args(argv)
-    report = audit_kernel(args.config, args.interfaces, args.require_legacy_oids)
+    if args.profile == "current" and args.require_legacy_oids:
+        parser.error("--require-legacy-oids applies only to --profile legacy")
+    report = audit_kernel(args.config, args.interfaces, args.require_legacy_oids,
+                          args.profile)
     if args.json:
         print(json.dumps(report, indent=2, ensure_ascii=False))
     else:
         print(f"KRONOS A1 audit | {report['system']} {report['release']}")
+        print(f"Profile: {report['profile']}")
         for item in report["items"]:
             print(f"[{item['status']}] {item['parametro']}: "
                   f"{item['valor_obtenido']!r}; expected {item['valor_esperado']!r}")
@@ -188,6 +237,8 @@ def main(argv=None):
                 print(f"  {error}")
         print(f"RESULT: {report['estado_general']} | {report['summary']}")
         print(report["scope"])
+        for diagnostic in report.get("legacy_diagnostics", []) + report.get("netmap_diagnostics", []):
+            print(f"[INFO] {diagnostic['oid']}: {diagnostic['command']!r}; not an acceptance requirement")
     if args.output:
         flags = os.O_WRONLY | os.O_CREAT | (os.O_TRUNC if args.overwrite else os.O_EXCL)
         try:

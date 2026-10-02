@@ -198,3 +198,17 @@ Se creo **baseline-s7-20261002** tras las pruebas finales. Es un snapshot sin me
 - [Reglas del guard en WebGUI](EA2_Evidencias_2026-10-02/configuraciones/08c-ips-readiness-guard.png) y [capacidad de tablas PF](EA2_Evidencias_2026-10-02/configuraciones/08d-pf-table-capacity.png).
 
 La entrega contiene **26 capturas nativas de configuracion** y **12 resumenes visuales de pruebas reales**, identificados como transcripciones y no como consolas nativas. La PPT tiene tres diapositivas; conserva responsables y fechas de la Gantt, desviaciones y criterios medibles. A4 base queda configurada y probada antes del cierre S8. No se acredita participacion personal por ejecutar automatizaciones. A5-A10, pruebas prolongadas, falsos positivos y garantia ante fallos simultaneos siguen fuera de lo validado.
+
+
+## Correccion final de compatibilidad A1 - perfil actual
+
+Se ejecuta directamente en pfSense CE 2.9.0 / FreeBSD 16 el nuevo perfil explicito `--profile current`: **14 PASS, 0 FAIL, 0 UNSUPPORTED**. Comprueba version, forwarding=1, recursos de colas/mbufs/PF, buffers efectivos Netmap de 2048 bytes, allocator de rings positivo, flags persistentes y opciones reales de las dos NIC, y dispositivo Netmap. No simula valores ni cuenta los tres OID retirados como PASS: los conserva como diagnostico separado. El perfil `legacy` mantiene su resultado historico PARTIAL.
+
+El antiguo `fastforwarding` no tiene un reemplazo sysctl que deba instalarse: el forwarding moderno sigue pasando por los hooks de filtrado. Los nombres actuales de buffers son `dev.netmap.buf_size` y `dev.netmap.buf_curr_size`. Los rings del allocator medidos en 36864 bytes no son 4096 descriptores. El arranque del driver muestra TX256/RX512 slots en las dos NIC. Las fuentes primarias y criterios estan enlazados en `src/pfsense_setup/README.md`.
+
+Se corrigen el script de tuning y el fragmento XML del repositorio: ya no agregan parametros inexistentes ni cambian identidad o SSH. El script realiza una auditoria real de lectura; no declara garantias de inspeccion sin medirla. **14 pruebas unitarias** verifican que parametros obligatorios ausentes, valores incorrectos, offloading activo, permisos y plataforma incompatible produzcan FAIL.
+
+Se repiten pruebas funcionales en la tarde del 2 de octubre: A2 16 PASS; A3 tres descartes nuevos por sensor y controles normales; A4 tres incrementos nuevos por cada regla. No se reetiquetan eventos antiguos como nuevos. [Evidencia de A1 compatible](EA2_Evidencias_2026-10-02/pruebas/10-a1-compatible.png). La entrega actual contiene 26 capturas de configuracion y 13 resumenes de pruebas. La incompatibilidad del perfil antiguo queda resuelta para la aceptacion del sistema actual; no queda un defecto funcional A1 atribuido a esos OID. Las actividades futuras de la Gantt no se presentan como ya realizadas.
+
+
+Se instalo y ejecuto en pfSense `/usr/local/libexec/kronos-a1/kernel_netmap_tuning.sh --interface vtnet0 --interface vtnet1 --json`: sintaxis POSIX y auditoria compatibles PASS14/14. La repeticion de fallos de sensores de la tarde tambien paso: cierre observado WAN **0,926 s** e interno **1,177 s**, administracion preservada y recuperacion correcta de ambos sensores y del worker. El guard termino **READY**, sin hold, con los dos motores preparados. Se eliminaron claves temporales del operador y se restauro la tailnet del equipo en esta PC.

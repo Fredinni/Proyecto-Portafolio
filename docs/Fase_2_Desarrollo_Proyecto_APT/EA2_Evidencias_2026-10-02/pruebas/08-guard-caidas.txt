@@ -1,6 +1,6 @@
 {
-  "WAN_cierre_segundos": 0.961,
-  "Trunk_cierre_segundos": 0.637,
+  "WAN_cierre_segundos": 0.926,
+  "Trunk_cierre_segundos": 1.177,
   "WAN_admin": {
     "rc": 0,
     "http": "200"

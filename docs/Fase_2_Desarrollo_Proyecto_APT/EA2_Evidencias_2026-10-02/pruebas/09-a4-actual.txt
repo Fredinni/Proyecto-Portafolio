@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-02T15:12:42.719917+00:00",
+  "checked_at": "2026-10-02T19:27:40.441102+00:00",
   "tests": [
     {
       "test": "Spamhaus WAN block",

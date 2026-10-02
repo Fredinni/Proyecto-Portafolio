@@ -1,72 +1,110 @@
 # Auditoría de kernel y base pfSense — A1
 
 **Responsable:** Bruno Urrea Ortiz. **Colaborador:** Freddy Vasquez Cortes.
-Actividad: A1, Setup Base pfSense & Netmap Tuning, semanas 1–2.
+Actividad A1: Setup Base pfSense & Netmap Tuning, semanas 1–2.
 
-`verify_kernel_hardening.py` es una auditoría de lectura. Comprueba el sistema
-real; no modifica sysctl, interfaces ni el XML de pfSense. Ejecutarlo desde
-Windows o Linux devuelve `UNSUPPORTED` con código 2 y no genera valores
-simulados ni evidencia de éxito.
+El verificador mide el kernel, el XML persistente y las opciones activas de
+las NIC. No aplica cambios, simula observaciones ni prueba el IPS por sí solo.
+La compatibilidad se declara por un perfil explícito; no se ocultan los
+resultados históricos para convertir una auditoría parcial en PASS.
 
-## Comprobaciones
+## Perfil actual: pfSense CE 2.9.0 / FreeBSD 16
 
-| Componente | Criterio | Fuente real |
+```sh
+python3.11 verify_kernel_hardening.py --profile current \
+  --interface vtnet0 --interface vtnet1 --json
+```
+
+Este perfil comprueba primero `platform.system()`, `platform.release()` y el
+contenido real de `/etc/version`. Un sistema diferente, una versión distinta
+o un error de lectura produce FAIL; no existe un fallback de éxito.
+
+| Componente | Criterio obligatorio | Fuente real |
 |---|---|---|
-| Cola de entrada IPv4 | `net.inet.ip.intr_queue_maxlen >= 4096` | `sysctl -n` |
-| Hash de estados pf | `net.pf.states_hashsize >= 131072` | `sysctl -n` |
+| Routing IPv4 | `net.inet.ip.forwarding = 1` | `sysctl -n` |
+| Cola de entrada | `net.inet.ip.intr_queue_maxlen >= 4096` | `sysctl -n` |
+| Hash de estados | `net.pf.states_hashsize >= 131072` | `sysctl -n` |
 | Clusters mbuf | `kern.ipc.nmbclusters >= 1000000` | `sysctl -n` |
-| Checksum, TSO y LRO | Desactivados en configuración persistente | Flags de `system` en `/cf/conf/config.xml` |
-| Offloading de NIC | Sin RXCSUM/TXCSUM, TSO ni LRO habilitados | Campo **options** de `ifconfig`, nunca capabilities |
-| Netmap | `/dev/netmap` es un dispositivo de caracteres | `/bin/test -c /dev/netmap` |
-| Tunables históricos | fastforwarding=0, buf_size=2048, ring_size=4096 si existen | `sysctl -n` |
+| Buffer Netmap configurado | `dev.netmap.buf_size = 2048` | `sysctl -n` |
+| Buffer Netmap efectivo | `dev.netmap.buf_curr_size = 2048` | `sysctl -n` |
+| Objeto ring Netmap efectivo | `dev.netmap.ring_curr_size > 0` bytes | `sysctl -n` |
+| Checksum, TSO y LRO | Desactivados en configuración persistente | Flags `system` de `/cf/conf/config.xml` |
+| Offloading de NIC | Sin RXCSUM/TXCSUM, TSO ni LRO activos en cada NIC elegida | Campo `options` de `ifconfig`, nunca `capabilities` |
+| Dispositivo Netmap | `/dev/netmap` es un dispositivo de caracteres | `/bin/test -c /dev/netmap` |
 
-Los OID históricos pueden estar ausentes en la versión instalada de
-FreeBSD/pfSense. Su ausencia explícita se registra como `UNSUPPORTED`, separada
-de `FAIL`; el resultado global es `PARTIAL`, nunca un PASS completo. Si existen
-con un valor incorrecto, fallan. Un error de permisos, timeout u otro fallo de
-comando también falla: no se confunde con un OID retirado. El perfil opcional
-`--require-legacy-oids` exige todos esos OID y convierte su ausencia en FAIL.
+Con WAN y trunk son **14 comprobaciones obligatorias**. Cualquier OID
+obligatorio ausente, valor incorrecto, comando fallido o XML inválido falla.
+El tamaño `dev.netmap.ring_size` se registra como diagnóstico en bytes:
+**no representa 4096 descriptores de NIC** y no se fuerza a ese valor.
+Los mínimos de recursos son criterios del laboratorio; no garantizan
+rendimiento, ausencia de pérdidas ni una capacidad universal de conexiones.
 
-Una tabla hash de 262144 cumple el mínimo sin reducirla a 131072. Los mínimos
-son el perfil de este proyecto; no son una garantía de rendimiento ni una
-recomendación universal de dimensionamiento. Cambios de memoria requieren
-revisar la RAM disponible y validar después del reboot.
+`net.inet.ip.fastforwarding`, `hw.netmap.buf_size` y `hw.netmap.ring_size`
+pertenecen al perfil histórico. En el perfil actual sus resultados reales
+quedan en `legacy_diagnostics`, fuera del conjunto de aceptación. Su ausencia
+no se convierte en un PASS, ni se escribe un nombre retirado en loader.conf.
+Tampoco se inventa un reemplazo `net.inet.ip.tryforwarding`. La protección
+real se verifica con Packet Filter y pruebas separadas de Suricata/Netmap.
 
-## Ejecución en el pfSense desplegado
-
-```sh
-python3.11 verify_kernel_hardening.py --interface vtnet0 --interface vtnet1
-```
-
-Sin `--interface`, se audita la WAN identificada en `config.xml`. Se pueden
-repetir las interfaces para comprobar también el trunk. Para exportar evidencia
-nueva explícitamente:
+## Perfil histórico: compatibilidad de la evidencia
 
 ```sh
-python3.11 verify_kernel_hardening.py --interface vtnet0 --interface vtnet1 \
-  --json --output /root/kronos-a1-audit-20261001.json
+python3.11 verify_kernel_hardening.py --profile legacy \
+  --interface vtnet0 --interface vtnet1 --json
 ```
 
-La salida JSON contiene observaciones, códigos de salida de los comandos y un
-resumen de PASS/FAIL/UNSUPPORTED. Nunca serializa el XML completo ni credenciales.
-Códigos de salida: **0** todas las comprobaciones PASS; **1** al menos un FAIL o
-error al escribir evidencia; **2** comprobaciones no soportadas sin otros fallos.
-No se escribe ningún archivo por defecto. Un destino existente se rechaza salvo
-que se indique `--overwrite`; la evidencia histórica del repositorio permanece
-intacta.
+`legacy` sigue siendo el perfil predeterminado para mantener comparables las
+auditorías anteriores. En el kernel desplegado puede producir 9 PASS y
+3 UNSUPPORTED: los tres OID históricos ausentes hacen el resultado PARTIAL.
+No se modifica esa evidencia. Si un OID existe con un valor incorrecto o el
+comando falla por permisos/timeout, se registra FAIL. `--require-legacy-oids`
+exige también esos nombres y solamente puede usarse con el perfil `legacy`.
 
-## Alcance de la evidencia
+## Scripts y persistencia
 
-La auditoría verifica prerrequisitos de kernel/offloading y la presencia del
-dispositivo Netmap. **No verifica Suricata Inline, bloqueo de ataques, carga,
-latencia ni persistencia tras reiniciar.** Esas pruebas requieren evidencia
-separada sobre la VM desplegada. La versión de FreeBSD se obtiene en cada
-reporte y no se presupone a partir del número de versión de pfSense.
+`kernel_netmap_tuning.sh` ahora es un punto de entrada **solo lectura** que
+ejecuta el verificador con `--profile current`; ya no añade bloques repetidos
+a `/boot/loader.conf.local`, escribe `/etc/sysctl.conf` ni anuncia cambios
+de offloading sin medirlos. Requiere `python3.11` y devuelve el código real
+de la auditoría.
 
-`kernel_netmap_tuning.sh` y `pfsense_tuning_patch.xml` contienen el perfil
-histórico. Revisar compatibilidad antes de usarlos: no aplicar OID inexistentes
-ni asumir que incluir un valor en loader.conf significa que el kernel lo utiliza.
-`evidencia_avance_A1_bruno.json` es un artefacto histórico y no acredita por sí
-solo el estado actual; la versión anterior del verificador simulaba valores
-fuera de FreeBSD y declaraba offloading correcto sin medirlo. Se necesita una
-nueva ejecución real del verificador corregido.
+`pfsense_tuning_patch.xml` es un **fragmento de referencia**, no un respaldo
+restaurable. Contiene solamente flags de offloading y los tres mínimos de
+recursos, con la estructura nativa `sysctl/item`. No cambia hostname, SSH,
+gateway, reglas o asignaciones de interfaces. Aplicar valores por los
+controles nativos de pfSense después de un backup, preservando cualquier
+valor actual mayor que el mínimo. No impone los tamaños del allocator
+Netmap. Los controles son **System → Advanced → Networking** para
+offloading y **System → Advanced → System Tunables** para los tunables.
+La persistencia efectiva requiere medir nuevamente después de reiniciar.
+
+## Evidencia y códigos de salida
+
+```sh
+python3.11 verify_kernel_hardening.py --profile current \
+  --interface vtnet0 --interface vtnet1 --json \
+  --output /root/kronos-a1-current-audit.json
+```
+
+No se escribe evidencia por defecto. Un archivo existente se rechaza salvo
+`--overwrite`; los reportes contienen solo observaciones no secretas, nunca
+el XML completo. Códigos: **0** aceptación PASS; **1** algún FAIL o error al
+guardar; **2** perfil histórico con UNSUPPORTED sin otros fallos. El perfil
+actual devuelve FAIL en Windows/Linux; el histórico devuelve UNSUPPORTED.
+
+`evidencia_avance_A1_bruno.json` es histórica: la versión original simulaba
+valores fuera de FreeBSD y no medía offloading. No acredita el estado actual.
+
+## Pruebas del verificador y alcance
+
+```sh
+python -m unittest discover -s src/pfsense_setup/tests -v
+```
+
+Los tests cubren perfiles, OID obligatorio ausente, buffers diferentes,
+ring efectivo vacío, forwarding deshabilitado, valores inválidos, errores de
+comando, plataformas incompatibles y distinción entre capabilities y options.
+Son pruebas del parser/criterios, no evidencia de la VM. Un PASS de A1 no
+demuestra bloqueo de ataques, logs, carga, latencia o persistencia del IPS:
+esas comprobaciones requieren ejecutar el healthcheck y tráfico de prueba
+sobre las instancias reales WAN y trunk.
