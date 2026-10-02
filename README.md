@@ -26,6 +26,8 @@
 
 > **Corte actualizado: 2 de octubre de 2026 (semana 7).** La tabla siguiente conserva el registro histórico de semana 6. El [informe comprobado más reciente](docs/Fase_2_Desarrollo_Proyecto_APT/AVANCE_SEMANA7_2026-10-02.md) documenta A2 verificada, Suricata Inline probado en WAN y trunk interno y cuatro políticas de reputación/GeoIP aplicadas, con 26 capturas reales y PPT de tres diapositivas. El guard IPS corrigió la ventana inicial de arranque: ensayo final sin marcadores escapados y recuperación automática. A1 pasa 14 comprobaciones del perfil compatible pfSense 2.9 / FreeBSD 16; se conserva el informe del perfil antiguo con tres OID retirados, que no representan un IPS averiado. Las integraciones posteriores y pruebas prolongadas siguen pendientes.
 
+**Presentación recomendada para Evaluación 2:** [PPT, PDF y guion del equipo](docs/Fase_2_Desarrollo_Proyecto_APT/PRESENTACION_EA2_EQUIPO.md).
+
 > **Institución:** Duoc UC — Sede San Joaquín | **Carrera:** Ingeniería en Conectividad y Redes  
 > **Semestre Académico:** Segundo Semestre 2026 (Primavera 2026: Agosto – Diciembre 2026)  
 > **Temporalidad Actual:** Semana 6 (21 al 27 de Septiembre 2026) • Transición Fase 1 (S1-S4) a Fase 2 (S5-S15)
