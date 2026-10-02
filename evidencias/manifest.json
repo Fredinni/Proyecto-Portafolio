@@ -558,5 +558,54 @@
     "tipo": "pruebas",
     "coleccion": "2026-10-02",
     "sha256": "6c66ab214620d542447e049f982019ae46e5667bc30d1ade490e3c9f37780ef2"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ampliacion-A1-kernel-netmap.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Presentacion_Equipo_5_Slides_2026-10-02/pruebas/A1-kernel-netmap.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "81d6df19af88c172e27b938a3cccdeb34b16a7aadb502b84150aa4ccbe4cf197"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ampliacion-A2-dhcp-segmentacion.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Presentacion_Equipo_5_Slides_2026-10-02/pruebas/A2-dhcp-segmentacion.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "20a613368da918cb740af30862a970437fd4606b22e70a0e7004f049243e162b"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ampliacion-A3-guard-fallos-reinicio.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Presentacion_Equipo_5_Slides_2026-10-02/pruebas/A3-guard-fallos-reinicio.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "b41666601e74df73181a2a1fcc1d97c6e7cdafa4b5e334f667eed485b36e62be"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ampliacion-A3-ips-wan-interno.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Presentacion_Equipo_5_Slides_2026-10-02/pruebas/A3-ips-wan-interno.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "ccfdb04f9a3bc19462a560d2c25d22b5addc43f9c19eea7eced1afd9d20d2a5f"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ampliacion-A4-reputacion-geoip.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Presentacion_Equipo_5_Slides_2026-10-02/pruebas/A4-reputacion-geoip.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "f9a6939067cdda6c62685d88db7ca55307d9e351d622fe9b83e1ad2c8f4870bd"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ampliacion-Administracion-health-actual.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Presentacion_Equipo_5_Slides_2026-10-02/pruebas/Administracion-health-actual.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "357be489508ba1bd566c77b9d650dc16203ce5ad7e3e215aa502d1bba10f1d08"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ampliacion-Transporte-ip-original.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Presentacion_Equipo_5_Slides_2026-10-02/pruebas/Transporte-ip-original.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "df9db4a03721201235cef3c43d35eebfaa3d44d87450729c05e9b4aa4bc40204"
   }
 ]

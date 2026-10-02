@@ -1,0 +1,9 @@
+Resumen visual, no captura nativa de terminal.
+Fecha: 02/10/2026 · 12:20 Chile
+tcpdump wg0:    3 SYN
+tcpdump eth1:   3 SYN
+Origen público: igual
+Destino 10.254.254.2:80
+Sin SNAT entre ambos
+Preservación IP: PASS
+Fuentes: s7-source-preservation.json

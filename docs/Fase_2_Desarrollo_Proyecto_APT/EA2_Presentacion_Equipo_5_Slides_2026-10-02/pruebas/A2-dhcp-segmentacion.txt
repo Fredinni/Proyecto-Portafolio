@@ -1,0 +1,9 @@
+Resumen visual, no captura nativa de terminal.
+Fecha: 02/10/2026 · 16:25 Chile
+VLAN 10/20/30/99: ACK
+4 gateways/DNS:   PASS
+MGMT -> SSH:    5 PASS
+DMZ -> MGMT/CORP DENY
+CORP -> MGMT      DENY
+16 PASS / 0 FAIL
+Fuentes: a2-test-results.json

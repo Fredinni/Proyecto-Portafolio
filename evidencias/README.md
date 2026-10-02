@@ -10,7 +10,7 @@ Assets originales para las presentaciones del equipo: capturas de configuracion 
 |---|---:|---:|
 | [2026-09-27](2026-09-27/) | 6 | 3 |
 | [2026-10-01](2026-10-01/) | 22 | 10 |
-| [2026-10-02](2026-10-02/) | 26 | 13 |
+| [2026-10-02](2026-10-02/) | 26 | 20 |
 
 ## Uso en PowerPoint
 
@@ -69,6 +69,13 @@ Se mantienen ocultos los campos sensibles en las capturas de configuracion. No s
 - [ppt-a2.png](2026-10-02/pruebas/ppt-a2.png) - pruebas
 - [ppt-a3.png](2026-10-02/pruebas/ppt-a3.png) - pruebas
 - [ppt-a4.png](2026-10-02/pruebas/ppt-a4.png) - pruebas
+- [ampliacion-A1-kernel-netmap.png](2026-10-02/pruebas/ampliacion-A1-kernel-netmap.png) - pruebas
+- [ampliacion-A2-dhcp-segmentacion.png](2026-10-02/pruebas/ampliacion-A2-dhcp-segmentacion.png) - pruebas
+- [ampliacion-A3-guard-fallos-reinicio.png](2026-10-02/pruebas/ampliacion-A3-guard-fallos-reinicio.png) - pruebas
+- [ampliacion-A3-ips-wan-interno.png](2026-10-02/pruebas/ampliacion-A3-ips-wan-interno.png) - pruebas
+- [ampliacion-A4-reputacion-geoip.png](2026-10-02/pruebas/ampliacion-A4-reputacion-geoip.png) - pruebas
+- [ampliacion-Administracion-health-actual.png](2026-10-02/pruebas/ampliacion-Administracion-health-actual.png) - pruebas
+- [ampliacion-Transporte-ip-original.png](2026-10-02/pruebas/ampliacion-Transporte-ip-original.png) - pruebas
 
 ### 2026-10-01
 
