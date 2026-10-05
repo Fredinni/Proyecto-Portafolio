@@ -1,121 +1,255 @@
 #!/usr/bin/env python3
-"""
-KRONOS SENTINEL - Kernel Hardening & Netmap Verification Tool
-Responsable: Bruno Urrea Ortiz (Líder de Ciberseguridad)
-Actividad Gantt: A1 - Setup Base pfSense & Netmap Tuning (Semanas 1 - 2)
+"""Read-only audit of actual pfSense/FreeBSD prerequisites for A1.
 
-Este script audita los parámetros críticos del kernel de FreeBSD / pfSense CE
-para garantizar que la plataforma cumple con los requisitos previos de
-Suricata Inline IPS (Netmap) y prevención de colapso de buffer.
+This does not prove Suricata Inline works. No observations are simulated and
+historical evidence is never overwritten by default.
 """
 
-import sys
+import argparse
+import datetime
+import json
 import os
 import platform
+import re
 import subprocess
-import json
+import sys
+import xml.etree.ElementTree as ET
 
 CRITICAL_SYSCTLS = {
-    "net.inet.ip.fastforwarding": {
-        "expected": "0",
-        "rationale": "Fastforwarding hace bypass de inspección en Packet Filter (pf) y corrompe el flujo Netmap."
-    },
-    "net.inet.ip.intr_queue_maxlen": {
-        "expected": "4096",
-        "rationale": "Cola de entrada de red dimensionada para absorber ráfagas de paquetes."
-    },
-    "net.pf.states_hashsize": {
-        "expected": "131072",
-        "rationale": "Tabla de hash de estados de pf optimizada para alta concurrencia."
-    }
+    "net.inet.ip.fastforwarding": {"expected": 0, "optional": True},
+    "net.inet.ip.intr_queue_maxlen": {"minimum": 4096},
+    "net.pf.states_hashsize": {"minimum": 131072},
+    "kern.ipc.nmbclusters": {"minimum": 1000000},
+    "hw.netmap.buf_size": {"expected": 2048, "optional": True},
+    "hw.netmap.ring_size": {"expected": 4096, "optional": True},
 }
+CURRENT_SYSCTLS = {
+    "net.inet.ip.forwarding": {"expected": 1},
+    "net.inet.ip.intr_queue_maxlen": {"minimum": 4096},
+    "net.pf.states_hashsize": {"minimum": 131072},
+    "kern.ipc.nmbclusters": {"minimum": 1000000},
+    "dev.netmap.buf_size": {"expected": 2048},
+    "dev.netmap.buf_curr_size": {"expected": 2048},
+    "dev.netmap.ring_curr_size": {"minimum": 1},
+}
+LEGACY_OIDS = ("net.inet.ip.fastforwarding", "hw.netmap.buf_size",
+               "hw.netmap.ring_size")
+OFFLOAD_SETTINGS = {
+    "checksum": "disablechecksumoffloading",
+    "tso": "disablesegmentationoffloading",
+    "lro": "disablelargereceiveoffloading",
+}
+OFFLOAD_OPTION = re.compile(r"^(?:[RT]XCSUM(?:_IPV6)?|TSO(?:4|6)?|LRO)$")
 
-HARDWARE_OFFLOADING_CHECKS = [
-    ("Hardware Checksum Offload", "Desactivado (Requerido para Netmap)"),
-    ("Hardware TCP Segmentation Offload (TSO)", "Desactivado (Previene descarte erróneo de paquetes)"),
-    ("Hardware Large Receive Offload (LRO)", "Desactivado (Evita ensamblado en NIC que rompe firmas IPS)")
-]
 
-def run_cmd(cmd):
+def run_cmd(argv):
+    """Retain exit status/stderr; never treat unsuccessful commands as data."""
     try:
-        res = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        return res.stdout.strip()
-    except Exception as e:
-        return f"ERROR: {e}"
+        result = subprocess.run(
+            argv, check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            text=True, timeout=15,
+        )
+        return {"returncode": result.returncode, "stdout": result.stdout.strip(),
+                "stderr": result.stderr.strip()}
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        return {"returncode": None, "stdout": "", "stderr": str(exc)}
 
-def audit_kernel():
-    system = platform.system()
-    print("=" * 70)
-    print(" KRONOS SENTINEL // AUDITORÍA DE KERNEL & TUNING NETMAP")
-    print(" Responsable: Bruno Urrea Ortiz | Actividad A1 (Semanas 1-2)")
-    print(f" Entorno detectado: {system} ({platform.release()})")
-    print("=" * 70)
 
+def observation(name, value, expected, status, **details):
+    return {"parametro": name, "valor_obtenido": value,
+            "valor_esperado": expected, "status": status,
+            "cumplimiento": True if status == "PASS" else
+            False if status == "FAIL" else None, **details}
+
+
+def sysctl_check(key, spec, require_legacy=False):
+    result = run_cmd(["sysctl", "-n", key])
+    expected = (f">= {spec['minimum']}" if "minimum" in spec
+                else str(spec["expected"]))
+    if result["returncode"] != 0:
+        missing_oid = bool(re.search(r"unknown oid|unknown object|no such oid",
+                                     result["stderr"], re.IGNORECASE))
+        status = ("UNSUPPORTED" if missing_oid and spec.get("optional")
+                  and not require_legacy else "FAIL")
+        return observation(key, None, expected, status, command=result)
+    try:
+        value = int(result["stdout"])
+    except ValueError:
+        return observation(key, result["stdout"], expected, "FAIL",
+                           error="sysctl did not return an integer", command=result)
+    passed = (value >= spec["minimum"] if "minimum" in spec
+              else value == spec["expected"])
+    return observation(key, value, expected, "PASS" if passed else "FAIL",
+                       command=result)
+
+
+def configured_offloads(config_path):
+    """Return only nonsecret flags and WAN name; never serialize config.xml."""
+    root = ET.parse(config_path).getroot()
+    system = root.find("system")
+    values = {}
+    for label, key in OFFLOAD_SETTINGS.items():
+        element = system.find(key) if system is not None else None
+        values[label] = (element is not None and
+                         (element.text or "").strip().lower() in
+                         ("", "yes", "true", "1", "on"))
+    return values, root.findtext("interfaces/wan/if")
+
+
+def audit_kernel(config_path="/cf/conf/config.xml", interfaces=None,
+                 require_legacy=False, profile="legacy"):
+    if profile not in ("legacy", "current"):
+        raise ValueError("Unknown audit profile")
+    if profile == "current" and require_legacy:
+        raise ValueError("--require-legacy-oids applies only to --profile legacy")
     report = {
         "responsable": "Bruno Urrea Ortiz",
+        "colaborador": "Freddy Vasquez Cortes",
         "actividad": "A1 - Setup Base pfSense & Netmap Tuning",
-        "fase": "Fase 1 / Inicio Fase 2",
-        "estado_general": "PASS",
-        "items": []
+        "timestamp_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "system": platform.system(), "release": platform.release(),
+        "profile": profile,
+        "items": [],
+        "scope": "Kernel, offloading and Netmap device only; no Inline IPS test",
     }
+    items = report["items"]
+    if report["system"] != "FreeBSD":
+        items.append(observation("platform", report["system"], "FreeBSD",
+                                 "FAIL" if profile == "current" else "UNSUPPORTED"))
+        summarize(report)
+        return report
 
-    is_freebsd = "FreeBSD" in system
+    if profile == "current":
+        version = run_cmd(["/bin/cat", "/etc/version"])
+        report["pfsense_version"] = version["stdout"]
+        supported = (version["returncode"] == 0 and
+                     re.fullmatch(r"2\.9\.0(?:-[A-Za-z0-9._-]+)?", version["stdout"])
+                     is not None and
+                     re.match(r"^16\.", report["release"]) is not None)
+        items.append(observation("current profile platform",
+                                 {"pfsense": version["stdout"],
+                                  "FreeBSD": report["release"]},
+                                 "pfSense CE 2.9.0 on FreeBSD 16.x",
+                                 "PASS" if supported else "FAIL", command=version))
+        if not supported:
+            summarize(report)
+            return report
+        # These historical names do not define acceptance on this kernel.
+        # Keep their real command results, outside PASS/FAIL prerequisites.
+        report["legacy_diagnostics"] = [
+            {"oid": key, "command": run_cmd(["sysctl", "-n", key]),
+             "acceptance_requirement": False} for key in LEGACY_OIDS]
+        report["netmap_diagnostics"] = [{
+            "oid": "dev.netmap.ring_size", "unit": "bytes",
+            "command": run_cmd(["sysctl", "-n", "dev.netmap.ring_size"]),
+            "acceptance_requirement": False,
+            "note": "Allocator ring object size; not a NIC descriptor count or throughput guarantee",
+        }]
+    required_sysctls = CURRENT_SYSCTLS if profile == "current" else CRITICAL_SYSCTLS
+    for key, spec in required_sysctls.items():
+        items.append(sysctl_check(key, spec, require_legacy))
 
-    # 1. Sysctl Audit
-    print("\n[1] Verificación de Parámetros de Kernel (sysctl):")
-    for key, spec in CRITICAL_SYSCTLS.items():
-        if is_freebsd:
-            val = run_cmd(f"sysctl -n {key}")
-            passed = (val == spec["expected"])
-        else:
-            # Modo simulación / entorno de desarrollo
-            val = spec["expected"]
-            passed = True
+    wan = None
+    try:
+        flags, wan = configured_offloads(config_path)
+        for label, key in OFFLOAD_SETTINGS.items():
+            items.append(observation(f"config.system.{key}", flags[label],
+                                     True, "PASS" if flags[label] else "FAIL"))
+    except (OSError, ET.ParseError) as exc:
+        items.append(observation("config.xml", None, "Readable valid XML",
+                                 "FAIL", error=str(exc)))
 
-        status_str = "[PASS]" if passed else "[FAIL]"
-        print(f"  - {key}: {val} (Esperado: {spec['expected']}) -> {status_str}")
-        print(f"    Razon tecnica: {spec['rationale']}")
-        report["items"].append({
-            "parametro": key,
-            "valor_obtenido": val,
-            "valor_esperado": spec["expected"],
-            "cumplimiento": passed,
-            "justificacion": spec["rationale"]
-        })
+    selected_interfaces = interfaces or ([wan] if wan else [])
+    if not selected_interfaces:
+        items.append(observation("interface selection", None,
+                                 "WAN in config.xml or --interface", "FAIL"))
+    for interface in dict.fromkeys(selected_interfaces):
+        # Interface names are separate argv elements, never shell-interpolated.
+        if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_.:-]*", interface):
+            items.append(observation(f"ifconfig.{interface}", None,
+                                     "Valid interface name", "FAIL"))
+            continue
+        result = run_cmd(["ifconfig", interface])
+        if result["returncode"] != 0:
+            items.append(observation(f"ifconfig.{interface}", None,
+                                     "Readable active options", "FAIL", command=result))
+            continue
+        # capabilities= lists available features, NOT enabled offload options.
+        options = re.findall(r"\boptions[0-9]*=[0-9a-fA-Fx]+<([^>]*)>",
+                             result["stdout"])
+        if not options:
+            items.append(observation(f"ifconfig.{interface}.offloads", None,
+                                     "Enabled options visible", "FAIL",
+                                     error="No enabled options field in ifconfig output"))
+            continue
+        enabled = [option.strip() for group in options for option in group.split(",")]
+        active_offloads = [option for option in enabled if OFFLOAD_OPTION.fullmatch(option)]
+        items.append(observation(f"ifconfig.{interface}.offloads", active_offloads,
+                                 [], "FAIL" if active_offloads else "PASS",
+                                 enabled_options=enabled))
 
-    # 2. Hardware Offloading
-    print("\n[2] Verificacion de Hardware Offloading (Advanced > Networking):")
-    for name, desc in HARDWARE_OFFLOADING_CHECKS:
-        print(f"  - {name}: {desc} -> [CONFIGURADO]")
-        report["items"].append({
-            "componente": name,
-            "estado": "Desactivado",
-            "cumplimiento": True
-        })
-
-    # 3. Netmap Buffers & Mbufs
-    print("\n[3] Dimensionamiento de Memoria para Netmap:")
-    mbuf_clusters = "1000000" if not is_freebsd else run_cmd("sysctl -n kern.ipc.nmbclusters")
-    netmap_ring = "4096" if not is_freebsd else run_cmd("sysctl -n hw.netmap.ring_size")
-    print(f"  - kern.ipc.nmbclusters: {mbuf_clusters} (Buffer disponible para rafagas)")
-    print(f"  - hw.netmap.ring_size: {netmap_ring} (Anillo de descriptores sin latencia)")
-
-    report["netmap_tuning"] = {
-        "mbuf_clusters": mbuf_clusters,
-        "ring_size": netmap_ring,
-        "mode": "Inline IPS Ready"
-    }
-
-    print("\n" + "=" * 70)
-    print(" RESULTADO TECNICO: PLATAFORMA LISTA Y HARDENIZADA PARA SURICATA INLINE")
-    print("=" * 70)
-
-    # Export report to json for academic evidence
-    output_file = os.path.join(os.path.dirname(__file__), "evidencia_avance_A1_bruno.json")
-    with open(output_file, "w", encoding="utf-8") as f:
-        json.dump(report, f, indent=2, ensure_ascii=False)
-    print(f"\n[OK] Evidencia tecnica exportada: {output_file}")
+    netmap = run_cmd(["/bin/test", "-c", "/dev/netmap"])
+    items.append(observation("/dev/netmap", netmap["returncode"] == 0,
+                             "Character device present",
+                             "PASS" if netmap["returncode"] == 0 else "FAIL",
+                             command=netmap))
+    summarize(report)
     return report
 
+
+def summarize(report):
+    counts = {status: sum(item["status"] == status for item in report["items"])
+              for status in ("PASS", "FAIL", "UNSUPPORTED")}
+    report["summary"] = counts
+    report["estado_general"] = ("FAIL" if counts["FAIL"] else
+                                "PARTIAL" if counts["UNSUPPORTED"] and counts["PASS"] else
+                                "UNSUPPORTED" if counts["UNSUPPORTED"] else "PASS")
+    report["exit_code"] = (1 if counts["FAIL"] else 2 if counts["UNSUPPORTED"] else 0)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--config", default="/cf/conf/config.xml")
+    parser.add_argument("--profile", choices=("legacy", "current"), default="legacy",
+                        help="legacy preserves historical reporting; current requires pfSense CE 2.9.0/FreeBSD 16")
+    parser.add_argument("--interface", action="append", dest="interfaces",
+                        help="Audit active NIC options (repeatable; default: WAN from XML)")
+    parser.add_argument("--require-legacy-oids", action="store_true",
+                        help="Fail instead of UNSUPPORTED when legacy optional OIDs are absent")
+    parser.add_argument("--json", action="store_true", help="Print actual observations as JSON")
+    parser.add_argument("--output", help="Explicit evidence output path; existing files refused")
+    parser.add_argument("--overwrite", action="store_true", help="Allow replacing --output file")
+    args = parser.parse_args(argv)
+    if args.profile == "current" and args.require_legacy_oids:
+        parser.error("--require-legacy-oids applies only to --profile legacy")
+    report = audit_kernel(args.config, args.interfaces, args.require_legacy_oids,
+                          args.profile)
+    if args.json:
+        print(json.dumps(report, indent=2, ensure_ascii=False))
+    else:
+        print(f"KRONOS A1 audit | {report['system']} {report['release']}")
+        print(f"Profile: {report['profile']}")
+        for item in report["items"]:
+            print(f"[{item['status']}] {item['parametro']}: "
+                  f"{item['valor_obtenido']!r}; expected {item['valor_esperado']!r}")
+            error = item.get("error") or item.get("command", {}).get("stderr")
+            if error:
+                print(f"  {error}")
+        print(f"RESULT: {report['estado_general']} | {report['summary']}")
+        print(report["scope"])
+        for diagnostic in report.get("legacy_diagnostics", []) + report.get("netmap_diagnostics", []):
+            print(f"[INFO] {diagnostic['oid']}: {diagnostic['command']!r}; not an acceptance requirement")
+    if args.output:
+        flags = os.O_WRONLY | os.O_CREAT | (os.O_TRUNC if args.overwrite else os.O_EXCL)
+        try:
+            with os.fdopen(os.open(args.output, flags, 0o600), "w", encoding="utf-8") as stream:
+                json.dump(report, stream, indent=2, ensure_ascii=False)
+                stream.write("\n")
+        except OSError as exc:
+            print(f"Evidence output failed: {exc}", file=sys.stderr)
+            return 1
+    return report["exit_code"]
+
+
 if __name__ == "__main__":
-    audit_kernel()
+    sys.exit(main())

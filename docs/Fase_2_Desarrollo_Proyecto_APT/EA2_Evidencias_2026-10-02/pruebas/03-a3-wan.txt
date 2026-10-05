@@ -1,0 +1,98 @@
+{
+  "started": "2026-10-02T19:24:54.343982+00:00",
+  "measured": {
+    "before": {
+      "rc": 0,
+      "output": "PING 10.254.254.2 (10.254.254.2) 56(84) bytes of data.\n64 bytes from 10.254.254.2: icmp_seq=1 ttl=64 time=0.465 ms\n64 bytes from 10.254.254.2: icmp_seq=2 ttl=64 time=0.382 ms\n64 bytes from 10.254.254.2: icmp_seq=3 ttl=64 time=0.546 ms\n\n--- 10.254.254.2 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2079ms\nrtt min/avg/max/mdev = 0.382/0.464/0.546/0.066 ms\n"
+    },
+    "marker": {
+      "rc": 1,
+      "output": "PATTERN: 0x4b524f4e4f532d4950532d54455354\nPING 10.254.254.2 (10.254.254.2) 56(84) bytes of data.\n\n--- 10.254.254.2 ping statistics ---\n3 packets transmitted, 0 received, 100% packet loss, time 2044ms\n\n"
+    },
+    "after": {
+      "rc": 0,
+      "output": "PING 10.254.254.2 (10.254.254.2) 56(84) bytes of data.\n64 bytes from 10.254.254.2: icmp_seq=1 ttl=64 time=0.714 ms\n64 bytes from 10.254.254.2: icmp_seq=2 ttl=64 time=0.673 ms\n64 bytes from 10.254.254.2: icmp_seq=3 ttl=64 time=0.460 ms\n\n--- 10.254.254.2 ping statistics ---\n3 packets transmitted, 3 received, 0% packet loss, time 2029ms\nrtt min/avg/max/mdev = 0.460/0.615/0.714/0.111 ms\n"
+    }
+  },
+  "current_events": [
+    {
+      "timestamp": "2026-10-02T16:25:00.730018-0300",
+      "flow_id": 810439650091747,
+      "in_iface": "vtnet0",
+      "event_type": "alert",
+      "src_ip": "10.254.254.1",
+      "dest_ip": "10.254.254.2",
+      "proto": "ICMP",
+      "ip_v": 4,
+      "icmp_type": 8,
+      "icmp_code": 0,
+      "pkt_src": "wire/pcap",
+      "alert": {
+        "action": "blocked",
+        "gid": 1,
+        "signature_id": 1000001,
+        "rev": 1,
+        "signature": "KRONOS benign Netmap IPS test",
+        "category": "",
+        "severity": 3
+      },
+      "direction": "to_server",
+      "verdict": {
+        "action": "drop"
+      }
+    },
+    {
+      "timestamp": "2026-10-02T16:25:01.750303-0300",
+      "flow_id": 810439650091747,
+      "in_iface": "vtnet0",
+      "event_type": "alert",
+      "src_ip": "10.254.254.1",
+      "dest_ip": "10.254.254.2",
+      "proto": "ICMP",
+      "ip_v": 4,
+      "icmp_type": 8,
+      "icmp_code": 0,
+      "pkt_src": "wire/pcap",
+      "alert": {
+        "action": "blocked",
+        "gid": 1,
+        "signature_id": 1000001,
+        "rev": 1,
+        "signature": "KRONOS benign Netmap IPS test",
+        "category": "",
+        "severity": 3
+      },
+      "direction": "to_server",
+      "verdict": {
+        "action": "drop"
+      }
+    },
+    {
+      "timestamp": "2026-10-02T16:25:02.774359-0300",
+      "flow_id": 810439650091747,
+      "in_iface": "vtnet0",
+      "event_type": "alert",
+      "src_ip": "10.254.254.1",
+      "dest_ip": "10.254.254.2",
+      "proto": "ICMP",
+      "ip_v": 4,
+      "icmp_type": 8,
+      "icmp_code": 0,
+      "pkt_src": "wire/pcap",
+      "alert": {
+        "action": "blocked",
+        "gid": 1,
+        "signature_id": 1000001,
+        "rev": 1,
+        "signature": "KRONOS benign Netmap IPS test",
+        "category": "",
+        "severity": 3
+      },
+      "direction": "to_server",
+      "verdict": {
+        "action": "drop"
+      }
+    }
+  ],
+  "status": "PASS"
+}

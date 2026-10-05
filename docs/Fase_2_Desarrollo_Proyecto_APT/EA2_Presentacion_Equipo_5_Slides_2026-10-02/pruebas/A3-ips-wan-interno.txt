@@ -1,0 +1,9 @@
+Resumen visual, no captura nativa de terminal.
+Fecha: 02/10/2026 · 16:25 Chile
+WAN: 3 EVE blocked/drop
+Control WAN: 3/3 OK
+Trunk: 3 EVE blocked/drop
+HTTP normal: 200 / 200
+Marcadores: 3 timeouts
+WAN + trunk:     PASS
+Fuentes: a3-wan-postboot-20261002.json; a3-internal-test-20261002.json

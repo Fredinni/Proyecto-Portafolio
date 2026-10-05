@@ -1,0 +1,8 @@
+Spamhaus: 1.692 entradas PF
+GeoIP RU: 13.178 redes / KP: 10
+Prueba local benigna, sin atacar hosts:
+contador RU: 3 paquetes descartados
+contador KP: 3 paquetes descartados
+MaxMind 8.8.8.8 → país DB: US
+Origen de prueba temporal retirado
+FireHOL: solo consulta; contiene bogons

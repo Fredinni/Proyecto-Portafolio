@@ -1,0 +1,50 @@
+Baseline normal ICMP Edge -> pfSense WAN
+PING 10.254.254.2 (10.254.254.2) 56(84) bytes of data.
+64 bytes from 10.254.254.2: icmp_seq=1 ttl=64 time=0.564 ms
+64 bytes from 10.254.254.2: icmp_seq=2 ttl=64 time=0.822 ms
+64 bytes from 10.254.254.2: icmp_seq=3 ttl=64 time=0.358 ms
+
+--- 10.254.254.2 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2049ms
+rtt min/avg/max/mdev = 0.358/0.581/0.822/0.189 ms
+
+Temporary benign test source added to loaded reputation table (not persistent)
+1/1 addresses added.
+killed 1 states from 1 sources and 1 destinations
+
+Same ICMP while test source in block table
+PING 10.254.254.2 (10.254.254.2) 56(84) bytes of data.
+
+--- 10.254.254.2 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2048ms
+
+
+Actual logged PF rule counters
+@60 block drop in log quick on vtnet0 inet from <pfB_KRONOS_DROP_v4:1693> to any label "id=1790895585" label "tags=user_rule" label "descr=KRONOS A4 Spamhaus DROP WAN" ridentifier 1790895585
+  [ Evaluations: 9         Packets: 3         Bytes: 252         States: 0     ]
+  [ Source Nodes: 0      Limit: 0      NAT/RDR: 0      Route: 0      ]
+  [ Inserted: uid 0 pid 0 State Creations: 0     ]
+  [ Last Active Time: Thu Oct  1 20:00:30 2026 ]
+
+Cleanup: remove only temporary test source; reputation feed retained
+1/1 addresses deleted.
+
+After cleanup same ICMP
+PING 10.254.254.2 (10.254.254.2) 56(84) bytes of data.
+64 bytes from 10.254.254.2: icmp_seq=1 ttl=64 time=0.523 ms
+64 bytes from 10.254.254.2: icmp_seq=2 ttl=64 time=0.360 ms
+64 bytes from 10.254.254.2: icmp_seq=3 ttl=64 time=0.349 ms
+
+--- 10.254.254.2 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2082ms
+rtt min/avg/max/mdev = 0.349/0.410/0.523/0.079 ms
+
+GeoIP lookup from downloaded MaxMind DB (database country, not physical location)
+
+  "US" <utf8_string>
+
+    1693 /var/db/aliastables/pfB_KRONOS_DROP_v4.txt
+    4660 /var/db/aliastables/pfB_KRONOS_FIREHOL_v4.txt
+    6353 total
+
+Reputation block proof: PASS

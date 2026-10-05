@@ -1,0 +1,206 @@
+{
+  "as_of": "2026-10-02",
+  "captured_at": "2026-10-02T15:25:14.961737+00:00",
+  "certificate_pinned_via_trusted_ssh": true,
+  "captures": [
+    {
+      "file": "01-dashboard-interfaces.png",
+      "url": "https://192.168.99.1:8443/",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:31.615155+00:00"
+    },
+    {
+      "file": "01b-interfaces-resumen.png",
+      "url": "https://192.168.99.1:8443/",
+      "source": "actual browser GUI screenshot"
+    },
+    {
+      "file": "02-wan.png",
+      "url": "https://192.168.99.1:8443/interfaces.php?if=wan",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:33.416464+00:00"
+    },
+    {
+      "file": "03-vlan-8021q.png",
+      "url": "https://192.168.99.1:8443/interfaces_vlan.php",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:34.341828+00:00"
+    },
+    {
+      "file": "04-dhcp-VLAN99-MGMT.png",
+      "url": "https://192.168.99.1:8443/services_dhcp.php?if=lan",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:36.098145+00:00"
+    },
+    {
+      "file": "04-dhcp-VLAN10-CORP.png",
+      "url": "https://192.168.99.1:8443/services_dhcp.php?if=opt1",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:37.382483+00:00"
+    },
+    {
+      "file": "04-dhcp-VLAN20-DMZ.png",
+      "url": "https://192.168.99.1:8443/services_dhcp.php?if=opt2",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:38.930363+00:00"
+    },
+    {
+      "file": "04-dhcp-VLAN30-VOIP.png",
+      "url": "https://192.168.99.1:8443/services_dhcp.php?if=opt3",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:40.330266+00:00"
+    },
+    {
+      "file": "05-offloading.png",
+      "url": "https://192.168.99.1:8443/system_advanced_network.php",
+      "source": "actual browser GUI screenshot"
+    },
+    {
+      "file": "06-system-tunables.png",
+      "url": "https://192.168.99.1:8443/system_advanced_sysctl.php",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:42.494690+00:00"
+    },
+    {
+      "file": "07-rules-CORP.png",
+      "url": "https://192.168.99.1:8443/firewall_rules.php?if=opt1",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:43.605082+00:00"
+    },
+    {
+      "file": "08-rules-DMZ.png",
+      "url": "https://192.168.99.1:8443/firewall_rules.php?if=opt2",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:44.703964+00:00"
+    },
+    {
+      "file": "08b-rules-WAN-reputation.png",
+      "url": "https://192.168.99.1:8443/firewall_rules.php?if=wan",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:45.797830+00:00"
+    },
+    {
+      "file": "08c-ips-readiness-guard.png",
+      "url": "https://192.168.99.1:8443/firewall_rules.php?if=FloatingRules",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:46.860037+00:00"
+    },
+    {
+      "file": "08d-pf-table-capacity.png",
+      "url": "https://192.168.99.1:8443/system_advanced_firewall.php",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:48.312087+00:00"
+    },
+    {
+      "file": "09-suricata-interfaces.png",
+      "url": "https://192.168.99.1:8443/suricata/suricata_interfaces.php",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:49.725993+00:00"
+    },
+    {
+      "file": "09b-suricata-WAN-settings.png",
+      "url": "https://192.168.99.1:8443/suricata/suricata_interfaces_edit.php?id=0",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:51.580646+00:00"
+    },
+    {
+      "file": "09c-suricata-SID-management.png",
+      "url": "https://192.168.99.1:8443/suricata/suricata_sid_mgmt.php",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:52.984853+00:00"
+    },
+    {
+      "file": "09c-suricata-categories.png",
+      "url": "https://192.168.99.1:8443/suricata/suricata_rulesets.php?id=0",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:55.176829+00:00"
+    },
+    {
+      "file": "09d-suricata-trunk-interface.png",
+      "url": "https://192.168.99.1:8443/suricata/suricata_interfaces.php",
+      "source": "actual browser GUI screenshot"
+    },
+    {
+      "file": "09e-suricata-trunk-settings.png",
+      "url": "https://192.168.99.1:8443/suricata/suricata_interfaces_edit.php?id=1",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:25:57.997715+00:00"
+    },
+    {
+      "file": "10-pfBlocker-IP-settings.png",
+      "url": "https://192.168.99.1:8443/pfblockerng/pfblockerng_ip.php",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:26:01.475363+00:00"
+    },
+    {
+      "file": "10b-pfBlocker-IPv4-lists.png",
+      "url": "https://192.168.99.1:8443/pfblockerng/pfblockerng_category.php?type=ipv4",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:26:02.441997+00:00"
+    },
+    {
+      "file": "10c-pfBlocker-summary-1.png",
+      "url": "https://192.168.99.1:8443/pfblockerng/pfblockerng_alerts.php",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:26:06.478760+00:00"
+    },
+    {
+      "file": "10c-pfBlocker-summary-2.png",
+      "url": "https://192.168.99.1:8443/pfblockerng/pfblockerng_category.php?type=geoip",
+      "source": "actual browser GUI screenshot",
+      "captured_at": "2026-10-02T15:26:07.520734+00:00"
+    },
+    {
+      "file": "11-DVWA-login.png",
+      "url": "http://192.168.20.50/login.php",
+      "source": "actual browser GUI screenshot",
+      "http_status": 200,
+      "authenticated_service_test": false
+    }
+  ],
+  "observations": {
+    "DHCP_lan": {
+      "enable": true,
+      "range_from": "192.168.99.100",
+      "range_to": "192.168.99.199"
+    },
+    "DHCP_opt1": {
+      "enable": true,
+      "range_from": "192.168.10.100",
+      "range_to": "192.168.10.199"
+    },
+    "DHCP_opt2": {
+      "enable": true,
+      "range_from": "192.168.20.100",
+      "range_to": "192.168.20.199"
+    },
+    "DHCP_opt3": {
+      "enable": true,
+      "range_from": "192.168.30.100",
+      "range_to": "192.168.30.199"
+    },
+    "offloading": {
+      "disablechecksumoffloading": true,
+      "disablesegmentationoffloading": true,
+      "disablelargereceiveoffloading": true
+    },
+    "maximumtableentries": "2000000"
+  },
+  "optional": [
+    {
+      "component": "Suricata WAN settings",
+      "captured": true,
+      "note": "Package presence alone does not validate Inline IPS"
+    },
+    {
+      "component": "Trunk custom rules GUI",
+      "captured": false,
+      "note": "GET filter did not select custom rules; no form submitted"
+    },
+    {
+      "component": "Suricata trunk index 1 settings",
+      "captured": true,
+      "note": "Actual interface settings, not a claim of verified Inline blocking"
+    }
+  ]
+}

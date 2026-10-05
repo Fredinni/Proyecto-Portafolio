@@ -1,0 +1,7 @@
+Spamhaus: 1.692 entradas PF
+FireHOL: 4.643; excluye red privada
+Rusia: 13.178 redes; Corea Norte: 10
+3 DROP nuevos por cada lista/pais
+MaxMind 8.8.8.8 - pais DB: US
+Actualizacion nativa programada
+Capacidad PF: 2.000.000 entradas

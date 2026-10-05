@@ -1,0 +1,229 @@
+{
+  "responsable": "Bruno Urrea Ortiz",
+  "colaborador": "Freddy Vasquez Cortes",
+  "actividad": "A1 - Setup Base pfSense & Netmap Tuning",
+  "timestamp_utc": "2026-10-02T19:29:49.230277+00:00",
+  "system": "FreeBSD",
+  "release": "16.0-CURRENT",
+  "profile": "current",
+  "items": [
+    {
+      "parametro": "current profile platform",
+      "valor_obtenido": {
+        "pfsense": "2.9.0-RELEASE",
+        "FreeBSD": "16.0-CURRENT"
+      },
+      "valor_esperado": "pfSense CE 2.9.0 on FreeBSD 16.x",
+      "status": "PASS",
+      "cumplimiento": true,
+      "command": {
+        "returncode": 0,
+        "stdout": "2.9.0-RELEASE",
+        "stderr": ""
+      }
+    },
+    {
+      "parametro": "net.inet.ip.forwarding",
+      "valor_obtenido": 1,
+      "valor_esperado": "1",
+      "status": "PASS",
+      "cumplimiento": true,
+      "command": {
+        "returncode": 0,
+        "stdout": "1",
+        "stderr": ""
+      }
+    },
+    {
+      "parametro": "net.inet.ip.intr_queue_maxlen",
+      "valor_obtenido": 4096,
+      "valor_esperado": ">= 4096",
+      "status": "PASS",
+      "cumplimiento": true,
+      "command": {
+        "returncode": 0,
+        "stdout": "4096",
+        "stderr": ""
+      }
+    },
+    {
+      "parametro": "net.pf.states_hashsize",
+      "valor_obtenido": 262144,
+      "valor_esperado": ">= 131072",
+      "status": "PASS",
+      "cumplimiento": true,
+      "command": {
+        "returncode": 0,
+        "stdout": "262144",
+        "stderr": ""
+      }
+    },
+    {
+      "parametro": "kern.ipc.nmbclusters",
+      "valor_obtenido": 1000000,
+      "valor_esperado": ">= 1000000",
+      "status": "PASS",
+      "cumplimiento": true,
+      "command": {
+        "returncode": 0,
+        "stdout": "1000000",
+        "stderr": ""
+      }
+    },
+    {
+      "parametro": "dev.netmap.buf_size",
+      "valor_obtenido": 2048,
+      "valor_esperado": "2048",
+      "status": "PASS",
+      "cumplimiento": true,
+      "command": {
+        "returncode": 0,
+        "stdout": "2048",
+        "stderr": ""
+      }
+    },
+    {
+      "parametro": "dev.netmap.buf_curr_size",
+      "valor_obtenido": 2048,
+      "valor_esperado": "2048",
+      "status": "PASS",
+      "cumplimiento": true,
+      "command": {
+        "returncode": 0,
+        "stdout": "2048",
+        "stderr": ""
+      }
+    },
+    {
+      "parametro": "dev.netmap.ring_curr_size",
+      "valor_obtenido": 36864,
+      "valor_esperado": ">= 1",
+      "status": "PASS",
+      "cumplimiento": true,
+      "command": {
+        "returncode": 0,
+        "stdout": "36864",
+        "stderr": ""
+      }
+    },
+    {
+      "parametro": "config.system.disablechecksumoffloading",
+      "valor_obtenido": true,
+      "valor_esperado": true,
+      "status": "PASS",
+      "cumplimiento": true
+    },
+    {
+      "parametro": "config.system.disablesegmentationoffloading",
+      "valor_obtenido": true,
+      "valor_esperado": true,
+      "status": "PASS",
+      "cumplimiento": true
+    },
+    {
+      "parametro": "config.system.disablelargereceiveoffloading",
+      "valor_obtenido": true,
+      "valor_esperado": true,
+      "status": "PASS",
+      "cumplimiento": true
+    },
+    {
+      "parametro": "ifconfig.vtnet0.offloads",
+      "valor_obtenido": [],
+      "valor_esperado": [],
+      "status": "PASS",
+      "cumplimiento": true,
+      "enabled_options": [
+        "VLAN_MTU",
+        "VLAN_HWTAGGING",
+        "VLAN_HWCSUM",
+        "LINKSTATE",
+        "NETMAP",
+        "HWSTATS",
+        "PERFORMNUD",
+        "AUTO_LINKLOCAL",
+        "STABLEADDR"
+      ]
+    },
+    {
+      "parametro": "ifconfig.vtnet1.offloads",
+      "valor_obtenido": [],
+      "valor_esperado": [],
+      "status": "PASS",
+      "cumplimiento": true,
+      "enabled_options": [
+        "VLAN_MTU",
+        "VLAN_HWCSUM",
+        "LINKSTATE",
+        "NETMAP",
+        "HWSTATS",
+        "PERFORMNUD",
+        "AUTO_LINKLOCAL",
+        "STABLEADDR"
+      ]
+    },
+    {
+      "parametro": "/dev/netmap",
+      "valor_obtenido": true,
+      "valor_esperado": "Character device present",
+      "status": "PASS",
+      "cumplimiento": true,
+      "command": {
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    }
+  ],
+  "scope": "Kernel, offloading and Netmap device only; no Inline IPS test",
+  "pfsense_version": "2.9.0-RELEASE",
+  "legacy_diagnostics": [
+    {
+      "oid": "net.inet.ip.fastforwarding",
+      "command": {
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "sysctl: unknown oid 'net.inet.ip.fastforwarding'"
+      },
+      "acceptance_requirement": false
+    },
+    {
+      "oid": "hw.netmap.buf_size",
+      "command": {
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "sysctl: unknown oid 'hw.netmap.buf_size'"
+      },
+      "acceptance_requirement": false
+    },
+    {
+      "oid": "hw.netmap.ring_size",
+      "command": {
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "sysctl: unknown oid 'hw.netmap.ring_size'"
+      },
+      "acceptance_requirement": false
+    }
+  ],
+  "netmap_diagnostics": [
+    {
+      "oid": "dev.netmap.ring_size",
+      "unit": "bytes",
+      "command": {
+        "returncode": 0,
+        "stdout": "36864",
+        "stderr": ""
+      },
+      "acceptance_requirement": false,
+      "note": "Allocator ring object size; not a NIC descriptor count or throughput guarantee"
+    }
+  ],
+  "summary": {
+    "PASS": 14,
+    "FAIL": 0,
+    "UNSUPPORTED": 0
+  },
+  "estado_general": "PASS",
+  "exit_code": 0
+}

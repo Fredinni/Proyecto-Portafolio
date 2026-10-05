@@ -1,0 +1,14 @@
+{
+  "WAN_cierre_segundos": 0.926,
+  "Trunk_cierre_segundos": 1.177,
+  "WAN_admin": {
+    "rc": 0,
+    "http": "200"
+  },
+  "Trunk_admin": {
+    "rc": 0,
+    "http": "200"
+  },
+  "worker_recovered": true,
+  "status": "PASS"
+}

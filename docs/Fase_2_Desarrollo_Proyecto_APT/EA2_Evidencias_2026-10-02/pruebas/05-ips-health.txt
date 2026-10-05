@@ -1,0 +1,38 @@
+{
+  "checked_at": "2026-10-02T12:24:00-03:00",
+  "sensors": {
+    "wan": {
+      "assigned_interface": "wan",
+      "netmap_parent": "vtnet0",
+      "uuid": "49823",
+      "enabled": true,
+      "running": true,
+      "engine_ready": true,
+      "capture_mode": "NETMAP",
+      "copy_mode": "ips",
+      "netmap_interfaces_live": true,
+      "ips_configured": true,
+      "loaded_rules": 26628,
+      "failed_rules": 0,
+      "missing_flowbit_warning": false
+    },
+    "opt2": {
+      "assigned_interface": "opt2",
+      "netmap_parent": "vtnet1",
+      "uuid": "62511",
+      "enabled": true,
+      "running": true,
+      "engine_ready": true,
+      "capture_mode": "NETMAP",
+      "copy_mode": "ips",
+      "netmap_interfaces_live": true,
+      "ips_configured": true,
+      "loaded_rules": 26629,
+      "failed_rules": 0,
+      "missing_flowbit_warning": false
+    }
+  },
+  "startup": "IPS readiness only; forwarding protection is independently reported by kronos-ips-guard status.",
+  "trunk_vlan_tag_filter_offload_disabled": true,
+  "status": "PASS"
+}
