@@ -24,21 +24,21 @@
 
 ## 📌 Estado de Avance Real del Proyecto (Portafolio de Título APT122)
 
-> **Corte actualizado: 2 de octubre de 2026 (semana 7).** La tabla siguiente conserva el registro histórico de semana 6. El [informe comprobado más reciente](docs/Fase_2_Desarrollo_Proyecto_APT/AVANCE_SEMANA7_2026-10-02.md) documenta A2 verificada, Suricata Inline probado en WAN y trunk interno y cuatro políticas de reputación/GeoIP aplicadas, con 26 capturas reales y presentación ampliada a cinco diapositivas. El guard IPS corrigió la ventana inicial de arranque: ensayo final sin marcadores escapados y recuperación automática. A1 pasa 14 comprobaciones del perfil compatible pfSense 2.9 / FreeBSD 16; se conserva el informe del perfil antiguo con tres OID retirados, que no representan un IPS averiado. Las integraciones posteriores y pruebas prolongadas siguen pendientes.
+> **Corte actualizado: 13 de octubre de 2026 (semana 9).** A1, A2, A3 y A4 están completadas y verificadas en laboratorio; A5 (Cristóbal Quezada) está en ejecución dentro de su ventana S9–S10. El [informe comprobado más reciente](docs/Fase_2_Desarrollo_Proyecto_APT/AVANCE_SEMANA7_2026-10-02.md) documenta A2 verificada, Suricata Inline probado en WAN y trunk interno y cuatro políticas de reputación/GeoIP aplicadas, con 26 capturas reales y presentación ampliada a cinco diapositivas. El guard IPS corrigió la ventana inicial de arranque: ensayo final sin marcadores escapados y recuperación automática. A1 pasa 14 comprobaciones del perfil compatible pfSense 2.9 / FreeBSD 16; se conserva el informe del perfil antiguo con tres OID retirados, que no representan un IPS averiado. Las integraciones posteriores y pruebas prolongadas siguen pendientes.
 
 **Presentación recomendada para Evaluación 2:** [PPT, PDF y guion del equipo](docs/Fase_2_Desarrollo_Proyecto_APT/PRESENTACION_EA2_EQUIPO.md).
 
 > **Institución:** Duoc UC — Sede San Joaquín | **Carrera:** Ingeniería en Conectividad y Redes  
 > **Semestre Académico:** Segundo Semestre 2026 (Primavera 2026: Agosto – Diciembre 2026)  
-> **Temporalidad Actual:** Semana 6 (21 al 27 de Septiembre 2026) • Transición Fase 1 (S1-S4) a Fase 2 (S5-S15)
+> **Temporalidad Actual:** Semana 9 (12 al 18 de Octubre 2026) • Fase 2 (S5-S15) en desarrollo • Evaluación Fase 2: 3 de noviembre de 2026
 
 | Fase del Proyecto | Temporalidad | Estado | Entregable / Hito Técnico Actual |
 | :--- | :---: | :---: | :--- |
-| **Fase 1: Definición & Infraestructura Base** | **Semanas 1 a 4** | **En Cierre** | • **Actividad A1 (S1 - S2):** ✔ **100% COMPLETADO Y PROBADO.** Despliegue pfSense CE 2.9.0 en Proxmox/VMware, conectividad WAN/LAN, tuning de kernel FreeBSD (`net.inet.ip.fastforwarding=0`), mbufs elevados y patch XML (en `src/pfsense_setup/`).<br>• **Actividad A2 (S3 - S4):** ⚙ **EN EJECUCIÓN.** Segmentación de 4 VLANs 802.1Q (Corp 10, DMZ 20, VoIP 30, Mgmt 99) y servidores DHCP por Freddy Vásquez. |
-| **Fase 2: Desarrollo, Hardening & Despliegue** | **Semanas 5 a 15** | **Planificado (Roadmap)** | Módulos **A3 a A9** planificados para desarrollo progresivo según Carta Gantt: Suricata Inline Netmap IPS, pfBlockerNG GeoIP, HAProxy SSL & DVWA, Motor KRONOS Python AST, Asterisk PBX 20, Gemini Live Voice y Malla Tailscale WireGuard. |
+| **Fase 1: Definición & Infraestructura Base** | **Semanas 1 a 4** | **✔ Completada** | • **Actividad A1 (S1 - S2):** ✔ **COMPLETADO Y PROBADO.** Despliegue pfSense CE 2.9.0 en Proxmox, conectividad WAN/LAN, tuning de kernel FreeBSD, mbufs elevados y offloading desactivado; 14 comprobaciones PASS del perfil compatible pfSense 2.9 (`src/pfsense_setup/`).<br>• **Actividad A2 (S3 - S4):** ✔ **COMPLETADO Y VERIFICADO.** Segmentación de 4 VLANs 802.1Q (Corp 10, DMZ 20, VoIP 30, Mgmt 99), DHCP por VLAN y aislamiento inter-VLAN; 16 comprobaciones PASS (Freddy Vásquez). |
+| **Fase 2: Desarrollo, Hardening & Despliegue** | **Semanas 5 a 15** | **⚙ En Ejecución** | • **A3 (S5 - S6):** ✔ **COMPLETADO.** Suricata Inline IPS en WAN y trunk interno (26.628 / 26.629 firmas, 0 fallidas) y guard IPS con recuperación automática (Bruno Urrea / Kevin Retamales).<br>• **A4 (S7 - S8):** ✔ **COMPLETADO.** pfBlockerNG-devel: Spamhaus DROP, FireHOL L1 y GeoIP (RU, KP) aplicados en WAN; 12/12 DROP verificados y tablas PF a 2.000.000 entradas (Kevin Retamales).<br>• **A5 (S9 - S10):** ⚙ **EN EJECUCIÓN.** DVWA base responde en DMZ; pendiente frontend HAProxy HTTPS, SSL Offload, Stick-Tables y publicación extremo a extremo (Cristóbal Quezada).<br>• **A6 a A9:** ⏳ Planificados según Carta Gantt (A9 con avance de administración adelantado). |
 | **Fase 3: QA, Auditoría & Defensa ante Comisión** | **Semanas 16 a 18** | **Planificado (Roadmap)** | Pruebas de penetración SQLi simuladas, verificación de descarte en kernel (<100 ms), medición de latencia (<1.5 s), manuales técnicos PDF y defensa final ante la comisión evaluadora. |
 
-> ⚠️ **Aclaración Metodológica Importante:** La arquitectura global, diagramas de procesos y guías de prototipado documentados en este repositorio representan el **diseño técnico integral** aprobado para el ciclo semestral de 18 semanas de la asignatura Capstone. En estricto cumplimiento del cronograma académico, los servicios se implementan de manera modular: actualmente se encuentra **100% completado y probado el hito A1**, **en desarrollo el hito A2**, mientras que el resto de componentes se desarrollarán durante las semanas correspondientes de la Fase 2 y Fase 3.
+> ⚠️ **Aclaración Metodológica Importante:** La arquitectura global, diagramas de procesos y guías de prototipado documentados en este repositorio representan el **diseño técnico integral** aprobado para el ciclo semestral de 18 semanas de la asignatura Capstone. En estricto cumplimiento del cronograma académico, los servicios se implementan de manera modular: actualmente se encuentran **completados y probados los hitos A1, A2, A3 y A4**, **en desarrollo el hito A5**, mientras que el resto de componentes se desarrollarán durante las semanas correspondientes de la Fase 2 y Fase 3.
 
 ---
 
@@ -215,10 +215,10 @@ Proyecto-Portafolio/
 │   │   ├── rtp.conf
 │   │   ├── gemini_audio_bridge.py
 │   │   └── call_trigger.py
-│   ├── haproxy_dvwa/                           # [⏳ ROADMAP FASE 2] Proxy inverso y contenedor DMZ de pruebas
+│   ├── haproxy_dvwa/                           # [⚙ EN EJECUCIÓN - HITO A5] Proxy inverso y contenedor DMZ de pruebas
 │   │   ├── haproxy.cfg
 │   │   └── docker-compose.dvwa.yml
-│   └── pfblocker_threatfeeds/                  # [⏳ ROADMAP FASE 2] GeoIP MaxMind y listas de reputación IP
+│   └── pfblocker_threatfeeds/                  # [✔ COMPLETADO - HITO A4] GeoIP MaxMind y listas de reputación IP
 │       ├── maxmind_geoip_setup.md
 │       └── threat_feeds_config.txt
 └── README.md                                   # Documentación corporativa principal
@@ -252,11 +252,11 @@ python verify_kernel_hardening.py
 
 ---
 
-### 8.2 Prototipo y Guía Proyectada de Despliegue Modular (Fase 2: Semanas 5 a 15) [⏳ ROADMAP]
+### 8.2 Prototipo y Guía Proyectada de Despliegue Modular (Fase 2: Semanas 9 a 15) [⏳ ROADMAP]
 
-> ⚠️ **Aclaración Académica:** Los siguientes servicios corresponden a los hitos proyectados de la Fase 2 según la Carta Gantt oficial, y se desplegarán progresivamente conforme al cronograma académico:
+> ⚠️ **Aclaración Académica:** A3 (Suricata) y A4 (pfBlockerNG) ya están completados; su evidencia está en [AVANCE_SEMANA7_2026-10-02.md](docs/Fase_2_Desarrollo_Proyecto_APT/AVANCE_SEMANA7_2026-10-02.md) y `evidencias/`. Los siguientes servicios corresponden a los hitos pendientes de la Fase 2 según la Carta Gantt oficial, y se desplegarán progresivamente conforme al cronograma académico:
 
-#### A5. Entorno de Pruebas DMZ (DVWA) — Semanas 9 a 10
+#### A5. Entorno de Pruebas DMZ (DVWA) — Semanas 9 a 10 [⚙ EN EJECUCIÓN]
 ```bash
 cd src/haproxy_dvwa
 docker compose -f docker-compose.dvwa.yml up -d
@@ -305,10 +305,10 @@ A continuación se presenta la planificación cronológica y técnica oficial de
 | Competencia | Nombre de Actividad | Estado Actual | Descripción de Tarea | Recursos ($0 CLP) | Duración | Responsable¹ | Observaciones (Facilitadores / Obstaculizadores & Mitigaciones) |
 | :--- | :--- | :---: | :--- | :--- | :---: | :--- | :--- |
 | **Comp. 4 & 8** | **A1. Setup Base pfSense** | **✔ Completado** | Instalación pfSense 2.9.0 en Proxmox/VMware, WAN/LAN y tuning Netmap. | Hipervisor, ISO pfSense CE 2.9.0 | Semanas 1 - 2 | Bruno Urrea / Freddy Vásquez | **✔ Facilitador:** Docs oficiales Netgate.<br>**⚠ Obstáculo:** Incompatibilidad TSO/LRO; se desactiva hardware offloading. |
-| **Comp. 4** | **A2. Segmentación VLANs** | **⚙ En Curso** | Creación de subredes VLAN 10 (Corp), 20 (DMZ), 30 (VoIP), 99 (Mgmt) y DHCP. | pfSense WebGUI, Switch L2 virtual | Semanas 3 - 4 | Freddy Vásquez | **✔ Facilitador:** Soporte 802.1Q nativo.<br>**⚠ Obstáculo:** Filtrado inter-VLAN; se aíslan con reglas Zero Trust. |
-| **Comp. 7 & 8** | **A3. Suricata Inline IPS** | **⏳ Planificado** | Suricata 7.x Inline Netmap, firmas ET Open y políticas `dropsid.conf`. | Paquete Suricata, feeds ET Open | Semanas 5 - 6 | Bruno Urrea / Kevin Retamales | **✔ Facilitador:** Descarte en hardware ring-buffer.<br>**⚠ Obstáculo:** Falsos positivos; tuning de SIDs selectivos. |
-| **Comp. 7 & 8** | **A4. GeoIP pfBlockerNG** | **⏳ Planificado** | MaxMind GeoLite2 Free, bloqueo Top Spammers y feeds FireHOL/Spamhaus. | pfBlockerNG-devel, MaxMind Free | Semanas 7 - 8 | Kevin Retamales | **✔ Facilitador:** Feeds globales actualizados.<br>**⚠ Obstáculo:** Consumo de RAM; se optimiza límite de tablas. |
-| **Comp. 7** | **A5. HAProxy SSL & DVWA** | **⏳ Planificado** | Frontend HTTPS 443, SSL Offload, Stick-Tables anti-fuzzing L7 y DVWA Docker. | HAProxy pkg, Docker, DVWA | Semanas 9 - 10 | Cristóbal Quezada | **✔ Facilitador:** Stick-Tables en RAM a microsegundos.<br>**⚠ Obstáculo:** Certificados SSL; se emite CA interna de laboratorio. |
+| **Comp. 4** | **A2. Segmentación VLANs** | **✔ Completado** | Creación de subredes VLAN 10 (Corp), 20 (DMZ), 30 (VoIP), 99 (Mgmt) y DHCP. | pfSense WebGUI, Switch L2 virtual | Semanas 3 - 4 | Freddy Vásquez | **✔ Facilitador:** Soporte 802.1Q nativo.<br>**⚠ Obstáculo:** Filtrado inter-VLAN; se aíslan con reglas Zero Trust. |
+| **Comp. 7 & 8** | **A3. Suricata Inline IPS** | **✔ Completado** | Suricata 7.x Inline Netmap, firmas ET Open y políticas `dropsid.conf`. | Paquete Suricata, feeds ET Open | Semanas 5 - 6 | Bruno Urrea / Kevin Retamales | **✔ Facilitador:** Descarte en hardware ring-buffer.<br>**⚠ Obstáculo:** Falsos positivos; tuning de SIDs selectivos. |
+| **Comp. 7 & 8** | **A4. GeoIP pfBlockerNG** | **✔ Completado** | MaxMind GeoLite2 Free, bloqueo Top Spammers y feeds FireHOL/Spamhaus. | pfBlockerNG-devel, MaxMind Free | Semanas 7 - 8 | Kevin Retamales | **✔ Facilitador:** Feeds globales actualizados.<br>**⚠ Obstáculo:** Consumo de RAM; se optimiza límite de tablas. |
+| **Comp. 7** | **A5. HAProxy SSL & DVWA** | **⚙ En Curso** | Frontend HTTPS 443, SSL Offload, Stick-Tables anti-fuzzing L7 y DVWA Docker. | HAProxy pkg, Docker, DVWA | Semanas 9 - 10 | Cristóbal Quezada | **✔ Facilitador:** Stick-Tables en RAM a microsegundos.<br>**⚠ Obstáculo:** Certificados SSL; se emite CA interna de laboratorio. |
 | **Comp. 6 & 8** | **A6. Motor KRONOS AST** | **⏳ Planificado** | Python 3.12 AST parser, ingesta `eve.json` y wrappers de kernel `pfctl`. | Python 3.12, FreeBSD CLI | Semanas 11 - 12 | Bruno Urrea | **✔ Facilitador:** Librería estándar AST.<br>**⚠ Obstáculo:** Privilegios en pfSense; se configura sudoers restringido para pfctl. |
 | **Comp. 5** | **A7. Asterisk PBX & AMI** | **⏳ Planificado** | Docker Asterisk 20 LTS, canal PJSIP, Dialplan y auto-dialer AMI al softphone. | Docker Engine, Asterisk 20 LTS | Semanas 13 - 14 | Freddy Vásquez | **✔ Facilitador:** Stack PJSIP moderno.<br>**⚠ Obstáculo:** NAT traversal; se fija directiva `external_media_address`. |
 | **Comp. 3 & 5** | **A8. Gemini Live Voice** | **⏳ Planificado** | WebSocket seguro WSS, System Prompts SecOps y streaming de audio PCM 24kHz. | Google AI Studio API Key | Semanas 14 - 15 | Bruno Urrea | **✔ Facilitador:** Gemini Live Free Tier (<400ms).<br>**⚠ Obstáculo:** Sincronía dúplex; se utiliza audio lineal nativo. |
@@ -325,10 +325,10 @@ A continuación se presenta la planificación cronológica y técnica oficial de
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | | **S1** | **S2** | **S3** | **S4** | **S5** | **S6** | **S7** | **S8** | **S9** | **S10** | **S11** | **S12** | **S13** | **S14** | **S15** | **S16** | **S17** | **S18** |
 | **A1. Setup Base pfSense & Netmap Tuning** | 🟩 [✔] | 🟩 [✔] | | | | | | | | | | | | | | | | |
-| **A2. Segmentación de VLANs 802.1Q** | | | 🟦 [⚙] | 🟦 [⚙] | | | | | | | | | | | | | | |
-| **A3. Suricata 7.x Inline Netmap IPS** | | | | | ⬜ [⏳] | ⬜ [⏳] | | | | | | | | | | | | |
-| **A4. Hardening GeoIP pfBlockerNG-devel** | | | | | | | ⬜ [⏳] | ⬜ [⏳] | | | | | | | | | | |
-| **A5. Proxy HAProxy 2.8+ SSL & DMZ DVWA**| | | | | | | | | ⬜ [⏳] | ⬜ [⏳] | | | | | | | | |
+| **A2. Segmentación de VLANs 802.1Q** | | | 🟩 [✔] | 🟩 [✔] | | | | | | | | | | | | | | |
+| **A3. Suricata 7.x Inline Netmap IPS** | | | | | 🟩 [✔] | 🟩 [✔] | | | | | | | | | | | | |
+| **A4. Hardening GeoIP pfBlockerNG-devel** | | | | | | | 🟩 [✔] | 🟩 [✔] | | | | | | | | | | |
+| **A5. Proxy HAProxy 2.8+ SSL & DMZ DVWA**| | | | | | | | | 🟦 [⚙] | ⬜ [⏳] | | | | | | | | |
 | **A6. Motor Correlación KRONOS (Python AST)**| | | | | | | | | | | ⬜ [⏳] | ⬜ [⏳] | | | | | | |
 | **A7. Centralita Asterisk 20 LTS PBX & AMI** | | | | | | | | | | | | | ⬜ [⏳] | ⬜ [⏳] | | | | |
 | **A8. Integración Google Gemini Live API** | | | | | | | | | | | | | | ⬜ [⏳] | ⬜ [⏳] | | | |
@@ -336,7 +336,7 @@ A continuación se presenta la planificación cronológica y técnica oficial de
 | **A10. Pruebas QA, Auditoría & Defensa**| | | | | | | | | | | | | | | | ⬜ [⏳] | ⬜ [⏳] | ⬜ [⏳] |
 
 > **Leyenda de Estado de Ejecución:**  
-> • `🟩 [✔]` **Completado (100%):** Hito verificado y testeado en laboratorio (`src/pfsense_setup/`).  
-> • `🟦 [⚙]` **En Ejecución:** Actividad en desarrollo activo (Freddy Vásquez).  
+> • `🟩 [✔]` **Completado (100%):** Hito verificado y testeado en laboratorio (A1 a A4; evidencia en `evidencias/` y `docs/Fase_2_Desarrollo_Proyecto_APT/`).  
+> • `🟦 [⚙]` **En Ejecución:** Actividad en desarrollo activo (A5, Cristóbal Quezada).  
 > • `⬜ [⏳]` **Planificado (Roadmap Modular):** Módulos proyectados para implementación en sus semanas lectivas correspondientes.  
-> • `📍 Temporalidad Actual:` **Semana 6 (21 al 27 de Septiembre 2026)** • Transición Fase 1 a Fase 2.
+> • `📍 Temporalidad Actual:` **Semana 9 (12 al 18 de Octubre 2026)** • Fase 2 en desarrollo.
