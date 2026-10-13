@@ -1,0 +1,11 @@
+{
+  "slides": 5,
+  "overflow": [],
+  "native_captures": 3,
+  "proof_transcript_images": 6,
+  "additional_health_transcript": 1,
+  "minimum_display_proof_font_px": 24,
+  "editable_text": true,
+  "notes_with_sources": true,
+  "portable_html_assets": true
+}

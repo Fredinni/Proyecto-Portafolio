@@ -1,0 +1,10 @@
+RU:3/3 blocked in prior measured PFcounter.
+KP initial test probe picked address+1 outside /32; corrected and checked table membership.
+KP 3 benign frames on isolated WAN transit only; exact /32 host respected
+@60 block drop in log quick on vtnet0 inet from <pfB_Europe_v4:13178> to any label "id=1790896396" label "tags=user_rule" label "descr=KRONOS A4 GeoIP RU WAN" ridentifier 1790896396
+  [ Evaluations: 77        Packets: 3         Bytes: 138         States: 0     ]
+  [ Source Nodes: 0      Limit: 0      NAT/RDR: 0      Route: 0      ]
+--
+@61 block drop in log quick on vtnet0 inet from <pfB_Asia_v4:10> to any label "id=1790896395" label "tags=user_rule" label "descr=KRONOS A4 GeoIP KP WAN" ridentifier 1790896395
+  [ Evaluations: 6         Packets: 3         Bytes: 138         States: 0     ]
+  [ Source Nodes: 0      Limit: 0      NAT/RDR: 0      Route: 0      ]

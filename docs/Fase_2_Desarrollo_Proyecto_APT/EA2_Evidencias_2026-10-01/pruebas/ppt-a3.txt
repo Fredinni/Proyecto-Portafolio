@@ -1,0 +1,8 @@
+pfSense WAN / vtnet0 / --netmap
+Tráfico normal antes: 3/3 respuestas
+Marcador benigno: 0/3 respuestas
+EVE SID 1000001: action=blocked
+verdict=drop: 3 registros correlacionados
+Tráfico normal después: 3/3
+22.142 reglas cargadas; 0 inválidas
+Probado después del reinicio

@@ -1,0 +1,8 @@
+#!/bin/sh
+# Install as /usr/local/etc/rc.d/shutdown.00-kronos-ips-guard.sh.
+# Native /etc/pfSense-rc.shutdown invokes shutdown.*.sh before init terminates
+# processes. Hold the native table closed before the IPS capture disappears.
+# pfSense also starts every *.sh as a package with argument "start". The
+# shutdown hook is called without arguments; ignore all package invocations.
+[ "$#" -eq 0 ] || exit 0
+exec /usr/local/sbin/kronos-ips-guard shutdown-hold

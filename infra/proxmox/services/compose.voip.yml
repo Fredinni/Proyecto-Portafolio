@@ -1,0 +1,21 @@
+name: kronos-voip
+services:
+  asterisk:
+    image: kronos-asterisk:ubuntu2404-base
+    build:
+      context: .
+      dockerfile: Dockerfile.asterisk
+    container_name: kronos_asterisk_pbx
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - /etc/kronos/asterisk/pjsip.conf:/etc/asterisk/pjsip.conf:ro
+      - /etc/kronos/asterisk/manager.conf:/etc/asterisk/manager.conf:ro
+      - /etc/kronos/asterisk/extensions.conf:/etc/asterisk/extensions.conf:ro
+      - /etc/kronos/asterisk/rtp.conf:/etc/asterisk/rtp.conf:ro
+      - spool:/var/spool/asterisk
+    logging:
+      driver: json-file
+      options: {max-size: "5m", max-file: "2"}
+volumes:
+  spool:

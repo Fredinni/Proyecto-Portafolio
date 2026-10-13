@@ -1,0 +1,2 @@
+# Preserve POSIX entrypoints on Windows checkouts.
+src/pfsense_setup/*.sh text eol=lf

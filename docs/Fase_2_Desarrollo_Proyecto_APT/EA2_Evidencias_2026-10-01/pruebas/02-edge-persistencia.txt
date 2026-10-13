@@ -1,0 +1,118 @@
+KRONOS-EDGE VM100 networkd persistence check - 2026-10-01
+BEFORE DHCP DEFAULT: default via 10.10.20.1 dev eth0 proto dhcp src 10.10.20.118 metric 100
+NETWORKD CONFIGURATION
+# /etc/systemd/networkd.conf
+#  This file is part of systemd.
+#
+#  systemd is free software; you can redistribute it and/or modify it under the
+#  terms of the GNU Lesser General Public License as published by the Free
+#  Software Foundation; either version 2.1 of the License, or (at your option)
+#  any later version.
+#
+# Entries in this file show the compile time defaults. Local configuration
+# should be created by either modifying this file (or a copy of it placed in
+# /etc/ if the original file is shipped in /usr/), or by creating "drop-ins" in
+# the /etc/systemd/networkd.conf.d/ directory. The latter is generally
+# recommended. Defaults can be restored by simply deleting the main
+# configuration file and all drop-ins located in /etc/.
+#
+# Use 'systemd-analyze cat-config systemd/networkd.conf' to display the full config.
+#
+# See networkd.conf(5) for details.
+
+[Network]
+#SpeedMeter=no
+#SpeedMeterIntervalSec=10sec
+#ManageForeignRoutingPolicyRules=yes
+#ManageForeignRoutes=yes
+#RouteTable=
+#IPv6PrivacyExtensions=no
+
+[DHCPv4]
+#DUIDType=vendor
+#DUIDRawData=
+
+[DHCPv6]
+#DUIDType=vendor
+#DUIDRawData=
+
+# /etc/systemd/networkd.conf.d/90-kronos-policy-routing.conf
+[Network]
+ManageForeignRoutingPolicyRules=no
+ManageForeignRoutes=no
+AFTER DHCP DEFAULT: default via 10.10.20.1 dev eth0 proto dhcp src 10.10.20.118 metric 100
+PASS DHCP main default unchanged
+0:	from all lookup local
+100:	from 10.254.254.0/30 lookup 51820
+32766:	from all lookup main
+32767:	from all lookup default
+100:	from 10.254.254.0/30 lookup 51820
+PASS policy 100 survived networkd restart
+default dev wg0 scope link
+10.254.254.0/30 dev eth1 scope link
+default dev wg0 scope link
+10.254.254.0/30 dev eth1 scope link
+PASS both dedicated table routes survived
+net.ipv4.ip_forward = 1
+1.1.1.1 from 10.254.254.2 dev wg0 table 51820
+    cache iif eth1
+PING 10.255.255.1 (10.255.255.1) 56(84) bytes of data.
+64 bytes from 10.255.255.1: icmp_seq=2 ttl=64 time=119 ms
+
+--- 10.255.255.1 ping statistics ---
+2 packets transmitted, 1 received, 50% packet loss, time 1059ms
+rtt min/avg/max/mdev = 118.841/118.841/118.841/0.000 ms
+PING 10.254.254.2 (10.254.254.2) 56(84) bytes of data.
+64 bytes from 10.254.254.2: icmp_seq=1 ttl=64 time=0.303 ms
+64 bytes from 10.254.254.2: icmp_seq=2 ttl=64 time=0.315 ms
+
+--- 10.254.254.2 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1030ms
+rtt min/avg/max/mdev = 0.303/0.309/0.315/0.006 ms
+active
+active
+active
+inactive
+N4okt5x9yB635l1t03xammTPr1tWuwnfR82SgsZqUzw=	1790894334
+N4okt5x9yB635l1t03xammTPr1tWuwnfR82SgsZqUzw=	699426236	45823308
+table inet kronos_local_edge {
+	chain forward {
+		type filter hook forward priority filter; policy drop;
+		ct state invalid counter packets 0 bytes 0 drop
+		iifname "wg0" oifname "eth1" ip daddr 10.254.254.0/30 counter packets 562 bytes 182010 accept
+		iifname "eth1" oifname "wg0" ip saddr 10.254.254.0/30 counter packets 579 bytes 193488 accept
+	}
+}
+PASS Edge restart persistence and connectivity
+
+EXITCODE=0
+
+RECHECK
+STEADY CONNECTIVITY AFTER NETWORKD RESTART
+PING 10.255.255.1 (10.255.255.1) 56(84) bytes of data.
+64 bytes from 10.255.255.1: icmp_seq=1 ttl=64 time=119 ms
+64 bytes from 10.255.255.1: icmp_seq=2 ttl=64 time=119 ms
+64 bytes from 10.255.255.1: icmp_seq=3 ttl=64 time=119 ms
+64 bytes from 10.255.255.1: icmp_seq=4 ttl=64 time=119 ms
+
+--- 10.255.255.1 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3004ms
+rtt min/avg/max/mdev = 118.780/118.931/119.103/0.133 ms
+DHCP MAIN DEFAULT
+default via 10.10.20.1 dev eth0 proto dhcp src 10.10.20.118 metric 100
+POLICY STILL PRESENT
+100:	from 10.254.254.0/30 lookup 51820
+WG HANDSHAKE AGE SECONDS
+3
+LOADED FORWARDING RULES (SERVICE IS INTENTIONALLY NOT THE RULE LOADER)
+table inet kronos_local_edge {
+	chain forward {
+		type filter hook forward priority filter; policy drop;
+		ct state invalid counter packets 0 bytes 0 drop
+		iifname "wg0" oifname "eth1" ip daddr 10.254.254.0/30 counter packets 755 bytes 392712 accept
+		iifname "eth1" oifname "wg0" ip saddr 10.254.254.0/30 counter packets 785 bytes 284437 accept
+	}
+}
+Networkd restart syntax/policy/route/connectivity checks completed
+
+EXITCODE=0
