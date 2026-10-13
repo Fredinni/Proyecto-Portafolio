@@ -19,10 +19,10 @@ A continuación se detalla la planificación cronológica oficial de **KRONOS SE
 | Fase | Semanas | Fechas Calendario | Actividad / Hito | Responsable(s) | Estado Actual |
 | :---: | :---: | :---: | :--- | :--- | :---: |
 | **Fase 1** | **S1 – S2** | 17/08/2026 – 30/08/2026 | **A1. Setup Base pfSense & Netmap Tuning:** Instalación de pfSense CE 2.9.0 en hipervisor, asignación de interfaces WAN/LAN, tuning de kernel FreeBSD (`net.inet.ip.fastforwarding=0`), cuadruplicación de mbufs y desactivación de Hardware Offloading (TSO/LRO). | Bruno Urrea / Freddy Vásquez | **Completado (100%)** |
-| **Fase 1** | **S3 – S4** | 31/08/2026 – 13/09/2026 | **A2. Segmentación de VLANs 802.1Q:** Configuración de troncal 802.1Q, direccionamiento CIDR para VLAN 10 (Corp), VLAN 20 (DMZ), VLAN 30 (VoIP), VLAN 99 (Mgmt), servidores DHCP y políticas de aislamiento inter-VLAN. | Freddy Vásquez | **En Ejecución** |
-| **Fase 2** | **S5 – S6** | 14/09/2026 – 27/09/2026 | **A3. Despliegue de Suricata Inline IPS:** Integración de Suricata 7.x sobre framework Netmap en interfaces WAN/LAN, descarga de firmas Emerging Threats Open y reglas automáticas `dropsid.conf`. | Bruno Urrea / Kevin Retamales | **Planificado** |
-| **Fase 2** | **S7 – S8** | 28/09/2026 – 11/10/2026 | **A4. Hardening GeoIP con pfBlockerNG-devel:** Integración de API de MaxMind GeoLite2, bloqueo de países de alto riesgo (Top Spammers) y suscripción a feeds de reputación FireHOL L1 y Spamhaus DROP. | Kevin Retamales | **Planificado** |
-| **Fase 2** | **S9 – S10** | 12/10/2026 – 25/10/2026 | **A5. Proxy HAProxy 2.8+ SSL & DVWA DMZ:** Configuración de frontend HTTPS 443 con SSL Offload, parametrización de *Stick-Tables* de control de tasa anti-fuzzing L7 en RAM y publicación de DVWA en VLAN 20. | Cristóbal Quezada | **Planificado** |
+| **Fase 1** | **S3 – S4** | 31/08/2026 – 13/09/2026 | **A2. Segmentación de VLANs 802.1Q:** Configuración de troncal 802.1Q, direccionamiento CIDR para VLAN 10 (Corp), VLAN 20 (DMZ), VLAN 30 (VoIP), VLAN 99 (Mgmt), servidores DHCP y políticas de aislamiento inter-VLAN. | Freddy Vásquez | **Completado (100%)** |
+| **Fase 2** | **S5 – S6** | 14/09/2026 – 27/09/2026 | **A3. Despliegue de Suricata Inline IPS:** Integración de Suricata 7.x sobre framework Netmap en interfaces WAN/LAN, descarga de firmas Emerging Threats Open y reglas automáticas `dropsid.conf`. | Bruno Urrea / Kevin Retamales | **Completado (100%)** |
+| **Fase 2** | **S7 – S8** | 28/09/2026 – 11/10/2026 | **A4. Hardening GeoIP con pfBlockerNG-devel:** Integración de API de MaxMind GeoLite2, bloqueo de países de alto riesgo (Top Spammers) y suscripción a feeds de reputación FireHOL L1 y Spamhaus DROP. | Kevin Retamales | **Completado (100%)** |
+| **Fase 2** | **S9 – S10** | 12/10/2026 – 25/10/2026 | **A5. Proxy HAProxy 2.8+ SSL & DVWA DMZ:** Configuración de frontend HTTPS 443 con SSL Offload, parametrización de *Stick-Tables* de control de tasa anti-fuzzing L7 en RAM y publicación de DVWA en VLAN 20. | Cristóbal Quezada | **En Ejecución** |
 | **Fase 2** | **S11 – S12** | 26/10/2026 – 08/11/2026 | **A6. Motor de Correlación KRONOS:** Desarrollo en Python 3.12 del daemon de análisis de logs `eve.json`, filtro sintáctico heurístico AST (>50% supresión de falsos positivos) y wrappers de kernel `pfctl` (`pfctl -k` y tabla `snort2c`). | Bruno Urrea | **Planificado** |
 | **Fase 2** | **S13 – S14** | 09/11/2026 – 22/11/2026 | **A7. Centralita Asterisk 20 LTS PBX & AMI:** Despliegue en Docker, canalización PJSIP, configuración de Dialplans prioritarios y script auto-dialer AMI (`Originate`) disparado por eventos críticos. | Freddy Vásquez | **Planificado** |
 | **Fase 2** | **S14 – S15** | 16/11/2026 – 29/11/2026 | **A8. Integración Google Gemini Live Voice API:** Desarrollo del cliente WebSocket seguro (WSS), streaming de audio bidireccional PCM 24kHz y System Prompts tácticos de ciberseguridad para debriefing al CISO. | Bruno Urrea | **Planificado** |
@@ -43,12 +43,12 @@ gantt
     
     section Fase 1: Definición (S1 - S4)
     A1. Setup Base pfSense & Netmap Tuning       :done, a1, 2026-08-17, 14d
-    A2. Segmentación de VLANs 802.1Q             :active, a2, 2026-08-31, 14d
+    A2. Segmentación de VLANs 802.1Q             :done, a2, 2026-08-31, 14d
     
     section Fase 2: Desarrollo & Hardening (S5 - S15)
-    A3. Suricata 7.x Inline IPS (Netmap)         :a3, 2026-09-14, 14d
-    A4. Hardening GeoIP pfBlockerNG-devel        :a4, 2026-09-28, 14d
-    A5. Proxy HAProxy 2.8+ SSL & DMZ DVWA        :a5, 2026-10-12, 14d
+    A3. Suricata 7.x Inline IPS (Netmap)         :done, a3, 2026-09-14, 14d
+    A4. Hardening GeoIP pfBlockerNG-devel        :done, a4, 2026-09-28, 14d
+    A5. Proxy HAProxy 2.8+ SSL & DMZ DVWA        :active, a5, 2026-10-12, 14d
     A6. Motor Correlación KRONOS (Python AST)    :a6, 2026-10-26, 14d
     A7. Centralita Asterisk 20 LTS PBX & AMI     :a7, 2026-11-09, 14d
     A8. Integración Google Gemini Live Voice     :a8, 2026-11-16, 14d
