@@ -4,9 +4,9 @@ Entrega ampliada a **cinco diapositivas**, por indicación del equipo: las tres 
 
 - [PowerPoint editable](Evaluacion2_Avance_S7_Equipo_5_Slides_2026-10-02.pptx)
 - [PDF](Evaluacion2_Avance_S7_Equipo_5_Slides_2026-10-02.pdf)
-- [Banco de imágenes para adaptar la presentación](../../evidencias/README.md)
-- [Informe completo de pruebas y correcciones](AVANCE_SEMANA7_2026-10-02.md)
-- [Gantt oficial](Informacion_EA2/Plan_Trabajo_Carta_Gantt.md)
+- [Banco de imágenes para adaptar la presentación](../../../../evidencias/README.md)
+- [Informe completo de pruebas y correcciones](../../AVANCE_SEMANA7_2026-10-02.md)
+- [Gantt oficial](../../Informacion_EA2/Plan_Trabajo_Carta_Gantt.md)
 
 Esta versión reemplaza la recomendación de usar la presentación anterior `Evaluacion2_Avance_Semana7_2026-10-02`. Las versiones anteriores de tres diapositivas permanecen como registro histórico.
 
