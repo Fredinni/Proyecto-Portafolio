@@ -1,0 +1,10 @@
+# The installer substitutes __TRANSIT_IF__. This file contains no NAT.
+# Other nftables tables are preserved; their independent drop rules still apply.
+table inet kronos_local_edge {
+    chain forward {
+        type filter hook forward priority filter; policy drop;
+        ct state invalid counter drop
+        iifname "wg0" oifname "__TRANSIT_IF__" ip daddr 10.254.254.0/30 counter accept
+        iifname "__TRANSIT_IF__" oifname "wg0" ip saddr 10.254.254.0/30 counter accept
+    }
+}

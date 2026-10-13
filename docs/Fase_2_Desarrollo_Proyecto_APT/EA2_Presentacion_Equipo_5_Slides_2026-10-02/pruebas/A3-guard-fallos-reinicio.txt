@@ -1,0 +1,9 @@
+Resumen visual, no captura nativa de terminal.
+Fecha: 02/10 · reinicio 12:10 / fallos 16:29
+Reinicio: 27 muestras
+Marcadores escapados: 0
+Auto retorno: 112.45 s
+Cierre WAN: 0.926 s
+Cierre trunk: 1.177 s
+WebGUI 200; fallo PASS
+Fuentes: s7-guard-boot-test.json; s7-guard-failure-tests.json

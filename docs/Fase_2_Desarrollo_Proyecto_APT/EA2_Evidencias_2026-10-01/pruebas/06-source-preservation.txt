@@ -1,0 +1,36 @@
+KRONOS: REAL INTERNET -> AWS -> WIREGUARD -> PFSENSE WAN
+2026-10-01T23:19:40.875022+00:00
+Client public IPv4: 186.67.242.29
+AWS EIP: 100.50.147.57
+DNAT destination: 10.254.254.2:80
+
+$ timeout 20 tcpdump -nn -l -i wg0 -c 4 'tcp dst port 80 and dst host 10.254.254.2'
+23:19:42.693153 IP 186.67.242.29.56764 > 10.254.254.2.80: Flags [S], seq 3459832386, win 65535, options [mss 1412,nop,wscale 8,nop,nop,sackOK], length 0
+23:19:43.698691 IP 186.67.242.29.56764 > 10.254.254.2.80: Flags [S], seq 3459832386, win 65535, options [mss 1412,nop,wscale 8,nop,nop,sackOK], length 0
+23:19:45.706239 IP 186.67.242.29.56764 > 10.254.254.2.80: Flags [S], seq 3459832386, win 65535, options [mss 1412,nop,wscale 8,nop,nop,sackOK], length 0
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on wg0, link-type RAW (Raw IP), snapshot length 262144 bytes
+3 packets captured
+3 packets received by filter
+0 packets dropped by kernel
+Source matches external client: True
+
+$ timeout 20 tcpdump -nn -l -i eth1 -c 4 'tcp dst port 80 and dst host 10.254.254.2'
+23:19:42.693178 IP 186.67.242.29.56764 > 10.254.254.2.80: Flags [S], seq 3459832386, win 65535, options [mss 1412,nop,wscale 8,nop,nop,sackOK], length 0
+23:19:43.698699 IP 186.67.242.29.56764 > 10.254.254.2.80: Flags [S], seq 3459832386, win 65535, options [mss 1412,nop,wscale 8,nop,nop,sackOK], length 0
+23:19:45.706255 IP 186.67.242.29.56764 > 10.254.254.2.80: Flags [S], seq 3459832386, win 65535, options [mss 1412,nop,wscale 8,nop,nop,sackOK], length 0
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on eth1, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+3 packets captured
+3 packets received by filter
+0 packets dropped by kernel
+Source matches external client: True
+
+Source preservation: PASS
+HTTP probe exit code: 28
+*   Trying 100.50.147.57:80...
+* Connection timed out after 6013 milliseconds
+* closing connection #0
+curl: (28) Connection timed out after 6013 milliseconds
+HTTP service: NOT VALIDATED; A5 HAProxy remains pending.
+No routing/firewall changes were made for this test.

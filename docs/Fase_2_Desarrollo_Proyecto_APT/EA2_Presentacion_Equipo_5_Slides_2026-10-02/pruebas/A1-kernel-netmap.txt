@@ -1,0 +1,9 @@
+Resumen visual, no captura nativa de terminal.
+Fecha: 02/10/2026 · 16:29 Chile
+CE 2.9.0 / FreeBSD 16
+IPv4 forwarding      1
+intr_queue_maxlen 4096
+RX/TX · TSO · LRO  OFF
+/dev/netmap    presente
+14 PASS / 0 FAIL
+Fuentes: a1-current-profile-20261002.json

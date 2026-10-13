@@ -1,0 +1,9 @@
+Resumen visual, no captura nativa de terminal.
+Fecha: 02/10/2026 · 17:15 Chile
+Tailnet / MGMT: ONLINE
+pfSense WebGUI: HTTP200
+WAN: 26628 firmas OK
+Trunk: 26629 firmas OK
+NETMAP/IPS: 0 fallidas
+Guard READY:     PASS
+Fuentes: ppt-five-live-health-20261002.json

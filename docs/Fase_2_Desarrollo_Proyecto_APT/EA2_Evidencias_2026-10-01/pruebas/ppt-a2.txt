@@ -1,0 +1,9 @@
+DHCP DORA: cuatro ACK reales
+CORP .10.100 | DMZ .20.100
+VOIP .30.100 | MGMT .99.100
+Gateway / DNS .1 y máscara /24
+
+TCP/22: CORP → MGMT bloqueado
+DMZ → CORP / MGMT bloqueado
+Control positivo SSH desde MGMT: OK
+Resultado: 16 verificaciones PASS

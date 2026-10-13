@@ -1,0 +1,611 @@
+[
+  {
+    "archivo": "2026-09-27/configuraciones/01-pfsense-dashboard.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/Avance_A1_Evidencias_2026-09-27/01-pfsense-dashboard.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-09-27",
+    "sha256": "bb7a0a7d4b84ebe5f090b3813ebf3e0bea8bbc14b9e4603e64acc73dfcfd8a69"
+  },
+  {
+    "archivo": "2026-09-27/configuraciones/01b-pfsense-version.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/Avance_A1_Evidencias_2026-09-27/01b-pfsense-version.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-09-27",
+    "sha256": "24a396be8efca944bc394f26fc8171e6670771d80a18e2c721f4aaa2c3e3d235"
+  },
+  {
+    "archivo": "2026-09-27/configuraciones/01c-pfsense-interfaces.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/Avance_A1_Evidencias_2026-09-27/01c-pfsense-interfaces.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-09-27",
+    "sha256": "3f12772322d64c1f162204f2a23ba77181a8635cac7939f7e4da6065be25fffe"
+  },
+  {
+    "archivo": "2026-09-27/configuraciones/02-pfsense-wan.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/Avance_A1_Evidencias_2026-09-27/02-pfsense-wan.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-09-27",
+    "sha256": "012d86069b07fc9395da1b4e201e1865588f21962e42156313e57a391340d4ee"
+  },
+  {
+    "archivo": "2026-09-27/configuraciones/03-pfsense-offloading.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/Avance_A1_Evidencias_2026-09-27/03-pfsense-offloading.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-09-27",
+    "sha256": "d1e7363b5a5da97761da905881b937a78f5963c1bccdf1d0e83afb6f22a098d1"
+  },
+  {
+    "archivo": "2026-09-27/configuraciones/04-dvwa-login.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/Avance_A1_Evidencias_2026-09-27/04-dvwa-login.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-09-27",
+    "sha256": "11ff0c3063bf8fdde2a1ba3b13a05c4d1d55735c11273b0ccef1a1dedb712e17"
+  },
+  {
+    "archivo": "2026-09-27/pruebas/05-edge.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/Avance_A1_Evidencias_2026-09-27/05-edge.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-09-27",
+    "sha256": "57a82d9cf92e17881e9478bb08b6d5424c1451302f09c7a931c92a404bee2a48"
+  },
+  {
+    "archivo": "2026-09-27/pruebas/06-pfsense-kernel.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/Avance_A1_Evidencias_2026-09-27/06-pfsense-kernel.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-09-27",
+    "sha256": "82f29ad0515f82567ad97b10ea0eac3a9ce0c48188cf1276672303afd6450ba0"
+  },
+  {
+    "archivo": "2026-09-27/pruebas/07-tailscale.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/Avance_A1_Evidencias_2026-09-27/07-tailscale.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-09-27",
+    "sha256": "efa9d4039e880436113d6c1f14b8c60559517c64ed353caf1c808f7fc46aaa24"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/01-dashboard-interfaces.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/01-dashboard-interfaces.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "03b914821fc49d7c788b659b09378f0a3686a7fe3d080ebe14ed8e070aeb4754"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/01b-interfaces-resumen.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/01b-interfaces-resumen.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "2cb9c89ff53d605a40342775dc1128ad7ac5bb801cb0beb8f1b0f9d130ac996e"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/02-wan.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/02-wan.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "28c7037b6ed7e30602aca4d99b22d1ea56b5504c4d3214b9286412798e52e99e"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/03-vlan-8021q.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/03-vlan-8021q.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "865c8aa3676a57050e01acc9557a5f367df6e06770db15a330c65087c0783305"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/04-dhcp-VLAN10-CORP.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/04-dhcp-VLAN10-CORP.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "f6433a015bbb7f73d20ad35d1b8e1b02a51f14c6e75bb0ca40e0eb308510ee90"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/04-dhcp-VLAN20-DMZ.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/04-dhcp-VLAN20-DMZ.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "09f861f171c708b5e1bc764d9caa3679ef21c5032006905b152656c089570b1c"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/04-dhcp-VLAN30-VOIP.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/04-dhcp-VLAN30-VOIP.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "1ab3479cb56313bf2c1f017a45741ca1ef3648c0b73685193e1a35db6770f877"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/04-dhcp-VLAN99-MGMT.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/04-dhcp-VLAN99-MGMT.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "4725c67e73c92409e9a04799df589b218f0db831adc3c5c219e02f4bff5fba9e"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/05-offloading.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/05-offloading.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "d1e7363b5a5da97761da905881b937a78f5963c1bccdf1d0e83afb6f22a098d1"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/06-system-tunables.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/06-system-tunables.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "7e0a67cabeb690404606f4ec6bbfb0e9c5e46c059ba01b727c0614bbf0202b1a"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/07-rules-CORP.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/07-rules-CORP.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "f6e0488ab433a05ef5484d997064215066945ba78d7927e693ed52bfb7968327"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/08-rules-DMZ.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/08-rules-DMZ.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "75e830ca93bbb8ddfa32cfa574396c40570ba0c3ec25951dd12dffc715f3470c"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/08b-rules-WAN-reputation.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/08b-rules-WAN-reputation.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "2214e6858a7cd47ac6cbac6dd07603e5f2ec010f9bc69efdc3951f38c3276cf9"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/09-suricata-interfaces.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/09-suricata-interfaces.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "7fd75499fc2dd8b3fc2c77c5048321aa520744cca55792756fdf12b7bff040c9"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/09b-suricata-WAN-settings.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/09b-suricata-WAN-settings.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "972f681fc8d60cc828b99f41d34b419413fb2ca97b1425cd73bf71eae5d98c65"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/09c-suricata-categories.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/09c-suricata-categories.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "c1bdfc69127a333c6621e01c736a00a8af7955f2eb11a6e78b7eee8a2402dcfd"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/09c-suricata-SID-management.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/09c-suricata-SID-management.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "6211856a5da27193e0081fbd66d2a97e47692ea9e13ee2ca355dd7d77d6f9e1b"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/10-pfBlocker-IP-settings.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/10-pfBlocker-IP-settings.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "35f55757ac2f310b1e5b7bfbf04ab365a89e0ebcc7e5fa191d963f9e60596e19"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/10b-pfBlocker-IPv4-lists.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/10b-pfBlocker-IPv4-lists.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "a95dd639228271888b59eb37a4c5a361fca015ccb441f2f4b7f0e8caef07da43"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/10c-pfBlocker-summary-1.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/10c-pfBlocker-summary-1.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "50160d73e17c57fb96f467a02870f207e68ad03a368cb00d0fbd5a989b9c461f"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/10c-pfBlocker-summary-2.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/10c-pfBlocker-summary-2.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "057edd345c8a003a086cb475f51e398027f40d278934536d48a15a43d3c6c6c3"
+  },
+  {
+    "archivo": "2026-10-01/configuraciones/11-DVWA-login.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/configuraciones/11-DVWA-login.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-01",
+    "sha256": "a78abc3dd94ff08d0d29c773d902ef7cbf32e7ca7ab26f03bd94c9ad9082d425"
+  },
+  {
+    "archivo": "2026-10-01/pruebas/01-a2-dhcp-aislamiento.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/pruebas/01-a2-dhcp-aislamiento.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-01",
+    "sha256": "1347f3d7b2fac5dfc10ce374be53f7a35422556049cbee74153ad93da7b709a8"
+  },
+  {
+    "archivo": "2026-10-01/pruebas/02-edge-persistencia.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/pruebas/02-edge-persistencia.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-01",
+    "sha256": "d394728f5b0dd162359164e41a7e3bf9e20a4a2b4d2f9f47d3989bb7df8a4e40"
+  },
+  {
+    "archivo": "2026-10-01/pruebas/03-a1-kernel.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/pruebas/03-a1-kernel.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-01",
+    "sha256": "1ac08176c380dfea8ff12c5cee7c707c7fe941e921775aa21c1ba6b0dced79c3"
+  },
+  {
+    "archivo": "2026-10-01/pruebas/04-suricata-ips.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/pruebas/04-suricata-ips.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-01",
+    "sha256": "04c7bf1b9b5c3625748031627f60a5b7f72c3f72420a284d66a9b2b29c169564"
+  },
+  {
+    "archivo": "2026-10-01/pruebas/05-pfblocker.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/pruebas/05-pfblocker.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-01",
+    "sha256": "a3e6a112f4b0749034e5d67e8c8fd1fbccded44af0a57d117b583eaea96dcddc"
+  },
+  {
+    "archivo": "2026-10-01/pruebas/06-source-preservation.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/pruebas/06-source-preservation.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-01",
+    "sha256": "a6e67544bf86980a08d6da62f20587394f923515e19a7e6430e785a688a6fe4c"
+  },
+  {
+    "archivo": "2026-10-01/pruebas/07-geoip-country-policy.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/pruebas/07-geoip-country-policy.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-01",
+    "sha256": "4bb12cc5552d1f606567224df8e96f0c685d80d81fe96541031d6da887bd24bc"
+  },
+  {
+    "archivo": "2026-10-01/pruebas/ppt-a2.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/pruebas/ppt-a2.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-01",
+    "sha256": "0929913b0cd08157445759708ce66de939391f085dcd3d60add2bd26345e6a67"
+  },
+  {
+    "archivo": "2026-10-01/pruebas/ppt-a3.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/pruebas/ppt-a3.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-01",
+    "sha256": "de462de62ec4a265e924fc9576f50d61707d73230c1f226fd0e43506dd406954"
+  },
+  {
+    "archivo": "2026-10-01/pruebas/ppt-a4.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-01/pruebas/ppt-a4.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-01",
+    "sha256": "b77711d5d9c4b82dd4031810e9f338c42fcb72321d646a51eaa43d4121be2fe7"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/01-dashboard-interfaces.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/01-dashboard-interfaces.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "2197e4aa4879154b90ba60333a8b0c5e807bd9539e654965a8fbb15cc758f4bf"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/01b-interfaces-resumen.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/01b-interfaces-resumen.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "3f12772322d64c1f162204f2a23ba77181a8635cac7939f7e4da6065be25fffe"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/02-wan.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/02-wan.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "28c7037b6ed7e30602aca4d99b22d1ea56b5504c4d3214b9286412798e52e99e"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/03-vlan-8021q.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/03-vlan-8021q.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "865c8aa3676a57050e01acc9557a5f367df6e06770db15a330c65087c0783305"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/04-dhcp-VLAN10-CORP.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/04-dhcp-VLAN10-CORP.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "f6433a015bbb7f73d20ad35d1b8e1b02a51f14c6e75bb0ca40e0eb308510ee90"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/04-dhcp-VLAN20-DMZ.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/04-dhcp-VLAN20-DMZ.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "09f861f171c708b5e1bc764d9caa3679ef21c5032006905b152656c089570b1c"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/04-dhcp-VLAN30-VOIP.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/04-dhcp-VLAN30-VOIP.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "1ab3479cb56313bf2c1f017a45741ca1ef3648c0b73685193e1a35db6770f877"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/04-dhcp-VLAN99-MGMT.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/04-dhcp-VLAN99-MGMT.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "4725c67e73c92409e9a04799df589b218f0db831adc3c5c219e02f4bff5fba9e"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/05-offloading.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/05-offloading.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "d1e7363b5a5da97761da905881b937a78f5963c1bccdf1d0e83afb6f22a098d1"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/06-system-tunables.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/06-system-tunables.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "7e0a67cabeb690404606f4ec6bbfb0e9c5e46c059ba01b727c0614bbf0202b1a"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/07-rules-CORP.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/07-rules-CORP.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "f6e0488ab433a05ef5484d997064215066945ba78d7927e693ed52bfb7968327"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/08-rules-DMZ.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/08-rules-DMZ.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "75e830ca93bbb8ddfa32cfa574396c40570ba0c3ec25951dd12dffc715f3470c"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/08b-rules-WAN-reputation.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/08b-rules-WAN-reputation.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "93992590aa7891107b64782c067c2d899fddcbe26df4f1c6818f53afd5f24828"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/08c-ips-readiness-guard.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/08c-ips-readiness-guard.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "6c68d525df81a8fb7c724e159cd560544b328324d2c5ddda355389266818cb56"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/08d-pf-table-capacity.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/08d-pf-table-capacity.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "a7aff6de9200bf97cb2579514c99f830f36682b04c0a49e9183170cc3c31503b"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/09-suricata-interfaces.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/09-suricata-interfaces.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "edd9d24450e1cc5fb521fa6ef649c15c0ce9e5f212ce55e86bbd16f19a388b78"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/09b-suricata-WAN-settings.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/09b-suricata-WAN-settings.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "972f681fc8d60cc828b99f41d34b419413fb2ca97b1425cd73bf71eae5d98c65"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/09c-suricata-categories.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/09c-suricata-categories.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "251e79722a096fb7cac029198435b7fbcfbf1f258f693c29cfeba4b1a342b5fd"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/09c-suricata-SID-management.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/09c-suricata-SID-management.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "21d3ecc6425c35d184fa3c3b0076623882f32438d7c3f242561053cf8eb65e28"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/09d-suricata-trunk-interface.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/09d-suricata-trunk-interface.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "588f7cc3175c381cb0f8dcc5a0ddf57bbd7ece280d0766d16f61b23566be8758"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/09e-suricata-trunk-settings.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/09e-suricata-trunk-settings.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "5436da7b847c24ffc593f1c12bda5ae2c6d956558af8533c4aa8e7e6e10de105"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/10-pfBlocker-IP-settings.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/10-pfBlocker-IP-settings.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "35f55757ac2f310b1e5b7bfbf04ab365a89e0ebcc7e5fa191d963f9e60596e19"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/10b-pfBlocker-IPv4-lists.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/10b-pfBlocker-IPv4-lists.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "15538ebbf557dddde7732d1ec096d6fba5107adcc13bd30596137da1e44e056e"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/10c-pfBlocker-summary-1.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/10c-pfBlocker-summary-1.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "0c081d66220a422e538e0f87a14c20b8094293352e1b90a170a76e2687ba0849"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/10c-pfBlocker-summary-2.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/10c-pfBlocker-summary-2.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "057edd345c8a003a086cb475f51e398027f40d278934536d48a15a43d3c6c6c3"
+  },
+  {
+    "archivo": "2026-10-02/configuraciones/11-DVWA-login.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/configuraciones/11-DVWA-login.png",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-02",
+    "sha256": "a78abc3dd94ff08d0d29c773d902ef7cbf32e7ca7ab26f03bd94c9ad9082d425"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/01-a2-postboot.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/pruebas/01-a2-postboot.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "5c4403d1b979cb0131a398ca21fcb5bcf4c4c771173939a0357373d89a1fb652"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/02-a3-interno.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/pruebas/02-a3-interno.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "52f4dc7c7accfbe6595552b351b821ac75d987799f574ef73f911c55e9159e60"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/03-a3-wan.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/pruebas/03-a3-wan.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "ba4a1fea914591d15c30550d3b48cc882c55b221842d8e5a9e46e61c41f824b1"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/04-a1-kernel.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/pruebas/04-a1-kernel.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "1bcaf434c510878899b9c5327aa98083183084f5cf3e975a53a1cbdc7f75bfae"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/05-ips-health.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/pruebas/05-ips-health.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "3e1ca9a7639a6a58183e1e507e0fb48265c96662f1e527ec669c2268db964633"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/06-startup-window.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/pruebas/06-startup-window.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "6657c064f1bf259074c9a5c00f61ac5fd8fda754f0fa33bca0c660a82a764944"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/07-guard-arranque.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/pruebas/07-guard-arranque.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "855ad85f2428e565b13702dbe6242b8169e58abe53836e6e8bb8fbd2b3446fcf"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/08-guard-caidas.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/pruebas/08-guard-caidas.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "9857240d6fe44f42081e0e1aed43ba7ba7786ab3b2c35f9d071e724603c049ae"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/09-a4-actual.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/pruebas/09-a4-actual.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "4d985f6bdbbe9a2d5c791d5ee8bbb5bcbbf5ba97b10819187330d9b3c70bc937"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/10-a1-compatible.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/pruebas/10-a1-compatible.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "0beab3c01a06eac095f7b8110fdfd70a6eb155c8a7d5da536fc3b6f91ebdf6d4"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ppt-a2.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/pruebas/ppt-a2.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "a94fbe1bf843cddf044a3f4afae17ac7f672c94284d3c3c798ad044ddbd47623"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ppt-a3.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/pruebas/ppt-a3.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "d371b52706eb2d80d480a82bd20221bdb8aa161c28e15a636b70f56a15cd64eb"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ppt-a4.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Evidencias_2026-10-02/pruebas/ppt-a4.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "6c66ab214620d542447e049f982019ae46e5667bc30d1ade490e3c9f37780ef2"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ampliacion-A1-kernel-netmap.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Presentacion_Equipo_5_Slides_2026-10-02/pruebas/A1-kernel-netmap.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "81d6df19af88c172e27b938a3cccdeb34b16a7aadb502b84150aa4ccbe4cf197"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ampliacion-A2-dhcp-segmentacion.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Presentacion_Equipo_5_Slides_2026-10-02/pruebas/A2-dhcp-segmentacion.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "20a613368da918cb740af30862a970437fd4606b22e70a0e7004f049243e162b"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ampliacion-A3-guard-fallos-reinicio.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Presentacion_Equipo_5_Slides_2026-10-02/pruebas/A3-guard-fallos-reinicio.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "b41666601e74df73181a2a1fcc1d97c6e7cdafa4b5e334f667eed485b36e62be"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ampliacion-A3-ips-wan-interno.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Presentacion_Equipo_5_Slides_2026-10-02/pruebas/A3-ips-wan-interno.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "ccfdb04f9a3bc19462a560d2c25d22b5addc43f9c19eea7eced1afd9d20d2a5f"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ampliacion-A4-reputacion-geoip.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Presentacion_Equipo_5_Slides_2026-10-02/pruebas/A4-reputacion-geoip.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "f9a6939067cdda6c62685d88db7ca55307d9e351d622fe9b83e1ad2c8f4870bd"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ampliacion-Administracion-health-actual.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Presentacion_Equipo_5_Slides_2026-10-02/pruebas/Administracion-health-actual.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "357be489508ba1bd566c77b9d650dc16203ce5ad7e3e215aa502d1bba10f1d08"
+  },
+  {
+    "archivo": "2026-10-02/pruebas/ampliacion-Transporte-ip-original.png",
+    "origen": "docs/Fase_2_Desarrollo_Proyecto_APT/EA2_Presentacion_Equipo_5_Slides_2026-10-02/pruebas/Transporte-ip-original.png",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-02",
+    "sha256": "df9db4a03721201235cef3c43d35eebfaa3d44d87450729c05e9b4aa4bc40204"
+  }
+]

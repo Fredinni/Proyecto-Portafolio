@@ -1,0 +1,15 @@
+#!/bin/sh
+# Installed as /usr/local/etc/rc.d/kronos-ips-guard.sh on the project pfSense.
+# pfSense native system/shellcmd invokes start after networking/filter setup.
+# No changes to rcorder or to production services are assumed.
+CONTROLLER=/usr/local/sbin/kronos-ips-guard
+case "${1:-start}" in
+    start) "$CONTROLLER" boot-start ;;
+    stop) "$CONTROLLER" stop ;;
+    restart)
+        "$CONTROLLER" stop && "$CONTROLLER" start
+        # stop holds closed intentionally; operator calls resume after maintenance.
+        ;;
+    status) "$CONTROLLER" status ;;
+    *) echo "Usage: $0 {start|stop|restart|status}" >&2; exit 2 ;;
+esac

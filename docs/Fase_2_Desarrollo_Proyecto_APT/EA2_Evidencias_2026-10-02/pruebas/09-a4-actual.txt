@@ -1,0 +1,38 @@
+{
+  "checked_at": "2026-10-02T19:27:40.441102+00:00",
+  "tests": [
+    {
+      "test": "Spamhaus WAN block",
+      "table_entries": 1692,
+      "expected_packets": 3,
+      "actual_counter_delta": 3,
+      "status": "PASS",
+      "scope": "three benign UDP frames only to pfSense WAN on isolated transit"
+    },
+    {
+      "test": "RU WAN block",
+      "table_entries": 13178,
+      "expected_packets": 3,
+      "actual_counter_delta": 3,
+      "status": "PASS",
+      "scope": "three benign UDP frames only to pfSense WAN on isolated transit"
+    },
+    {
+      "test": "KP WAN block",
+      "table_entries": 10,
+      "expected_packets": 3,
+      "actual_counter_delta": 3,
+      "status": "PASS",
+      "scope": "three benign UDP frames only to pfSense WAN on isolated transit"
+    },
+    {
+      "test": "FireHOL WAN block",
+      "table_entries": 4643,
+      "expected_packets": 3,
+      "actual_counter_delta": 3,
+      "status": "PASS",
+      "scope": "three benign UDP frames only to pfSense WAN on isolated transit"
+    }
+  ],
+  "status": "PASS"
+}

@@ -1,0 +1,14 @@
+Sistema: FreeBSD 16.0-CURRENT
+[UNSUPPORTED] net.inet.ip.fastforwarding: None
+[PASS] net.inet.ip.intr_queue_maxlen: 4096
+[PASS] net.pf.states_hashsize: 262144
+[PASS] kern.ipc.nmbclusters: 1000000
+[UNSUPPORTED] hw.netmap.buf_size: None
+[UNSUPPORTED] hw.netmap.ring_size: None
+[PASS] config.system.disablechecksumoffloading: True
+[PASS] config.system.disablesegmentationoffloading: True
+[PASS] config.system.disablelargereceiveoffloading: True
+[PASS] ifconfig.vtnet0.offloads: []
+[PASS] ifconfig.vtnet1.offloads: []
+[PASS] /dev/netmap: True
+Resultado: PARTIAL; 9 PASS, 0 FAIL, 3 OID retirados / UNSUPPORTED

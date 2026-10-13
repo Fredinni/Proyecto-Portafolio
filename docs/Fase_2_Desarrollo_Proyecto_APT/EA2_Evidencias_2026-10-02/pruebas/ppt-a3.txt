@@ -1,0 +1,7 @@
+WAN: 3 DROP + 3 EVE nuevos
+Interno: 3 DROP + 3 EVE nuevos
+HTTP200 normal antes/despues
+Arranque: 0 marcadores escapados
+Fallos: cierre y recuperacion OK
+WebGUI y transporte Tailscale OK
+Netmap WAN + trunk: 0 reglas fallidas

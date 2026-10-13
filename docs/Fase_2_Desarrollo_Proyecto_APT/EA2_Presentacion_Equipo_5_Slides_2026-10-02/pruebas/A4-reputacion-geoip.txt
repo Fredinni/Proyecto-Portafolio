@@ -1,0 +1,9 @@
+Resumen visual, no captura nativa de terminal.
+Fecha: 02/10/2026 · 16:27 Chile
+Spamhaus: 3 DROP · 1692 redes
+Rusia: 3 DROP · 13178 redes
+Corea N.: 3 DROP · 10 redes
+FireHOL: 3 DROP · 4643 redes
+Esperado: 3 por regla
+4 reglas:        PASS
+Fuentes: s7-a4-live-tests.json
