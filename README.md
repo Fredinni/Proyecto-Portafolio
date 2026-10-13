@@ -26,7 +26,7 @@
 
 > **Corte actualizado: 13 de octubre de 2026 (semana 9).** A1, A2, A3 y A4 están completadas y verificadas en laboratorio; A5 (Cristóbal Quezada) está en ejecución dentro de su ventana S9–S10. El [informe comprobado más reciente](docs/Fase_2_Desarrollo_Proyecto_APT/AVANCE_SEMANA7_2026-10-02.md) documenta A2 verificada, Suricata Inline probado en WAN y trunk interno y cuatro políticas de reputación/GeoIP aplicadas, con 26 capturas reales y presentación ampliada a cinco diapositivas. El guard IPS corrigió la ventana inicial de arranque: ensayo final sin marcadores escapados y recuperación automática. A1 pasa 14 comprobaciones del perfil compatible pfSense 2.9 / FreeBSD 16; se conserva el informe del perfil antiguo con tres OID retirados, que no representan un IPS averiado. Las integraciones posteriores y pruebas prolongadas siguen pendientes.
 
-**Presentación recomendada para Evaluación 2:** [PPT, PDF y guion del equipo](docs/Fase_2_Desarrollo_Proyecto_APT/PRESENTACION_EA2_EQUIPO.md).
+**Presentación recomendada para Evaluación 2:** [PPT, PDF y guion del equipo](docs/Fase_2_Desarrollo_Proyecto_APT/Presentaciones_y_Evidencias_EA2/05_Presentacion_Final_5_Slides_2026-10-06/PRESENTACION_EA2_EQUIPO.md).
 
 > **Institución:** Duoc UC — Sede San Joaquín | **Carrera:** Ingeniería en Conectividad y Redes  
 > **Semestre Académico:** Segundo Semestre 2026 (Primavera 2026: Agosto – Diciembre 2026)  
@@ -184,7 +184,14 @@ Proyecto-Portafolio/
 │   │   ├── Informacion_EA2/
 │   │   │   └── Plan_Trabajo_Carta_Gantt.md     # Cronograma maestro oficial de 18 semanas
 │   │   ├── Diario_Reflexion_Fase_2/            # Diarios 2.1 de monitoreo y Carta Gantt
-│   │   └── GUIA_DEFENSA_AVANCE_A1_SEMANAS_1_2.md # Guión técnico y evidencias de avance A1
+│   │   ├── Autoevaluacion_Avance_Fase_2/       # Autoevaluaciones 2.2 por integrante
+│   │   ├── AVANCE_SEMANA7_2026-10-0[1-2].md    # Informes técnicos de avance de la semana 7
+│   │   └── Presentaciones_y_Evidencias_EA2/    # Presentaciones de avance (PPT/PDF) y sus capturas
+│   │       ├── 01_Avance_A1_Semanas_1_2/       # PPT y guion de defensa del avance A1
+│   │       ├── 02_Avance_S7_Corte_2026-10-01/  # PPT/PDF del corte 01-oct y sus evidencias
+│   │       ├── 03_Avance_S7_Corte_2026-10-02/  # PPT/PDF del corte 02-oct y sus evidencias
+│   │       ├── 04_Presentacion_Equipo_3_Slides_2026-10-02/ # Versión de 3 diapositivas (histórica)
+│   │       └── 05_Presentacion_Final_5_Slides_2026-10-06/  # Versión presentada el 06-oct y guion
 │   ├── Fase_3_Presentacion_Proyecto_APT/
 │   │   ├── roles/                              # Manuales operativos y guías por integrante
 │   │   └── knowledge_base/                     # Base de conocimiento técnico para la defensa
