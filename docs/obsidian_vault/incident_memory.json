@@ -1,8 +1,8 @@
 {
   "185.220.101.5": {
-    "count": 12,
+    "count": 13,
     "first_seen": "2026-10-26T00:54:12Z",
-    "last_seen": "2026-10-26T01:49:21Z",
+    "last_seen": "2026-10-26T19:14:23Z",
     "attack_types": [
       "Inyección SQL (AST Validated)",
       "Inyección SQL Crítica",
@@ -30,6 +30,6 @@
     "actions": [
       "DROP & BLOCK en Firewall pfSense (Kernel pfctl State Kill)"
     ],
-    "notes": "Ataque reincidente detectado #12."
+    "notes": "Ataque reincidente detectado #13."
   }
 }

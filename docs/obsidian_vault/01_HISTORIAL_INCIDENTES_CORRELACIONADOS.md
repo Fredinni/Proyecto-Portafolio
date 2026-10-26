@@ -40,6 +40,7 @@ Base de conocimiento activa para correlación de vectores de ataque, detección 
 | 10 | 2026-10-26 01:45:49 | `185.220.101.5` | Bloqueo Manual SOAR por Voz | `N/A` | DROP permanente en snort2c y purga de estados (Ataque reiterado detectado por KRONOS) | ⚠️ **x10 (REINCIDENTE)** | En curso |
 | 11 | 2026-10-26 01:49:21 | `185.220.101.5` | Inyección SQL Crítica | `1=1` | DROP en snort2c & State Kill | ⚠️ **x11 (REINCIDENTE)** | En curso |
 | 12 | 2026-10-26 01:49:21 | `185.220.101.5` | Bloqueo Manual SOAR por Voz | `N/A` | DROP permanente en snort2c y purga de estados (Ataque reiterado detectado por KRONOS) | ⚠️ **x12 (REINCIDENTE)** | En curso |
+| 13 | 2026-10-26 19:14:23 | `185.220.101.5` | SQL_INJECTION (AST_TAUTOLOGY) | `1=1` | DROP & BLOCK en Firewall pfSense (Kernel pfctl State Kill) | ⚠️ **x13 (REINCIDENTE)** | En curso |
 
 ## 2. Detalle de Incidentes Registrados
 
@@ -172,3 +173,12 @@ Base de conocimiento activa para correlación de vectores de ataque, detección 
 * **Prioridad:** CRITICA
 * **Instrucciones del CISO:** Auditoría autónoma completada
 * **Estado:** Asignado a Equipo de Respuesta a Incidentes (IR / Blue Team)
+
+### Caso #013 - Reincidencia ⚠️ **x13 (REINCIDENTE)**: SQL_INJECTION (AST_TAUTOLOGY)
+* **Timestamp:** 2026-10-26 19:14:23 UTC
+* **IP Atacante:** `185.220.101.5`
+* **Objetivo:** DVWA en DMZ
+* **Tautologías AST:** `1=1`
+* **Acción de Mitigación:** DROP & BLOCK en Firewall pfSense (Kernel pfctl State Kill)
+* **Frecuencia:** Este origen ha intentado atacar 13 veces.
+* **Correlación:** [[00_PERSONALIDAD_IA_KRONOS]], [[02_TOPOLOGIA_Y_REGLAS_PFSENSE]]
