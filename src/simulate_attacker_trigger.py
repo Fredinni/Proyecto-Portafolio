@@ -5,12 +5,16 @@ Autor: Bruno Urrea Ortiz - Proyecto Portafolio de Título APT122
 Duoc UC - Sede San Joaquín
 """
 
-import json
-import logging
 import os
 import sys
 import time
+import json
+import base64
+import subprocess
 import urllib.request
+import urllib.error
+import logging
+import paramiko
 
 # Ajustar rutas de módulos
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "pfsense_pfctl_engine"))
@@ -24,6 +28,148 @@ from call_trigger import AsteriskCallTrigger
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] [KRONOS-ATTACKER] %(message)s')
 
+def get_gemini_key():
+    for env_path in [r"C:\Users\bruno\.env", os.path.expanduser("~/.env"), os.path.join(os.path.dirname(__file__), "..", ".env")]:
+        if os.path.exists(env_path):
+            with open(env_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    if line.startswith("GEMINI_API_KEY="):
+                        return line.split("=", 1)[1].strip().strip("'\"")
+    return os.getenv("GEMINI_API_KEY", "")
+
+def pregenerate_live_gemini_speech(attacker_ip: str, incident_type: str, vm103_ip: str = "192.168.30.50"):
+    """Genera en vivo el debriefing y cierre con Gemini 3.1 Flash y voz femenina Aoede, subiéndolo a Asterisk"""
+    api_key = get_gemini_key()
+    if not api_key:
+        print(" [!] No se encontro GEMINI_API_KEY. Se utilizara sintesis de respaldo.")
+        return
+
+    print(" -> Consultando Gemini 3.1 Flash Lite (Generacion de dialogo informal en vivo)...")
+    sys_prompt = (
+        "Eres la operadora de IA del sistema de ciberseguridad KRONOS SENTINEL. "
+        "Estás en una llamada telefónica en vivo con Bruno Urrea (CISO). "
+        "HABLA DE TÚ A TÚ, SÚPER INFORMAL, MUY CASUAL, COMO UNA COLEGA CAPA Y RELAJADA. "
+        "Cero formalismos corporativos. "
+        "Genera dos respuestas en formato JSON con las claves 'alert' y 'closing': "
+        f"1. 'alert': Explícale que acabas de mitigar una intrusión SQLi hacia DVWA desde la IP {attacker_ip}, "
+        "que el pfSense ya le chantó un DROP en la tabla snort2c y mató los estados activos en el kernel. "
+        "Pregúntale si revisamos el tráfico o si lo dejamos bloqueado nomás. (Máximo 28 palabras). "
+        "2. 'closing': Despídete de Bruno con buena onda diciendo que quedó blindado y que ante cualquier cosa le timbras al tiro. (Máximo 16 palabras). "
+        "Devuelve SOLO el JSON válido."
+    )
+
+    LLM_MODELS = [
+        "gemini-3.5-flash",
+        "gemini-3.1-flash-lite",
+        "gemini-2.5-flash"
+    ]
+
+    TTS_MODELS = [
+        "gemini-3.1-flash-tts-preview",
+        "gemini-3.8-flash-lite-tts",
+        "gemini-3.8-flash-tts",
+        "gemini-2.5-flash-preview-tts"
+    ]
+
+    def ask_gemini_json(prompt, sys_inst):
+        for m in LLM_MODELS:
+            url_llm = f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent?key={api_key}"
+            body_llm = {
+                "systemInstruction": {"parts": [{"text": sys_inst}]},
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {"responseMimeType": "application/json"}
+            }
+            req = urllib.request.Request(url_llm, data=json.dumps(body_llm).encode(), headers={"Content-Type": "application/json"})
+            try:
+                with urllib.request.urlopen(req, timeout=12) as resp:
+                    data = json.loads(resp.read().decode())
+                    raw_json = data['candidates'][0]['content']['parts'][0]['text']
+                    return json.loads(raw_json)
+            except Exception as e:
+                print(f" -> Aviso LLM con {m}: {e}. Probando siguiente modelo...")
+                continue
+        return None
+
+    def ask_gemini_tts(text_to_speak):
+        for model in TTS_MODELS:
+            url_tts = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
+            body = {
+                "contents": [{"parts": [{"text": text_to_speak}]}],
+                "generationConfig": {
+                    "responseModalities": ["AUDIO"],
+                    "speechConfig": {
+                        "voiceConfig": {
+                            "prebuiltVoiceConfig": {
+                                "voiceName": "Aoede"
+                            }
+                        }
+                    }
+                }
+            }
+            req = urllib.request.Request(url_tts, data=json.dumps(body).encode(), headers={"Content-Type": "application/json"})
+            try:
+                with urllib.request.urlopen(req, timeout=25) as resp:
+                    data = json.loads(resp.read().decode())
+                    pcm = base64.b64decode(data['candidates'][0]['content']['parts'][0]['inlineData']['data'])
+                    print(f" -> Sintesis OK con {model} ({len(pcm)} bytes)")
+                    return pcm
+            except Exception as e:
+                print(f" -> Aviso TTS con {model}: {e}. Intentando modelo alternativo...")
+                continue
+        raise RuntimeError("Todos los modelos TTS de Gemini fallaron.")
+
+    try:
+        parsed_dialogue = ask_gemini_json("Genera el diálogo de alerta y despedida para Bruno en JSON.", sys_prompt) or {}
+        spoken_alert = parsed_dialogue.get("alert", f"¡Bruno! Oye, te cuento que mitigamos una inyección SQL hacia DVWA desde la IP {attacker_ip}. El pfSense ya le chantó un DROP en snort2c y mató los estados. ¿Qué hacemos, revisamos el tráfico o lo dejamos bloqueado?")
+        spoken_closing = parsed_dialogue.get("closing", "¡Listo Bruno! Ya quedó todo blindado en el pfSense. Cualquier cosa rara te timbro al tiro, nos vemos.")
+
+        print(f" -> Alerta IA Generada: \"{spoken_alert}\"")
+        print(f" -> Cierre IA Generado: \"{spoken_closing}\"")
+
+        print(" -> Sintetizando audio en vivo con Gemini TTS (Voz femenina Aoede)...")
+        raw_pcm_alert = ask_gemini_tts(spoken_alert)
+        time.sleep(1)
+        raw_pcm_closing = ask_gemini_tts(spoken_closing)
+
+        # Subir los PCM crudos a VM103 y convertir con sox en el contenedor a 8kHz
+        c = paramiko.SSHClient()
+        c.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        c.connect(vm103_ip, username='kronos', password='3IDQInZoYuSPns4K-YhAIkTRl0ESa0Dt', timeout=10)
+
+        sftp = c.open_sftp()
+        with sftp.file('/tmp/gemini_live_alert.raw', 'wb') as f:
+            f.write(raw_pcm_alert)
+        with sftp.file('/tmp/gemini_live_closing.raw', 'wb') as f:
+            f.write(raw_pcm_closing)
+        sftp.close()
+
+        def run_sudo(cmd_str):
+            stdin, stdout, _ = c.exec_command(f"sudo -S -p '' {cmd_str}")
+            stdin.write("3IDQInZoYuSPns4K-YhAIkTRl0ESa0Dt\n")
+            stdin.flush()
+            stdin.channel.shutdown_write()
+            return stdout.read().decode('utf-8', errors='replace').strip()
+
+        # Copiar y convertir en contenedor
+        run_sudo("docker cp /tmp/gemini_live_alert.raw kronos_asterisk_pbx:/tmp/gemini_live_alert.raw")
+        run_sudo("docker cp /tmp/gemini_live_closing.raw kronos_asterisk_pbx:/tmp/gemini_live_closing.raw")
+
+        run_sudo("docker exec kronos_asterisk_pbx sox -t raw -r 24000 -c 1 -b 16 -e signed-integer /tmp/gemini_live_alert.raw -r 8000 -c 1 /tmp/gemini_alert_current.wav")
+        run_sudo("docker exec kronos_asterisk_pbx sox /tmp/gemini_alert_current.wav -t ul /tmp/gemini_alert_current.ulaw")
+
+        run_sudo("docker exec kronos_asterisk_pbx sox -t raw -r 24000 -c 1 -b 16 -e signed-integer /tmp/gemini_live_closing.raw -r 8000 -c 1 /tmp/gemini_close_current.wav")
+        run_sudo("docker exec kronos_asterisk_pbx sox /tmp/gemini_close_current.wav -t ul /tmp/gemini_close_current.ulaw")
+
+        # Asegurar permisos y crear copia en sonidos permanentes
+        run_sudo("docker exec kronos_asterisk_pbx chown asterisk:asterisk /tmp/gemini_*")
+        run_sudo("docker exec kronos_asterisk_pbx cp /tmp/gemini_close_current.wav /usr/share/asterisk/sounds/custom/kronos_farewell.wav")
+        run_sudo("docker exec kronos_asterisk_pbx cp /tmp/gemini_close_current.ulaw /usr/share/asterisk/sounds/custom/kronos_farewell.ulaw")
+        run_sudo("docker exec kronos_asterisk_pbx chown asterisk:asterisk /usr/share/asterisk/sounds/custom/kronos_farewell.*")
+
+        c.close()
+        print(" -> Audios Gemini Live desplegados en Asterisk PBX (/tmp/gemini_alert_current & /tmp/gemini_close_current)!")
+    except Exception as e:
+        print(f" [!] Aviso en generacion Gemini: {e}. Se utilizara sintesis local.")
 
 def launch_attack_and_trigger_pipeline(attacker_ip: str = "185.220.101.5", target_host: str = "192.168.20.50"):
     print("=" * 72)
@@ -73,6 +219,10 @@ def launch_attack_and_trigger_pipeline(attacker_ip: str = "185.220.101.5", targe
     print(f" -> Tautologias extraidas: {diag['incident']['tautologies']}")
     print(f" -> Accion en Kernel pfctl: {diag['pfctl_action']}")
 
+    # 2.5. Síntesis en tiempo real con Gemini Live (Voz femenina Aoede)
+    print(f"\n[*] PASO 2.5: Generando síntesis interactiva de voz con Gemini Live (Voz: Aoede)...")
+    pregenerate_live_gemini_speech(attacker_ip=attacker_ip, incident_type=diag["attack_type"], vm103_ip="192.168.30.50")
+
     # 3. Disparar llamada prioritaria AMI a Asterisk VM103 hacia PJSIP/1001
     print(f"\n[*] PASO 3: Disparando llamada de emergencia AMI hacia Zoiper (PJSIP/1001)...")
     trigger = AsteriskCallTrigger(
@@ -97,7 +247,6 @@ def launch_attack_and_trigger_pipeline(attacker_ip: str = "185.220.101.5", targe
     print("\n" + "=" * 72)
     print("  PIPELINE COMPLETADO: VERIFICA EL TIMBRADO EN ZOIPER DE TU IPHONE  ")
     print("=" * 72 + "\n")
-
 
 if __name__ == "__main__":
     launch_attack_and_trigger_pipeline()
