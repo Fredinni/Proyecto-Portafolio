@@ -607,5 +607,117 @@
     "tipo": "pruebas",
     "coleccion": "2026-10-02",
     "sha256": "df9db4a03721201235cef3c43d35eebfaa3d44d87450729c05e9b4aa4bc40204"
+  },
+  {
+    "archivo": "2026-10-18/configuraciones/a5-01-haproxy-settings.jpg",
+    "origen": "Capturas de Cristóbal Quezada (WhatsApp, 18/10/2026)",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-18",
+    "sha256": "da286e72663289fa51fdb17ad15cb9b84d9726c8a7487ecefb04915d5e48cfff"
+  },
+  {
+    "archivo": "2026-10-18/configuraciones/a5-02-ca-kronos.jpg",
+    "origen": "Capturas de Cristóbal Quezada (WhatsApp, 18/10/2026)",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-18",
+    "sha256": "5c106d3345607b014cabe53dfa619b283a6e886f098b68ca99bf14cf992e3429"
+  },
+  {
+    "archivo": "2026-10-18/configuraciones/a5-03-certificado-dvwa.jpg",
+    "origen": "Capturas de Cristóbal Quezada (WhatsApp, 18/10/2026)",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-18",
+    "sha256": "055b375522f6c66cb402d8f24f4488b5de91c09d016d92a22c63f5819f087f44"
+  },
+  {
+    "archivo": "2026-10-18/configuraciones/a5-04-frontend-lista.jpg",
+    "origen": "Capturas de Cristóbal Quezada (WhatsApp, 18/10/2026)",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-18",
+    "sha256": "504c09cdd6b822232360e74415731cd820ac7ae6a680534d8d0b49250f9f2474"
+  },
+  {
+    "archivo": "2026-10-18/configuraciones/a5-05-frontend-ssl-offloading.jpg",
+    "origen": "Capturas de Cristóbal Quezada (WhatsApp, 18/10/2026)",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-18",
+    "sha256": "46bd8b043d9d0debfc6d478fa56e247431c6759f80b093f8471e5703e6e4a1a3"
+  },
+  {
+    "archivo": "2026-10-18/configuraciones/a5-06-frontend-advanced-pass-thru.jpg",
+    "origen": "Capturas de Cristóbal Quezada (WhatsApp, 18/10/2026)",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-18",
+    "sha256": "8c3cacdc80d42b4c1cb6bd8e6474bd6595e8a98a4b900d691adefe3a6cfd6261"
+  },
+  {
+    "archivo": "2026-10-18/configuraciones/a5-07-backend-servidor.jpg",
+    "origen": "Capturas de Cristóbal Quezada (WhatsApp, 18/10/2026)",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-18",
+    "sha256": "0c0c4375bde4cff47fc1263958c1cfaa209fc5085d2bbcb3288532466858654e"
+  },
+  {
+    "archivo": "2026-10-18/configuraciones/a5-08-backend-health-check.jpg",
+    "origen": "Capturas de Cristóbal Quezada (WhatsApp, 18/10/2026)",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-18",
+    "sha256": "172b9a03e4f4af12669d6b59ebfcf4544116c9f7f88fb2202b0409f7f99c0962"
+  },
+  {
+    "archivo": "2026-10-18/configuraciones/a5-09-backend-stick-table.jpg",
+    "origen": "Capturas de Cristóbal Quezada (WhatsApp, 18/10/2026)",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-18",
+    "sha256": "383ff5c5705a133085dd98b952438a3096de441b9a5424dc9a06a2a78d3c08e8"
+  },
+  {
+    "archivo": "2026-10-18/configuraciones/a5-10-regla-wan-web-ports.jpg",
+    "origen": "Capturas de Cristóbal Quezada (WhatsApp, 18/10/2026)",
+    "tipo": "configuraciones",
+    "coleccion": "2026-10-18",
+    "sha256": "00da071f1cf5d8893c6548dd26de32eef277c71567b850e099c13f66e915d6b8"
+  },
+  {
+    "archivo": "2026-10-18/pruebas/a5-11-haproxy-validacion-config.jpg",
+    "origen": "Capturas de Cristóbal Quezada (WhatsApp, 18/10/2026)",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-18",
+    "sha256": "143ea70a658e214b456388d462b0717c2a429f8aa83e11fecacf3e3f64119b72"
+  },
+  {
+    "archivo": "2026-10-18/pruebas/a5-12-haproxy-validacion-codigo-0.jpg",
+    "origen": "Capturas de Cristóbal Quezada (WhatsApp, 18/10/2026)",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-18",
+    "sha256": "02128a8d8a605ae0a9da5aa575a0403b9feab311c9fac011a421f400f5ed63bd"
+  },
+  {
+    "archivo": "2026-10-18/pruebas/a5-13-sockstat-puertos.jpg",
+    "origen": "Capturas de Cristóbal Quezada (WhatsApp, 18/10/2026)",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-18",
+    "sha256": "09a41fe81a039e43b1694b04ffc76e5606ff77a43b9c887a56e58bbfacd7bb52"
+  },
+  {
+    "archivo": "2026-10-18/pruebas/a5-14-stick-tables.jpg",
+    "origen": "Capturas de Cristóbal Quezada (WhatsApp, 18/10/2026)",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-18",
+    "sha256": "62ac13127f1d4db313a6a6c0adbbfdee32809b161ab14a4dfe64e885f255a1a6"
+  },
+  {
+    "archivo": "2026-10-18/pruebas/a5-15-haproxy-stats.jpg",
+    "origen": "Capturas de Cristóbal Quezada (WhatsApp, 18/10/2026)",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-18",
+    "sha256": "4a2619e5ab0895395ca71782d4a5600fa20568d7689ed064738ae9ded6d4e36c"
+  },
+  {
+    "archivo": "2026-10-18/pruebas/a5-16-curl-pruebas-edge.jpg",
+    "origen": "Capturas de Cristóbal Quezada (WhatsApp, 18/10/2026) con cookies PHPSESSID ocultas",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-18",
+    "sha256": "5cab8275ac88e520c014f215e7885d3aabe083cfa5fd0787a3514a0e34fa32aa"
   }
 ]

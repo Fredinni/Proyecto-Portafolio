@@ -2,7 +2,7 @@
 
 Assets originales para las presentaciones del equipo: capturas de configuracion y resumenes visuales de pruebas reales. Los PNG se copian sin recortes, recompresion ni cambios de resolucion.
 
-**Para la configuracion mas reciente, usar `2026-10-02/`.** Las otras carpetas conservan el avance historico y pueden mostrar valores o problemas anteriores ya corregidos.
+**Para la configuracion mas reciente de A1 a A4, usar `2026-10-02/`; para A5 (HAProxy HTTPS y DVWA), usar [`2026-10-18/`](2026-10-18/README.md).** Las otras carpetas conservan el avance historico y pueden mostrar valores o problemas anteriores ya corregidos.
 
 ## Colecciones
 
@@ -11,6 +11,7 @@ Assets originales para las presentaciones del equipo: capturas de configuracion 
 | [2026-09-27](2026-09-27/) | 6 | 3 |
 | [2026-10-01](2026-10-01/) | 22 | 10 |
 | [2026-10-02](2026-10-02/) | 26 | 20 |
+| [2026-10-18](2026-10-18/) · A5 HAProxy (Cristóbal Quezada) | 10 | 6 |
 
 ## Uso en PowerPoint
 
@@ -27,6 +28,25 @@ Se mantienen ocultos los campos sensibles en las capturas de configuracion. No s
 `manifest.json` registra origen y SHA-256 de cada PNG para verificar que es una copia identica.
 
 ## Indice de imagenes
+
+### 2026-10-18
+
+- [a5-01-haproxy-settings.jpg](2026-10-18/configuraciones/a5-01-haproxy-settings.jpg) - configuraciones
+- [a5-02-ca-kronos.jpg](2026-10-18/configuraciones/a5-02-ca-kronos.jpg) - configuraciones
+- [a5-03-certificado-dvwa.jpg](2026-10-18/configuraciones/a5-03-certificado-dvwa.jpg) - configuraciones
+- [a5-04-frontend-lista.jpg](2026-10-18/configuraciones/a5-04-frontend-lista.jpg) - configuraciones
+- [a5-05-frontend-ssl-offloading.jpg](2026-10-18/configuraciones/a5-05-frontend-ssl-offloading.jpg) - configuraciones
+- [a5-06-frontend-advanced-pass-thru.jpg](2026-10-18/configuraciones/a5-06-frontend-advanced-pass-thru.jpg) - configuraciones
+- [a5-07-backend-servidor.jpg](2026-10-18/configuraciones/a5-07-backend-servidor.jpg) - configuraciones
+- [a5-08-backend-health-check.jpg](2026-10-18/configuraciones/a5-08-backend-health-check.jpg) - configuraciones
+- [a5-09-backend-stick-table.jpg](2026-10-18/configuraciones/a5-09-backend-stick-table.jpg) - configuraciones
+- [a5-10-regla-wan-web-ports.jpg](2026-10-18/configuraciones/a5-10-regla-wan-web-ports.jpg) - configuraciones
+- [a5-11-haproxy-validacion-config.jpg](2026-10-18/pruebas/a5-11-haproxy-validacion-config.jpg) - pruebas
+- [a5-12-haproxy-validacion-codigo-0.jpg](2026-10-18/pruebas/a5-12-haproxy-validacion-codigo-0.jpg) - pruebas
+- [a5-13-sockstat-puertos.jpg](2026-10-18/pruebas/a5-13-sockstat-puertos.jpg) - pruebas
+- [a5-14-stick-tables.jpg](2026-10-18/pruebas/a5-14-stick-tables.jpg) - pruebas
+- [a5-15-haproxy-stats.jpg](2026-10-18/pruebas/a5-15-haproxy-stats.jpg) - pruebas
+- [a5-16-curl-pruebas-edge.jpg](2026-10-18/pruebas/a5-16-curl-pruebas-edge.jpg) - pruebas
 
 ### 2026-10-02
 
