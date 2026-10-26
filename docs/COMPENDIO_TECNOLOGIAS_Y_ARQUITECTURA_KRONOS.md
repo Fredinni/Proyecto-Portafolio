@@ -138,7 +138,7 @@
 
 ### 2.9 Google Gemini Live API Flash 3.1 (Audio Multimodal en Tiempo Real)
 * **¿Qué es?**  
-  El modelo de Inteligencia Artificial generativa multimodal de última generación de Google DeepMind optimizado para procesamiento de texto, audio y visión con latencia de respuesta ultra-baja.
+  El modelo de Inteligencia Artificial generativa multimodal de última generación de Google optimizado para procesamiento de texto, audio y visión con latencia de respuesta ultra-baja.
 * **¿Cómo funciona bajo el capó?**  
   * Se conecta mediante un canal bidireccional **WebSocket seguro (WSS) sobre HTTPS (puerto 443)** con el endpoint `generativelanguage.googleapis.com`.
   * Recibe el stream de audio en tiempo real desde Asterisk (PCM lineal a 16kHz o 24kHz) y transmite de vuelta audio sintetizado nativo sin pasar por etapas lentas de transcripción separada (Audio-to-Audio nativo).
