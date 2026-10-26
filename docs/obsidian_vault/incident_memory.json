@@ -1,0 +1,33 @@
+{
+  "185.220.101.5": {
+    "count": 5,
+    "first_seen": "2026-10-26T00:54:12Z",
+    "last_seen": "2026-10-26T01:33:14Z",
+    "attack_types": [
+      "Inyección SQL (AST Validated)",
+      "Inyección SQL Crítica",
+      "SQL_INJECTION (AST_TAUTOLOGY)"
+    ],
+    "target_services": [
+      "DVWA en DMZ (192.168.20.50)",
+      "DVWA en DMZ"
+    ],
+    "tautologies": [
+      "'1'='1",
+      {
+        "expression": "1=1",
+        "ast_node": "Compare(Eq)",
+        "operands": [
+          "1",
+          "1"
+        ],
+        "is_tautology": true
+      },
+      "1=1"
+    ],
+    "actions": [
+      "DROP & BLOCK en Firewall pfSense (Kernel pfctl State Kill)"
+    ],
+    "notes": "Ataque reincidente detectado #5."
+  }
+}
