@@ -174,10 +174,18 @@ class PfctlWrapper:
         add_res = self._exec_command(["pfctl", "-t", self.table_name, "-T", "add", clean_ip])
 
         # 2. Matar estados bidireccionales en FreeBSD pf
-        self._exec_command(["pfctl", "-k", clean_ip])
-        self._exec_command(["pfctl", "-k", "0.0.0.0/0", "-k", clean_ip])
+        self.kill_states(clean_ip)
 
         return add_res.returncode == 0
+
+    def kill_states(self, ip: str) -> bool:
+        """Purga estados de conexión bidireccionales activos en kernel pf para la IP indicada"""
+        if not self._validate_ip(ip):
+            return False
+        clean_ip = ip.strip()
+        r1 = self._exec_command(["pfctl", "-k", clean_ip])
+        r2 = self._exec_command(["pfctl", "-k", "0.0.0.0/0", "-k", clean_ip])
+        return r1.returncode == 0 or r2.returncode == 0
 
     def unblock_ip(self, ip: str) -> bool:
         """Elimina una IP de la tabla snort2c (para expiración o desbaneo manual)"""

@@ -1,0 +1,51 @@
+{
+  "GATE_1_HTTP_L7": {
+    "status": "PASSED",
+    "target": "http://192.168.20.50/vulnerabilities/sqli/?id=1%27%20OR%20%271%27%3D%271%20--&Submit=Submit"
+  },
+  "GATE_2_AST_ANALYSIS": {
+    "status": "PASSED",
+    "tautologies": [
+      "1=1"
+    ],
+    "confidence": 0.85
+  },
+  "GATE_3_PFCTL_KERNEL": {
+    "status": "PASSED",
+    "table": "snort2c",
+    "is_blocked": true
+  },
+  "GATE_4_OBSIDIAN_VAULT": {
+    "status": "PASSED",
+    "recurrence_count": 11,
+    "vault_path": "C:\\Users\\bruno\\Downloads\\proyecto de titulo\\docs\\obsidian_vault"
+  },
+  "GATE_5_SOAR_TOOLS": {
+    "status": "PASSED",
+    "tools_tested": [
+      "get_firewall_states",
+      "block_ip_permanently",
+      "escalate_to_soc_tier2"
+    ],
+    "empty_functions": 0
+  },
+  "GATE_6_CODEC_AND_VAD": {
+    "status": "PASSED",
+    "vad_threshold": 3500,
+    "sample_rate_telephony": "8000 Hz Mono",
+    "sample_rate_gemini": "24000 Hz Linear PCM"
+  },
+  "GATE_7_GEMINI_LIVE": {
+    "status": "PASSED",
+    "multimodal_response": "Ya, chiquillo, le tiré un reinicio al pfSense, quedó listo el sistema.",
+    "tts_pcm_bytes": 242276,
+    "voice": "Aoede",
+    "model_tts": "gemini-3.8-flash-lite-tts"
+  },
+  "GATE_8_ASTERISK_A7": {
+    "status": "PASSED",
+    "ami_host": "192.168.30.50:5038",
+    "dialplan_context": "kronos-emergency-response",
+    "eagi_bridge": "/usr/local/bin/gemini_audio_bridge.py"
+  }
+}

@@ -1,16 +1,18 @@
 {
   "185.220.101.5": {
-    "count": 5,
+    "count": 12,
     "first_seen": "2026-10-26T00:54:12Z",
-    "last_seen": "2026-10-26T01:33:14Z",
+    "last_seen": "2026-10-26T01:49:21Z",
     "attack_types": [
       "Inyección SQL (AST Validated)",
       "Inyección SQL Crítica",
-      "SQL_INJECTION (AST_TAUTOLOGY)"
+      "SQL_INJECTION (AST_TAUTOLOGY)",
+      "Bloqueo Manual SOAR por Voz"
     ],
     "target_services": [
       "DVWA en DMZ (192.168.20.50)",
-      "DVWA en DMZ"
+      "DVWA en DMZ",
+      "DVWA / Perímetro"
     ],
     "tautologies": [
       "'1'='1",
@@ -28,6 +30,6 @@
     "actions": [
       "DROP & BLOCK en Firewall pfSense (Kernel pfctl State Kill)"
     ],
-    "notes": "Ataque reincidente detectado #5."
+    "notes": "Ataque reincidente detectado #12."
   }
 }
