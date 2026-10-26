@@ -1,0 +1,17 @@
+Shell Output - date; pfctl -vvs rules | grep -A2 "KRONOS A4"
+Sun Oct 25 22:35:37 -03 2026
+@74 block drop in log quick on vtnet0 inet from <pfB_Europe_v4:13190> to any label "id=1790896396" label "tags=user_rule" label "descr=KRONOS A4 GeoIP RU WAN" ridentifier 1790896396
+  [ Evaluations: 58892     Packets: 54        Bytes: 2420        States: 0     ]
+  [ Source Nodes: 0      Limit: 0      NAT/RDR: 0      Route: 0      ]
+--
+@75 block drop in log quick on vtnet0 inet from <pfB_Asia_v4:11> to any label "id=1790896395" label "tags=user_rule" label "descr=KRONOS A4 GeoIP KP WAN" ridentifier 1790896395
+  [ Evaluations: 14531     Packets: 6         Bytes: 264         States: 0     ]
+  [ Source Nodes: 0      Limit: 0      NAT/RDR: 0      Route: 0      ]
+--
+@76 block drop in log quick on vtnet0 inet from <pfB_KRONOS_DROP_v4:1687> to any label "id=1790895585" label "tags=user_rule" label "descr=KRONOS A4 Spamhaus DROP WAN" ridentifier 1790895585
+  [ Evaluations: 14525     Packets: 1296      Bytes: 59368       States: 0     ]
+  [ Source Nodes: 0      Limit: 0      NAT/RDR: 0      Route: 0      ]
+--
+@77 block drop in log quick on vtnet0 inet from <pfB_KRONOS_FIREHOL_v4:4623> to any label "id=1790952918" label "tags=user_rule" label "descr=KRONOS A4 FireHOL WAN" ridentifier 1790952918
+  [ Evaluations: 13229     Packets: 1574      Bytes: 78289       States: 0     ]
+  [ Source Nodes: 0      Limit: 0      NAT/RDR: 0      Route: 0      ]

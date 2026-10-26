@@ -1,0 +1,19 @@
+Shell Output - date; ls -l /usr/local/share/GeoIP/
+Sun Oct 25 22:37:29 -03 2026
+total 39112
+drwxr-xr-x  2 root      wheel         1284 Oct 25 19:01 cc
+-rw-r--r--  1 806011168 806011168       55 Oct 23 12:26 COPYRIGHT.txt
+-rw-r--r--  1 806011168 806011168 21444709 Oct 23 12:26 GeoLite2-Country-Blocks-IPv4.csv
+-rw-r--r--  1 806011168 806011168 21401639 Oct 23 12:26 GeoLite2-Country-Blocks-IPv6.csv
+-rw-------  1 root      wheel      4496740 Oct 23 13:46 GeoLite2-Country-CSV.zip.raw
+-rw-r--r--  1 806011168 806011168     9642 Oct 23 12:26 GeoLite2-Country-Locations-de.csv
+-rw-r--r--  1 806011168 806011168     9866 Oct 23 12:26 GeoLite2-Country-Locations-en.csv
+-rw-r--r--  1 806011168 806011168     9782 Oct 23 12:26 GeoLite2-Country-Locations-es.csv
+-rw-r--r--  1 806011168 806011168    10159 Oct 23 12:26 GeoLite2-Country-Locations-fr.csv
+-rw-r--r--  1 806011168 806011168    13881 Oct 23 12:26 GeoLite2-Country-Locations-ja.csv
+-rw-r--r--  1 806011168 806011168    10998 Oct 23 12:26 GeoLite2-Country-Locations-pt-BR.csv
+-rw-r--r--  1 806011168 806011168    14063 Oct 23 12:26 GeoLite2-Country-Locations-ru.csv
+-rw-r--r--  1 806011168 806011168    10668 Oct 23 12:26 GeoLite2-Country-Locations-zh-CN.csv
+-rw-r--r--  1 root      wheel      3403332 Oct 23 12:30 GeoLite2-Country.mmdb
+-rw-------  1 root      wheel      2265828 Oct 23 13:46 GeoLite2-Country.tar.gz.raw
+-rw-r--r--  1 806011168 806011168      396 Oct 23 12:26 LICENSE.txt

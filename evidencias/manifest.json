@@ -719,5 +719,54 @@
     "tipo": "pruebas",
     "coleccion": "2026-10-18",
     "sha256": "5cab8275ac88e520c014f215e7885d3aabe083cfa5fd0787a3514a0e34fa32aa"
+  },
+  {
+    "archivo": "2026-10-25/pruebas/a4-01-tablas-pfblockerng.txt",
+    "origen": "Salida de Diagnostics > Command Prompt ejecutada por Kevin Retamales (25/10/2026)",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-25",
+    "sha256": "16f3d34d79464451dc0a756cf16eb5c2215248a17042ea77450d13cfd562a5fc"
+  },
+  {
+    "archivo": "2026-10-25/pruebas/a4-02-entradas-por-tabla.txt",
+    "origen": "Salida de Diagnostics > Command Prompt ejecutada por Kevin Retamales (25/10/2026)",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-25",
+    "sha256": "7f5b9fe61b92a6307d21b4c41f383f0586ca89b6584ca9c4b63a56db527e5a9a"
+  },
+  {
+    "archivo": "2026-10-25/pruebas/a4-03-reglas-y-contadores.txt",
+    "origen": "Salida de Diagnostics > Command Prompt ejecutada por Kevin Retamales (25/10/2026)",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-25",
+    "sha256": "5927d1bfede75d2239e7c4342bba9e5e6a5978a887f673f0074c7f2a6da69f1f"
+  },
+  {
+    "archivo": "2026-10-25/pruebas/a4-04-limite-tablas.txt",
+    "origen": "Salida de Diagnostics > Command Prompt ejecutada por Kevin Retamales (25/10/2026)",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-25",
+    "sha256": "46d1b73e8d12c033cb8fe9cb8ba4aedadbc0232dd21bcdc3f8074cb4a10dfb2d"
+  },
+  {
+    "archivo": "2026-10-25/pruebas/a4-05-log-pfblockerng.txt",
+    "origen": "Salida de Diagnostics > Command Prompt ejecutada por Kevin Retamales (25/10/2026)",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-25",
+    "sha256": "8a2e9761feb638d2a38beb877d1e3fea31d49106b4f39a002db82eb72e76b84f"
+  },
+  {
+    "archivo": "2026-10-25/pruebas/a4-06-base-maxmind.txt",
+    "origen": "Salida de Diagnostics > Command Prompt ejecutada por Kevin Retamales (25/10/2026)",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-25",
+    "sha256": "aac4916777a2d5ec917f260cddd96fe61db0570a2d736126d14ad856eaefcc11"
+  },
+  {
+    "archivo": "2026-10-25/pruebas/a4-07-pfblockerng-alertas.png",
+    "origen": "Captura de pfBlockerNG Reports > Alerts de Kevin Retamales (25/10/2026), foto de perfil del navegador difuminada",
+    "tipo": "pruebas",
+    "coleccion": "2026-10-25",
+    "sha256": "3a4c464f4d5ef3c21eef745733ff25a9c923a97e9fc33b79f2ab7b8f005aa7e0"
   }
 ]

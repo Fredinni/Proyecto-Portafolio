@@ -1,0 +1,6 @@
+Shell Output - date; pfctl -s Tables | grep pfB_
+Sun Oct 25 22:33:58 -03 2026
+pfB_Asia_v4
+pfB_Europe_v4
+pfB_KRONOS_DROP_v4
+pfB_KRONOS_FIREHOL_v4

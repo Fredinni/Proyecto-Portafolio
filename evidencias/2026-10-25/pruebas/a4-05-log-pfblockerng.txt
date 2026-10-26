@@ -1,0 +1,42 @@
+Shell Output - date; tail -n 40 /var/log/pfblockerng/pfblockerng.log
+Sun Oct 25 22:36:50 -03 2026
+                ( md5 changed )        Update found
+ UPDATE PROCESS START [ v3.2.17_1 ] [ 10/25/26 00:00:03 ]
+
+===[  DNSBL Process  ]================================================
+
+
+===[  GeoIP Process  ]============================================
+
+[ pfB_Asia_v4 ]             Changes found... Updating
+
+[ pfB_Europe_v4 ]         Changes found... Updating
+
+
+===[  IPv4 Process  ]=================================================
+
+[ KRONOS_SPAMHAUS_DROP_v4 ]     Downloading update .. 200 OK. completed ..
+
+[ KRONOS_FIREHOL_L1_v4 ]     Downloading update [ 10/25/26 00:00:05 ] . ( md5 feed ) . completed ..
+
+===[ Suppression Stats ]===================================
+
+List                 Pre        Suppress   Master
+-----------------------------------------------------------
+KRONOS_FIREHOL_L1_v4 4624       4623       0
+
+
+===[  Aliastables / Rules  ]==========================================
+
+No changes to Firewall rules, skipping Filter Reload
+
+ Updating: pfB_Asia_v4
+no changes.
+ Updating: pfB_Europe_v4
+no changes.
+ Updating: pfB_KRONOS_DROP_v4
+no changes.
+ Updating: pfB_KRONOS_FIREHOL_v4
+15 addresses added.23 addresses deleted.
+
+ UPDATE PROCESS ENDED

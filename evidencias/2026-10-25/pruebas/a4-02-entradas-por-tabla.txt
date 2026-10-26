@@ -1,0 +1,6 @@
+Shell Output - date; for t in pfB_KRONOS_DROP_v4 pfB_KRONOS_FIREHOL_v4 pfB_Europe_v4 pfB_Asia_v4; do echo "$t: $(pfctl -t $t -T show | wc -l)"; done
+Sun Oct 25 22:34:56 -03 2026
+pfB_KRONOS_DROP_v4:     1687
+pfB_KRONOS_FIREHOL_v4:     4623
+pfB_Europe_v4:    13190
+pfB_Asia_v4:       11

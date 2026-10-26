@@ -1,0 +1,8 @@
+Shell Output - date; pfctl -s memory
+Sun Oct 25 22:36:17 -03 2026
+states        hard limit   403000
+src-nodes     hard limit   403000
+frags         hard limit     5000
+table-entries hard limit  2000000
+anchors       hard limit      512
+eth-anchors   hard limit        0

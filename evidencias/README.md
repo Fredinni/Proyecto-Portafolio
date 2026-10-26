@@ -2,7 +2,7 @@
 
 Assets originales para las presentaciones del equipo: capturas de configuracion y resumenes visuales de pruebas reales. Los PNG se copian sin recortes, recompresion ni cambios de resolucion.
 
-**Para la configuracion mas reciente de A1 a A4, usar `2026-10-02/`; para A5 (HAProxy HTTPS y DVWA), usar [`2026-10-18/`](2026-10-18/README.md).** Las otras carpetas conservan el avance historico y pueden mostrar valores o problemas anteriores ya corregidos.
+**Para la configuracion mas reciente de A1 a A4, usar `2026-10-02/`; para A5 (HAProxy HTTPS y DVWA), usar [`2026-10-18/`](2026-10-18/README.md); para la evidencia nativa de A4 (salidas de `pfctl` y log de pfBlockerNG), usar [`2026-10-25/`](2026-10-25/README.md).** Las otras carpetas conservan el avance historico y pueden mostrar valores o problemas anteriores ya corregidos.
 
 ## Colecciones
 
@@ -12,6 +12,7 @@ Assets originales para las presentaciones del equipo: capturas de configuracion 
 | [2026-10-01](2026-10-01/) | 22 | 10 |
 | [2026-10-02](2026-10-02/) | 26 | 20 |
 | [2026-10-18](2026-10-18/) · A5 HAProxy (Cristóbal Quezada) | 10 | 6 |
+| [2026-10-25](2026-10-25/) · A4 evidencia nativa de consola (Kevin Retamales) | 0 | 7 |
 
 ## Uso en PowerPoint
 
@@ -28,6 +29,16 @@ Se mantienen ocultos los campos sensibles en las capturas de configuracion. No s
 `manifest.json` registra origen y SHA-256 de cada PNG para verificar que es una copia identica.
 
 ## Indice de imagenes
+
+### 2026-10-25
+
+- [a4-01-tablas-pfblockerng.txt](2026-10-25/pruebas/a4-01-tablas-pfblockerng.txt) - pruebas
+- [a4-02-entradas-por-tabla.txt](2026-10-25/pruebas/a4-02-entradas-por-tabla.txt) - pruebas
+- [a4-03-reglas-y-contadores.txt](2026-10-25/pruebas/a4-03-reglas-y-contadores.txt) - pruebas
+- [a4-04-limite-tablas.txt](2026-10-25/pruebas/a4-04-limite-tablas.txt) - pruebas
+- [a4-05-log-pfblockerng.txt](2026-10-25/pruebas/a4-05-log-pfblockerng.txt) - pruebas
+- [a4-06-base-maxmind.txt](2026-10-25/pruebas/a4-06-base-maxmind.txt) - pruebas
+- [a4-07-pfblockerng-alertas.png](2026-10-25/pruebas/a4-07-pfblockerng-alertas.png) - pruebas
 
 ### 2026-10-18
 
