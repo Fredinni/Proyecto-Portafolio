@@ -60,16 +60,15 @@ def pregenerate_live_gemini_speech(attacker_ip: str, incident_type: str, vm103_i
     )
 
     LLM_MODELS = [
+        "gemini-3-flash-preview",
         "gemini-3.5-flash",
-        "gemini-3.1-flash-lite",
-        "gemini-2.5-flash"
+        "gemini-3.1-flash-lite"
     ]
 
     TTS_MODELS = [
-        "gemini-3.1-flash-tts-preview",
-        "gemini-3.8-flash-lite-tts",
         "gemini-3.8-flash-tts",
-        "gemini-2.5-flash-preview-tts"
+        "gemini-3.8-flash-lite-tts",
+        "gemini-3.1-flash-tts-preview"
     ]
 
     def ask_gemini_json(prompt, sys_inst):

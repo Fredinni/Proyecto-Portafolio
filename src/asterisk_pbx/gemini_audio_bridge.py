@@ -71,7 +71,7 @@ def generate_gemini_text(prompt: str, system_prompt: str, incident_type: str = "
     if not API_KEY:
         return default_text
 
-    llm_models = ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-2.5-flash"]
+    llm_models = ["gemini-3-flash-preview", "gemini-3.5-flash", "gemini-3.1-flash-lite"]
     for m in llm_models:
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent?key={API_KEY}"
         body = {
@@ -95,10 +95,9 @@ def generate_gemini_text(prompt: str, system_prompt: str, incident_type: str = "
     return default_text
 
 TTS_MODELS = [
-    "gemini-3.1-flash-tts-preview",
-    "gemini-3.8-flash-lite-tts",
     "gemini-3.8-flash-tts",
-    "gemini-2.5-flash-preview-tts"
+    "gemini-3.8-flash-lite-tts",
+    "gemini-3.1-flash-tts-preview"
 ]
 
 def synthesize_gemini_audio(text_to_speak: str, output_prefix: str, voice_name: str = "Aoede") -> bool:
