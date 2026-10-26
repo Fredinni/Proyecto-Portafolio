@@ -1,0 +1,16 @@
+tailscale status --json (solo dispositivo KRONOS)
+{
+  "HostName": "KRONOS-MGMT",
+  "Online": true,
+  "TailscaleIPs": [
+    "100.73.101.28",
+    "fd7a:115c:a1e0::ce39:651d"
+  ],
+  "PrimaryRoutes": [
+    "10.254.254.1/32",
+    "192.168.10.0/24",
+    "192.168.20.0/24",
+    "192.168.30.0/24",
+    "192.168.99.0/24"
+  ]
+}

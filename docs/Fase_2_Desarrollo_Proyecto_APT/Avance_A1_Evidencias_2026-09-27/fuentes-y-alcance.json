@@ -1,0 +1,30 @@
+[
+  {
+    "slide": 1,
+    "fuentes": "Carta Gantt oficial A1/A2; capturas reales 27-09-2026. A1 completado según cronograma histórico; compatibilidad tuning actual parcial. A2 reportada lista por Freddy según usuario; su evidencia no fue revisada en esta entrega."
+  },
+  {
+    "slide": 2,
+    "fuentes": "Carta Gantt oficial A1 Bruno/Freddy, A2 Freddy; última aclaración usuario: Freddy reporta A2 lista y tiene evidencia propia. No fue revisada ni implementada en esta entrega."
+  },
+  {
+    "slide": 3,
+    "fuentes": "01-pfsense-dashboard.png; sesión WebGUI real del 27-09-2026. Netgate Device ID oculto. Interfaces observadas, no certificación de A2. pfSense VM101:2vCPU/4GiB/20GiB."
+  },
+  {
+    "slide": 4,
+    "fuentes": "03-pfsense-offloading.png y offloading-observaciones.json: tres checkbox true; pfSense-observaciones.txt: nmbclusters1000000, intr_queue1000, states_hash262144, fastforwarding OID ausente, /dev/netmap existe. No Suricata Inline ejecutado."
+  },
+  {
+    "slide": 5,
+    "fuentes": "Edge-observaciones.txt y 05-edge.png: wg0 10.255.255.2/30, transit10.254.254.1/30, forwarding1, policy100tabla51820, handshake reciente,ping AWS2/2 y pfSense2/2. AWS es transporte; Tailscale es administración."
+  },
+  {
+    "slide": 6,
+    "fuentes": "Última instrucción del usuario: A2 lista según Freddy, quien dispone de evidencia propia. No adjunta aún; no se declara verificada por el autor de esta PPT. Reemplazar recuadros por capturas reales."
+  },
+  {
+    "slide": 7,
+    "fuentes": "TEAM_LAB_ACCESS.md, PROXMOX_ONPREM_DEPLOYMENT.md, Tailscale-observaciones.txt; PrimaryRoutes solo4VLAN y Edge/32. No cambios A2 durante preparación PPT. Cuenta SSH por VM; secretos fuera de PPT/Git."
+  }
+]

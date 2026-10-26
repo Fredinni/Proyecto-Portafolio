@@ -13,6 +13,7 @@ services:
     volumes:
       - ./pjsip.conf:/etc/asterisk/pjsip.conf:ro
       - ./extensions.conf:/etc/asterisk/extensions.conf:ro
+      - ./manager.conf:/etc/asterisk/manager.conf:ro
       - ./rtp.conf:/etc/asterisk/rtp.conf:ro
       - ./gemini_audio_bridge.py:/usr/local/bin/gemini_audio_bridge.py:ro
       - asterisk_spool:/var/spool/asterisk/outgoing

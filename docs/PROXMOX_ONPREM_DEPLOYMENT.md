@@ -28,7 +28,7 @@ Los nombres conceptuales `vmbr-kronos-wan` y `vmbr-kronos-trunk` se implementan 
 
 | VMID | Nombre | CPU | RAM MiB | Disk GiB | NIC/bridge y VLAN | IPv4 / gateway objetivo | Estado |
 |---|---|---:|---:|---:|---|---|---|
-| 100 | KRONOS-EDGE | 1 | 1024 | 10 | net0 vmbr0 DHCP; net1 vmbr2 | [gateway privado del host]18 DHCP / uplink DHCP; 10.254.254.1/30 sin GW; wg0 10.255.255.2/30 | PROVISIONED; túnel CONFIGURED y handshake TESTED |
+| 100 | KRONOS-EDGE | 1 | 1024 | 10 | net0 vmbr0 DHCP; net1 vmbr2 | NIC0 DHCP / gateway uplink; 10.254.254.1/30 sin GW; wg0 10.255.255.2/30 | PROVISIONED; túnel CONFIGURED y handshake TESTED |
 | 101 | KRONOS-PFSENSE | 2 | 4096 | 20 | net0 vmbr2; net1 vmbr3 trunk | WAN 10.254.254.2/30 / 10.254.254.1 | PROVISIONED / CONFIGURED; red y gestión TESTED tras reboot |
 | 102 | KRONOS-DMZ | 2 | 2048 | 20 | net0 vmbr3 tag20 | 192.168.20.50/24 / 192.168.20.1 | PROVISIONED / CONFIGURED; DVWA HTTP y base TESTED; HAProxy pendiente |
 | 103 | KRONOS-VOIP | 2 | 4096 | 25 | net0 vmbr3 tag30 | 192.168.30.50/24 / 192.168.30.1 | PROVISIONED / CONFIGURED; Asterisk container y CLI TESTED; AMI/Gemini pendientes |

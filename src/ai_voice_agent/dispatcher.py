@@ -37,10 +37,11 @@ class IncidentDispatcherHandler(BaseHTTPRequestHandler):
                 
                 # Disparar llamada telefónica a Bruno Urrea (CISO / Anexo 1001)
                 trigger = AsteriskCallTrigger()
-                call_success = trigger.trigger_ciso_call(
+                call_res = trigger.trigger_ciso_call(
                     ciso_channel="PJSIP/1001",
                     incident_context=incident_data
                 )
+                call_success = call_res.get("success", False) if isinstance(call_res, dict) else bool(call_res)
                 
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json')
@@ -49,7 +50,8 @@ class IncidentDispatcherHandler(BaseHTTPRequestHandler):
                     "status": "SUCCESS",
                     "session_id": session_id,
                     "target_channel": "PJSIP/1001",
-                    "call_initiated": call_success
+                    "call_initiated": call_success,
+                    "call_details": call_res if isinstance(call_res, dict) else {"success": call_success}
                 }
                 self.wfile.write(json.dumps(response).encode('utf-8'))
                 

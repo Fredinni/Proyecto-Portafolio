@@ -11,6 +11,18 @@ import logging
 from typing import Dict, Any, Optional
 from prompts import SYSTEM_INSTRUCTION_CISO_CALL, generate_incident_context_prompt
 
+# Carga automática de .env local si existe
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+ENV_FILE = os.path.join(PROJECT_ROOT, ".env")
+if os.path.exists(ENV_FILE):
+    with open(ENV_FILE, "r", encoding="utf-8") as f:
+        for line in f:
+            line_clean = line.strip()
+            if line_clean.startswith("GEMINI_API_KEY=") and not line_clean.startswith("#"):
+                key_val = line_clean.split("=", 1)[1].strip().strip("'\"")
+                if key_val:
+                    os.environ["GEMINI_API_KEY"] = key_val
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] [GEMINI-LIVE] %(message)s')
 
 class GeminiLiveVoiceClient:

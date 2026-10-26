@@ -148,8 +148,10 @@ se obtuvo la clave pública con Paramiko y se validó contra la consola EC2.
 
 Estimación para 730 horas/mes, sin créditos promocionales ni impuestos:
 EC2 t3.micro ~$7.59 ($0.0104/h), EBS gp3 20 GiB ~$1.60, EIP ~$3.65
-($0.005/h): **~USD 12.84/mes**. Transferencia saliente y CPU Unlimited sostenida
-pueden añadir cargos. Fuentes: [EC2 T3](https://aws.amazon.com/ec2/instance-types/t3/),
+($0.005/h): **~USD 12.84/mes**. Transferencia saliente puede añadir cargos.
+Desde el 27/09 se usan créditos CPU `standard` para evitar recargos por
+ráfagas Unlimited; al agotar créditos CPU se limita el rendimiento de ráfaga.
+Fuentes: [EC2 T3](https://aws.amazon.com/ec2/instance-types/t3/),
 [EBS gp3](https://aws.amazon.com/ebs/volume-types/),
 [IPv4](https://aws.amazon.com/vpc/pricing/).
 Detener EC2 conserva EBS y EIP y sus cargos (~USD 5.25/mes base).
@@ -163,3 +165,13 @@ La elegibilidad del tipo no garantiza costo cero: depende del plan, vigencia y
 creditos de la cuenta. IAM denego freetier:GetAccountPlanState, por lo que no
 se pudo verificar el beneficio efectivo. Referencia:
 https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-free-tier-usage.html
+
+Actualización del 27/09/2026: la consulta EC2 reportó `t3.micro`
+FreeTierEligible=true y `t2.micro`=false; se conserva t3.micro.
+Se aplicó `CpuCredits=standard` y se verificaron EC2 running, ambos status
+checks OK y ping WireGuard 2/2. No hubo reinicio ni cambio de EIP.
+Para cuentas creadas desde el 15/07/2025, el beneficio EC2 se basa en créditos,
+sin asumir una etapa adicional de 750 horas antes de consumirlos.
+Saldo, plan y vencimiento deben verificarse en Billing: este IAM no puede
+leer `GetFreeTierUsage`, `GetAccountPlanState` ni `GetCostAndUsage`.
+Referencia: [Free Tier y créditos](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/free-tier.html).
