@@ -37,24 +37,25 @@ def get_gemini_key():
                         return line.split("=", 1)[1].strip().strip("'\"")
     return os.getenv("GEMINI_API_KEY", "")
 
-def pregenerate_live_gemini_speech(attacker_ip: str, incident_type: str, vm103_ip: str = "192.168.30.50"):
-    """Genera en vivo el debriefing y cierre con Gemini 3.1 Flash y voz femenina Aoede, subiéndolo a Asterisk"""
+def pregenerate_live_gemini_speech(attacker_ip: str, incident_type: str, vm103_ip: str = "192.168.30.50", target_service: str = "DVWA en DMZ", geo_origin: str = "Nodo Hostil"):
+    """Genera en vivo el debriefing y cierre con Gemini 3.5 Flash y voz femenina Aoede, subiéndolo a Asterisk"""
     api_key = get_gemini_key()
     if not api_key:
         print(" [!] No se encontro GEMINI_API_KEY. Se utilizara sintesis de respaldo.")
         return
 
-    print(" -> Consultando Gemini 3.1 Flash Lite (Generacion de dialogo informal en vivo)...")
+    print(" -> Consultando Gemini 3.5 Flash (Generacion de dialogo informal en vivo con variables reales)...")
     sys_prompt = (
         "Eres la operadora de IA del sistema de ciberseguridad KRONOS SENTINEL. "
         "Estás en una llamada telefónica en vivo con Bruno Urrea (CISO). "
         "HABLA DE TÚ A TÚ, SÚPER INFORMAL, MUY CASUAL, COMO UNA COLEGA CAPA Y RELAJADA. "
         "Cero formalismos corporativos. "
+        "FLUJO DE TELEFONÍA CHILENA: Empieza siempre saludando como se hace en Chile: '¿Aló, Bruno? Oye...'. "
         "Genera dos respuestas en formato JSON con las claves 'alert' y 'closing': "
-        f"1. 'alert': Explícale que acabas de mitigar una intrusión SQLi hacia DVWA desde la IP {attacker_ip}, "
-        "que el pfSense ya le chantó un DROP en la tabla snort2c y mató los estados activos en el kernel. "
-        "Pregúntale si revisamos el tráfico o si lo dejamos bloqueado nomás. (Máximo 28 palabras). "
-        "2. 'closing': Despídete de Bruno con buena onda diciendo que quedó blindado y que ante cualquier cosa le timbras al tiro. (Máximo 16 palabras). "
+        f"1. 'alert': Saluda con '¿Aló, Bruno? Oye...' y explícale que acabas de mitigar una intrusión de {incident_type} hacia {target_service} desde la IP {attacker_ip} ({geo_origin}), "
+        "y que el pfSense ya le chantó un DROP en la tabla snort2c y mató todos los estados activos en el kernel. "
+        "Pregúntale qué hacemos: si revisamos el tráfico o si lo dejamos bloqueado nomás. (Máximo 28 palabras). "
+        f"2. 'closing': Despídete de Bruno con buena onda diciéndole que la IP {attacker_ip} ya quedó blindada en el pfSense y que ante cualquier cosa rara le timbras al tiro. (Máximo 16 palabras). "
         "Devuelve SOLO el JSON válido."
     )
 
@@ -221,7 +222,13 @@ def launch_attack_and_trigger_pipeline(attacker_ip: str = "185.220.101.5", targe
 
     # 2.5. Síntesis en tiempo real con Gemini Live (Voz femenina Aoede)
     print(f"\n[*] PASO 2.5: Generando síntesis interactiva de voz con Gemini Live (Voz: Aoede)...")
-    pregenerate_live_gemini_speech(attacker_ip=attacker_ip, incident_type=diag["attack_type"], vm103_ip="192.168.30.50")
+    pregenerate_live_gemini_speech(
+        attacker_ip=attacker_ip,
+        incident_type=diag["attack_type"],
+        vm103_ip="192.168.30.50",
+        target_service="DVWA en DMZ",
+        geo_origin="Nodo Hostil Externo"
+    )
 
     # 3. Disparar llamada prioritaria AMI a Asterisk VM103 hacia PJSIP/1001
     print(f"\n[*] PASO 3: Disparando llamada de emergencia AMI hacia Zoiper (PJSIP/1001)...")

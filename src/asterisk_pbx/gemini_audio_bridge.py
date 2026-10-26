@@ -65,28 +65,34 @@ def read_agi_env():
             env[k.strip()] = v.strip()
     return env
 
-def generate_gemini_text(prompt: str, system_prompt: str) -> str:
-    """Genera el texto de respuesta usando Gemini 3.1 Flash Lite"""
+def generate_gemini_text(prompt: str, system_prompt: str, incident_type: str = "Intrusión", attacker_ip: str = "0.0.0.0", target_service: str = "el servidor") -> str:
+    """Genera el texto de respuesta usando Gemini 3.5 Flash / 3.1 Flash con variables dinámicas"""
+    default_text = f"¿Aló, Bruno? Oye, frené un ataque de {incident_type} desde la IP {attacker_ip} hacia {target_service}. El pfSense ya le chantó DROP en snort2c y mató los estados. ¿Lo dejamos bloqueado nomás?"
     if not API_KEY:
-        return "¡Hola Bruno! Oye, te cuento que saltó una inyección SQL al DVWA, pero tranqui que el pfSense ya le chantó un drop en snort2c y mató los estados. ¿Lo dejamos bloqueado nomás?"
+        return default_text
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key={API_KEY}"
-    body = {
-        "systemInstruction": {"parts": [{"text": system_prompt}]},
-        "contents": [{"parts": [{"text": prompt}]}]
-    }
-    try:
-        req = urllib.request.Request(
-            url,
-            data=json.dumps(body).encode(),
-            headers={"Content-Type": "application/json"}
-        )
-        with urllib.request.urlopen(req, timeout=10, context=SSL_CTX) as resp:
-            data = json.loads(resp.read().decode())
-            return data["candidates"][0]["content"]["parts"][0]["text"].strip()
-    except Exception as e:
-        logging.error(f"Error generando texto con Gemini: {e}")
-        return "¡Hola Bruno! Oye, te cuento: hubo un ataque SQL Injection al servidor DVWA, pero el pfSense ya lo bloqueó en snort2c y limpió el kernel. ¿Quieres que revise algo más o lo dejamos bloqueado?"
+    llm_models = ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-2.5-flash"]
+    for m in llm_models:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent?key={API_KEY}"
+        body = {
+            "systemInstruction": {"parts": [{"text": system_prompt}]},
+            "contents": [{"parts": [{"text": prompt}]}]
+        }
+        try:
+            req = urllib.request.Request(
+                url,
+                data=json.dumps(body).encode(),
+                headers={"Content-Type": "application/json"}
+            )
+            with urllib.request.urlopen(req, timeout=10, context=SSL_CTX) as resp:
+                data = json.loads(resp.read().decode())
+                return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+        except Exception as e:
+            logging.warning(f"Error generando texto con {m}: {e}. Intentando siguiente modelo...")
+            continue
+
+    logging.error("Todos los modelos de texto fallaron. Usando plantilla dinámica de respaldo.")
+    return default_text
 
 TTS_MODELS = [
     "gemini-3.1-flash-tts-preview",
@@ -161,14 +167,16 @@ def main():
     attacker_ip = args[1] if len(args) > 1 and args[1] else "185.220.101.5"
     geo_origin = args[2] if len(args) > 2 and args[2] else "Nodo Hostil"
 
-    logging.info(f"Iniciando llamada interactiva Gemini Live: {incident_type} | {attacker_ip} | {geo_origin}")
+    target_service = args[3] if len(args) > 3 and args[3] else "DVWA en DMZ"
+
+    logging.info(f"Iniciando llamada interactiva Gemini Live: {incident_type} | {attacker_ip} | {geo_origin} | {target_service}")
 
     # Verificar si el pipeline ya pre-generó el briefing en vivo para eliminar la latencia
     cached_briefing = "/tmp/gemini_alert_current"
     used_cached = False
     if os.path.exists(f"{cached_briefing}.wav"):
         file_age = time.time() - os.path.getmtime(f"{cached_briefing}.wav")
-        if file_age < 180:
+        if file_age < 300:
             logging.info(f"Reproduciendo briefing Gemini Live en tiempo real (edad: {file_age:.1f}s)")
             send_agi(f"STREAM FILE {cached_briefing} \"\"")
             used_cached = True
@@ -180,13 +188,14 @@ def main():
             "Estás en una llamada telefónica en vivo con Bruno Urrea (CISO). "
             "HABLA DE TÚ A TÚ, SÚPER INFORMAL, MUY CASUAL, COMO UNA COLEGA CAPA Y RELAJADA. "
             "Cero formalismos corporativos. "
-            f"Explícale que acabas de mitigar una intrusión de inyección SQL hacia DVWA desde la IP {attacker_ip}, "
+            "FLUJO DE TELEFONÍA CHILENA: Empieza siempre saludando como se hace en Chile: '¿Aló, Bruno? Oye...'. "
+            f"Explícale que acabas de mitigar una intrusión de {incident_type} hacia {target_service} desde la IP {attacker_ip} ({geo_origin}), "
             "y que el pfSense ya le chantó un DROP en la tabla snort2c y mató todos los estados activos en el kernel. "
             "Pregúntale qué hacemos ahora: si revisamos el tráfico o si lo dejamos bloqueado nomás. "
-            "Máximo 30 palabras. Responde SOLO el diálogo a pronunciar."
+            "Máximo 28 palabras. Responde SOLO el diálogo a pronunciar."
         )
 
-        spoken_text = generate_gemini_text("Inicia el reporte de alerta a Bruno.", sys_prompt)
+        spoken_text = generate_gemini_text("Inicia el reporte de alerta a Bruno.", sys_prompt, incident_type, attacker_ip, target_service)
         logging.info(f"Texto generado por Gemini: {spoken_text}")
 
         prefix_alert = f"/tmp/gemini_call_{int(time.time())}"
@@ -214,11 +223,12 @@ def main():
     if not played_closing:
         farewell_prompt = (
             "Eres la operadora de IA de KRONOS en la llamada con Bruno. "
-            "Cierra la llamada de tú a tú, muy informal y casual, diciéndole que la amenaza ya quedó totalmente bloqueada "
-            "en el firewall pfSense y que cualquier otra cosa le pegas una llamada al tiro. "
-            "Máximo 18 palabras."
+            "HABLA DE TÚ A TÚ, SÚPER INFORMAL, MUY CASUAL. "
+            f"Dile que el incidente de {incident_type} de la IP {attacker_ip} ya quedó totalmente blindado en el firewall pfSense "
+            "y que cualquier cosa rara le pegas una llamada al tiro. "
+            "Máximo 16 palabras. Responde SOLO el diálogo a pronunciar."
         )
-        closing_text = generate_gemini_text("Despídete y cierra la llamada.", farewell_prompt)
+        closing_text = generate_gemini_text("Despídete y cierra la llamada.", farewell_prompt, incident_type, attacker_ip, target_service)
         prefix_closing = f"/tmp/gemini_close_{int(time.time())}"
         if synthesize_gemini_audio(closing_text, prefix_closing, voice_name="Aoede"):
             send_agi(f"STREAM FILE {prefix_closing} \"\"")
