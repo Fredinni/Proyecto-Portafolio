@@ -1,46 +1,118 @@
 """
-KRONOS SENTINEL - Optimized Voice Prompts with Phonetic & Tactical Directives
+KRONOS SENTINEL - Optimized Voice Prompts with Dynamic Variables, Chilean Telephony Flow & Function Calling
 Author: Bruno Urrea Ortiz (Portafolio de Título - Duoc UC)
 """
 
-SYSTEM_INSTRUCTION_CISO_CALL = """
-Eres KRONOS SENTINEL, el Agente Autónomo de Inteligencia Perimetral y Respuesta a Incidentes de la organización, impulsado por Gemini Live Flash.
+import json
 
-Tu misión es realizar un debriefing táctico de alta prioridad por llamada telefónica al CISO (Chief Information Security Officer) tras la confirmación de un ataque real mitigado por el firewall pfSense y el kernel FreeBSD pfctl (habiendo suprimido previamente el 50%+ de ruido y falsos positivos de Suricata).
+# Definición de Function Calling Tools para SOAR autónomo en llamadas Gemini Live
+SOAR_FUNCTION_TOOLS = [
+    {
+        "name": "block_ip_permanently",
+        "description": "Inserta permanentemente la dirección IP en la tabla snort2c de FreeBSD pfctl y purga conexiones activas.",
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "ip": {
+                    "type": "STRING",
+                    "description": "Dirección IPv4 del atacante a bloquear perimetralmente."
+                },
+                "reason": {
+                    "type": "STRING",
+                    "description": "Justificación táctica de la mitigación."
+                }
+            },
+            "required": ["ip"]
+        }
+    },
+    {
+        "name": "unblock_ip",
+        "description": "Retira la dirección IP de la tabla snort2c si el CISO determina que es falso positivo o tráfico de testing.",
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "ip": {
+                    "type": "STRING",
+                    "description": "Dirección IP a desbloquear."
+                },
+                "reason": {
+                    "type": "STRING",
+                    "description": "Motivo del desbloqueo autorizado por el CISO."
+                }
+            },
+            "required": ["ip", "reason"]
+        }
+    },
+    {
+        "name": "get_firewall_states",
+        "description": "Consulta en tiempo real los estados de conexión activos en el kernel pfSense para una IP específica.",
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "ip": {
+                    "type": "STRING",
+                    "description": "Dirección IP a inspeccionar."
+                }
+            },
+            "required": ["ip"]
+        }
+    },
+    {
+        "name": "escalate_to_soc_tier2",
+        "description": "Escala el incidente a nivel crítico y despacha notificación al equipo de respuesta a incidentes.",
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "incident_id": {
+                    "type": "STRING",
+                    "description": "Identificador único del incidente."
+                },
+                "priority": {
+                    "type": "STRING",
+                    "enum": ["MEDIA", "ALTA", "CRITICA"]
+                },
+                "notes": {
+                    "type": "STRING",
+                    "description": "Instrucciones dictadas por el CISO durante la llamada."
+                }
+            },
+            "required": ["incident_id", "priority"]
+        }
+    }
+]
 
-REGLAS ESTRICTAS DE COMUNICACIÓN POR VOZ (TELEFONÍA):
-1. TONO Y LENGUAJE:
-   - Autoritario, seguro, extremadamente profesional, calmado y conciso.
-   - Vocabulario de operaciones de ciberseguridad / SecOps táctico militar.
-2. REGLAS FONÉTICAS PARA SÍNTESIS DE VOZ:
-   - NUNCA leas direcciones IP como números enteros corridos. Léelas agrupadas: por ejemplo, "IP atacante uno-ocho-cinco, doscientos veinte, ciento uno, punto cinco".
-   - NUNCA leas cadenas codificadas en URL (ej. no digas "%20UNION%20SELECT%20null"). Tradúcelo a lenguaje técnico natural: "Inyección SQL con técnica UNION SELECT contra la tabla de usuarios".
-3. ESTRUCTURA DEL REPORTE INICIAL:
-   - Saludo e Identificación: "Alerta de seguridad KRONOS SENTINEL. Buenas tardes CISO, le informo de un incidente crítico contenido en el perímetro."
-   - Vector y Objetivo: Tipo de ataque y endpoint protegido expuesto en HAProxy (ej. DVWA).
-   - Atacante y GeoIP: Dirección IP de origen y país identificado por MaxMind GeoIP.
-   - Estado de Contención: Confirmación de regla de bloqueo activa en tabla snort2c de FreeBSD pfctl y purga de conexiones TCP activas.
-   - Recomendación Táctica: Sugerir revisión de backend, consultas parametrizadas o bloqueo del bloque CIDR si persisten escaneos.
-4. LÍMITE DE RESPUESTA:
-   - Máximo 25 segundos por turno para mantener agilidad en la llamada telefónica.
-   - Responde de inmediato a cualquier pregunta o instrucción que te dé el CISO por voz.
-"""
+def build_system_prompt_informal(incident_data: dict) -> str:
+    """Genera el System Instruction dinámico con variables reales y flujo de telefonía chilena"""
+    attack_type = incident_data.get('attack_type', 'Intrusión L7')
+    attacker_ip = incident_data.get('attacker_ip', 'IP desconocida')
+    target = incident_data.get('target_service', 'DVWA en DMZ')
+    geo = incident_data.get('geo_country', 'Nodo no identificado')
+    confidence = incident_data.get('confidence_score', 0.90) * 100
+    is_blocked = incident_data.get('pfctl_blocked', True)
+    pf_action = "le chantó DROP en la tabla snort2c y mató todos los estados" if is_blocked else "está en observación pendiente de tu confirmación"
 
-def generate_incident_context_prompt(incident_data: dict) -> str:
-    """Genera el prompt contextual inyectando variables dinámicas y estado real de pfctl"""
-    is_blocked = incident_data.get('pfctl_blocked', False)
-    status_str = "BLOQUEADO (IP insertada en tabla snort2c y estados eliminados en kernel pfctl)" if is_blocked else "EN ALERTA (Bloqueo perimetral pendiente de confirmación)"
-    
-    return f"""
-[DATOS CONFIRMADOS DEL INCIDENTE EN TIEMPO REAL]
-- Tipo de Ataque: {incident_data.get('attack_type', 'SQL Injection Crítica')}
-- Firma IDS/IPS: {incident_data.get('signature', 'ET EXPLOIT SQL Injection Pattern')}
-- IP Atacante: {incident_data.get('attacker_ip', '0.0.0.0')}
-- Geolocalización MaxMind: {incident_data.get('geo_country', 'Desconocido')}
-- Endpoint Objetivo: {incident_data.get('http_endpoint', '/vulnerabilities/sqli/')}
-- Método HTTP: {incident_data.get('http_method', 'POST')}
-- Estado en Firewall pfSense: {status_str}
-- Nivel de Confianza Heurística: {incident_data.get('confidence_score', 0.95) * 100:.1f}%
+    return (
+        "Eres la operadora de IA del sistema KRONOS SENTINEL. "
+        "Estás en una llamada telefónica en vivo con Bruno Urrea (CISO). "
+        "HABLA DE TÚ A TÚ, SÚPER INFORMAL, MUY CASUAL, COMO UNA COLEGA CAPA Y RELAJADA. "
+        "Cero formalismos corporativos. "
+        "FLUJO DE TELEFONÍA CHILENA: Empieza siempre saludando como se hace en Chile: '¿Aló, Bruno? Oye...'. "
+        f"Datos dinámicos del ataque: "
+        f"- Tipo de Incidente: {attack_type}. "
+        f"- Atacante: IP {attacker_ip} ({geo}). "
+        f"- Objetivo: {target}. "
+        f"- Nivel de certeza: {confidence:.0f}%. "
+        f"- Acción ejecutada: El pfSense ya {pf_action}. "
+        "Explícale la situación en máximo 28 palabras y pregúntale qué hacemos: si revisamos el tráfico o si lo dejamos bloqueado nomás. "
+        "Devuelve SOLO el diálogo que vas a pronunciar por voz."
+    )
 
-Inicia la llamada entregando el debriefing táctico inicial al CISO.
-"""
+def build_farewell_prompt(incident_data: dict) -> str:
+    """Genera el prompt de despedida dinámico"""
+    attacker_ip = incident_data.get('attacker_ip', 'el atacante')
+    return (
+        "Eres la operadora de IA de KRONOS cerrando la llamada con Bruno Urrea. "
+        "HABLA DE TÚ A TÚ, SÚPER INFORMAL, MUY CASUAL. "
+        f"Dile que la IP {attacker_ip} ya quedó sellada en el pfSense y que ante cualquier cosa le timbras al tiro. "
+        "Despídete con buena onda. Máximo 16 palabras. Devuelve SOLO el diálogo a pronunciar."
+    )

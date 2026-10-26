@@ -1,0 +1,31 @@
+PLATAFORMA
+2.9.0-RELEASE
+FreeBSD
+
+WAN / vtnet0
+vtnet0: flags=1008843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST,LOWER_UP> metric 0 mtu 1500
+	description: WAN
+	options=880098<VLAN_MTU,VLAN_HWTAGGING,VLAN_HWCSUM,LINKSTATE,HWSTATS>
+	ether bc:24:11:e0:13:8f
+	inet 10.254.254.2 netmask 0xfffffffc broadcast 10.254.254.3
+	inet6 fe80::be24:11ff:fee0:138f%vtnet0 prefixlen 64 scopeid 0x1
+	media: Ethernet autoselect (10Gbase-T <full-duplex>)
+	status: active
+	nd6 options=821<PERFORMNUD,AUTO_LINKLOCAL,STABLEADDR>
+
+PRERREQUISITOS DE KERNEL
+net.inet.ip.forwarding: 1
+net.inet.ip.intr_queue_maxlen: 1000
+net.pf.states_hashsize: 262144
+kern.ipc.nmbclusters: 1000000
+crw-------  1 root wheel 0x13 Sep 23 21:10 /dev/netmap
+
+CONECTIVIDAD TRANSIT
+PING 10.254.254.1 (10.254.254.1): 56 data bytes
+64 bytes from 10.254.254.1: icmp_seq=0 ttl=64 time=0.294 ms
+64 bytes from 10.254.254.1: icmp_seq=1 ttl=64 time=0.313 ms
+
+--- 10.254.254.1 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 0.294/0.304/0.313/0.009 ms
+sysctl: unknown oid 'net.inet.ip.fastforwarding'

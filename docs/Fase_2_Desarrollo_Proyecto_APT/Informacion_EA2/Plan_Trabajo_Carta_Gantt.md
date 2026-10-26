@@ -22,9 +22,9 @@ A continuación se detalla la planificación cronológica oficial de **KRONOS SE
 | **Fase 1** | **S3 – S4** | 31/08/2026 – 13/09/2026 | **A2. Segmentación de VLANs 802.1Q:** Configuración de troncal 802.1Q, direccionamiento CIDR para VLAN 10 (Corp), VLAN 20 (DMZ), VLAN 30 (VoIP), VLAN 99 (Mgmt), servidores DHCP y políticas de aislamiento inter-VLAN. | Freddy Vásquez | **Completado (100%)** |
 | **Fase 2** | **S5 – S6** | 14/09/2026 – 27/09/2026 | **A3. Despliegue de Suricata Inline IPS:** Integración de Suricata 7.x sobre framework Netmap en interfaces WAN/LAN, descarga de firmas Emerging Threats Open y reglas automáticas `dropsid.conf`. | Bruno Urrea / Kevin Retamales | **Completado (100%)** |
 | **Fase 2** | **S7 – S8** | 28/09/2026 – 11/10/2026 | **A4. Hardening GeoIP con pfBlockerNG-devel:** Integración de API de MaxMind GeoLite2, bloqueo de países de alto riesgo (Top Spammers) y suscripción a feeds de reputación FireHOL L1 y Spamhaus DROP. | Kevin Retamales | **Completado (100%)** |
-| **Fase 2** | **S9 – S10** | 12/10/2026 – 25/10/2026 | **A5. Proxy HAProxy 2.8+ SSL & DVWA DMZ:** Configuración de frontend HTTPS 443 con SSL Offload, parametrización de *Stick-Tables* de control de tasa anti-fuzzing L7 en RAM y publicación de DVWA en VLAN 20. | Cristóbal Quezada | **En Ejecución** |
-| **Fase 2** | **S11 – S12** | 26/10/2026 – 08/11/2026 | **A6. Motor de Correlación KRONOS:** Desarrollo en Python 3.12 del daemon de análisis de logs `eve.json`, filtro sintáctico heurístico AST (>50% supresión de falsos positivos) y wrappers de kernel `pfctl` (`pfctl -k` y tabla `snort2c`). | Bruno Urrea | **Planificado** |
-| **Fase 2** | **S13 – S14** | 09/11/2026 – 22/11/2026 | **A7. Centralita Asterisk 20 LTS PBX & AMI:** Despliegue en Docker, canalización PJSIP, configuración de Dialplans prioritarios y script auto-dialer AMI (`Originate`) disparado por eventos críticos. | Freddy Vásquez | **Planificado** |
+| **Fase 2** | **S9 – S10** | 12/10/2026 – 25/10/2026 | **A5. Proxy HAProxy 2.8+ SSL & DVWA DMZ:** Configuración de frontend HTTPS 443 con SSL Offload, parametrización de *Stick-Tables* de control de tasa anti-fuzzing L7 en RAM y publicación de DVWA en VLAN 20. | Cristóbal Quezada | **Completado (100%)** |
+| **Fase 2** | **S11 – S12** | 26/10/2026 – 08/11/2026 | **A6. Motor de Correlación KRONOS:** Desarrollo en Python 3.12 del daemon de análisis de logs `eve.json`, filtro sintáctico heurístico AST (>50% supresión de falsos positivos) y wrappers de kernel `pfctl` (`pfctl -k` y tabla `snort2c`). | Bruno Urrea | **Completado (100%)** |
+| **Fase 2** | **S13 – S14** | 09/11/2026 – 22/11/2026 | **A7. Centralita Asterisk 20 LTS PBX & AMI:** Despliegue en Docker, canalización PJSIP, configuración de Dialplans prioritarios y script auto-dialer AMI (`Originate`) disparado por eventos críticos. | Freddy Vásquez / Bruno Urrea | **Completado (100%)** |
 | **Fase 2** | **S14 – S15** | 16/11/2026 – 29/11/2026 | **A8. Integración Google Gemini Live Voice API:** Desarrollo del cliente WebSocket seguro (WSS), streaming de audio bidireccional PCM 24kHz y System Prompts tácticos de ciberseguridad para debriefing al CISO. | Bruno Urrea | **Planificado** |
 | **Fase 2** | **S15** | 23/11/2026 – 29/11/2026 | **A9. Malla VPN Zero Trust Tailscale:** Configuración de Tailscale Subnet Router en pfSense para publicación segura de la subred VoIP `192.168.30.0/24` hacia softphones remotos sin exponer puertos ni depender de IP fija. | Freddy Vásquez | **Planificado** |
 | **Fase 3** | **S16 – S18** | 30/11/2026 – 20/12/2026 | **A10. QA Integral, Auditoría & Defensa de Título:** Pruebas de penetración SQLi simuladas, verificación de descarte en kernel (<100 ms), medición de latencia total de respuesta (<1.5 s), manuales técnicos PDF y defensa final. | Todo el Equipo | **Planificado** |
@@ -48,9 +48,9 @@ gantt
     section Fase 2: Desarrollo & Hardening (S5 - S15)
     A3. Suricata 7.x Inline IPS (Netmap)         :done, a3, 2026-09-14, 14d
     A4. Hardening GeoIP pfBlockerNG-devel        :done, a4, 2026-09-28, 14d
-    A5. Proxy HAProxy 2.8+ SSL & DMZ DVWA        :active, a5, 2026-10-12, 14d
-    A6. Motor Correlación KRONOS (Python AST)    :a6, 2026-10-26, 14d
-    A7. Centralita Asterisk 20 LTS PBX & AMI     :a7, 2026-11-09, 14d
+    A5. Proxy HAProxy 2.8+ SSL & DMZ DVWA        :done, a5, 2026-10-12, 14d
+    A6. Motor Correlación KRONOS (Python AST)    :done, a6, 2026-10-26, 14d
+    A7. Centralita Asterisk 20 LTS PBX & AMI     :done, a7, 2026-11-09, 14d
     A8. Integración Google Gemini Live Voice     :a8, 2026-11-16, 14d
     A9. Malla Zero Trust Tailscale WireGuard     :a9, 2026-11-23, 7d
     

@@ -1,0 +1,5 @@
+{
+  "disablechecksumoffloading": true,
+  "disablesegmentationoffloading": true,
+  "disablelargereceiveoffloading": true
+}
