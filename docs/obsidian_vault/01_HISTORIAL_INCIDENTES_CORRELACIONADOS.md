@@ -41,6 +41,7 @@ Base de conocimiento activa para correlación de vectores de ataque, detección 
 | 11 | 2026-10-26 01:49:21 | `185.220.101.5` | Inyección SQL Crítica | `1=1` | DROP en snort2c & State Kill | ⚠️ **x11 (REINCIDENTE)** | En curso |
 | 12 | 2026-10-26 01:49:21 | `185.220.101.5` | Bloqueo Manual SOAR por Voz | `N/A` | DROP permanente en snort2c y purga de estados (Ataque reiterado detectado por KRONOS) | ⚠️ **x12 (REINCIDENTE)** | En curso |
 | 13 | 2026-10-26 19:14:23 | `185.220.101.5` | SQL_INJECTION (AST_TAUTOLOGY) | `1=1` | DROP & BLOCK en Firewall pfSense (Kernel pfctl State Kill) | ⚠️ **x13 (REINCIDENTE)** | En curso |
+| 1 | 2026-11-09 19:17:39 | `186.10.176.148` | SQL Injection Tautology (OR 1=1 en DMZ) | `' OR '1'='1` | DROP Inline Netmap en DMZ + pfctl snort2c | **x1** | En curso |
 
 ## 2. Detalle de Incidentes Registrados
 
@@ -181,4 +182,13 @@ Base de conocimiento activa para correlación de vectores de ataque, detección 
 * **Tautologías AST:** `1=1`
 * **Acción de Mitigación:** DROP & BLOCK en Firewall pfSense (Kernel pfctl State Kill)
 * **Frecuencia:** Este origen ha intentado atacar 13 veces.
+* **Correlación:** [[00_PERSONALIDAD_IA_KRONOS]], [[02_TOPOLOGIA_Y_REGLAS_PFSENSE]]
+
+### Caso #001 - Reincidencia **x1**: SQL Injection Tautology (OR 1=1 en DMZ)
+* **Timestamp:** 2026-11-09 19:17:39 UTC
+* **IP Atacante:** `186.10.176.148`
+* **Objetivo:** DVWA en DMZ
+* **Tautologías AST:** `' OR '1'='1`
+* **Acción de Mitigación:** DROP Inline Netmap en DMZ + pfctl snort2c
+* **Frecuencia:** Este origen ha intentado atacar 1 veces.
 * **Correlación:** [[00_PERSONALIDAD_IA_KRONOS]], [[02_TOPOLOGIA_Y_REGLAS_PFSENSE]]

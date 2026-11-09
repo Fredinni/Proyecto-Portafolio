@@ -31,5 +31,23 @@
       "DROP & BLOCK en Firewall pfSense (Kernel pfctl State Kill)"
     ],
     "notes": "Ataque reincidente detectado #13."
+  },
+  "186.10.176.148": {
+    "count": 1,
+    "first_seen": "2026-11-09T19:17:39Z",
+    "last_seen": "2026-11-09T19:17:39Z",
+    "attack_types": [
+      "SQL Injection Tautology (OR 1=1 en DMZ)"
+    ],
+    "target_services": [
+      "DVWA en DMZ"
+    ],
+    "tautologies": [
+      "' OR '1'='1"
+    ],
+    "actions": [
+      "DROP Inline Netmap en DMZ + pfctl snort2c"
+    ],
+    "notes": "Primer ataque registrado desde 186.10.176.148."
   }
 }

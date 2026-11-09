@@ -368,26 +368,20 @@ def main():
     args = sys.argv[1:]
 
     # Valores por defecto del incidente
-    incident_type = "Inyección SQL Crítica"
-    attacker_ip = "185.220.101.5"
-    geo_origin = "Nodo Hostil"
+    incident_type = "Inyección SQL Crítica en DMZ"
+    attacker_ip = "186.10.176.148"
+    geo_origin = "Entorno de Pruebas QA"
     target_service = "DVWA en DMZ"
     recurrence_count = 1
 
-    # Cargar contexto enriquecido si existe
-    ctx_file = "/tmp/incident_context.json"
-    if os.path.exists(ctx_file):
-        try:
-            with open(ctx_file, "r", encoding="utf-8") as f:
-                ctx = json.load(f)
-                incident_type = ctx.get("attack_type", incident_type)
-                attacker_ip = ctx.get("attacker_ip", attacker_ip)
-                geo_origin = ctx.get("geo_country", geo_origin)
-                target_service = ctx.get("target_service", target_service)
-                recurrence_count = ctx.get("recurrence_count", recurrence_count)
-                logger.info(f"Contexto cargado de {ctx_file}: {attacker_ip} (Reincidencia: x{recurrence_count})")
-        except Exception as e:
-            logger.warning(f"Error leyendo {ctx_file}: {e}")
+    # Cargar argumentos pasados por Asterisk Dialplan
+    if len(args) >= 2 and args[0] != "DIRECT_CALL":
+        if args[0] and not args[0].startswith("${"):
+            incident_type = args[0]
+        if args[1] and not args[1].startswith("${"):
+            attacker_ip = args[1]
+        if len(args) >= 3 and args[2] and not args[2].startswith("${"):
+            geo_origin = args[2]
 
     # Determinar si es llamada directa al anexo 1000
     is_direct_call = False
@@ -402,41 +396,34 @@ def main():
 
     # Identificar operador
     operator_name, operator_role = OPERATOR_MAP.get(caller_id, ("Kevin", "Threat Intel QA Lead"))
+    is_kevin_test = ("186.10" in attacker_ip) or (operator_name == "Kevin")
 
     logger.info(f"=== NUEVA SESIÓN DE VOZ GEMINI LIVE EN TIEMPO REAL ===")
     logger.info(f"Operador: {operator_name} (Anexo: {caller_id}) | Modo: {'DIRECT_CALL (1000)' if is_direct_call else 'EMERGENCY_DISPATCH'}")
     logger.info(f"Ataque: {incident_type} | IP Atacante: {attacker_ip} | Reincidencia: x{recurrence_count}")
 
     # =========================================================================
-    # PASO 1: Reproducción Inmediata del Saludo Inicial (Cero Piper, Cero Beeps)
+    # PASO 1: Reproducción Inmediata del Saludo Inicial Dinámico y Contextual
     # =========================================================================
     played_greeting = False
 
-    # A) Si es llamada de emergencia y existe briefing reciente pre-generado
-    if not is_direct_call and os.path.exists("/tmp/gemini_alert_current.wav"):
-        file_age = time.time() - os.path.getmtime("/tmp/gemini_alert_current.wav")
-        if file_age < 300:
-            logger.info(f"Reproduciendo briefing táctico de emergencia pre-sintetizado (edad: {file_age:.1f}s)")
-            send_agi("STREAM FILE /tmp/gemini_alert_current \"\"")
-            played_greeting = True
-
-    # B) Si es llamada directa al 1000 y existe audio pre-calentado para este anexo
-    if not played_greeting and is_direct_call:
+    # A) Si es llamada directa al 1000 y existe audio pre-calentado para este anexo
+    if is_direct_call:
         prewarmed_path = f"/tmp/gemini_greeting_{caller_id}"
         if os.path.exists(f"{prewarmed_path}.wav"):
             logger.info(f"Reproduciendo saludo pre-calentado para anexo {caller_id} (0.0s de latencia)")
             send_agi(f"STREAM FILE {prewarmed_path} \"\"")
             played_greeting = True
 
-    # C) Generación dinámica en vivo si no había pre-calentado
+    # B) Generación dinámica en vivo e informada
     if not played_greeting:
         if is_direct_call:
-            opening_text = f"¡Aló {operator_name}! Soy la operadora de KRONOS SENTINEL. Estoy monitoreando la DMZ y el pfSense. ¿Qué necesitas revisar o bloquear?"
+            opening_text = f"¡Aló {operator_name}! Soy la operadora de KRONOS SENTINEL. Estoy monitoreando la DMZ y el pfSense. ¿Qué necesitas revisar o desbloquear?"
         else:
-            if recurrence_count >= 2:
-                opening_text = f"¡Aló {operator_name}! Oye, este compadre de la {attacker_ip} ya van {recurrence_count} veces que nos tira {incident_type}. El pfSense ya le chantó DROP en snort2c y mató los estados. ¿Lo dejamos bloqueado nomás?"
+            if is_kevin_test:
+                opening_text = f"¡Aló Kevin! Oye, te llamo al tiro porque el IPS en la DMZ te acaba de frenar una inyección SQL hacia DVWA desde tu IP {attacker_ip}. Como estás probando tú, avísame si quieres que te la libere de una para que sigas testeando. ¿Lo dejamos bloqueado o te lo desbloqueo?"
             else:
-                opening_text = f"¡Aló, {operator_name}! Oye, frené un ataque de {incident_type} desde la IP {attacker_ip} hacia {target_service}. El pfSense ya le chantó DROP en snort2c y mató los estados. ¿Lo dejamos bloqueado nomás?"
+                opening_text = f"¡Aló {operator_name}! Oye, frenamos un ataque de {incident_type} desde la IP {attacker_ip} hacia {target_service}. El pfSense ya le chantó DROP en snort2c y mató los estados. ¿Lo dejamos bloqueado o te lo desbloqueo?"
 
         prefix_opening = f"/tmp/gemini_opening_{int(time.time())}"
         logger.info(f"Sintetizando saludo dinámico en vivo para {operator_name}: '{opening_text}'")
@@ -486,8 +473,14 @@ def main():
                 ai_response = f"Dale {operator_name}, la red quedó protegida en el firewall y el atacante está bloqueado."
 
             # Detección y ejecución de acción SOAR: Desbloqueo en caliente a solicitud de voz
-            if "[ACTION:UNBLOCK]" in ai_response or any(w in ai_response.lower() for w in ["liberar la ip", "desbloquear la ip", "liberé la ip"]):
-                ai_response = ai_response.replace("[ACTION:UNBLOCK]", "").strip()
+            unblock_triggers = [
+                "[action:unblock]", "liberar", "desbloquear", "liberé", "libere",
+                "desbloqueé", "desbloquee", "desbloqueo", "desbloqueada", "desbloqueado",
+                "liberada", "liberado", "libera", "desbloquea", "sácala", "sacala"
+            ]
+            lower_ai = ai_response.lower()
+            if any(t in lower_ai for t in unblock_triggers):
+                ai_response = re.sub(r'\[action:unblock\]', '', ai_response, flags=re.IGNORECASE).strip()
                 logger.info(f"⚡ ORDEN DE VOZ DETECTADA: Desbloquear IP atacante {attacker_ip} en pfSense...")
                 unblock_ok = unblock_ip_pfsense(attacker_ip)
                 if unblock_ok:
