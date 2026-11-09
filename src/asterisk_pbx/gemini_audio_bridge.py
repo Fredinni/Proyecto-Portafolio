@@ -198,10 +198,10 @@ def synthesize_gemini_audio(text_to_speak: str, output_prefix: str, voice_name: 
         logger.error("No hay API Key configurada para síntesis Gemini TTS.")
         return False
 
-    # Limitar a máximo 12 palabras para garantizar síntesis instantánea
+    # Permitir frases tácticas completas de hasta 60 palabras
     words = text_to_speak.split()
-    if len(words) > 12:
-        text_to_speak = " ".join(words[:12]) + "."
+    if len(words) > 60:
+        text_to_speak = " ".join(words[:60]) + "."
 
     raw_path = f"{output_prefix}_raw.pcm"
     wav_path = f"{output_prefix}.wav"
@@ -305,13 +305,13 @@ def understand_and_respond_multimodal(
         f"Contexto técnico: Mitigamos un ataque de {incident_type} desde la IP {attacker_ip} hacia {target_service}. "
         f"El pfSense ya le chantó un DROP en la tabla snort2c y mató todos los sockets TCP activos. {rec_info} "
         f"Escucha atentamente lo que {operator_name} acaba de decir en el audio grabado de su micrófono. "
-        f"Respóndele DIRECTAMENTE en MÁXIMO 8 PALABRAS: "
-        f"- Si pide bloquear o confirmar, dile que ya quedó sellada en snort2c ('Listo compadre, ya la sellé en snort2c.'). "
-        f"- Si pide desbloquear la IP, levantar el bloqueo, liberarla o dice que es una prueba suya para seguir testeando: responde confirmando con buena onda (ej: '[ACTION:UNBLOCK] Listo compadre, te liberé la IP de snort2c.') e incluye SIEMPRE la etiqueta [ACTION:UNBLOCK] al inicio. "
-        f"- Si pregunta qué IP fue o detalles del ataque, dale la IP {attacker_ip} y el servicio {target_service} ('Fue la {attacker_ip} al {target_service}.'). "
-        f"- Si dice 'vale', 'gracias', 'chao', 'listo' o se despide, despídete en buena onda ('¡Vale compadre, nos vemos!'). "
-        f"- Si pregunta cómo está la red, dile que la DMZ está segura ('La DMZ está impeque, pfSense asegurado.'). "
-        f"MÁXIMO 8 PALABRAS. CERO PREÁMBULOS NI EXPLICACIONES. Habla ÚNICAMENTE la frase directa a pronunciar por teléfono."
+        f"Respóndele DIRECTAMENTE en máximo 15 palabras, de forma clara, natural y chilena: "
+        f"- Si pide bloquear o confirmar, responde que ya quedó sellada en el firewall ('Listo compadre, ya quedó sellada en el firewall.'). "
+        f"- Si pide desbloquear la IP, levantar el bloqueo, liberarla, o dice que era él testeando: responde confirmando con buena onda (ej: '[ACTION:UNBLOCK] Listo Kevin, ya te liberé la IP en el firewall para que sigas.') e incluye SIEMPRE la etiqueta [ACTION:UNBLOCK] al inicio. "
+        f"- Si pregunta qué IP fue o detalles del ataque, indícale la IP {attacker_ip} y DVWA ('Te botó la inyección SQL en DVWA desde tu IP.'). "
+        f"- Si dice 'vale', 'gracias', 'chao', 'listo' o se despide, despídete en buena onda ('¡Vale compadre, avísame cualquier cosa!'). "
+        f"- Si pregunta cómo está la red, dile que la DMZ está segura ('La DMZ está impeque, todo asegurado.'). "
+        f"MÁXIMO 15 PALABRAS. CERO PREÁMBULOS NI EXPLICACIONES. Habla ÚNICAMENTE la frase directa a pronunciar por teléfono."
     )
 
     for m in LLM_MODELS:
@@ -328,13 +328,13 @@ def understand_and_respond_multimodal(
                             }
                         },
                         {
-                            "text": f"Responde directamente a {operator_name} en máximo 8 palabras:"
+                            "text": f"Responde directamente a {operator_name} en máximo 15 palabras:"
                         }
                     ]
                 }
             ],
             "generationConfig": {
-                "maxOutputTokens": 25,
+                "maxOutputTokens": 80,
                 "temperature": 0.1,
                 "thinkingConfig": {"thinkingBudget": 0}
             }
@@ -421,9 +421,9 @@ def main():
             opening_text = f"¡Aló {operator_name}! Soy la operadora de KRONOS SENTINEL. Estoy monitoreando la DMZ y el pfSense. ¿Qué necesitas revisar o desbloquear?"
         else:
             if is_kevin_test:
-                opening_text = f"¡Aló Kevin! Oye, te llamo al tiro porque el IPS en la DMZ te acaba de frenar una inyección SQL hacia DVWA desde tu IP {attacker_ip}. Como estás probando tú, avísame si quieres que te la libere de una para que sigas testeando. ¿Lo dejamos bloqueado o te lo desbloqueo?"
+                opening_text = f"¡Aló Kevin! Oye, te llamo porque el IPS en la DMZ te acaba de frenar una inyección SQL hacia DVWA. Como estás probando tú, ¿quieres que te desbloquee la IP al tiro para que sigas?"
             else:
-                opening_text = f"¡Aló {operator_name}! Oye, frenamos un ataque de {incident_type} desde la IP {attacker_ip} hacia {target_service}. El pfSense ya le chantó DROP en snort2c y mató los estados. ¿Lo dejamos bloqueado o te lo desbloqueo?"
+                opening_text = f"¡Aló {operator_name}! Oye, frenamos un ataque de {incident_type} desde la IP {attacker_ip} hacia {target_service}. ¿Lo dejamos bloqueado o te lo desbloqueo?"
 
         prefix_opening = f"/tmp/gemini_opening_{int(time.time())}"
         logger.info(f"Sintetizando saludo dinámico en vivo para {operator_name}: '{opening_text}'")
@@ -445,8 +445,8 @@ def main():
         logger.info(f"--- Turno {turn}: Escuchando micrófono de {operator_name} (sin beeps)...")
 
         # Asterisk RECORD FILE sin beep:
-        # 3500ms max con detección de silencio 's=1' (corta tras 1 segundo de silencio)
-        rec_res = send_agi(f"RECORD FILE {rec_prefix} wav \"#\" 3500 0 s=1")
+        # 5000ms max con detección de silencio 's=1' (corta tras 1 segundo de silencio completo)
+        rec_res = send_agi(f"RECORD FILE {rec_prefix} wav \"#\" 5000 0 s=1")
         if "result=-1" in rec_res:
             logger.info("Canal colgado por el usuario durante la grabación.")
             break
