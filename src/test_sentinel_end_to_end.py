@@ -1,52 +1,55 @@
 #!/usr/bin/env python3
 """
-KRONOS SENTINEL - End-to-End Pipeline Verification Script (A6 + A7)
-Authors: Bruno Urrea Ortiz & Freddy Vásquez Cortés (Portafolio de Título - Duoc UC)
-Project: KRONOS SENTINEL - Autonomous AI-IPS & Live Voice Incident Response
+KRONOS SENTINEL - Suite de Verificación Integral End-to-End
+Valida la integración real: Filtro AST + FreeBSD pfctl + Asterisk AMI PBX + Gemini Live Voice
+Autor: Bruno Urrea Ortiz - Proyecto Portafolio de Título APT122
+Duoc UC - Sede San Joaquín
 """
 
-import json
 import os
 import sys
 import time
 
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-ENGINE_DIR = os.path.join(PROJECT_ROOT, "src", "pfsense_pfctl_engine")
-PBX_DIR = os.path.join(PROJECT_ROOT, "src", "asterisk_pbx")
+# Configurar rutas de importación del proyecto
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PFCTL_DIR = os.path.join(BASE_DIR, "pfsense_pfctl_engine")
+PBX_DIR = os.path.join(BASE_DIR, "asterisk_pbx")
 
-for p in [ENGINE_DIR, PBX_DIR]:
-    if p not in sys.path:
-        sys.path.insert(0, p)
+for d in [PFCTL_DIR, PBX_DIR]:
+    if d not in sys.path:
+        sys.path.insert(0, d)
 
+from log_correlator import PfctlLogCorrelator
 from false_positive_filter import FalsePositiveFilter
 from pfctl_wrapper import PfctlWrapper
-from log_correlator import PfctlLogCorrelator
 from call_trigger import AsteriskCallTrigger
 
 
-def print_banner():
+def main():
     print("=" * 72)
     print("         KRONOS SENTINEL - VERIFICACIÓN END-TO-END (A6 & A7)       ")
     print("   Motor AST Python 3.12 + FreeBSD Kernel pfctl + Asterisk 20 AMI   ")
-    print("=" * 72)
-
-
-def main():
-    print_banner()
+    print("=" * 72 + "\n")
 
     # Inicializar componentes
     correlator = PfctlLogCorrelator()
-    correlator.pfctl.simulation_mode = True
-    trigger = AsteriskCallTrigger(prefer_ami=True)
+    correlator.config["asterisk"]["host"] = "192.168.30.50"
+    correlator.config["asterisk"]["port"] = 5038
+    correlator.config["asterisk"]["ciso_extension"] = "PJSIP/1004"
+    trigger = AsteriskCallTrigger(
+        ami_host="192.168.30.50",
+        ami_port=5038,
+        ami_user="kronos_ami",
+        ami_secret="KronosSecOps2026!",
+        prefer_ami=True
+    )
 
-    print("\n[*] FASE 1: Verificación del Filtro AST y Supresión de Ruido (Actividad A6)")
+    print("[*] FASE 1: Verificación del Filtro AST y Supresión de Ruido (Actividad A6)")
     test_events = [
-        # Ruido de escaneo sin impacto L7
         {"event_type": "alert", "src_ip": "198.51.100.1", "alert": {"signature": "ET SCAN Potential SSH Scan"}},
         {"event_type": "alert", "src_ip": "198.51.100.2", "alert": {"signature": "GPL SCAN PING *NIX"}},
         {"event_type": "alert", "src_ip": "198.51.100.3", "alert": {"signature": "SURICATA HTTP suspicious User-Agent"}},
         {"event_type": "alert", "src_ip": "198.51.100.4", "alert": {"signature": "ET POLICY Suspicious inbound to MSSQL port"}},
-        # Ataques reales de alta fidelidad
         {"event_type": "alert", "src_ip": "185.220.101.5", "alert": {"signature": "SQLi Tautology Attempt"}, "http": {"url": "/vulnerabilities/sqli/?id=1%27%20OR%20%271%27%3D%271%20--&Submit=Submit"}},
         {"event_type": "alert", "src_ip": "185.220.101.6", "alert": {"signature": "SQLi UNION SELECT"}, "http": {"url": "/vulnerabilities/sqli/?id=1%27%20UNION%20SELECT%20null%2Cuser%20FROM%20users--"}},
         {"event_type": "alert", "src_ip": "198.51.100.99", "alert": {"signature": "RCE Command Injection"}, "http": {"url": "/vulnerabilities/exec/?ip=127.0.0.1%3B%20cat%20%2Fetc%2Fpasswd"}}
@@ -69,7 +72,7 @@ def main():
 
     print("\n[*] FASE 3: Verificación de Centralita Asterisk 20 LTS PBX & AMI (Actividad A7)")
     call_dispatch = trigger.trigger_ciso_call(
-        ciso_channel="PJSIP/1001",
+        ciso_channel="PJSIP/1004",
         incident_context={
             "attack_type": "SQL Injection Crítica (AST Tautology)",
             "attacker_ip": "185.220.101.5",
@@ -77,7 +80,7 @@ def main():
         }
     )
     print(f" -> Estado del Despacho: {call_dispatch['status']}")
-    print(f" -> Canal Objetivo: {call_dispatch['target_channel']} (Bruno Urrea - CISO / SecOps Lead)")
+    print(f" -> Canal Objetivo: {call_dispatch['target_channel']} (Kevin Retamales - Threat Intel & QA Lead)")
     print(f" -> Método Utilizado: {call_dispatch['method']}")
     print(f" -> CallID Generado: {call_dispatch['call_id']}")
     print(f" -> Resultado: {'EXITOSO' if call_dispatch['success'] else 'FALLIDO'}")

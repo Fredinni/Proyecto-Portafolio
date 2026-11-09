@@ -35,10 +35,10 @@ class IncidentDispatcherHandler(BaseHTTPRequestHandler):
                 logging.info(f"==> INCIDENTE VALIDADO RECIBIDO EN DISPATCHER <==")
                 logging.info(f"SessionID: {session_id} | Vector: {incident_data.get('attack_type')} | IP: {incident_data.get('attacker_ip')}")
                 
-                # Disparar llamada telefónica a Bruno Urrea (CISO / Anexo 1001)
+                # Disparar llamada telefónica a Kevin Retamales (QA Lead / Anexo 1004)
                 trigger = AsteriskCallTrigger()
                 call_res = trigger.trigger_ciso_call(
-                    ciso_channel="PJSIP/1001",
+                    ciso_channel="PJSIP/1004",
                     incident_context=incident_data
                 )
                 call_success = call_res.get("success", False) if isinstance(call_res, dict) else bool(call_res)
@@ -49,7 +49,7 @@ class IncidentDispatcherHandler(BaseHTTPRequestHandler):
                 response = {
                     "status": "SUCCESS",
                     "session_id": session_id,
-                    "target_channel": "PJSIP/1001",
+                    "target_channel": "PJSIP/1004",
                     "call_initiated": call_success,
                     "call_details": call_res if isinstance(call_res, dict) else {"success": call_success}
                 }
@@ -66,7 +66,7 @@ class IncidentDispatcherHandler(BaseHTTPRequestHandler):
 def run_dispatcher(port: int = 8080):
     server_address = ('', port)
     httpd = HTTPServer(server_address, IncidentDispatcherHandler)
-    logging.info(f"KRONOS Voice Dispatcher activo en puerto HTTP {port} (Llamadas a PJSIP/1001)...")
+    logging.info(f"KRONOS Voice Dispatcher activo en puerto HTTP {port} (Llamadas a PJSIP/1004 - Kevin Retamales)...")
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

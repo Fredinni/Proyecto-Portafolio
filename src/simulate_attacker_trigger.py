@@ -38,9 +38,15 @@ def get_gemini_key():
                         return line.split("=", 1)[1].strip().strip("'\"")
     return os.getenv("GEMINI_API_KEY", "")
 
-def pregenerate_live_gemini_speech(attacker_ip: str, incident_type: str, recurrence_count: int = 1,
-                                   vm103_ip: str = "192.168.30.50", target_service: str = "DVWA en DMZ",
-                                   tautologies: list = None):
+def pregenerate_live_gemini_speech(
+    attacker_ip: str,
+    incident_type: str,
+    recurrence_count: int = 1,
+    vm103_ip: str = "192.168.30.50",
+    target_service: str = "DVWA en DMZ",
+    tautologies: list = None,
+    operator_name: str = "Kevin"
+):
     """
     Genera en vivo la alerta de inicio con Gemini 3.8 Live (Voz: Aoede),
     incorporando la correlación de reincidencia de Obsidian y telemetría de pfSense.
@@ -54,18 +60,18 @@ def pregenerate_live_gemini_speech(attacker_ip: str, incident_type: str, recurre
 
     if recurrence_count >= 2:
         prompt_instruction = (
-            f"Saluda con '¡Aló Bruno! Oye, este compadre de la {attacker_ip} ya van {recurrence_count} veces que nos tira {incident_type}, revísalo. "
+            f"Saluda con '¡Aló {operator_name}! Oye, este compadre de la {attacker_ip} ya van {recurrence_count} veces que nos tira {incident_type}, revísalo. "
             "El pfSense ya le chantó DROP en snort2c y mató los estados. ¿Lo dejamos bloqueado nomás?'"
         )
     else:
         prompt_instruction = (
-            f"Saluda con '¿Aló, Bruno? Oye...' y dile que frenaste un {incident_type} desde la IP {attacker_ip} hacia {target_service}. "
+            f"Saluda con '¡Aló, {operator_name}! Oye...' y dile que frenaste un {incident_type} desde la IP {attacker_ip} hacia {target_service}. "
             "El pfSense ya le chantó DROP en snort2c y mató los estados. Pregúntale si lo dejamos bloqueado nomás."
         )
 
     sys_prompt = (
         "Eres la operadora de IA del sistema de ciberseguridad KRONOS SENTINEL. "
-        "Estás en una llamada telefónica en vivo con Bruno Urrea (CISO). "
+        f"Estás en una llamada telefónica en vivo con {operator_name}. "
         "HABLA DE TÚ A TÚ, SÚPER INFORMAL, MUY CASUAL CHILENA, COMO UNA COLEGA CAPA Y RELAJADA. "
         "Cero formalismos corporativos. Sé súper breve, directa y al grano. "
         f"{prompt_instruction} "
@@ -73,14 +79,14 @@ def pregenerate_live_gemini_speech(attacker_ip: str, incident_type: str, recurre
     )
 
     LLM_MODELS = [
-        "gemini-3-flash-preview",
-        "gemini-3.5-flash",
-        "gemini-3.1-flash-lite"
+        "gemini-3.1-flash-lite",
+        "gemini-3.8-flash",
+        "gemini-3-flash-preview"
     ]
 
     TTS_MODELS = [
-        "gemini-3.8-flash-tts",
         "gemini-3.8-flash-lite-tts",
+        "gemini-2.5-flash-preview-tts",
         "gemini-3.1-flash-tts-preview"
     ]
 
@@ -89,13 +95,13 @@ def pregenerate_live_gemini_speech(attacker_ip: str, incident_type: str, recurre
         url_llm = f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent?key={api_key}"
         body_llm = {
             "systemInstruction": {"parts": [{"text": sys_prompt}]},
-            "contents": [{"parts": [{"text": "Genera el diálogo de alerta telefónica para Bruno."}]}]
+            "contents": [{"parts": [{"text": f"Genera el diálogo de alerta telefónica para {operator_name}."}]}]
         }
         req = urllib.request.Request(url_llm, data=json.dumps(body_llm).encode(), headers={"Content-Type": "application/json"})
         try:
             with urllib.request.urlopen(req, timeout=10) as resp:
                 data = json.loads(resp.read().decode())
-                spoken_alert = data['candidates'][0]['content']['parts'][0]['text'].strip()
+                spoken_alert = data['candidates'][0]['content']['parts'][0]['text'].strip().strip('"\'')
                 if spoken_alert:
                     print(f" -> Diálogo generado con {m}: \"{spoken_alert}\"")
                     break
@@ -105,9 +111,9 @@ def pregenerate_live_gemini_speech(attacker_ip: str, incident_type: str, recurre
 
     if not spoken_alert:
         if recurrence_count >= 2:
-            spoken_alert = f"¡Aló Bruno! Oye, este compadre de la {attacker_ip} ya van {recurrence_count} veces que nos tira {incident_type}, revísalo. El pfSense ya le chantó DROP en snort2c y mató los estados. ¿Lo dejamos bloqueado nomás?"
+            spoken_alert = f"¡Aló {operator_name}! Oye, este compadre de la {attacker_ip} ya van {recurrence_count} veces que nos tira {incident_type}, revísalo. El pfSense ya le chantó DROP en snort2c y mató los estados. ¿Lo dejamos bloqueado nomás?"
         else:
-            spoken_alert = f"¿Aló, Bruno? Oye, frené un {incident_type} desde la IP {attacker_ip} hacia {target_service}. El pfSense ya le chantó DROP en snort2c y mató los estados. ¿Lo dejamos bloqueado nomás?"
+            spoken_alert = f"¡Aló, {operator_name}! Oye, frené un {incident_type} desde la IP {attacker_ip} hacia {target_service}. El pfSense ya le chantó DROP en snort2c y mató los estados. ¿Lo dejamos bloqueado nomás?"
 
     print(f" -> Sintetizando alerta con Gemini 3.8 Live TTS (Aoede)...")
     raw_pcm_alert = None
@@ -128,7 +134,7 @@ def pregenerate_live_gemini_speech(attacker_ip: str, incident_type: str, recurre
         }
         req = urllib.request.Request(url_tts, data=json.dumps(body).encode(), headers={"Content-Type": "application/json"})
         try:
-            with urllib.request.urlopen(req, timeout=25) as resp:
+            with urllib.request.urlopen(req, timeout=15) as resp:
                 data = json.loads(resp.read().decode())
                 raw_pcm_alert = base64.b64decode(data['candidates'][0]['content']['parts'][0]['inlineData']['data'])
                 print(f" -> Síntesis OK con {model} ({len(raw_pcm_alert)} bytes PCM)")
@@ -182,13 +188,26 @@ def pregenerate_live_gemini_speech(attacker_ip: str, incident_type: str, recurre
         run_sudo("docker exec kronos_asterisk_pbx chown asterisk:asterisk /tmp/gemini_alert_current.*")
 
         c.close()
-        print(" -> Alerta Gemini 3.8 Live y Contexto Obsidian desplegados en Asterisk PBX!")
+        print(" -> Alerta Gemini Live y Contexto Obsidian desplegados en Asterisk PBX!")
     except Exception as e:
         print(f" [!] Error subiendo audio a Asterisk: {e}")
 
 def launch_attack_and_trigger_pipeline(attacker_ip: str = "185.220.101.5", target_host: str = "192.168.20.50"):
+    # Detectar destinatario por argumento de línea de comandos (ej. 1004 para Kevin, 1001 para Bruno)
+    target_ext = "1004"
+    if len(sys.argv) > 1 and sys.argv[1] in ["1001", "1002", "1003", "1004"]:
+        target_ext = sys.argv[1]
+
+    names_map = {
+        "1001": ("Bruno Urrea", "CISO"),
+        "1002": ("Freddy Vásquez", "VoIP Engineer"),
+        "1003": ("Cristóbal Quezada", "DMZ Admin"),
+        "1004": ("Kevin Retamales", "QA Lead")
+    }
+    op_name, op_title = names_map.get(target_ext, ("Kevin Retamales", "QA Lead"))
+
     print("=" * 72)
-    print("           KRONOS SENTINEL - DISPARO DE ATAQUE Y LLAMADA SOAR           ")
+    print(f"     KRONOS SENTINEL - DISPARO DE ATAQUE Y LLAMADA SOAR ({op_name})     ")
     print("=" * 72)
 
     # 1. Petición HTTP L7 hacia DVWA
@@ -246,18 +265,20 @@ def launch_attack_and_trigger_pipeline(attacker_ip: str = "185.220.101.5", targe
     print(f" -> Reincidencia registrada en Obsidian: x{recurrence_count}")
 
     # 2.5. Síntesis en tiempo real con Gemini Live (Voz femenina Aoede)
-    print(f"\n[*] PASO 2.5: Generando síntesis en vivo con Gemini 3.8 Live (Aoede)...")
+    print(f"\n[*] PASO 2.5: Generando síntesis en vivo con Gemini Live para {op_name} (Aoede)...")
     pregenerate_live_gemini_speech(
         attacker_ip=attacker_ip,
         incident_type=diag["attack_type"],
         recurrence_count=recurrence_count,
         vm103_ip="192.168.30.50",
         target_service="DVWA en DMZ",
-        tautologies=diag["incident"]["tautologies"]
+        tautologies=diag["incident"]["tautologies"],
+        operator_name=op_name.split()[0]
     )
 
-    # 3. Disparar llamada prioritaria AMI a Asterisk VM103 hacia PJSIP/1001
-    print(f"\n[*] PASO 3: Disparando llamada de emergencia AMI hacia Zoiper (PJSIP/1001)...")
+    # 3. Disparar llamada prioritaria AMI a Asterisk VM103 hacia target_ext
+    target_channel = f"PJSIP/{target_ext}"
+    print(f"\n[*] PASO 3: Disparando llamada de emergencia AMI hacia Zoiper ({target_channel})...")
     trigger = AsteriskCallTrigger(
         ami_host="192.168.30.50",
         ami_port=5038,
@@ -267,18 +288,18 @@ def launch_attack_and_trigger_pipeline(attacker_ip: str = "185.220.101.5", targe
     )
 
     call_result = trigger.trigger_ciso_call(
-        ciso_channel="PJSIP/1001",
+        ciso_channel=target_channel,
         incident_context=diag["incident"]
     )
 
     print(f" -> Estado de llamada: {call_result['status']}")
     print(f" -> Método: {call_result['method']}")
     print(f" -> CallID: {call_result['call_id']}")
-    print(f" -> Destino: {call_result['target_channel']} (Bruno Urrea - CISO)")
-    print(f" -> Resultado: {'EXITOSO - TIMBRANDO EN IPHONE ZOIPER' if call_result['success'] else 'FALLIDO'}")
+    print(f" -> Destino: {call_result['target_channel']} ({op_name} - {op_title})")
+    print(f" -> Resultado: {'EXITOSO - TIMBRANDO EN ZOIPER' if call_result['success'] else 'FALLIDO'}")
 
     print("\n" + "=" * 72)
-    print("  PIPELINE COMPLETADO: VERIFICA EL TIMBRADO EN ZOIPER DE TU IPHONE  ")
+    print("  PIPELINE COMPLETADO: VERIFICA EL TIMBRADO EN ZOIPER  ")
     print("=" * 72 + "\n")
 
 if __name__ == "__main__":

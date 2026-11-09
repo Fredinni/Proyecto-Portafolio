@@ -31,3 +31,17 @@ infra/proxmox/evidence/*.txt
 infra/proxmox/inventory.json
 # Historical lab verifier bypassed TLS trust; keep it as private evidence.
 infra/proxmox/team-access/verify-pfsense-webgui-login.py
+
+
+# Local scratch and diagnostic scripts
+/scripts/
+/cat_edge_status.py
+/check_*.py
+/diagnose_*.py
+/test_admin_shell.py
+/test_aws_edge.py
+/test_aws_ssh_keys.py
+/test_mgmt_to_wan.py
+/test_pfsense_root.py
+/test_route_from_mgmt.py
+/test_su_pfsense.py

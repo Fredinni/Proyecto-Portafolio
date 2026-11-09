@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 """
-KRONOS SENTINEL - Gemini Live Multimodal Voice Agent Bridge (EAGI)
-Author: Bruno Urrea Ortiz (Portafolio de Título - Duoc UC)
-Description:
-  Real-time AI voice incident responder using Google Gemini 3 Flash / 3.1 Flash (Multimodal Audio Understanding)
-  and Gemini 3.8 Live TTS (Voice: Aoede).
-  Processes actual microphone audio from CISO (zero canned recordings) and conducts an interactive debriefing.
+KRONOS SENTINEL - Puente Conversacional de Voz en Tiempo Real para Asterisk (EAGI)
+Autores: Bruno Urrea Ortiz & Kevin Retamales (Portafolio de Título - Duoc UC)
+Proyecto: KRONOS SENTINEL - Autonomous AI-IPS & Live Voice Incident Response
+Descripción:
+  Agente de respuesta telefónica a incidentes de seguridad integrado con Asterisk 20 LTS.
+  - Interacción bidireccional mediante streaming de audio y telefonía SIP.
+  - Supresión de tonos de grabación para interacción fluida de baja latencia.
+  - Comprensión multimodal de audio con Gemini API.
+  - Síntesis de voz dinámica en tiempo real (TTS Aoede).
+  - Desbloqueo y gestión reactiva de tablas de firewall snort2c bajo comando del operador.
 """
 
 import sys
@@ -35,7 +39,7 @@ handler = FlushFileHandler(LOG_FILE, encoding="utf-8")
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-# SSL context
+# SSL context (ignorar verificación en entorno de laboratorio cerrado)
 SSL_CTX = ssl.create_default_context()
 SSL_CTX.check_hostname = False
 SSL_CTX.verify_mode = ssl.CERT_NONE
@@ -61,8 +65,15 @@ def get_api_key():
 
 API_KEY = get_api_key()
 
+OPERATOR_MAP = {
+    "1001": ("Bruno", "CISO / SecOps Lead"),
+    "1002": ("Freddy", "VoIP & Network Engineer"),
+    "1003": ("Cristóbal", "DMZ & Proxy Admin"),
+    "1004": ("Kevin", "Threat Intel & Hardening QA Lead")
+}
+
 def send_agi(command: str) -> str:
-    """Envía un comando al canal Asterisk AGI y lee la respuesta"""
+    """Envía un comando al canal Asterisk AGI y lee la respuesta síncrona"""
     sys.stdout.write(f"{command}\n")
     sys.stdout.flush()
     res = sys.stdin.readline().strip()
@@ -70,7 +81,7 @@ def send_agi(command: str) -> str:
     return res
 
 def read_agi_env():
-    """Consume las cabeceras iniciales que Asterisk envía por stdin"""
+    """Consume las cabeceras iniciales enviadas por Asterisk por stdin"""
     env = {}
     while True:
         line = sys.stdin.readline().strip()
@@ -81,23 +92,120 @@ def read_agi_env():
             env[k.strip()] = v.strip()
     return env
 
+# Modelos multimodales para comprensión de audio (ordenados por velocidad y cuota)
 LLM_MODELS = [
     "gemini-3.1-flash-lite",
-    "gemini-3-flash-preview",
-    "gemini-3.5-flash"
+    "gemini-3.8-flash",
+    "gemini-3-flash-preview"
 ]
 
+# Modelos TTS para síntesis vocal en vivo (Aoede)
 TTS_MODELS = [
     "gemini-3.8-flash-lite-tts",
-    "gemini-3.8-flash-tts",
+    "gemini-2.5-flash-preview-tts",
     "gemini-3.1-flash-tts-preview"
 ]
 
-def synthesize_gemini_audio(text_to_speak: str, output_prefix: str, voice_name: str = "Aoede") -> bool:
-    """Sintetiza audio con voz femenina (Aoede) usando Gemini 3.8 Live y lo convierte a 8kHz WAV/ULAW"""
-    if not API_KEY:
-        logger.error("No hay API Key para síntesis Gemini TTS.")
+def unblock_ip_pfsense(ip_to_unblock: str, pfsense_ip: str = "192.168.99.1", port: int = 8443) -> bool:
+    """
+    Desbloquea en tiempo real una dirección IP en la tabla snort2c del kernel de pfSense
+    a través del endpoint administrativo autorizado para el agente SOAR de KRONOS.
+    """
+    clean_ip = re.sub(r'[^0-9a-fA-F.:]', '', ip_to_unblock.strip())
+    if not clean_ip:
+        logger.warning("No se proporcionó una IP válida para desbloquear.")
         return False
+
+    base_url = f"https://{pfsense_ip}:{port}"
+    try:
+        # 1. Obtener token CSRF
+        req1 = urllib.request.Request(f"{base_url}/", headers={"User-Agent": "KRONOS-SOAR-Agent/1.0"})
+        with urllib.request.urlopen(req1, timeout=4, context=SSL_CTX) as resp1:
+            html1 = resp1.read().decode('utf-8', errors='replace')
+            cookies = resp1.headers.get_all('Set-Cookie') or []
+            cookie_header = "; ".join([c.split(';')[0] for c in cookies])
+
+        csrf_match = re.search(r'var\s+csrfMagicToken\s*=\s*"(sid:[^"]+)";', html1)
+        if not csrf_match:
+            csrf_match = re.search(r'name=["\']__csrf_magic["\']\s+value=["\']([^"\']+)["\']', html1)
+        if not csrf_match:
+            logger.error("No se pudo obtener CSRF token de pfSense para el desbloqueo.")
+            return False
+        csrf_token = csrf_match.group(1)
+
+        # 2. Login administrativo
+        login_body = urllib.parse.urlencode({
+            '__csrf_magic': csrf_token,
+            'usernamefld': 'kronos',
+            'passwordfld': 'Iw5vPx1iR0L2TlwiIriAdfFWjE_iHtF_',
+            'login': 'Sign In'
+        }).encode('utf-8')
+
+        req2 = urllib.request.Request(
+            f"{base_url}/",
+            data=login_body,
+            headers={
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Cookie": cookie_header,
+                "User-Agent": "KRONOS-SOAR-Agent/1.0"
+            }
+        )
+        with urllib.request.urlopen(req2, timeout=4, context=SSL_CTX) as resp2:
+            new_cookies = resp2.headers.get_all('Set-Cookie') or []
+            if new_cookies:
+                cookie_header = "; ".join([c.split(';')[0] for c in new_cookies])
+
+        # 3. Obtener CSRF de diag_command.php
+        req3 = urllib.request.Request(f"{base_url}/diag_command.php", headers={"Cookie": cookie_header, "User-Agent": "KRONOS-SOAR-Agent/1.0"})
+        with urllib.request.urlopen(req3, timeout=4, context=SSL_CTX) as resp3:
+            html3 = resp3.read().decode('utf-8', errors='replace')
+
+        csrf_diag = re.search(r'name=["\']__csrf_magic["\']\s+value=["\']([^"\']+)["\']', html3)
+        csrf_cmd = csrf_diag.group(1) if csrf_diag else csrf_token
+
+        # 4. Ejecutar borrado en tabla snort2c y purga de estados
+        cmd_body = urllib.parse.urlencode({
+            '__csrf_magic': csrf_cmd,
+            'txtCommand': f'pfctl -t snort2c -T delete {clean_ip} ; pfctl -k {clean_ip}',
+            'submit': 'EXEC'
+        }).encode('utf-8')
+
+        req4 = urllib.request.Request(
+            f"{base_url}/diag_command.php",
+            data=cmd_body,
+            headers={
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Cookie": cookie_header,
+                "User-Agent": "KRONOS-SOAR-Agent/1.0"
+            }
+        )
+        with urllib.request.urlopen(req4, timeout=4, context=SSL_CTX) as resp4:
+            resp4.read()
+
+        logger.info(f"✅ ¡DESBLOQUEO EN KERNEL EXITOSO! IP {clean_ip} eliminada de snort2c.")
+        return True
+    except Exception as e:
+        logger.error(f"❌ Error ejecutando desbloqueo en pfSense para {clean_ip}: {e}")
+        return False
+
+def synthesize_gemini_audio(text_to_speak: str, output_prefix: str, voice_name: str = "Aoede") -> bool:
+    """
+    Sintetiza audio al vuelo usando Gemini TTS con la voz Aoede.
+    Convierte el flujo PCM de 24kHz a 8kHz mono WAV y ULAW para Asterisk.
+    Optimizado para frases tácticas de < 10 palabras (latencia < 2.0s).
+    """
+    if not API_KEY:
+        logger.error("No hay API Key configurada para síntesis Gemini TTS.")
+        return False
+
+    # Limitar a máximo 12 palabras para garantizar síntesis instantánea
+    words = text_to_speak.split()
+    if len(words) > 12:
+        text_to_speak = " ".join(words[:12]) + "."
+
+    raw_path = f"{output_prefix}_raw.pcm"
+    wav_path = f"{output_prefix}.wav"
+    ulaw_path = f"{output_prefix}.ulaw"
 
     for model in TTS_MODELS:
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={API_KEY}"
@@ -121,50 +229,62 @@ def synthesize_gemini_audio(text_to_speak: str, output_prefix: str, voice_name: 
                 data=json.dumps(body).encode(),
                 headers={"Content-Type": "application/json"}
             )
-            with urllib.request.urlopen(req, timeout=12, context=SSL_CTX) as resp:
+            t0 = time.time()
+            with urllib.request.urlopen(req, timeout=10, context=SSL_CTX) as resp:
                 data = json.loads(resp.read().decode())
                 p = data["candidates"][0]["content"]["parts"][0]
                 raw_pcm = base64.b64decode(p["inlineData"]["data"])
 
-            raw_path = f"{output_prefix}_raw.pcm"
-            wav_path = f"{output_prefix}.wav"
-            ulaw_path = f"{output_prefix}.ulaw"
-
             with open(raw_path, "wb") as f:
                 f.write(raw_pcm)
 
-            # Conversión con sox de 24kHz mono 16-bit PCM a 8kHz mono WAV y ULAW para Asterisk
+            # Conversión rápida mono 8kHz WAV y ULAW
             subprocess.run(
                 ["sox", "-t", "raw", "-r", "24000", "-c", "1", "-b", "16", "-e", "signed-integer", raw_path, "-r", "8000", "-c", "1", wav_path],
-                check=True
+                check=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
             )
             subprocess.run(
                 ["sox", wav_path, "-t", "ul", ulaw_path],
-                check=True
+                check=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
             )
-            logger.info(f"Audio sintetizado con {model} ({len(raw_pcm)} bytes PCM) -> {wav_path}")
+            dur = time.time() - t0
+            logger.info(f"Audio sintetizado con {model} en {dur:.2f}s ({len(raw_pcm)} bytes PCM) -> {wav_path}")
             return True
+        except urllib.error.HTTPError as he:
+            logger.warning(f"TTS {model} error HTTP {he.code}: {he.reason}. Intentando siguiente...")
+            continue
         except Exception as e:
-            logger.warning(f"Error en síntesis con {model}: {e}. Probando siguiente modelo...")
+            logger.warning(f"TTS {model} excepción: {e}. Intentando siguiente...")
             continue
 
     logger.error("Todos los modelos TTS de Gemini fallaron.")
     return False
 
-def understand_and_respond_multimodal(wav_path: str, incident_type: str, attacker_ip: str, target_service: str, recurrence_count: int = 1) -> str:
+def understand_and_respond_multimodal(
+    wav_path: str,
+    operator_name: str,
+    operator_role: str,
+    incident_type: str,
+    attacker_ip: str,
+    target_service: str,
+    recurrence_count: int = 1,
+    is_direct_call: bool = False
+) -> str:
     """
-    Procesa directamente el audio capturado del micrófono de Bruno usando la API Multimodal de Gemini.
-    Zero transcripción externa - Gemini 'escucha' el WAV y responde directamente al contenido.
+    Procesa el audio directo del micrófono del operador usando la API Multimodal de Gemini.
+    Zero transcripción externa: Gemini escucha el WAV y responde directamente.
     """
     if not os.path.exists(wav_path):
         logger.error(f"Archivo de grabación no existe: {wav_path}")
         return ""
 
     file_size = os.path.getsize(wav_path)
-    logger.info(f"Procesando audio de micrófono de Bruno: {wav_path} ({file_size} bytes)")
-
-    if file_size < 3500:
-        logger.info("Audio de micrófono demasiado corto (silencio detectado).")
+    if file_size < 3000:
+        logger.info(f"Audio de micrófono descartado por tamaño insignificante ({file_size} bytes).")
         return ""
 
     try:
@@ -172,24 +292,26 @@ def understand_and_respond_multimodal(wav_path: str, incident_type: str, attacke
             wav_bytes = f.read()
         b64_audio = base64.b64encode(wav_bytes).decode("utf-8")
     except Exception as e:
-        logger.error(f"Error leyendo WAV: {e}")
+        logger.error(f"Error leyendo WAV para envío multimodal: {e}")
         return ""
 
-    rec_info = f"Este atacante ya reincidió {recurrence_count} veces." if recurrence_count >= 2 else "Es el primer intento detectado."
+    rec_info = f"Este atacante ya reincidió {recurrence_count} veces." if recurrence_count >= 2 else "Es el primer intento registrado."
 
     system_instruction = (
-        "Eres la operadora de ciberseguridad de IA del sistema KRONOS SENTINEL. "
-        "Estás en una llamada telefónica en vivo con Bruno Urrea (CISO). "
-        "HABLA DE TÚ A TÚ, SÚPER INFORMAL, MUY CASUAL CHILENA, RELAJADA, COMO UNA COLEGA CAPA DE SOC. "
-        "Cero formalismos corporativos ni discursos largos. "
-        f"Contexto del incidente: Mitigamos un ataque de {incident_type} desde la IP {attacker_ip} hacia {target_service}. "
-        f"El pfSense ya le chantó un DROP en snort2c y mató todos los estados. {rec_info} "
-        "Escucha atentamente lo que Bruno acaba de decir en el audio grabado de su micrófono. "
-        "Respóndele DIRECTAMENTE a lo que dijo o preguntó: "
-        "- Si te dice que lo bloquees o confirmes, dile que ya quedó sellado en snort2c y que no entra más. "
-        "- Si te pregunta qué IP fue o qué pasó, dale los datos técnicos exactos. "
-        "- Si te dice 'vale', 'chao' o agradece, despídete rápido en buena onda. "
-        "Máximo 14 palabras. Responde ÚNICAMENTE el diálogo que vas a pronunciar por teléfono."
+        f"Eres la operadora de ciberseguridad de IA del sistema KRONOS SENTINEL. "
+        f"Estás en una llamada telefónica en vivo con {operator_name} ({operator_role}). "
+        f"HABLA DE TÚ A TÚ, SÚPER INFORMAL, MUY CASUAL CHILENA, RELAJADA, COMO UNA COLEGA CAPA DE SOC. "
+        f"Cero formalismos corporativos, cero introducciones robóticas, CERO narraciones de lo que dijo el operador. "
+        f"Contexto técnico: Mitigamos un ataque de {incident_type} desde la IP {attacker_ip} hacia {target_service}. "
+        f"El pfSense ya le chantó un DROP en la tabla snort2c y mató todos los sockets TCP activos. {rec_info} "
+        f"Escucha atentamente lo que {operator_name} acaba de decir en el audio grabado de su micrófono. "
+        f"Respóndele DIRECTAMENTE en MÁXIMO 8 PALABRAS: "
+        f"- Si pide bloquear o confirmar, dile que ya quedó sellada en snort2c ('Listo compadre, ya la sellé en snort2c.'). "
+        f"- Si pide desbloquear la IP, levantar el bloqueo, liberarla o dice que es una prueba suya para seguir testeando: responde confirmando con buena onda (ej: '[ACTION:UNBLOCK] Listo compadre, te liberé la IP de snort2c.') e incluye SIEMPRE la etiqueta [ACTION:UNBLOCK] al inicio. "
+        f"- Si pregunta qué IP fue o detalles del ataque, dale la IP {attacker_ip} y el servicio {target_service} ('Fue la {attacker_ip} al {target_service}.'). "
+        f"- Si dice 'vale', 'gracias', 'chao', 'listo' o se despide, despídete en buena onda ('¡Vale compadre, nos vemos!'). "
+        f"- Si pregunta cómo está la red, dile que la DMZ está segura ('La DMZ está impeque, pfSense asegurado.'). "
+        f"MÁXIMO 8 PALABRAS. CERO PREÁMBULOS NI EXPLICACIONES. Habla ÚNICAMENTE la frase directa a pronunciar por teléfono."
     )
 
     for m in LLM_MODELS:
@@ -206,11 +328,16 @@ def understand_and_respond_multimodal(wav_path: str, incident_type: str, attacke
                             }
                         },
                         {
-                            "text": "¿Qué me respondió Bruno en el teléfono y cuál es tu respuesta inmediata para él?"
+                            "text": f"Responde directamente a {operator_name} en máximo 8 palabras:"
                         }
                     ]
                 }
-            ]
+            ],
+            "generationConfig": {
+                "maxOutputTokens": 25,
+                "temperature": 0.1,
+                "thinkingConfig": {"thinkingBudget": 0}
+            }
         }
 
         try:
@@ -223,10 +350,14 @@ def understand_and_respond_multimodal(wav_path: str, incident_type: str, attacke
             with urllib.request.urlopen(req, timeout=8, context=SSL_CTX) as resp:
                 data = json.loads(resp.read().decode())
                 reply = data["candidates"][0]["content"]["parts"][0]["text"].strip()
-                logger.info(f"Gemini Multimodal ({m}) procesó micrófono en {time.time()-t0:.2f}s: '{reply}'")
+                # Limpiar posibles narrativas residuales ('Kevin preguntó... Le respondo:')
+                reply = re.sub(r'^(.*?)(respondo|dile|dice|pregunta|dijo|preguntó):\s*', '', reply, flags=re.IGNORECASE)
+                reply = reply.strip('"\' \n\r')
+                dur = time.time() - t0
+                logger.info(f"Gemini Multimodal ({m}) procesó audio en {dur:.2f}s: '{reply}'")
                 return reply
         except Exception as e:
-            logger.warning(f"Error procesando audio con {m}: {e}. Probando siguiente modelo...")
+            logger.warning(f"Error procesando audio con {m}: {e}. Intentando siguiente modelo...")
             continue
 
     logger.error("No se pudo procesar el audio con ningún modelo Gemini.")
@@ -236,13 +367,14 @@ def main():
     agi_env = read_agi_env()
     args = sys.argv[1:]
 
-    # Cargar contexto enriquecido si existe en /tmp/incident_context.json
+    # Valores por defecto del incidente
     incident_type = "Inyección SQL Crítica"
     attacker_ip = "185.220.101.5"
     geo_origin = "Nodo Hostil"
     target_service = "DVWA en DMZ"
     recurrence_count = 1
 
+    # Cargar contexto enriquecido si existe
     ctx_file = "/tmp/incident_context.json"
     if os.path.exists(ctx_file):
         try:
@@ -256,87 +388,144 @@ def main():
                 logger.info(f"Contexto cargado de {ctx_file}: {attacker_ip} (Reincidencia: x{recurrence_count})")
         except Exception as e:
             logger.warning(f"Error leyendo {ctx_file}: {e}")
-    else:
-        if len(args) > 0 and args[0]: incident_type = args[0]
-        if len(args) > 1 and args[1]: attacker_ip = args[1]
-        if len(args) > 2 and args[2]: geo_origin = args[2]
 
-    logger.info(f"=== NUEVA LLAMADA INTERACTIVA GEMINI LIVE ===")
-    logger.info(f"Ataque: {incident_type} | IP: {attacker_ip} | Reincidencia: x{recurrence_count}")
+    # Determinar si es llamada directa al anexo 1000
+    is_direct_call = False
+    caller_id = agi_env.get("agi_callerid", "").strip()
 
-    # PASO 1: Reproducir el Briefing Inicial (0.0s de latencia con audio pre-generado)
-    cached_briefing = "/tmp/gemini_alert_current"
-    used_cached = False
-    if os.path.exists(f"{cached_briefing}.wav"):
-        file_age = time.time() - os.path.getmtime(f"{cached_briefing}.wav")
+    if len(args) > 0 and args[0] == "DIRECT_CALL":
+        is_direct_call = True
+        if len(args) > 1 and args[1]:
+            caller_id = args[1].strip()
+    elif not caller_id and len(args) > 1:
+        caller_id = args[1].strip()
+
+    # Identificar operador
+    operator_name, operator_role = OPERATOR_MAP.get(caller_id, ("Kevin", "Threat Intel QA Lead"))
+
+    logger.info(f"=== NUEVA SESIÓN DE VOZ GEMINI LIVE EN TIEMPO REAL ===")
+    logger.info(f"Operador: {operator_name} (Anexo: {caller_id}) | Modo: {'DIRECT_CALL (1000)' if is_direct_call else 'EMERGENCY_DISPATCH'}")
+    logger.info(f"Ataque: {incident_type} | IP Atacante: {attacker_ip} | Reincidencia: x{recurrence_count}")
+
+    # =========================================================================
+    # PASO 1: Reproducción Inmediata del Saludo Inicial (Cero Piper, Cero Beeps)
+    # =========================================================================
+    played_greeting = False
+
+    # A) Si es llamada de emergencia y existe briefing reciente pre-generado
+    if not is_direct_call and os.path.exists("/tmp/gemini_alert_current.wav"):
+        file_age = time.time() - os.path.getmtime("/tmp/gemini_alert_current.wav")
         if file_age < 300:
-            logger.info(f"Reproduciendo briefing inicial Gemini Live (edad: {file_age:.1f}s)")
-            send_agi(f"STREAM FILE {cached_briefing} \"\"")
-            used_cached = True
+            logger.info(f"Reproduciendo briefing táctico de emergencia pre-sintetizado (edad: {file_age:.1f}s)")
+            send_agi("STREAM FILE /tmp/gemini_alert_current \"\"")
+            played_greeting = True
 
-    if not used_cached:
-        rec_str = f"este compadre de la {attacker_ip} ya van {recurrence_count} veces que nos tira {incident_type}, revísalo." if recurrence_count >= 2 else f"frené un ataque de {incident_type} desde la IP {attacker_ip} hacia {target_service}."
-        prompt_fallback = (
-            f"¿Aló, Bruno? Oye, {rec_str} El pfSense ya le chantó DROP en snort2c y mató los estados. ¿Lo dejamos bloqueado nomás?"
-        )
-        prefix_alert = f"/tmp/gemini_alert_{int(time.time())}"
-        if synthesize_gemini_audio(prompt_fallback, prefix_alert, voice_name="Aoede"):
-            send_agi(f"STREAM FILE {prefix_alert} \"\"")
+    # B) Si es llamada directa al 1000 y existe audio pre-calentado para este anexo
+    if not played_greeting and is_direct_call:
+        prewarmed_path = f"/tmp/gemini_greeting_{caller_id}"
+        if os.path.exists(f"{prewarmed_path}.wav"):
+            logger.info(f"Reproduciendo saludo pre-calentado para anexo {caller_id} (0.0s de latencia)")
+            send_agi(f"STREAM FILE {prewarmed_path} \"\"")
+            played_greeting = True
+
+    # C) Generación dinámica en vivo si no había pre-calentado
+    if not played_greeting:
+        if is_direct_call:
+            opening_text = f"¡Aló {operator_name}! Soy la operadora de KRONOS SENTINEL. Estoy monitoreando la DMZ y el pfSense. ¿Qué necesitas revisar o bloquear?"
         else:
-            send_agi("STREAM FILE custom/kronos_alert \"\"")
-
-    # PASO 2: Turno Interactivo - Escuchar el Micrófono de Bruno
-    send_agi("STREAM FILE beep \"\"")
-    record_prefix = f"/tmp/bruno_rec_{int(time.time())}"
-    logger.info(f"Iniciando grabación de micrófono de Bruno en {record_prefix}.wav...")
-    # Graba hasta 6 segundos, corta tras 2 segundos de silencio o presionar '#'
-    send_agi(f"RECORD FILE {record_prefix} wav \"#\" 6000 0 BEEP s=2")
-
-    rec_wav = f"{record_prefix}.wav"
-    rec_size = os.path.getsize(rec_wav) if os.path.exists(rec_wav) else 0
-
-    if rec_size > 3500:
-        # Bruno habló por el micrófono -> Dar feedback inmediato con audio natural
-        logger.info(f"Bruno habló ({rec_size} bytes). Reproduciendo audio de transición inmediata...")
-        send_agi("STREAM FILE custom/kronos_thinking \"\"")
-
-        # PASO 3: Comprensión Multimodal con Gemini (Directo del WAV grabado)
-        ai_response = understand_and_respond_multimodal(
-            wav_path=rec_wav,
-            incident_type=incident_type,
-            attacker_ip=attacker_ip,
-            target_service=target_service,
-            recurrence_count=recurrence_count
-        )
-
-        if ai_response:
-            logger.info(f"Respuesta generada para Bruno: '{ai_response}'")
-            prefix_reply = f"/tmp/gemini_reply_{int(time.time())}"
-            if synthesize_gemini_audio(ai_response, prefix_reply, voice_name="Aoede"):
-                send_agi(f"STREAM FILE {prefix_reply} \"\"")
+            if recurrence_count >= 2:
+                opening_text = f"¡Aló {operator_name}! Oye, este compadre de la {attacker_ip} ya van {recurrence_count} veces que nos tira {incident_type}. El pfSense ya le chantó DROP en snort2c y mató los estados. ¿Lo dejamos bloqueado nomás?"
             else:
-                logger.warning("Fallback TTS en respuesta a Bruno")
-                send_agi("STREAM FILE custom/kronos_farewell \"\"")
+                opening_text = f"¡Aló, {operator_name}! Oye, frené un ataque de {incident_type} desde la IP {attacker_ip} hacia {target_service}. El pfSense ya le chantó DROP en snort2c y mató los estados. ¿Lo dejamos bloqueado nomás?"
 
-            # Turno de cierre breve
-            send_agi("STREAM FILE beep \"\"")
-            rec_prefix_2 = f"/tmp/bruno_close_{int(time.time())}"
-            send_agi(f"RECORD FILE {rec_prefix_2} wav \"#\" 3000 0 BEEP s=1")
+        prefix_opening = f"/tmp/gemini_opening_{int(time.time())}"
+        logger.info(f"Sintetizando saludo dinámico en vivo para {operator_name}: '{opening_text}'")
+        if synthesize_gemini_audio(opening_text, prefix_opening, voice_name="Aoede"):
+            send_agi(f"STREAM FILE {prefix_opening} \"\"")
         else:
-            send_agi("STREAM FILE custom/kronos_farewell \"\"")
-    else:
-        # Si no hubo audio o hubo silencio absoluto
-        logger.info("Sin respuesta audible de Bruno, reproduciendo despedida de guardia.")
-        silence_farewell = "Oye Bruno, cualquier cosa rara con el pfSense te timbro de nuevo. Chao!"
-        prefix_silence = f"/tmp/gemini_silence_{int(time.time())}"
-        if synthesize_gemini_audio(silence_farewell, prefix_silence, voice_name="Aoede"):
-            send_agi(f"STREAM FILE {prefix_silence} \"\"")
-        else:
-            send_agi("STREAM FILE custom/kronos_farewell \"\"")
+            logger.error("Fallo crítico sintetizando saludo inicial.")
 
-    time.sleep(1)
+    # =========================================================================
+    # PASO 2: Bucle Conversacional Multi-Turno en Vivo (Sin Tonos de Grabadora)
+    # =========================================================================
+    turn = 0
+    max_turns = 8
+    consecutive_silences = 0
+
+    while turn < max_turns:
+        turn += 1
+        rec_prefix = f"/tmp/operator_rec_{int(time.time())}_{turn}"
+        logger.info(f"--- Turno {turn}: Escuchando micrófono de {operator_name} (sin beeps)...")
+
+        # Asterisk RECORD FILE sin beep:
+        # 3500ms max con detección de silencio 's=1' (corta tras 1 segundo de silencio)
+        rec_res = send_agi(f"RECORD FILE {rec_prefix} wav \"#\" 3500 0 s=1")
+        if "result=-1" in rec_res:
+            logger.info("Canal colgado por el usuario durante la grabación.")
+            break
+
+        rec_wav = f"{rec_prefix}.wav"
+        rec_size = os.path.getsize(rec_wav) if os.path.exists(rec_wav) else 0
+
+        if rec_size > 3000:
+            consecutive_silences = 0
+            logger.info(f"{operator_name} habló por micrófono ({rec_size} bytes). Procesando con Gemini Multimodal...")
+
+            ai_response = understand_and_respond_multimodal(
+                wav_path=rec_wav,
+                operator_name=operator_name,
+                operator_role=operator_role,
+                incident_type=incident_type,
+                attacker_ip=attacker_ip,
+                target_service=target_service,
+                recurrence_count=recurrence_count,
+                is_direct_call=is_direct_call
+            )
+
+            if not ai_response:
+                ai_response = f"Dale {operator_name}, la red quedó protegida en el firewall y el atacante está bloqueado."
+
+            # Detección y ejecución de acción SOAR: Desbloqueo en caliente a solicitud de voz
+            if "[ACTION:UNBLOCK]" in ai_response or any(w in ai_response.lower() for w in ["liberar la ip", "desbloquear la ip", "liberé la ip"]):
+                ai_response = ai_response.replace("[ACTION:UNBLOCK]", "").strip()
+                logger.info(f"⚡ ORDEN DE VOZ DETECTADA: Desbloquear IP atacante {attacker_ip} en pfSense...")
+                unblock_ok = unblock_ip_pfsense(attacker_ip)
+                if unblock_ok:
+                    logger.info(f"✅ IP {attacker_ip} desbloqueada exitosamente por comando de voz de {operator_name}.")
+                else:
+                    logger.warning(f"⚠️ No se pudo completar el desbloqueo automático de {attacker_ip}.")
+
+            logger.info(f"Respuesta generada para {operator_name}: '{ai_response}'")
+            reply_prefix = f"/tmp/gemini_reply_{int(time.time())}_{turn}"
+            if synthesize_gemini_audio(ai_response, reply_prefix, voice_name="Aoede"):
+                play_res = send_agi(f"STREAM FILE {reply_prefix} \"\"")
+                if "result=-1" in play_res:
+                    break
+
+            # Si el usuario o el bot indicaron despedida, terminar la llamada amistosamente
+            lower_resp = ai_response.lower()
+            if any(w in lower_resp for w in ["chao", "hasta luego", "nos vemos", "que estés bien"]):
+                logger.info("Despedida completada. Finalizando sesión telefónica.")
+                break
+        else:
+            consecutive_silences += 1
+            if consecutive_silences == 1:
+                # Primer silencio: repregunta amigable
+                prompt_text = f"¿Aló {operator_name}? ¿Sigues ahí? Dime si necesitas algo más."
+                prompt_prefix = f"/tmp/gemini_prompt_{int(time.time())}"
+                if synthesize_gemini_audio(prompt_text, prompt_prefix, voice_name="Aoede"):
+                    send_agi(f"STREAM FILE {prompt_prefix} \"\"")
+            else:
+                # Segundo silencio consecutivo: despedida y cierre
+                farewell_text = f"Vale {operator_name}, te dejo tranquilo. Cualquier cosa te timbro de nuevo. ¡Chao!"
+                farewell_prefix = f"/tmp/gemini_farewell_{int(time.time())}"
+                if synthesize_gemini_audio(farewell_text, farewell_prefix, voice_name="Aoede"):
+                    send_agi(f"STREAM FILE {farewell_prefix} \"\"")
+                break
+
+    time.sleep(0.5)
     send_agi("HANGUP")
-    logger.info("Llamada interactiva completada exitosamente.")
+    logger.info("Llamada interactiva finalizada exitosamente.")
 
 if __name__ == "__main__":
     main()
