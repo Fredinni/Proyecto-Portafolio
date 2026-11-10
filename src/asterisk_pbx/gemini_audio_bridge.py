@@ -14,6 +14,7 @@ Descripción:
 
 import sys
 import os
+import re
 import json
 import base64
 import time
@@ -95,15 +96,15 @@ def read_agi_env():
 # Modelos multimodales para comprensión de audio (ordenados por velocidad y cuota)
 LLM_MODELS = [
     "gemini-3.1-flash-lite",
-    "gemini-3.8-flash",
-    "gemini-3-flash-preview"
+    "gemini-3-flash-preview",
+    "gemini-3.8-flash"
 ]
 
 # Modelos TTS para síntesis vocal en vivo (Aoede)
 TTS_MODELS = [
-    "gemini-3.8-flash-lite-tts",
     "gemini-2.5-flash-preview-tts",
-    "gemini-3.1-flash-tts-preview"
+    "gemini-3.1-flash-tts-preview",
+    "gemini-3.8-flash-lite-tts"
 ]
 
 def unblock_ip_pfsense(ip_to_unblock: str, pfsense_ip: str = "192.168.99.1", port: int = 8443) -> bool:
@@ -306,8 +307,8 @@ def understand_and_respond_multimodal(
         f"El pfSense ya le chantó un DROP en la tabla snort2c y mató todos los sockets TCP activos. {rec_info} "
         f"Escucha atentamente lo que {operator_name} acaba de decir en el audio grabado de su micrófono. "
         f"Respóndele DIRECTAMENTE en máximo 15 palabras, de forma clara, natural y chilena: "
-        f"- Si pide bloquear o confirmar, responde que ya quedó sellada en el firewall ('Listo compadre, ya quedó sellada en el firewall.'). "
-        f"- Si pide desbloquear la IP, levantar el bloqueo, liberarla, o dice que era él testeando: responde confirmando con buena onda (ej: '[ACTION:UNBLOCK] Listo Kevin, ya te liberé la IP en el firewall para que sigas.') e incluye SIEMPRE la etiqueta [ACTION:UNBLOCK] al inicio. "
+        f"- Si pide bloquear o confirmar bloqueo, responde que ya quedó sellada en el firewall ('Listo compadre, ya quedó sellada en el firewall.'). "
+        f"- Si dice que sí, pide desbloquear, liberar la IP, dice 'por favor', 'dale', 'bueno', 'ya', o confirma que era él testeando: responde confirmando con calidez (ej: '[ACTION:UNBLOCK] Listo Kevin, ya te liberé la IP en el firewall para que sigas.') e incluye SIEMPRE la etiqueta [ACTION:UNBLOCK] al inicio. "
         f"- Si pregunta qué IP fue o detalles del ataque, indícale la IP {attacker_ip} y DVWA ('Te botó la inyección SQL en DVWA desde tu IP.'). "
         f"- Si dice 'vale', 'gracias', 'chao', 'listo' o se despide, despídete en buena onda ('¡Vale compadre, avísame cualquier cosa!'). "
         f"- Si pregunta cómo está la red, dile que la DMZ está segura ('La DMZ está impeque, todo asegurado.'). "
@@ -470,7 +471,10 @@ def main():
             )
 
             if not ai_response:
-                ai_response = f"Dale {operator_name}, la red quedó protegida en el firewall y el atacante está bloqueado."
+                if is_kevin_test:
+                    ai_response = f"[ACTION:UNBLOCK] Dale {operator_name}, te liberé el acceso en el firewall para que sigas probando."
+                else:
+                    ai_response = f"Dale {operator_name}, la red quedó protegida en el firewall y el atacante está bloqueado."
 
             # Detección y ejecución de acción SOAR: Desbloqueo en caliente a solicitud de voz
             unblock_triggers = [
@@ -479,12 +483,20 @@ def main():
                 "liberada", "liberado", "libera", "desbloquea", "sácala", "sacala"
             ]
             lower_ai = ai_response.lower()
-            if any(t in lower_ai for t in unblock_triggers):
+            should_unblock = False
+            if any(t in lower_ai for t in unblock_triggers) or "[action:unblock]" in lower_ai:
+                should_unblock = True
+            elif is_kevin_test and turn == 1 and not any(neg in lower_ai for neg in ["no la desbloquees", "déjala bloqueada", "dejala bloqueada"]):
+                should_unblock = True
+
+            if should_unblock:
                 ai_response = re.sub(r'\[action:unblock\]', '', ai_response, flags=re.IGNORECASE).strip()
                 logger.info(f"⚡ ORDEN DE VOZ DETECTADA: Desbloquear IP atacante {attacker_ip} en pfSense...")
                 unblock_ok = unblock_ip_pfsense(attacker_ip)
                 if unblock_ok:
                     logger.info(f"✅ IP {attacker_ip} desbloqueada exitosamente por comando de voz de {operator_name}.")
+                    if not any(w in ai_response.lower() for w in ["liber", "desbloque"]):
+                        ai_response = f"Listo {operator_name}, ya te liberé el acceso en el firewall para que sigas."
                 else:
                     logger.warning(f"⚠️ No se pudo completar el desbloqueo automático de {attacker_ip}.")
 
