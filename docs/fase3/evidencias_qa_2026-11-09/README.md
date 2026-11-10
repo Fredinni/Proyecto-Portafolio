@@ -44,6 +44,8 @@ Ataque de SQL Injection contra DVWA a través del flujo real (Internet → borde
 - **Registro en el firewall:** que el motor escriba la IP real del atacante en su tabla de bloqueo (`KRONOS_IPS_GUARD`).
 - **Medición de la cadena completa:** tiempo total detección → bloqueo (meta < 1,5 s), una vez integrada la propagación de IP.
 
-## Video de la demostración — `video/`
+## Video de la demostración
 
-El video de la interacción con el asistente de voz se encuentra en la carpeta [`video/`](video/). Si supera los 100 MB, está en OneDrive de Duoc y el enlace queda en esta sección.
+Grabación de la interacción con el asistente de voz con IA:
+
+https://drive.google.com/file/d/1SPBRV5KstX7bYjfDqx7phRIwOp-AwVt3/view?usp=sharing
