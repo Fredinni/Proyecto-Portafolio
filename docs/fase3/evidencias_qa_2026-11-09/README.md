@@ -25,6 +25,14 @@ Llamada de la extensión 1004 (QA) al asistente de voz con IA (extensión 1000).
 
 **Análisis.** La voz se escuchó sin cortes en ambos sentidos. La pérdida de 4,5 % se atribuye a la ruta de acceso remoto (relay de Tailscale, ~270 ms ida y vuelta), no a la red interna; G.711 enmascara pérdidas pequeñas. La **configuración** de priorización QoS en la VLAN 30 de voz corresponde a A9; estas mediciones son la línea base para contrastarla.
 
+### Configuración del cliente VoIP (Zoiper)
+
+| Archivo | Qué demuestra |
+|---|---|
+| [06-zoiper-cuenta-registrada.png](voz/06-zoiper-cuenta-registrada.png) | Extensión 1004 (QA) registrada en la central Asterisk. |
+| [07-zoiper-transporte-sip.png](voz/07-zoiper-transporte-sip.png) | Negociación de transporte: la central responde por SIP sobre la red del laboratorio. |
+| [08-zoiper-ajustes-network.png](voz/08-zoiper-ajustes-network.png) | Parámetros de red del softphone (puertos SIP 5060 y RTP). |
+
 ## Prueba 2 · Inyección SQL desde Internet — `pentest/`
 
 Ataque de SQL Injection contra DVWA a través del flujo real (Internet → borde AWS → HAProxy → DMZ).
@@ -33,6 +41,7 @@ Ataque de SQL Injection contra DVWA a través del flujo real (Internet → borde
 |---|---|
 | [01-sqli-exfiltracion-credenciales.png](pentest/01-sqli-exfiltracion-credenciales.png) | SQLi `UNION SELECT` exitoso en nivel *Low*: volcado de usuarios y hashes de contraseña. |
 | [02-dvwa-security-level-impossible.png](pentest/02-dvwa-security-level-impossible.png) | En nivel *Impossible* (consultas parametrizadas) la aplicación resiste el mismo ataque. |
+| [03-dvwa-sqli-impossible-sin-resultado.png](pentest/03-dvwa-sqli-impossible-sin-resultado.png) | El mismo `payload` enviado en nivel *Impossible* no devuelve datos: la inyección queda neutralizada. |
 
 **Resultados.**
 - Se confirma que DVWA es vulnerable a SQLi en nivel *Low* y que se defiende en nivel *Impossible* (defensa en profundidad a nivel de aplicación).
