@@ -12,8 +12,10 @@ import os
 import sys
 import time
 import urllib.request
+import urllib.error
 from collections import OrderedDict
 from concurrent.futures import ThreadPoolExecutor
+from threading import Event
 from typing import Dict, Any, List, Optional
 
 # Carga de YAML con fallback a parser ligero si PyYAML no está disponible
@@ -173,7 +175,9 @@ class PfctlLogCorrelator:
             src_ip = str(ipaddress.ip_address(src_ip))
         except ValueError:
             return {"status": "INVALID_SOURCE_IP", "suppressed": True, "is_real_attack": False}
-        if src_ip in self.config.get("protected_ips", []):
+        source_protected = src_ip in self.config.get("protected_ips", [])
+        ips_dropped = alert.get("action") == "blocked" or (event.get("verdict") or {}).get("action") == "drop"
+        if source_protected and not ips_dropped:
             return {"status": "PROTECTED_INFRASTRUCTURE_SOURCE", "src_ip": src_ip,
                     "suppressed": True, "is_real_attack": False}
 
@@ -194,7 +198,6 @@ class PfctlLogCorrelator:
         is_real_attack = analysis.get("is_real_attack", False)
         attack_type = analysis.get("attack_type", "UNKNOWN")
         confidence = analysis.get("confidence_score", 0.0)
-        ips_dropped = alert.get("action") == "blocked" or (event.get("verdict") or {}).get("action") == "drop"
         classification_source = "HEURISTIC"
         if ips_dropped and not is_real_attack:
             # An IPS-enforced drop is important evidence even if EVE has no
@@ -225,17 +228,32 @@ class PfctlLogCorrelator:
         logging.warning(f"-> [ATAQUE REAL CONFIRMADO] Tipo: {attack_type} | Confianza: {confidence:.2f}")
 
         # 2. Correlación atómica con kernel FreeBSD pfctl (tabla snort2c y kill states)
-        is_blocked_in_pfctl = self.pfctl.is_ip_blocked(src_ip)
-        action_taken = "IP YA SE ENCUENTRA BLOQUEADA EN KERNEL" if is_blocked_in_pfctl else "SIN BLOQUEO CONFIRMADO"
+        try:
+            is_blocked_in_pfctl = self.pfctl.is_ip_blocked(src_ip)
+        except (RuntimeError, OSError):
+            # An unavailable firewall query must not silence a sensor alert.
+            logging.exception("No se pudo consultar pfctl; se notificara el estado desconocido")
+            is_blocked_in_pfctl = None
+        action_taken = ("IP YA SE ENCUENTRA BLOQUEADA EN KERNEL" if is_blocked_in_pfctl else
+                        "ESTADO DE BLOQUEO DESCONOCIDO" if is_blocked_in_pfctl is None else
+                        "SIN BLOQUEO CONFIRMADO")
 
-        if not is_blocked_in_pfctl and self.enable_auto_pfctl_drop:
+        if source_protected:
+            action_taken = "IPS DESCARTO EL ATAQUE; ORIGEN PROTEGIDO, SIN CAMBIOS AUTOMATICOS EN LA TABLA"
+            logging.warning("Alerta IPS desde infraestructura protegida %s; solo notificacion", src_ip)
+        elif is_blocked_in_pfctl is False and self.enable_auto_pfctl_drop:
             logging.warning(
                 f"-> IP hostil {src_ip} no aislada en {self.pfctl.table_name}. "
                 f"Ejecutando DROP perimetral y purga de estados..."
             )
-            block_success = self.pfctl.block_ip(src_ip)
+            try:
+                block_success = self.pfctl.block_ip(src_ip)
+            except (RuntimeError, OSError):
+                logging.exception("Fallo al bloquear; el incidente se notificara igualmente")
+                block_success = None
             is_blocked_in_pfctl = block_success
-            action_taken = "DROP & BLOCK en Firewall pfSense (Kernel pfctl State Kill)" if block_success else "FALLO AL BLOQUEAR"
+            action_taken = ("DROP & BLOCK en Firewall pfSense (Kernel pfctl State Kill)" if block_success else
+                            "ESTADO DE BLOQUEO DESCONOCIDO" if block_success is None else "FALLO AL BLOQUEAR")
 
         # 3. Construcción del payload estructurado del incidente
         incident_payload = {
@@ -248,12 +266,18 @@ class PfctlLogCorrelator:
             "confidence_score": confidence if classification_source == "HEURISTIC" else None,
             "classification_source": classification_source,
             "sensor_action": alert.get("action"),
+            "sensor_dropped": ips_dropped,
+            "source_protected": source_protected,
+            "observed_source_ip": event.get("src_ip"),
+            "source_identity": ("UNRESOLVED_PROXY" if source_protected and
+                                src_ip in self.config.get("trusted_proxy_ips", []) else
+                                "PROTECTED_INFRASTRUCTURE" if source_protected else "ACTOR_IP"),
             "signature_id": alert.get("signature_id"),
             "category": alert.get("category"),
             "http_endpoint": http_data.get("url"),
             "target_service": f"{dest_ip}:{event.get('dest_port', 'puerto no informado')}",
             "protocol": event.get("proto"),
-            "http_method": http_data.get("http_method", "GET"),
+            "http_method": http_data.get("http_method"),
             "ast_verified": analysis.get("ast_verified", False),
             "tautologies": analysis.get("tautologies", []),
             "pfctl_table": self.pfctl.table_name,
@@ -268,7 +292,9 @@ class PfctlLogCorrelator:
             self.executor.submit(self.dispatch_voice_alert, incident_payload)
 
         return {
-            "status": "CONFIRMED_AND_MITIGATED" if is_blocked_in_pfctl else "CONFIRMED_NOT_MITIGATED",
+            "status": ("CONFIRMED_AND_MITIGATED" if is_blocked_in_pfctl else
+                       "CONFIRMED_BLOCK_STATUS_UNKNOWN" if is_blocked_in_pfctl is None else
+                       "CONFIRMED_NOT_MITIGATED"),
             "event_id": event_id,
             "src_ip": src_ip,
             "dest_ip": dest_ip,
@@ -323,58 +349,81 @@ class PfctlLogCorrelator:
             f"DISPARANDO ALERTA DE EMERGENCIA AL CISO: "
             f"{incident['attack_type']} ({incident['attacker_ip']})"
         )
-        try:
+        for attempt in range(3):
             req = urllib.request.Request(
                 self.webhook_url,
                 data=json.dumps(incident).encode('utf-8'),
                 headers={'Content-Type': 'application/json',
                          'Authorization': 'Bearer ' + os.getenv('KRONOS_DISPATCH_TOKEN', '')}
             )
-            with urllib.request.urlopen(req, timeout=3) as resp:
-                logging.info(f"Despachador de voz respondió HTTP {resp.status}")
-        except Exception as e:
-            logging.warning(
-                f"Aviso: Webhook de voz en {self.webhook_url} no respondió ({e}). "
-                f"El incidente quedó mitigado en kernel pfctl y registrado."
-            )
-
-    def tail_eve_log(self):
-        """Monitorea eve.json en tiempo real con tolerancia a rotación de archivos (newsyslog)"""
-        logging.info(f"Iniciando ingesta de telemetría desde: {self.eve_log_path}")
-
-        while True:
             try:
-                if not os.path.exists(self.eve_log_path):
-                    logging.warning(f"Esperando creación de {self.eve_log_path}...")
-                    time.sleep(2)
-                    continue
+                with urllib.request.urlopen(req, timeout=5) as resp:
+                    result = json.loads(resp.read(16000))
+                    if not isinstance(result, dict):
+                        raise ValueError("Dispatcher response must be an object")
+                    logging.info("Despachador HTTP %s: estado=%s llamada_iniciada=%s",
+                                 resp.status, result.get("status"), result.get("call_initiated"))
+                return True
+            except urllib.error.HTTPError as error:
+                logging.warning("Despacho HTTP %s (intento %s/3)", error.code, attempt + 1)
+                error.close()
+                if error.code < 500:
+                    break
+            except (urllib.error.URLError, OSError, ValueError):
+                logging.exception("Despacho no confirmado (intento %s/3)", attempt + 1)
+            if attempt < 2:
+                time.sleep(2 ** attempt)
+        logging.error("Notificacion de voz no confirmada para %s; bloqueo pfctl=%s",
+                      incident['attacker_ip'], incident.get('pfctl_blocked'))
+        return False
 
-                with open(self.eve_log_path, "r", encoding="utf-8") as f:
-                    current_inode = os.stat(self.eve_log_path).st_ino
-                    f.seek(0, 2)
-                    logging.info(f"Descriptor abierto (Inodo: {current_inode}). Monitoreando...")
-
-                    while True:
-                        line = f.readline()
-                        if line:
-                            try:
-                                event = json.loads(line.strip())
-                                self.process_event(event)
-                            except json.JSONDecodeError:
-                                continue
-                        else:
-                            time.sleep(0.05)
-                            try:
-                                new_stat = os.stat(self.eve_log_path)
-                                if new_stat.st_ino != current_inode:
-                                    logging.info("Rotación detectada (newsyslog). Reabriendo...")
-                                    break
-                            except FileNotFoundError:
+    def _follow_eve_lines(self, stop_event: Optional[Event] = None):
+        """Follow complete records; drain rotated files and read replacements from byte zero."""
+        stop_event = stop_event or Event()
+        first_open = True
+        while not stop_event.is_set():
+            try:
+                with open(self.eve_log_path, "rb") as stream:
+                    inode = os.fstat(stream.fileno()).st_ino
+                    if first_open:
+                        stream.seek(0, os.SEEK_END)
+                        first_open = False
+                    while not stop_event.is_set():
+                        position = stream.tell()
+                        if os.fstat(stream.fileno()).st_size < position:
+                            logging.info("EVE truncado; reiniciando lectura")
+                            stream.seek(0)
+                            position = 0
+                        line = stream.readline()
+                        if line.endswith(b"\n"):
+                            yield line
+                            continue
+                        # Suricata can append a JSON record in several writes.
+                        # Re-read its prefix once the terminating newline arrives.
+                        stream.seek(position)
+                        try:
+                            if os.stat(self.eve_log_path).st_ino != inode:
+                                logging.info("EVE rotado; leyendo reemplazo desde el inicio")
                                 break
+                        except FileNotFoundError:
+                            # Keep draining this descriptor until its replacement exists.
+                            pass
+                        stop_event.wait(0.05)
+            except OSError:
+                logging.exception("EVE no disponible: %s", self.eve_log_path)
+                stop_event.wait(2)
 
-            except Exception as e:
-                logging.error(f"Error en bucle de lectura de logs: {e}")
-                time.sleep(2)
+    def tail_eve_log(self, stop_event: Optional[Event] = None):
+        """Monitorea EVE sin perder los eventos posteriores a una línea defectuosa."""
+        logging.info(f"Iniciando ingesta de telemetría desde: {self.eve_log_path}")
+        for line in self._follow_eve_lines(stop_event):
+            try:
+                event = json.loads(line)
+                if not isinstance(event, dict):
+                    raise ValueError("EVE record must be an object")
+                self.process_event(event)
+            except Exception:
+                logging.exception("Error en evento EVE; continuando con el siguiente registro")
 
 
 if __name__ == "__main__":

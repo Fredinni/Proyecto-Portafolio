@@ -154,6 +154,19 @@ class VoicePolicyTests(unittest.TestCase):
         self.assertFalse(tools.execute_tool_call("unblock_ip", {"ip": IP})["success"])
         self.assertEqual(fw.changes, [])
 
+    def test_protected_incident_or_config_never_mutates_infrastructure(self):
+        for config, incident in [({"protected_ips": [IP]}, INCIDENT),
+                                 ({}, {**INCIDENT, "source_protected": True})]:
+            with self.subTest(config=config):
+                fw = FakeFirewall()
+                tools = SoarToolsExecutor({"authorized_extensions": ["1004"], **config}, incident, pfctl=fw)
+                tools.observe_input("Desbloquea esa IP")
+                result = tools.execute_tool_call("unblock_ip", {"ip": IP})
+                self.assertFalse(result["success"])
+                self.assertIn("protegido", result["error"])
+                self.assertEqual(fw.changes, [])
+                self.assertTrue(tools.execute_tool_call("get_firewall_states", {"ip": IP})["success"])
+
 
 class FirewallAndMetadataTests(unittest.TestCase):
     def test_pfctl_error_is_unknown(self):

@@ -16,7 +16,7 @@ services:
       DB_DATABASE: dvwa
       DB_USER: dvwa
       DB_PASSWORD: ${DVWA_DB_PASSWORD:?External environment file required}
-      DEFAULT_SECURITY_LEVEL: impossible
+      DEFAULT_SECURITY_LEVEL: ${DVWA_SECURITY_LEVEL:-impossible}
     depends_on:
       db:
         condition: service_healthy

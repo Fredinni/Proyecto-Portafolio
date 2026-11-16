@@ -34,6 +34,7 @@ class SoarToolsExecutor:
                       "target_ip", "target_service", "protocol", "http_endpoint", "http_method",
                       "geoip", "geo_country", "confidence_score", "ast_verified", "action_taken")
             fields += ("classification_source", "sensor_action", "signature_id", "category")
+            fields += ("sensor_dropped", "source_protected", "observed_source_ip", "source_identity", "pfctl_blocked")
             return {"success": True, "incident": {k: self.incident[k] for k in fields if k in self.incident},
                     "note": "La telemetría describe el incidente. Consulta el firewall para conocer el bloqueo actual."}
         if function_name not in {"get_firewall_states", "unblock_ip", "block_ip_permanently"}:
@@ -48,6 +49,10 @@ class SoarToolsExecutor:
                 self.policy.focus_ip = ip
             return result
 
+        if (ip in self.config.get("protected_ips", []) or
+                (self.incident.get("source_protected") and ip == self.incident.get("attacker_ip"))):
+            return {"success": False, "verified": False,
+                    "error": "Origen de infraestructura protegido. El IPS descarta el payload, pero no se modifica su bloqueo global. Para QA usa un origen separado por la URL publica."}
         allowed, reason = self.policy.authorize(function_name, ip)
         if not allowed:
             return {"success": False, "verified": False, "error": reason}

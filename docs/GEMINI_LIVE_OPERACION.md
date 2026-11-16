@@ -23,6 +23,8 @@ incluye `deploy-live-host.sh`. `compose.live.yml` es una alternativa con servici
 en contenedores, no el runtime usado en esta validación.
 
 Ver [resultados, recuperación de DVWA y límites](VALIDACION_OPERATIVA_2026-11-16.md).
+La [validación posterior de SQLi y llamadas](VALIDACION_QA_SQLI_2026-11-16.md)
+documenta la corrección de alertas desde MGMT y el cambio autorizado de DVWA a Low.
 
 ## Configuración en VM103
 
@@ -94,6 +96,29 @@ el sensor. Una IP y su geolocalización no identifican a la persona atacante.
 El enfriamiento de llamadas se configura con `KRONOS_CALL_COOLDOWN_SECONDS`
 y `KRONOS_GLOBAL_CALL_COOLDOWN_SECONDS` (120 segundos predeterminados). El
 bloqueo del IPS sigue funcionando mientras se suprimen avisos repetidos.
+
+El lector EVE conserva los registros completos al rotar o truncar el archivo y
+espera el salto de línea antes de procesar escrituras parciales. Un evento
+defectuoso no interrumpe los siguientes. Si pfctl no responde, el incidente se
+notifica con `pfctl_blocked: null` y estado desconocido. El webhook reintenta
+errores de conexión y respuestas 5xx hasta tres veces; no reintenta errores de
+autenticación. Los logs distinguen el despacho de una llamada de su supresión
+por enfriamiento; la aceptación de AMI no demuestra que el teléfono haya sonado.
+
+Para QA, el compose de DVWA admite `DVWA_SECURITY_LEVEL=low` en su archivo de
+entorno externo. El valor predeterminado sigue siendo `impossible`; cambiar esta
+variable requiere recrear el contenedor de aplicación, conservando la base de
+datos. Una sesión existente puede conservar su cookie de seguridad: comprobar
+también el nivel en «DVWA Security» del navegador de QA. Este ajuste no cambia las
+reglas del IPS ni autoriza a desactivar el bloqueo para obtener una respuesta SQLi.
+
+Un `drop` desde una IP de `protected_ips` también genera aviso. Se identifica como
+infraestructura y no se agrega a la tabla ni se permite modificarla por voz.
+Esto evita perder la alerta al probar desde MGMT y conserva el acceso de gestión.
+Si falta XFF desde un proxy protegido, se informa `UNRESOLVED_PROXY`, sin atribuir
+el ataque al proxy. Para demostrar el bloqueo y desbloqueo de un actor, realizar
+la prueba desde un equipo externo contra la URL pública; una IP privada de MGMT
+no tiene un país GeoLite2 público ni representa el origen externo del atacante.
 
 ## Verificación y límites de esta entrega
 
