@@ -68,3 +68,27 @@ la IP después de un desbloqueo. El desbloqueo no desactiva reglas de Suricata.
 
 Se guardaron copias anteriores junto a los archivos desplegados. Las credenciales
 y el resultado detallado de QA permanecen en archivos privados, fuera del repositorio.
+
+## Aclaración posterior: origen público y víctima privada
+
+La prueba de las 20:16 (hora de Chile) volvió a salir desde MGMT hacia DVWA sin
+cabecera XFF. Ese evento identifica un origen interno y una víctima privada;
+no contiene un origen público que pueda atribuirse al atacante. El evento externo
+anterior sí conserva el cliente público en `alert.xff` y `http.xff`, aunque la IP
+observada del transporte hacia el backend sea la del proxy. WireGuard no causa
+por sí solo la pérdida de identidad en este recorrido.
+
+Se agregaron campos derivados para origen público o privado, víctima privada,
+origen observado y método de resolución. El prompt y la consulta de detalles los
+presentan con esos roles. Si no existe una IP pública respaldada por la evidencia,
+el agente lo indica; no consulta una IP de salida para inventar una atribución.
+La regresión ampliada terminó con **67 pruebas y 28 subpruebas aprobadas**.
+
+El cambio se desplegó en pfSense y en el servicio de voz. Se verificó con Gemini
+Live real usando ambos eventos registrados y consultas de solo lectura: el caso
+interno nombró el origen privado y la víctima, y el externo nombró explícitamente
+el origen público y la víctima privada. Ninguno ejecutó mutaciones ni originó una
+llamada SIP para esta comprobación. El primer intento del caso externo agotó el
+tiempo de espera; una repetición instrumentada completó ambos casos con
+`passed: true`. Esto valida las respuestas observadas, no una disponibilidad
+garantizada del modelo. Las transcripciones detalladas permanecen privadas.

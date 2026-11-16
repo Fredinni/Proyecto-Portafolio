@@ -7,6 +7,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "pfsense_pfctl_engine"))
 from pfctl_wrapper import PfctlWrapper
+from incident_identity import describe_network_identity
 from voice_policy import VoiceActionPolicy, mentioned_ips
 
 log = logging.getLogger(__name__)
@@ -35,7 +36,9 @@ class SoarToolsExecutor:
                       "geoip", "geo_country", "confidence_score", "ast_verified", "action_taken")
             fields += ("classification_source", "sensor_action", "signature_id", "category")
             fields += ("sensor_dropped", "source_protected", "observed_source_ip", "source_identity", "pfctl_blocked")
-            return {"success": True, "incident": {k: self.incident[k] for k in fields if k in self.incident},
+            details = {k: self.incident[k] for k in fields if k in self.incident}
+            details.update(describe_network_identity(self.incident))
+            return {"success": True, "incident": details,
                     "note": "La telemetría describe el incidente. Consulta el firewall para conocer el bloqueo actual."}
         if function_name not in {"get_firewall_states", "unblock_ip", "block_ip_permanently"}:
             return {"success": False, "error": "Herramienta no disponible."}

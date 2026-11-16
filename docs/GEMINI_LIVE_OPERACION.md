@@ -76,6 +76,17 @@ limitación; nunca se deduce un país a partir del prefijo IP.
 sobrescriban cabeceras de origen. Si no están verificados, usar la IP observada por
 el sensor. Una IP y su geolocalización no identifican a la persona atacante.
 
+La identidad del incidente distingue `attacker_public_ip`, `attacker_private_ip`
+y `victim_private_ip`, además de `observed_source_ip` y `origin_resolution`.
+La dirección pública se informa únicamente si el origen resuelto es globalmente
+enrutable. Una dirección privada, CGNAT, reservada o un proxy sin cliente resuelto
+no se transforma en una IP pública consultando la salida a Internet del servidor.
+Si el ataque nace en MGMT, puede no existir una IP pública de origen observable;
+el agente informa el origen interno y la víctima privada sin inventar un mapeo NAT.
+El recorrido público probado conserva la IP del cliente a través de WireGuard y
+HAProxy mediante XFF del proxy verificado. La IA no atribuye al atacante la IP
+pública del borde, del firewall ni del par del túnel.
+
 ## Comportamiento esperado
 
 - «¿Qué ataque fue y de dónde venía?» devuelve los datos del incidente mediante

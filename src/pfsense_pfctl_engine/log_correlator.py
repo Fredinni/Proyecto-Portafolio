@@ -32,6 +32,7 @@ if BASE_DIR not in sys.path:
 
 from false_positive_filter import FalsePositiveFilter
 from pfctl_wrapper import PfctlWrapper
+from incident_identity import describe_network_identity
 
 logging.basicConfig(
     level=logging.INFO,
@@ -286,6 +287,7 @@ class PfctlLogCorrelator:
             "geoip": self.filter.geoip.lookup(src_ip),
             "geo_country": self.filter.get_geoip(src_ip)
         }
+        incident_payload.update(describe_network_identity(incident_payload))
 
         # 4. Despacho asíncrono al agente de voz Asterisk / Gemini Live
         if trigger_dispatch:
