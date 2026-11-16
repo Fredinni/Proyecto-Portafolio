@@ -39,6 +39,11 @@ secreto se rotó. El recolector se ejecuta localmente en pfSense y su inicio est
 registrado en `system/shellcmd`; procesa los dos EVE logs y consulta la base
 GeoLite2 que ya estaba instalada. No se instaló MaxMind en la IA.
 
+Se comprobó que las antiguas contraseñas de operador de pfSense y VM103 publicadas
+en el historial aún coincidían con las de los servidores. Ambas se rotaron; se
+verificaron de nuevo SSH, la administración web de pfSense y sudo en VM103.
+El handoff privado se actualizó con las nuevas claves, sin incorporarlas a Git.
+
 El destino normal de alertas es el anexo 1004. El anexo 1000 permite llamar al
 agente. Para recibir una alerta, el softphone debe estar registrado en el tailnet
 del proyecto. Las llamadas repetidas tienen un enfriamiento de 120 segundos,
