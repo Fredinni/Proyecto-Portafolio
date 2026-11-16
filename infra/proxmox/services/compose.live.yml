@@ -1,0 +1,46 @@
+# Overlay: docker compose -f compose.voip.yml -f compose.live.yml ...
+services:
+  asterisk:
+    environment:
+      KRONOS_CALL_DIR: /run/kronos/calls
+    volumes:
+      - ../../../src/asterisk_pbx/gemini_audio_bridge.py:/usr/local/bin/gemini_audio_bridge.py:ro
+      - live_calls:/run/kronos/calls
+    depends_on:
+      voice:
+        condition: service_healthy
+  voice:
+    image: kronos-voice:live
+    build:
+      context: ../../..
+      dockerfile: src/asterisk_pbx/Dockerfile.voice
+    container_name: kronos_gemini_live
+    restart: unless-stopped
+    network_mode: host
+    env_file: /etc/kronos/voice.env
+    volumes:
+      - /etc/kronos/voice:/etc/kronos/voice:ro
+      - live_calls:/run/kronos/calls
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; socket.create_connection(('127.0.0.1',9092),2).close()"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: json-file
+      options: {max-size: "5m", max-file: "3"}
+  dispatcher:
+    image: kronos-voice:live
+    container_name: kronos_voice_dispatcher
+    command: ["python", "/opt/kronos/src/ai_voice_agent/dispatcher.py"]
+    restart: unless-stopped
+    network_mode: host
+    env_file: /etc/kronos/voice.env
+    volumes:
+      - spool:/var/spool/asterisk
+    logging:
+      driver: json-file
+      options: {max-size: "5m", max-file: "3"}
+volumes:
+  live_calls:

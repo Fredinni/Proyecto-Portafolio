@@ -15,6 +15,12 @@ rol: CISO & Security Operations Lead
 
 # 🤖 Personalidad y Directivas del Agente de Voz IA KRONOS
 
+> Documento histórico del flujo anterior. Las instrucciones activas están en
+> `src/ai_voice_agent/prompts.py` y la operación actual en
+> [Gemini Live](../GEMINI_LIVE_OPERACION.md). No usar los modelos, promesas de
+> bloqueo permanente ni respuestas predeterminadas de este documento como configuración.
+
+
 ## 1. Identidad de la Operadora
 * **Nombre Operativo:** KRONOS Voice Dispatcher / Operadora SOC KRONOS.
 * **Modelo TTS en Vivo:** Google Gemini 3.8 Live (`gemini-3.8-flash-tts` / `gemini-3.8-flash-lite-tts`).

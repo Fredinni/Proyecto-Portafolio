@@ -1,0 +1,3 @@
+# Only for the collector running on pfSense, reading its existing MMDB files.
+maxminddb>=2.6,<4
+PyYAML>=6,<7

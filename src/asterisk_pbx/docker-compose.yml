@@ -1,4 +1,5 @@
-version: '3.8'
+# Basic PBX only. For the complete Live agent use compose.voip.yml + compose.live.yml
+# as documented in docs/GEMINI_LIVE_OPERACION.md.
 
 services:
   kronos_asterisk:
@@ -11,11 +12,10 @@ services:
     environment:
       - TZ=America/Santiago
     volumes:
-      - ./pjsip.conf:/etc/asterisk/pjsip.conf:ro
-      - ./extensions.conf:/etc/asterisk/extensions.conf:ro
-      - ./manager.conf:/etc/asterisk/manager.conf:ro
-      - ./rtp.conf:/etc/asterisk/rtp.conf:ro
-      - ./gemini_audio_bridge.py:/usr/local/bin/gemini_audio_bridge.py:ro
+      - ${ASTERISK_CONFIG_DIR:?Set ASTERISK_CONFIG_DIR}/pjsip.conf:/etc/asterisk/pjsip.conf:ro
+      - ${ASTERISK_CONFIG_DIR:?Set ASTERISK_CONFIG_DIR}/extensions.conf:/etc/asterisk/extensions.conf:ro
+      - ${ASTERISK_CONFIG_DIR:?Set ASTERISK_CONFIG_DIR}/manager.conf:/etc/asterisk/manager.conf:ro
+      - ${ASTERISK_CONFIG_DIR:?Set ASTERISK_CONFIG_DIR}/rtp.conf:/etc/asterisk/rtp.conf:ro
       - asterisk_spool:/var/spool/asterisk/outgoing
       - asterisk_logs:/var/log/asterisk
 

@@ -12,6 +12,7 @@ import sys
 import threading
 import time
 import unittest
+import tempfile
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 # Inyectar rutas de módulos KRONOS
@@ -128,7 +129,7 @@ class TestSentinelPipeline(unittest.TestCase):
                 "host": "127.0.0.1",
                 "port": 5038,
                 "user": "kronos_ami",
-                "secret": "KronosSecOps2026!",
+                "secret": "test-only-ami-secret",
                 "ciso_extension": "PJSIP/1001"
             }
         }
@@ -262,7 +263,7 @@ class TestSentinelPipeline(unittest.TestCase):
                 ami_host="127.0.0.1",
                 ami_port=mock_ami.port,
                 ami_user="kronos_ami",
-                ami_secret="KronosSecOps2026!",
+                ami_secret="test-only-ami-secret",
                 prefer_ami=True
             )
 
@@ -300,14 +301,21 @@ class TestSentinelPipeline(unittest.TestCase):
             prefer_ami=True
         )
 
-        res = trigger.trigger_ciso_call(
-            ciso_channel="PJSIP/1001",
-            incident_context={
-                "attack_type": "Command Injection RCE",
-                "attacker_ip": "185.220.101.7",
-                "geo_country": "Nodo Hostil"
-            }
-        )
+        with tempfile.TemporaryDirectory() as directory:
+            trigger.spool_dir = os.path.join(directory, "outgoing")
+            os.mkdir(trigger.spool_dir)
+            res = trigger.trigger_ciso_call(
+                ciso_channel="PJSIP/1001",
+                incident_context={
+                    "attack_type": "Command Injection RCE",
+                    "attacker_ip": "185.220.101.7",
+                    "geo_country": "Origen no disponible"
+                }
+            )
+            files = os.listdir(trigger.spool_dir)
+            self.assertEqual(len(files), 1)
+            with open(os.path.join(trigger.spool_dir, files[0]), encoding="utf-8") as handle:
+                self.assertIn("INCIDENT_JSON_000=", handle.read())
 
         self.assertEqual(res["status"], "DISPATCHED")
         self.assertEqual(res["method"], "SPOOL_CALL_FILE")

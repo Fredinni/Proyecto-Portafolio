@@ -8,6 +8,7 @@ Project: KRONOS SENTINEL - Autonomous AI-IPS & Live Voice Incident Response
 import ast
 import re
 import urllib.parse
+from geoip_lookup import GeoIPLookup
 from typing import Dict, Any, List, Tuple, Optional
 
 
@@ -20,6 +21,7 @@ class FalsePositiveFilter:
 
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         self.config = config or {}
+        self.geoip = GeoIPLookup(self.config.get("geoip", {}))
         self.confidence_threshold = self.config.get("confidence_threshold", 0.75)
 
         # Contadores estadísticos para auditoría y métricas de supresión
@@ -237,16 +239,5 @@ class FalsePositiveFilter:
         }
 
     def get_geoip(self, ip: str) -> str:
-        """
-        Resolución de procedencia geográfica basada en prefijos IP conocidos
-        e integración conceptual con MaxMind GeoLite2.
-        """
-        if not ip or not isinstance(ip, str):
-            return "Origen Desconocido"
-        if ip.startswith("192.168.") or ip.startswith("10.") or ip.startswith("172.16."):
-            return "Red Privada / Laboratorio Local (VLAN KRONOS)"
-        if ip.startswith("185.220.") or ip.startswith("198.51.") or ip.startswith("194."):
-            return "Federación Rusa (Nodo Hostil Detectado)"
-        if ip.startswith("45.") or ip.startswith("103."):
-            return "Región Asia-Pacífico (Nodo Sospechoso)"
-        return "Origen Internacional No Confiable (MaxMind GeoIP)"
+        result = self.geoip.lookup(ip)
+        return result.get("country") or "Geolocalización no disponible"

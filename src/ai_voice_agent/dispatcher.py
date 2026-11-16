@@ -1,77 +1,102 @@
 #!/usr/bin/env python3
-"""
-KRONOS SENTINEL - Voice Incident Dispatcher & Asterisk PBX Trigger Server (Hardened)
-Author: Bruno Urrea Ortiz (Portafolio de Título - Duoc UC)
-"""
+"""Authenticated incident dispatch with bounded input and call deduplication."""
 
-import os
+import hmac
+import ipaddress
 import json
-import uuid
 import logging
-from http.server import HTTPServer, BaseHTTPRequestHandler
+import os
+from pathlib import Path
+import re
 import sys
+import threading
+import time
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-# Añadir ruta del PBX para invocar call trigger
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'asterisk_pbx')))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "asterisk_pbx"))
 from call_trigger import AsteriskCallTrigger
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] [VOICE-DISPATCHER] %(message)s')
+log = logging.getLogger(__name__)
 
-# Almacenamiento en memoria de sesiones de incidentes por UUID
-ACTIVE_INCIDENT_SESSIONS = {}
 
 class IncidentDispatcherHandler(BaseHTTPRequestHandler):
-    def do_POST(self):
-        if self.path == "/incident":
-            content_len = int(self.headers.get('Content-Length', 0))
-            post_body = self.rfile.read(content_len)
-            
-            try:
-                incident_data = json.loads(post_body.decode('utf-8'))
-                session_id = uuid.uuid4().hex
-                incident_data["session_id"] = session_id
-                ACTIVE_INCIDENT_SESSIONS[session_id] = incident_data
-                
-                logging.info(f"==> INCIDENTE VALIDADO RECIBIDO EN DISPATCHER <==")
-                logging.info(f"SessionID: {session_id} | Vector: {incident_data.get('attack_type')} | IP: {incident_data.get('attacker_ip')}")
-                
-                # Disparar llamada telefónica a Kevin Retamales (QA Lead / Anexo 1004)
-                trigger = AsteriskCallTrigger()
-                call_res = trigger.trigger_ciso_call(
-                    ciso_channel="PJSIP/1004",
-                    incident_context=incident_data
-                )
-                call_success = call_res.get("success", False) if isinstance(call_res, dict) else bool(call_res)
-                
-                self.send_response(200)
-                self.send_header('Content-Type', 'application/json')
-                self.end_headers()
-                response = {
-                    "status": "SUCCESS",
-                    "session_id": session_id,
-                    "target_channel": "PJSIP/1004",
-                    "call_initiated": call_success,
-                    "call_details": call_res if isinstance(call_res, dict) else {"success": call_success}
-                }
-                self.wfile.write(json.dumps(response).encode('utf-8'))
-                
-            except Exception as e:
-                logging.error(f"Error procesando incidente en dispatcher: {e}")
-                self.send_response(500)
-                self.end_headers()
-        else:
-            self.send_response(404)
-            self.end_headers()
+    def reply(self, status, data):
+        body = json.dumps(data).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
 
-def run_dispatcher(port: int = 8080):
-    server_address = ('', port)
-    httpd = HTTPServer(server_address, IncidentDispatcherHandler)
-    logging.info(f"KRONOS Voice Dispatcher activo en puerto HTTP {port} (Llamadas a PJSIP/1004 - Kevin Retamales)...")
+    def do_GET(self):
+        if self.path == "/health":
+            return self.reply(200, {"status": "listening", "voice_e2e_verified": False})
+        self.reply(404, {"error": "not_found"})
+
+    def do_POST(self):
+        if self.path != "/incident":
+            return self.reply(404, {"error": "not_found"})
+        supplied = self.headers.get("Authorization", "")
+        if not hmac.compare_digest(supplied, "Bearer " + self.server.dispatch_token):
+            return self.reply(401, {"error": "unauthorized"})
+        try:
+            size = int(self.headers.get("Content-Length", "0"))
+            if not 0 < size <= 16000:
+                return self.reply(413, {"error": "invalid_body_size"})
+            self.connection.settimeout(5)
+            incident = json.loads(self.rfile.read(size))
+            if not isinstance(incident, dict) or not incident.get("attack_type"):
+                raise ValueError("Missing attack type")
+            incident["attacker_ip"] = str(ipaddress.ip_address(incident["attacker_ip"]))
+        except (ValueError, KeyError, TypeError, OSError):
+            return self.reply(400, {"error": "invalid_incident"})
+        key = incident["attacker_ip"]
+        now = time.monotonic()
+        with self.server.dispatch_lock:
+            self.server.recent = {k: t for k, t in self.server.recent.items()
+                                  if now - t < self.server.cooldown}
+            if key in self.server.recent:
+                return self.reply(202, {"status": "DUPLICATE_SUPPRESSED", "call_initiated": False})
+            self.server.recent[key] = now
+        try:
+            result = self.server.trigger.trigger_ciso_call(self.server.target_channel, incident)
+        except Exception:
+            log.error("dispatch_failed")
+            result = {"success": False, "status": "FAILED"}
+        if not result["success"]:
+            with self.server.dispatch_lock:
+                self.server.recent.pop(key, None)
+        self.reply(200 if result["success"] else 503, {
+            "status": result["status"], "call_initiated": result["success"],
+            "target_channel": self.server.target_channel, "call_id": result.get("call_id")})
+
+
+def make_server(address, token, target_channel, trigger=None, cooldown=120):
+    if not token or len(token) < 24:
+        raise ValueError("Configure KRONOS_DISPATCH_TOKEN with at least 24 characters")
+    if not re.fullmatch(r"PJSIP/[A-Za-z0-9_]+", target_channel):
+        raise ValueError("Configure KRONOS_CALL_CHANNEL")
+    server = ThreadingHTTPServer(address, IncidentDispatcherHandler)
+    server.dispatch_token = token
+    server.target_channel = target_channel
+    server.trigger = trigger or AsteriskCallTrigger()
+    server.cooldown = cooldown
+    server.dispatch_lock = threading.Lock()
+    server.recent = {}
+    return server
+
+
+def run_dispatcher(port=None):
+    server = make_server((os.getenv("KRONOS_DISPATCH_BIND", "127.0.0.1"),
+                          port or int(os.getenv("KRONOS_DISPATCH_PORT", "8080"))),
+                         os.getenv("KRONOS_DISPATCH_TOKEN", ""),
+                         os.getenv("KRONOS_CALL_CHANNEL", ""))
     try:
-        httpd.serve_forever()
-    except KeyboardInterrupt:
-        pass
-    httpd.server_close()
+        server.serve_forever()
+    finally:
+        server.server_close()
+
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     run_dispatcher()

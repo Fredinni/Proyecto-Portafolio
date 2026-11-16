@@ -15,6 +15,13 @@ DVWA follows the [maintainer compose structure](https://github.com/digininja/DVW
 
 VOIP builds a minimal Ubuntu Asterisk image. Configuration in `/etc/kronos/asterisk` is preserved across reruns. SIP binds only 192.168.30.50:5060; no SIP identities/passwords are invented. AMI is disabled pending Freddy's access policy and credentials. Existing source `pjsip.conf` passwords are not copied. Existing dialplan is retained in the repository for Freddy, but the deployed dialplan starts empty to avoid invoking the unimplemented Gemini transport.
 
-Bruno owns Gemini/pfctl integration. `gemini_live_client.py` currently simulates success without a WebSocket; `gemini_audio_bridge.py` does not transport bidirectional audio. `dispatcher.py` exposes an unauthenticated incident HTTP endpoint and `call_trigger.py` uses call files, not AMI. None is auto-started. No Gemini credentials are generated. Asterisk container availability, AMI configuration, Gemini transport implementation and voice end-to-end validation are distinct statuses.
+Bruno owns Gemini/pfctl integration. The Live implementation uses a stateful Gemini
+WebSocket, Asterisk AudioSocket for continuous bidirectional audio, authenticated
+incident dispatch, AMI and verified voice-authorized firewall tools. The deployment
+overlay is `compose.live.yml`; it preserves existing SIP/AMI configuration. MaxMind
+stays on pfSense and the collector attaches GeoIP to incident telemetry. See
+[operation and deployment](../../../docs/GEMINI_LIVE_OPERACION.md). Local integration
+tests do not establish production voice readiness; run the read-only preflight and
+verify a real laboratory call after deployment.
 
 HAProxy remains a future pfSense task for Cristobal: backend 192.168.20.50:80, external TLS termination then internal HTTP. The prepared source HAProxy configuration now targets 192.168.20.50 and uses three named stick-table backends; it still requires `haproxy -c -f` with a real TLS PEM and functional rate-limit tests before deployment. This preparation does not mark A5 completed. Suricata WAN sees encrypted TLS metadata, not plaintext SQLi inside HTTPS. Internal HTTP inspection is a separate required test. No roadmap completion states are modified.

@@ -1,0 +1,8 @@
+FROM python:3.12-slim-bookworm
+RUN apt-get update && apt-get install -y --no-install-recommends openssh-client ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+COPY requirements-voice.txt /tmp/requirements-voice.txt
+RUN pip install --no-cache-dir -r /tmp/requirements-voice.txt
+COPY src /opt/kronos/src
+ENV PYTHONUNBUFFERED=1
+CMD ["python", "/opt/kronos/src/asterisk_pbx/live_audio_server.py"]

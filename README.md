@@ -14,7 +14,7 @@
   <img src="https://img.shields.io/badge/Firewall-pfSense%20CE%202.9.0-00599C?style=for-the-badge&logo=pfsense&logoColor=white" alt="pfSense">
   <img src="https://img.shields.io/badge/IPS_Engine-Suricata%20Inline%20(Netmap)-FF1E56?style=for-the-badge&logo=securityscorecard&logoColor=white" alt="Suricata">
   <img src="https://img.shields.io/badge/Kernel_Filter-FreeBSD%20pfctl%20(snort2c)-1E293B?style=for-the-badge&logo=freebsd&logoColor=white" alt="pfctl">
-  <img src="https://img.shields.io/badge/AI_Engine-Gemini%20Live%20TTS%20%2B%20Multimodal-00F5FF?style=for-the-badge&logo=google&logoColor=black" alt="Gemini">
+  <img src="https://img.shields.io/badge/AI_Engine-Gemini%20Flash%20Live-00F5FF?style=for-the-badge&logo=google&logoColor=black" alt="Gemini">
   <img src="https://img.shields.io/badge/Voice_Telephony-Asterisk%20PBX%2020.6-D97706?style=for-the-badge&logo=asterisk&logoColor=white" alt="Asterisk">
   <img src="https://img.shields.io/badge/Reverse_Proxy-HAProxy%203.2%20SSL-00A86B?style=for-the-badge&logo=haproxy&logoColor=white" alt="HAProxy">
   <img src="https://img.shields.io/badge/Threat_Memory-Obsidian%20Vault%20SOAR-8B5CF6?style=for-the-badge&logo=obsidian&logoColor=white" alt="Obsidian">
@@ -29,7 +29,7 @@
 > - **A3 & A4 (Prevención de Intrusos & Filtrado GeoIP):** Suricata 7.x en modo Inline IPS (Netmap) sobre WAN (`vtnet0`) y trunk interno (26.628 firmas activas) con auto-recuperación (`suricata_watchdog.sh`), sumado a pfBlockerNG-devel con base de datos MaxMind GeoIP y feeds globales (FireHOL L1, Spamhaus DROP) operando sobre tablas PF de 2.000.000 de entradas.
 > - **A5 (Proxy Inverso SSL & DMZ Vulnerable):** HAProxy 3.2 con frontend HTTPS 443 (CA interna KRONOS-CA), SSL Offload, Stick-Tables de tasa anti-fuzzing L7 en RAM y publicación protegida de DVWA en DMZ VLAN 20.
 > - **A6 (Motor de Correlación KRONOS & Kernel pfctl):** Motor de Correlación en Python 3.12 con análisis sintáctico AST (`sqlparse` / `ast`), supresión heurística de >50% de falsos positivos y aislamiento atómico en kernel FreeBSD `pfctl` (inserción en tabla `<snort2c>` y terminación inmediata de estados con `pfctl -k`).
-> - **A7 (Voz Conversacional en Vivo & Telefonía Asterisk):** Centralita Asterisk 20.6 LTS PBX con interfaz AMI en TCP 5038, canalización PJSIP, puente bidireccional EAGI de baja latencia con **Google Gemini Live TTS (Voz: `Aoede`)** y comprensión de audio por micrófono mediante **Gemini Multimodal Audio** (sin audios pregrabados estáticos, supresión de beeps de grabadora, ciclo de respuesta telefónica optimizado a ~4.5 s y comando vocal de desbloqueo SOAR).
+> - **A7 (Voz Conversacional en Vivo & Telefonía Asterisk):** Implementación de Gemini Flash Live en una sesión WebSocket con audio nativo bidireccional por AudioSocket, herramientas SOAR verificadas y contexto completo del incidente. **Validación local; despliegue y llamada real pendientes de comprobar.** Ver [operación](docs/GEMINI_LIVE_OPERACION.md).
 > - **A8 (Bóveda de Memoria de Amenazas Obsidian):** Bóveda local estructurada en Obsidian Vault con correlación histórica de reincidencia de atacantes, registro JSON/MD de eventos de contención y enriquecimiento contextual táctico para el operador SOC.
 > - **A9 (Edge Público AWS & Malla Zero Trust Tailscale):** Pasarela de tránsito perimetral en AWS EC2 (IP Pública Elastic `100.50.147.57`) interconectada vía túnel WireGuard (`wg0`) hacia la WAN de pfSense (`10.254.254.2`), permitiendo pruebas de penetración externas reales contra HAProxy/DVWA inspeccionadas por Suricata Inline, con plano de gestión y VoIP aislado mediante malla cifrada Tailscale.
 > - **A10 (QA Integral & Pruebas de Penetración Externas):** Pruebas de intrusión reales ejecutadas por el equipo de QA (Kevin Retamales) validando vectores SQLi y RCE contra el borde público AWS/pfSense, confirmando la contención por Suricata y la llamada telefónica interactiva con desbloqueo en caliente.
@@ -44,7 +44,7 @@
 | Fase del Proyecto | Temporalidad | Estado | Entregable / Hito Técnico Actual |
 | :--- | :---: | :---: | :--- |
 | **Fase 1: Definición & Infraestructura Base** | **Semanas 1 a 4** | **✔ Completada** | • **Actividad A1 (S1 - S2):** ✔ **COMPLETADO Y PROBADO.** Despliegue pfSense CE 2.9.0 en Proxmox, conectividad WAN/LAN, tuning de kernel FreeBSD, mbufs elevados y offloading desactivado; 14 comprobaciones PASS del perfil compatible pfSense 2.9 (`src/pfsense_setup/`).<br>• **Actividad A2 (S3 - S4):** ✔ **COMPLETADO Y VERIFICADO.** Segmentación de 4 VLANs 802.1Q (Corp 10, DMZ 20, VoIP 30, Mgmt 99), DHCP por VLAN y aislamiento inter-VLAN; 16 comprobaciones PASS (Freddy Vásquez). |
-| **Fase 2: Desarrollo, Hardening & Despliegue** | **Semanas 5 a 15** | **✔ Completada (A1-A9 Integrados)** | • **A3 (S5 - S6):** ✔ **COMPLETADO.** Suricata Inline IPS en WAN y trunk interno (26.628 firmas, 0 fallidas) y guard IPS con recuperación automática (Bruno Urrea / Kevin Retamales).<br>• **A4 (S7 - S8):** ✔ **COMPLETADO.** pfBlockerNG-devel: Spamhaus DROP, FireHOL L1 y GeoIP (RU, KP) aplicados en WAN; 12/12 DROP verificados y tablas PF a 2.000.000 entradas (Kevin Retamales).<br>• **A5 (S9 - S10):** ✔ **COMPLETADO.** HAProxy 3.2 con frontend HTTPS 443 (CA interna KRONOS-CA), SSL Offload, Stick-Tables de tasa anti-fuzzing L7 en RAM y publicación protegida de DVWA en DMZ VLAN 20 (Cristóbal Quezada).<br>• **A6 (S11 - S12):** ✔ **COMPLETADO Y VERIFICADO.** Motor de Correlación KRONOS en Python 3.12 con análisis sintáctico AST (`sqlparse` / `ast`), supresión de >50% de falsos positivos y aislamiento en kernel FreeBSD `pfctl` (`pfctl -k` y tabla `<snort2c>`) (Bruno Urrea).<br>• **A7 (S13 - S14):** ✔ **COMPLETADO Y VERIFICADO.** Centralita Asterisk 20.6 LTS PBX con interfaz AMI en TCP 5038 (`manager.conf`), canalización PJSIP y auto-dialer prioritario `call_trigger.py` (`Action: Originate` a anexos SOC), integración de voz interactiva en vivo (Gemini Live TTS Aoede y comprensión multimodal de micrófono sin grabaciones fijas) y latencia optimizada a ~4.5s (Freddy Vásquez / Bruno Urrea).<br>• **A8 (S15):** ✔ **COMPLETADO.** Memoria de amenazas en Obsidian Vault con correlación histórica y enriquecimiento de reincidencia (Bruno Urrea).<br>• **A9 (S15):** ✔ **COMPLETADO.** Despliegue de Edge Público en AWS EC2 con túnel WireGuard perimetral y malla Tailscale Zero Trust (Bruno Urrea / Freddy Vásquez). |
+| **Fase 2: Desarrollo, Hardening & Despliegue** | **Semanas 5 a 15** | **✔ Completada (A1-A9 Integrados)** | • **A3 (S5 - S6):** ✔ **COMPLETADO.** Suricata Inline IPS en WAN y trunk interno (26.628 firmas, 0 fallidas) y guard IPS con recuperación automática (Bruno Urrea / Kevin Retamales).<br>• **A4 (S7 - S8):** ✔ **COMPLETADO.** pfBlockerNG-devel: Spamhaus DROP, FireHOL L1 y GeoIP (RU, KP) aplicados en WAN; 12/12 DROP verificados y tablas PF a 2.000.000 entradas (Kevin Retamales).<br>• **A5 (S9 - S10):** ✔ **COMPLETADO.** HAProxy 3.2 con frontend HTTPS 443 (CA interna KRONOS-CA), SSL Offload, Stick-Tables de tasa anti-fuzzing L7 en RAM y publicación protegida de DVWA en DMZ VLAN 20 (Cristóbal Quezada).<br>• **A6 (S11 - S12):** ✔ **COMPLETADO Y VERIFICADO.** Motor de Correlación KRONOS en Python 3.12 con análisis sintáctico AST (`sqlparse` / `ast`), supresión de >50% de falsos positivos y aislamiento en kernel FreeBSD `pfctl` (`pfctl -k` y tabla `<snort2c>`) (Bruno Urrea).<br>• **A7 (S13 - S14):** Implementación de voz Gemini Flash Live con AudioSocket y herramientas verificadas. Validada con integración local; pendiente de despliegue y llamada real en laboratorio (Freddy Vásquez / Bruno Urrea).<br>• **A8 (S15):** ✔ **COMPLETADO.** Memoria de amenazas en Obsidian Vault con correlación histórica y enriquecimiento de reincidencia (Bruno Urrea).<br>• **A9 (S15):** ✔ **COMPLETADO.** Despliegue de Edge Público en AWS EC2 con túnel WireGuard perimetral y malla Tailscale Zero Trust (Bruno Urrea / Freddy Vásquez). |
 | **Fase 3: QA, Auditoría & Defensa ante Comisión** | **Semanas 16 a 18** | **⚙ En Ejecución Activa (A10)** | • **A10:** Ejecución de pruebas de penetración externas reales (SQLi, RCE) por el equipo de QA (Kevin Retamales), validación de descarte en kernel (<100 ms), verificación de desbloqueo SOAR por comando de voz, preparación de manuales técnicos PDF y ensayo de defensa final ante la comisión evaluadora. |
 
 ---
@@ -60,7 +60,7 @@ En las infraestructuras corporativas modernas, los Centros de Operaciones de Seg
 **KRONOS SENTINEL** es una arquitectura de defensa en profundidad y respuesta autónoma ante incidentes (**SOAR**) que:
 * Inspecciona el tráfico en tiempo real mediante **pfSense** y **Suricata en modo Inline IPS (Netmap)** sobre la interfaz WAN externa conectada a una pasarela pública en **AWS EC2**.
 * Ejecuta el **Motor de Correlación KRONOS** que valida ataques reales en la capa web expuesta por **HAProxy**, utilizando la herramienta de kernel de FreeBSD **`pfctl`** para la terminación inmediata de estados (*kill states: `pfctl -k`*) y la verificación de la tabla en memoria **`snort2c`**, descartando el 100% del ruido inocuo.
-* Dispara una llamada telefónica de emergencia en tiempo real vía **Asterisk PBX**, donde un **Agente de IA Multimodal (Google Gemini Live TTS & Gemini Multimodal Audio)** interactúa por voz con el operador SOC o CISO, entregando un *debriefing* táctico inmediato (IP, país GeoIP, vector de ataque, reincidencias correlacionadas en **Obsidian Vault** y bloqueo en firewall) y ejecutando acciones de mitigación táctica en vivo (incluyendo el desbloqueo bajo demanda por voz para permitir continuar las pruebas de QA).
+* Dispara una llamada telefónica de emergencia en tiempo real vía **Asterisk PBX**, donde un **Agente de IA Multimodal (Google Gemini Flash Live)** interactúa por voz con el operador SOC o CISO, entregando un *debriefing* táctico inmediato (IP, país GeoIP, vector de ataque, reincidencias correlacionadas en **Obsidian Vault** y bloqueo en firewall) y ejecutando acciones de mitigación táctica en vivo (incluyendo el desbloqueo bajo demanda por voz para permitir continuar las pruebas de QA).
 
 <p align="center">
   <img src="assets/kronos_process_flow.gif" alt="Pipeline de Flujo de Ataque y Respuesta SOAR en Tiempo Real" width="100%">
@@ -85,7 +85,7 @@ En las infraestructuras corporativas modernas, los Centros de Operaciones de Seg
 | **Proxy Inverso & DMZ** | `HAProxy 3.2 + DVWA Docker` | Terminación SSL/TLS, balanceo y publicación segura del entorno vulnerable controlado (DVWA) en DMZ VLAN 20. |
 | **Motor de Correlación KRONOS** | `Python 3.12 + FreeBSD pfctl` | Ingesta de telemetría, análisis sintáctico AST (`ast` / `sqlparse`), supresión de falsos positivos y aislamiento en kernel con `pfctl`. |
 | **Telefonía VoIP PBX** | `Asterisk 20.6 LTS (Docker)` | Generación automática de llamadas telefónicas SIP hacia el CISO/QA Lead vía PJSIP y control AMI TCP 5038. |
-| **Agente de Voz IA Conversacional** | `Gemini Live TTS + Gemini Multimodal` | Diálogo telefónico bidireccional en tiempo real (Voz: `Aoede`), comprensión directa de micrófono y cero audios pregrabados. |
+| **Agente de Voz IA Conversacional** | `Gemini Flash Live + AudioSocket` | Diálogo telefónico bidireccional en tiempo real (Voz: `Aoede`), comprensión directa de micrófono y cero audios pregrabados. |
 | **Bóveda de Memoria de Amenazas** | `Obsidian Vault SOAR` | Memoria persistente JSON/Markdown para correlación de reincidencias, historial de ataques y perfilado de atacantes. |
 | **Malla de Red Zero Trust** | `Tailscale WireGuard Mesh` | Interconexión cifrada punto a punto para plano de control/VoIP, aislando los softphones Zoiper del tráfico atacado. |
 
@@ -129,39 +129,30 @@ Cuando un ataque es validado y contenido en el firewall, el subsistema de voz ej
   <img src="assets/voice_soar_flow.png" alt="Diagrama de Flujo SOAR Voz IA y Asterisk" width="100%">
 </p>
 
-### 📞 Fases de la Interacción por Voz en Vivo (Zero Grabaciones Pregrabadas)
+### 📞 Fases de la interacción por voz
 
-1. **Disparo Inmediato (AMI Originate):** El **Motor de Correlación KRONOS** consulta la memoria de amenazas en **Obsidian**, calcula el nivel de reincidencia del atacante y genera una llamada instantánea hacia el softphone asignado (ej. `PJSIP/1004` - Kevin Retamales o `PJSIP/1001` - Bruno Urrea) vía Asterisk PBX AMI (TCP 5038).
-2. **Briefing Inicial con Gemini Live TTS (Voz: `Aoede`):** Al descolgar, la IA saluda en español chileno técnico informal con latencia mínima (audio inicial pre-calentado):
-   > *"¡Aló Kevin! Oye, este compadre de la 185.220.101.5 ya van 13 veces que nos tira inyección SQL. El pfSense ya le chantó DROP en snort2c y mató los estados. ¿Lo dejamos bloqueado nomás?"*
-3. **Escucha Activa de Micrófono sin Tonos de Grabadora:** Mediante el canal EAGI, se escucha el micrófono del operador suprimiendo cualquier tono beep artificial (`s=1` en Asterisk), cerrando la grabación en cuanto el operador guarda 1 segundo de silencio.
-4. **Comprensión Multimodal Nativa (Gemini Multimodal Audio):** El archivo WAV del micrófono es analizado directamente por la API multimodal de Gemini sin intermediarios de transcripción externa, extrayendo la intención táctica del operador en ~1.4 segundos.
-5. **Ejecución SOAR Táctica & Desbloqueo por Voz:**
-   - Si el operador confirma el bloqueo, la IA ratifica la protección: *"Listo compadre, ya quedó sellada en snort2c."*
-   - Si el operador (QA Lead) indica que es una prueba y pide desbloquear la IP para continuar evaluando, la IA detecta la orden (`[ACTION:UNBLOCK]`), ejecuta la purga en caliente del kernel de pfSense (`pfctl -t snort2c -T delete <IP> ; pfctl -k <IP>`) vía API administrativa en <0.3s y responde verbalmente:
-     > *"Listo compadre, te liberé la IP de snort2c. Dale con las pruebas."*
-6. **Ciclo Conversacional Optimizado:** El tiempo total de turno (desde que el operador termina de hablar hasta que la IA comienza a reproducir su respuesta) opera en **~4.5 segundos**, garantizando una experiencia interactiva fluida.
+1. El IPS bloquea inmediatamente y el recolector en pfSense adjunta la firma,
+   tipo, destino y geolocalización de su base MaxMind/GeoLite2 existente.
+2. El dispatcher autenticado solicita la llamada al anexo configurado por AMI.
+3. Al contestar, AudioSocket conecta el micrófono y el audio del agente a una
+   única sesión Gemini Flash Live. El operador puede interrumpir y conversar.
+4. La IA consulta el bloqueo real y pregunta si se mantiene o se desbloquea.
+   Puede explicar más detalles del ataque y su origen sin modificar el firewall.
+5. Una orden explícita autoriza la herramienta de desbloqueo. El resultado se
+   verifica leyendo la tabla antes de anunciar éxito. Una negativa conserva el bloqueo.
+
+El diagrama raster anterior documenta el flujo previo. La implementación actual y
+sus instrucciones están en [Gemini Live: operación](docs/GEMINI_LIVE_OPERACION.md).
 
 ---
 
-## ⏱️ 5. Línea de Tiempo de Respuesta a Incidentes (SOC War-Room)
+## ⏱️ 5. Validación de la respuesta a incidentes
 
-```text
- [T+0.00s]  [INGRESS]        Hostile actor launches attack payload: "admin' OR '1'='1 --" to AWS Public Edge
- [T+0.04s]  [NETMAP IPS]     Suricata 7.x inline ring-buffer on vtnet0 catches payload -> Drops packet & logs to eve.json
- [T+0.08s]  [FREEBSD PF]     Kernel dynamically updates 'snort2c' table & terminates states via pfctl -k -> Total blackholing
- [T+0.12s]  [KRONOS CORE]    log_correlator tails log -> AST analyzer validates attack pattern confidence (0.85)
- [T+0.16s]  [OBSIDIAN VAULT] Memory manager updates threat vault -> Correlates incident recurrence count (x13)
- [T+0.22s]  [GEMINI LIVE]    Gemini Live synthesizes contextual briefing with Aoede voice (24kHz PCM -> 8kHz ULAW)
- [T+0.45s]  [ASTERISK AMI]   AMI executes Originate -> Rings operator softphone via PJSIP/1004 (Tailscale)
- [T+1.10s]  [CALL CONNECT]   Operator answers -> Asterisk EAGI plays dynamic Gemini briefing immediately
- [T+2.50s]  [MIC RECORD]     Operator speaks command via softphone ("Es una prueba mía, desbloquea la IP para seguir")
- [T+3.70s]  [VAD SILENCE]    Silence detection cuts recording at 1.0s of pause -> Hands WAV to Gemini
- [T+5.10s]  [GEMINI AUDIO]   Gemini Multimodal processes raw audio (1.4s) -> Emits [ACTION:UNBLOCK]
- [T+5.35s]  [SOAR UNBLOCK]   SOAR API executes 'pfctl -t snort2c -T delete <IP>; pfctl -k <IP>' on pfSense (0.25s)
- [T+6.95s]  [TTS RESPONSE]   Gemini TTS Aoede synthesizes audio (<1.8s) -> Plays via Asterisk EAGI
- [T+7.05s]  [OPERATOR HEARS] "Listo compadre, te liberé la IP de snort2c. Dale con las pruebas."
-```
+Las pruebas locales verifican el transporte TCP/WebSocket, el contexto por llamada,
+la política de autorización y la confirmación del cambio en el firewall simulado.
+La latencia real de voz, SIP/RTP, cuota Gemini y permisos pfSense se miden después
+del despliegue. No se atribuyen tiempos de laboratorio a esta implementación sin
+una medición nueva. El preflight es de solo lectura y no origina llamadas.
 
 ---
 
@@ -226,12 +217,12 @@ Proyecto-Portafolio/
 │   │   ├── soar_tools_executor.py              # Ejecutor de herramientas SOAR (bloqueo/desbloqueo/estados)
 │   │   ├── prompts.py                          # Prompts tácticos con lenguaje técnico chileno SOC
 │   │   └── dispatcher.py                       # Despachador HTTP de alertas hacia Asterisk PBX
-│   ├── asterisk_pbx/                           # [✔ HITO A7] Telefonía VoIP y puente EAGI
+│   ├── asterisk_pbx/                           # [✔ HITO A7] Telefonía VoIP y transporte AudioSocket
 │   │   ├── extensions.conf                     # Dialplan de llamadas de emergencia y enlace AGI
 │   │   ├── pjsip.conf                          # Configuración de transportes UDP y endpoints SIP (1000-1004)
 │   │   ├── manager.conf                        # Interfaz AMI TCP 5038 con usuario kronos_ami
 │   │   ├── call_trigger.py                     # Auto-dialer prioritario AMI Originate hacia anexos SOC
-│   │   ├── gemini_audio_bridge.py              # Puente EAGI interactivo multimodal y desbloqueo por voz
+│   │   ├── gemini_audio_bridge.py              # Handoff AGI de contexto; audio en live_audio_server.py
 │   │   └── Dockerfile                          # Contenedor de Asterisk 20.6 con sox y utilidades de audio
 │   ├── haproxy_dvwa/                           # [✔ HITO A5] Proxy inverso y contenedor DMZ
 │   │   ├── haproxy.cfg                         # Configuración SSL Offload y Stick-Tables anti-fuzzing
@@ -268,14 +259,16 @@ python verify_kernel_hardening.py
 
 ---
 
-### 8.2 Disparo de Simulación de Ataque & Llamada en Vivo al Operador SOC (Hito A6 & A7) [✔ 100% COMPLETADO]
-
-Para ejecutar la verificación integral con inyección de ataque, bloqueo en pfSense, actualización de memoria en Obsidian y llamada conversacional interactiva:
+### 8.2 Verificación de la integración de voz
 
 ```bash
-# Ejecutar verificación integral del pipeline de contención y despacho telefónico
-python src/test_sentinel_end_to_end.py
+python -m pytest tests src/pfsense_setup/tests -q
 ```
+
+Estas pruebas usan dobles de Gemini y pfSense y no llaman al equipo. Para desplegar
+los servicios reales y comprobar la sesión Live, seguir
+[la guía de operación](docs/GEMINI_LIVE_OPERACION.md). Las configuraciones SIP y AMI
+publicadas son plantillas; los secretos de ejecución permanecen fuera de Git.
 
 ---
 

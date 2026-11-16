@@ -1,0 +1,18 @@
+{
+  "simulation_mode": false,
+  "use_ssh": true,
+  "pfsense_host": "192.168.99.1",
+  "pfsense_user": "kronos",
+  "pfctl_table": "snort2c",
+  "ssh_identity_file": "/etc/kronos/voice/pfsense_ed25519",
+  "ssh_known_hosts": "/etc/kronos/voice/known_hosts",
+  "ssh_sudo": true,
+  "max_call_seconds": 300,
+  "authorized_extensions": ["1001", "1002", "1003", "1004"],
+  "operators": {
+    "1001": {"name": "Bruno", "role": "SecOps"},
+    "1002": {"name": "Freddy", "role": "Redes y VoIP"},
+    "1003": {"name": "Cristóbal", "role": "DMZ y proxy"},
+    "1004": {"name": "Kevin", "role": "QA de seguridad"}
+  }
+}

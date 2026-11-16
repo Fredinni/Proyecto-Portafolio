@@ -7,6 +7,8 @@ Project: KRONOS SENTINEL - Autonomous AI-IPS & Live Voice Incident Response
 
 import ipaddress
 import logging
+import re
+import shlex
 import shutil
 import subprocess
 from typing import List, Dict, Any, Set, Optional
@@ -28,16 +30,15 @@ class PfctlWrapper:
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         self.config = config or {}
         self.table_name = self.config.get("pfctl_table", "snort2c")
+        if not re.fullmatch(r"[A-Za-z0-9_]+", self.table_name):
+            raise ValueError("Invalid pfctl table name")
         self.use_ssh = self.config.get("use_ssh", False)
         self.ssh_host = self.config.get("pfsense_host", "192.168.1.1")
         self.ssh_user = self.config.get("pfsense_user", "admin")
 
         # Detección de binario pfctl local; si no existe y no es SSH, opera en modo simulación
         self.has_local_pfctl = shutil.which("pfctl") is not None
-        self.simulation_mode = self.config.get(
-            "simulation_mode",
-            not self.has_local_pfctl and not self.use_ssh
-        )
+        self.simulation_mode = self.config.get("simulation_mode", False)
 
         # Estructura en memoria para auditoría y pruebas
         self._simulated_table: Set[str] = set()
@@ -72,8 +73,14 @@ class PfctlWrapper:
         if self.use_ssh:
             full_cmd = [
                 "ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=3",
-                f"{self.ssh_user}@{self.ssh_host}"
-            ] + cmd
+                "-o", "StrictHostKeyChecking=yes"
+            ]
+            if self.config.get("ssh_identity_file"):
+                full_cmd += ["-i", self.config["ssh_identity_file"], "-o", "IdentitiesOnly=yes"]
+            if self.config.get("ssh_known_hosts"):
+                full_cmd += ["-o", "UserKnownHostsFile=" + self.config["ssh_known_hosts"]]
+            remote_cmd = (["sudo", "-n"] if self.config.get("ssh_sudo", False) else []) + cmd
+            full_cmd += [f"{self.ssh_user}@{self.ssh_host}", shlex.join(remote_cmd)]
         else:
             full_cmd = cmd
 
@@ -156,8 +163,32 @@ class PfctlWrapper:
         """
         if not self._validate_ip(ip):
             return False
-        res = self._exec_command(["pfctl", "-t", self.table_name, "-T", "test", ip.strip()])
-        return res.returncode == 0
+        result = self.get_ip_status(ip)
+        if not result["success"]:
+            raise RuntimeError("Cannot read firewall table")
+        return result["is_blocked"]
+
+    def get_ip_status(self, ip: str) -> Dict[str, Any]:
+        """A failed query is UNKNOWN, never a successful 'not blocked'.
+
+        Read actual table entries rather than interpreting pfctl -T test's exit
+        status, which does not reliably encode match/no-match across versions.
+        """
+        try:
+            address = ipaddress.ip_address(ip)
+        except (ValueError, TypeError):
+            return {"success": False, "verified": False, "error": "Invalid individual IP"}
+        res = self._exec_command(["pfctl", "-t", self.table_name, "-T", "show"])
+        if res.returncode != 0:
+            return {"success": False, "verified": False, "ip": ip, "is_blocked": None,
+                    "error": "No se pudo consultar la tabla del firewall."}
+        try:
+            blocked = any(address in ipaddress.ip_network(entry.strip(), strict=False)
+                          for entry in res.stdout.splitlines() if entry.strip())
+        except ValueError:
+            return {"success": False, "verified": False, "error": "Invalid firewall table response"}
+        return {"success": True, "verified": not self.simulation_mode, "ip": str(address),
+                "is_blocked": blocked, "table": self.table_name, "simulation": self.simulation_mode}
 
     def block_ip(self, ip: str) -> bool:
         """

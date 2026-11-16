@@ -6,10 +6,14 @@ Project: KRONOS SENTINEL - Autonomous AI-IPS & Live Voice Incident Response
 """
 
 import logging
+import base64
+import json
 import os
+import re
 import socket
 import time
 import uuid
+import tempfile
 from typing import Dict, Any, Optional, Tuple
 
 logging.basicConfig(
@@ -28,17 +32,17 @@ class AsteriskCallTrigger:
 
     def __init__(
         self,
-        ami_host: str = "localhost",
+        ami_host: str = None,
         ami_port: int = 5038,
-        ami_user: str = "kronos_ami",
-        ami_secret: str = "KronosSecOps2026!",
+        ami_user: str = None,
+        ami_secret: str = None,
         spool_dir: str = "/var/spool/asterisk/outgoing",
         prefer_ami: bool = True
     ):
-        self.ami_host = ami_host
-        self.ami_port = ami_port
-        self.ami_user = ami_user
-        self.ami_secret = ami_secret
+        self.ami_host = ami_host or os.getenv("ASTERISK_AMI_HOST", "localhost")
+        self.ami_port = int(os.getenv("ASTERISK_AMI_PORT", str(ami_port)))
+        self.ami_user = ami_user or os.getenv("ASTERISK_AMI_USER", "kronos_ami")
+        self.ami_secret = ami_secret or os.getenv("ASTERISK_AMI_SECRET", "")
         self.spool_dir = spool_dir
         self.prefer_ami = prefer_ami
 
@@ -46,6 +50,36 @@ class AsteriskCallTrigger:
         """Elimina retornos de carro y saltos de línea para evitar CRLF injection en AMI"""
         val = str(text) if text is not None else default
         return val.replace("\r", " ").replace("\n", " ").strip()
+
+    @staticmethod
+    def _encoded_context(incident_context):
+        data = json.dumps(incident_context, ensure_ascii=False).encode("utf-8")
+        if len(data) > 16000:
+            raise ValueError("Incident context too large")
+        return base64.b64encode(data).decode("ascii")
+
+    @classmethod
+    def _context_variables(cls, incident_context):
+        encoded = cls._encoded_context(incident_context)
+        chunks = [encoded[i:i + 400] for i in range(0, len(encoded), 400)]
+        return [f"INCIDENT_PARTS={len(chunks)}"] + [
+            f"INCIDENT_JSON_{i:03d}={value}" for i, value in enumerate(chunks)]
+
+    @staticmethod
+    def _read_response(connection):
+        """Read a complete AMI frame, tolerating TCP fragmentation and events."""
+        buffer = b""
+        while True:
+            while b"\r\n\r\n" not in buffer:
+                chunk = connection.recv(4096)
+                if not chunk:
+                    raise ConnectionError("AMI closed before response")
+                buffer += chunk
+                if len(buffer) > 65536:
+                    raise ValueError("AMI response too large")
+            frame, buffer = buffer.split(b"\r\n\r\n", 1)
+            if frame.startswith(b"Response:") or b"\r\nResponse:" in frame:
+                return frame.decode("utf-8", errors="replace")
 
     def originate_via_ami(
         self,
@@ -62,6 +96,8 @@ class AsteriskCallTrigger:
 
         s = None
         try:
+            if not self.ami_secret:
+                return False, "Configure ASTERISK_AMI_SECRET"
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.settimeout(2.0)
             s.connect((self.ami_host, self.ami_port))
@@ -75,16 +111,12 @@ class AsteriskCallTrigger:
             login_cmd = (
                 f"Action: Login\r\n"
                 f"Username: {self.ami_user}\r\n"
-                f"Secret: {self.ami_secret}\r\n\r\n"
+                f"Secret: {self.ami_secret}\r\n"
+                f"Events: off\r\n\r\n"
             )
             s.sendall(login_cmd.encode('utf-8'))
 
-            login_resp = ""
-            while "Response:" not in login_resp:
-                chunk = s.recv(2048).decode('utf-8', errors='ignore')
-                if not chunk:
-                    break
-                login_resp += chunk
+            login_resp = self._read_response(s)
 
             if "Response: Success" not in login_resp:
                 return False, f"Fallo de autenticacion AMI: {login_resp.strip()}"
@@ -102,16 +134,12 @@ class AsteriskCallTrigger:
                 f"Variable: INCIDENT_TYPE={safe_attack_type}\r\n"
                 f"Variable: ATTACKER_IP={safe_attacker_ip}\r\n"
                 f"Variable: GEO_ORIGIN={safe_geo}\r\n"
-                f"Variable: CALL_ID={call_id}\r\n\r\n"
+                f"Variable: CALL_ID={call_id}\r\n"
             )
+            originate_cmd += "".join("Variable: " + value + "\r\n" for value in self._context_variables(incident_context)) + "\r\n"
             s.sendall(originate_cmd.encode('utf-8'))
             
-            orig_resp = ""
-            while "Response:" not in orig_resp:
-                chunk = s.recv(2048).decode('utf-8', errors='ignore')
-                if not chunk:
-                    break
-                orig_resp += chunk
+            orig_resp = self._read_response(s)
 
             # 3. Logoff cortés
             s.sendall(b"Action: Logoff\r\n\r\n")
@@ -162,24 +190,29 @@ class AsteriskCallTrigger:
             f"Set: GEO_ORIGIN={safe_geo}\n"
             f"Set: CALL_ID={call_id}\n"
         )
+        call_file_content += "".join("Set: " + value + "\n" for value in self._context_variables(incident_context))
 
-        temp_file = os.path.join(os.environ.get("TEMP", "/tmp"), f"kronos_{call_id}.call")
+        temp_file = None
         dest_file = os.path.join(self.spool_dir, f"kronos_{call_id}.call")
 
         try:
             if os.path.exists(self.spool_dir):
-                with open(temp_file, "w", encoding="utf-8") as f:
+                # Stage on the same filesystem outside outgoing: Asterisk may
+                # consume any filename placed inside its outgoing directory.
+                with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", delete=False,
+                                                 dir=os.path.dirname(self.spool_dir), suffix=".call") as f:
+                    temp_file = f.name
                     f.write(call_file_content)
+                os.chmod(temp_file, 0o640)
                 os.replace(temp_file, dest_file)
                 return True, f"Call file entregado a spool: {dest_file}"
             else:
-                # Simulación diagnóstica si el spool no está montado en host
-                logging.info(f"[SIMULACIÓN PBX SPOOL] Directorio {self.spool_dir} no existe. Call content:")
-                for line in call_file_content.strip().split("\n"):
-                    logging.info(f"   | {line}")
-                return True, "Simulación de llamada registrada exitosamente"
+                return False, "No existe el spool de Asterisk; no se originó la llamada"
         except Exception as e:
             return False, f"Error escribiendo en spool: {e}"
+        finally:
+            if temp_file and os.path.exists(temp_file):
+                os.unlink(temp_file)
 
     def trigger_ciso_call(
         self,
@@ -192,6 +225,9 @@ class AsteriskCallTrigger:
         """
         if incident_context is None:
             incident_context = {}
+
+        if not re.fullmatch(r"PJSIP/[A-Za-z0-9_]+", ciso_channel):
+            raise ValueError("Invalid authenticated PJSIP target channel")
 
         call_id = uuid.uuid4().hex[:12]
         attack_type = incident_context.get("attack_type", "Ataque Crítico")

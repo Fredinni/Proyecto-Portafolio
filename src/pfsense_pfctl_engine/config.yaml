@@ -4,6 +4,7 @@
 suricata_eve_path: "/var/log/suricata/eve.json"
 pfctl_table: "snort2c"
 use_ssh: false
+simulation_mode: false
 pfsense_host: "192.168.99.1"
 pfsense_user: "kronos"
 
@@ -13,13 +14,14 @@ confidence_threshold: 0.75
 enable_auto_pfctl_drop: true
 
 geoip:
+  # Actual location of the MMDB already installed on pfSense. Override locally.
   db_path: "/usr/local/share/GeoIP/GeoLite2-City.mmdb"
+  asn_db_path: ""
   provider: "MaxMind Free Tier"
 
 asterisk:
   host: "192.168.30.50"
   port: 5038
   user: "kronos_ami"
-  secret: "KronosSecOps2026!"
+  # AMI credential comes from ASTERISK_AMI_SECRET outside Git.
   ciso_extension: "PJSIP/1004" # Anexo Kevin Retamales (Threat Intel & QA Lead)
-  ciso_phone_number: "+56987654321"

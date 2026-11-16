@@ -6,6 +6,7 @@ Project: KRONOS SENTINEL - Autonomous AI-IPS & Live Voice Incident Response
 """
 
 import json
+import ipaddress
 import logging
 import os
 import sys
@@ -112,7 +113,7 @@ class PfctlLogCorrelator:
         self.eve_log_path = self.config.get("suricata_eve_path", "/var/log/suricata/eve.json")
         self.confidence_threshold = self.config.get("confidence_threshold", 0.75)
         self.enable_auto_pfctl_drop = self.config.get("enable_auto_pfctl_drop", True)
-        self.webhook_url = self.config.get("dispatcher_webhook_url", "http://localhost:8080/incident")
+        self.webhook_url = os.getenv("KRONOS_DISPATCH_URL", self.config.get("dispatcher_webhook_url", "http://localhost:8080/incident"))
 
         self.filter = FalsePositiveFilter(self.config)
         self.pfctl = PfctlWrapper(self.config)
@@ -159,10 +160,15 @@ class PfctlLogCorrelator:
         timestamp = event.get("timestamp") or time.strftime("%Y-%m-%dT%H:%M:%S.000000Z")
 
         # Manejo de X-Forwarded-For en DMZ para identificar la IP real tras HAProxy
-        if src_ip.startswith("192.168.100.1") or src_ip.startswith("127.0.0.1") or src_ip.startswith("192.168.20.1"):
+        if src_ip in self.config.get("trusted_proxy_ips", []):
             real_ip = http_data.get("xff", "") or http_data.get("request_headers", {}).get("X-Real-IP", "")
             if real_ip:
                 src_ip = real_ip.split(",")[0].strip()
+
+        try:
+            src_ip = str(ipaddress.ip_address(src_ip))
+        except ValueError:
+            return {"status": "INVALID_SOURCE_IP", "suppressed": True, "is_real_attack": False}
 
         event_id = f"{src_ip}_{signature}_{timestamp}"
         if self._is_duplicate(event_id):
@@ -204,7 +210,7 @@ class PfctlLogCorrelator:
 
         # 2. Correlación atómica con kernel FreeBSD pfctl (tabla snort2c y kill states)
         is_blocked_in_pfctl = self.pfctl.is_ip_blocked(src_ip)
-        action_taken = "IP YA SE ENCUENTRA BLOQUEADA EN KERNEL"
+        action_taken = "IP YA SE ENCUENTRA BLOQUEADA EN KERNEL" if is_blocked_in_pfctl else "SIN BLOQUEO CONFIRMADO"
 
         if not is_blocked_in_pfctl and self.enable_auto_pfctl_drop:
             logging.warning(
@@ -213,7 +219,7 @@ class PfctlLogCorrelator:
             )
             block_success = self.pfctl.block_ip(src_ip)
             is_blocked_in_pfctl = block_success
-            action_taken = "DROP & BLOCK en Firewall pfSense (Kernel pfctl State Kill)"
+            action_taken = "DROP & BLOCK en Firewall pfSense (Kernel pfctl State Kill)" if block_success else "FALLO AL BLOQUEAR"
 
         # 3. Construcción del payload estructurado del incidente
         incident_payload = {
@@ -224,14 +230,17 @@ class PfctlLogCorrelator:
             "signature": signature,
             "severity": severity,
             "confidence_score": confidence,
-            "http_endpoint": http_data.get("url", "/vulnerabilities/sqli/"),
+            "http_endpoint": http_data.get("url"),
+            "target_service": f"{dest_ip}:{event.get('dest_port', 'puerto no informado')}",
+            "protocol": event.get("proto"),
             "http_method": http_data.get("http_method", "GET"),
             "ast_verified": analysis.get("ast_verified", False),
             "tautologies": analysis.get("tautologies", []),
             "pfctl_table": self.pfctl.table_name,
             "pfctl_blocked": is_blocked_in_pfctl,
             "action_taken": action_taken,
-            "geo_country": analysis.get("geo_origin", "Origen Desconocido")
+            "geoip": self.filter.geoip.lookup(src_ip),
+            "geo_country": self.filter.get_geoip(src_ip)
         }
 
         # 4. Despacho asíncrono al agente de voz Asterisk / Gemini Live
@@ -239,7 +248,7 @@ class PfctlLogCorrelator:
             self.executor.submit(self.dispatch_voice_alert, incident_payload)
 
         return {
-            "status": "CONFIRMED_AND_MITIGATED",
+            "status": "CONFIRMED_AND_MITIGATED" if is_blocked_in_pfctl else "CONFIRMED_NOT_MITIGATED",
             "event_id": event_id,
             "src_ip": src_ip,
             "dest_ip": dest_ip,
@@ -298,7 +307,8 @@ class PfctlLogCorrelator:
             req = urllib.request.Request(
                 self.webhook_url,
                 data=json.dumps(incident).encode('utf-8'),
-                headers={'Content-Type': 'application/json'}
+                headers={'Content-Type': 'application/json',
+                         'Authorization': 'Bearer ' + os.getenv('KRONOS_DISPATCH_TOKEN', '')}
             )
             with urllib.request.urlopen(req, timeout=3) as resp:
                 logging.info(f"Despachador de voz respondió HTTP {resp.status}")
