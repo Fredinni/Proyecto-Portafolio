@@ -33,6 +33,7 @@ class SoarToolsExecutor:
             fields = ("attacker_ip", "attack_type", "signature", "severity", "timestamp",
                       "target_ip", "target_service", "protocol", "http_endpoint", "http_method",
                       "geoip", "geo_country", "confidence_score", "ast_verified", "action_taken")
+            fields += ("classification_source", "sensor_action", "signature_id", "category")
             return {"success": True, "incident": {k: self.incident[k] for k in fields if k in self.incident},
                     "note": "La telemetría describe el incidente. Consulta el firewall para conocer el bloqueo actual."}
         if function_name not in {"get_firewall_states", "unblock_ip", "block_ip_permanently"}:

@@ -1,9 +1,14 @@
 name: kronos-dmz
 services:
   dvwa_target:
-    image: ghcr.io/digininja/dvwa:latest
+    image: ghcr.io/digininja/dvwa@sha256:ed35515e9111801e6e386a6fbb11165508cc7f72e0cb8da4dbb3df70182986c6
     container_name: kronos_dvwa_dmz
     restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=64m,mode=1777
+      - /var/run/apache2:rw,noexec,nosuid,nodev,size=8m,mode=755
+      - /var/lock/apache2:rw,noexec,nosuid,nodev,size=8m,mode=755
     ports:
       - "192.168.20.50:80:80"
     environment:
@@ -11,11 +16,13 @@ services:
       DB_DATABASE: dvwa
       DB_USER: dvwa
       DB_PASSWORD: ${DVWA_DB_PASSWORD:?External environment file required}
+      DEFAULT_SECURITY_LEVEL: impossible
     depends_on:
       db:
         condition: service_healthy
     security_opt:
       - no-new-privileges:true
+    cap_drop: [NET_RAW, NET_ADMIN, SYS_ADMIN, SYS_PTRACE]
     mem_limit: 512m
     cpus: 0.75
     pids_limit: 150

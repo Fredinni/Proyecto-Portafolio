@@ -105,6 +105,18 @@ class VoicePolicyTests(unittest.TestCase):
         self.assertFalse(tools.execute_tool_call("unblock_ip", {"ip": IP})["success"])
         self.assertEqual(fw.changes, [])
 
+    def test_polite_explicit_requests_are_actions(self):
+        for phrase in ["¿Puedes desbloquear esa IP, por favor?", "¿Podrías liberar la IP?"]:
+            tools, fw = self.executor()
+            tools.observe_input(phrase)
+            self.assertTrue(tools.execute_tool_call("unblock_ip", {"ip": IP})["success"])
+
+    def test_block_status_question_is_not_a_block_order(self):
+        tools, fw = self.executor()
+        tools.observe_input("¿Está bloqueada esa IP?")
+        self.assertFalse(tools.execute_tool_call("block_ip_permanently", {"ip": IP})["success"])
+        self.assertEqual(fw.changes, [])
+
     def test_ip_substring_cannot_change_target(self):
         tools, fw = self.executor()
         tools.observe_input("Desbloquea 203.0.113.990")
@@ -224,7 +236,7 @@ class DispatcherTests(unittest.TestCase):
                 return {"success": self.success, "status": "DISPATCHED" if self.success else "FAILED"}
         trigger = Trigger()
         token = "test-only-dispatch-token-123456"
-        server = make_server(("127.0.0.1", 0), token, "PJSIP/1004", trigger=trigger)
+        server = make_server(("127.0.0.1", 0), token, "PJSIP/1004", trigger=trigger, global_cooldown=0)
         thread = threading.Thread(target=server.serve_forever, daemon=True)
         thread.start()
         url = f"http://127.0.0.1:{server.server_port}/incident"

@@ -1,0 +1,23 @@
+[Unit]
+Description=KRONOS authenticated incident call dispatcher
+After=network-online.target docker.service kronos-voice.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=kronos-voice
+Group=kronos-voice
+EnvironmentFile=/etc/kronos/voice.env
+WorkingDirectory=/opt/kronos/live-current
+ExecStart=/opt/kronos/voice-venv/bin/python /opt/kronos/live-current/src/ai_voice_agent/dispatcher.py
+Restart=on-failure
+RestartSec=3
+UMask=0027
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=strict
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target

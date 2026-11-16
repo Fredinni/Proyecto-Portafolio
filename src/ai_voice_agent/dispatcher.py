@@ -57,7 +57,10 @@ class IncidentDispatcherHandler(BaseHTTPRequestHandler):
                                   if now - t < self.server.cooldown}
             if key in self.server.recent:
                 return self.reply(202, {"status": "DUPLICATE_SUPPRESSED", "call_initiated": False})
+            if now - self.server.last_dispatch_at < self.server.global_cooldown:
+                return self.reply(202, {"status": "CALL_COOLDOWN", "call_initiated": False})
             self.server.recent[key] = now
+            self.server.last_dispatch_at = now
         try:
             result = self.server.trigger.trigger_ciso_call(self.server.target_channel, incident)
         except Exception:
@@ -66,12 +69,13 @@ class IncidentDispatcherHandler(BaseHTTPRequestHandler):
         if not result["success"]:
             with self.server.dispatch_lock:
                 self.server.recent.pop(key, None)
+                self.server.last_dispatch_at = 0
         self.reply(200 if result["success"] else 503, {
             "status": result["status"], "call_initiated": result["success"],
             "target_channel": self.server.target_channel, "call_id": result.get("call_id")})
 
 
-def make_server(address, token, target_channel, trigger=None, cooldown=120):
+def make_server(address, token, target_channel, trigger=None, cooldown=120, global_cooldown=120):
     if not token or len(token) < 24:
         raise ValueError("Configure KRONOS_DISPATCH_TOKEN with at least 24 characters")
     if not re.fullmatch(r"PJSIP/[A-Za-z0-9_]+", target_channel):
@@ -83,6 +87,8 @@ def make_server(address, token, target_channel, trigger=None, cooldown=120):
     server.cooldown = cooldown
     server.dispatch_lock = threading.Lock()
     server.recent = {}
+    server.last_dispatch_at = 0
+    server.global_cooldown = global_cooldown
     return server
 
 
@@ -90,7 +96,9 @@ def run_dispatcher(port=None):
     server = make_server((os.getenv("KRONOS_DISPATCH_BIND", "127.0.0.1"),
                           port or int(os.getenv("KRONOS_DISPATCH_PORT", "8080"))),
                          os.getenv("KRONOS_DISPATCH_TOKEN", ""),
-                         os.getenv("KRONOS_CALL_CHANNEL", ""))
+                         os.getenv("KRONOS_CALL_CHANNEL", ""),
+                         cooldown=int(os.getenv("KRONOS_CALL_COOLDOWN_SECONDS", "120")),
+                         global_cooldown=int(os.getenv("KRONOS_GLOBAL_CALL_COOLDOWN_SECONDS", "120")))
     try:
         server.serve_forever()
     finally:

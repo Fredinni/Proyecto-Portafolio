@@ -1,0 +1,8 @@
+# Runtime alternative: voice + dispatcher run as unprivileged host services.
+services:
+  asterisk:
+    environment:
+      KRONOS_CALL_DIR: /run/kronos/calls
+    volumes:
+      - ../../../src/asterisk_pbx/gemini_audio_bridge.py:/usr/local/bin/gemini_audio_bridge.py:ro
+      - /run/kronos/calls:/run/kronos/calls

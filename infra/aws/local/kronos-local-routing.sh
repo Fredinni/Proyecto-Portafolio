@@ -51,6 +51,8 @@ if [[ -n $existing ]]; then
 fi
 table_routes=$(ip -4 route show table 51820 2>/dev/null || true)
 while IFS= read -r route; do
+    # iproute2 may leave trailing spaces on otherwise identical route output.
+    route=${route%"${route##*[![:space:]]}"}
     [[ -z $route || $route =~ ^default[[:space:]]+dev[[:space:]]+wg0([[:space:]]+scope[[:space:]]+link)?[[:space:]]*$ ||
        $route == "10.254.254.0/30 dev $TRANSIT_IF scope link" ]] \
         || die 'Table 51820 contains unrelated routes; refusing to replace them.'

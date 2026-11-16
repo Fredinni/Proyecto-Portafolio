@@ -119,6 +119,12 @@ async def handle_call(reader, writer, config, call_directory, client_factory=Gem
         incident.update({"operator_name": operator.get("name", "operador"),
                          "operator_role": operator.get("role", "no identificado")})
         tools = SoarToolsExecutor(config=config, incident=incident)
+        if incident.get("attacker_ip"):
+            incident["sensor_pfctl_blocked_at_alert"] = incident.get("pfctl_blocked")
+            current = await asyncio.to_thread(tools.execute_tool_call, "get_firewall_states",
+                                             {"ip": incident["attacker_ip"]})
+            incident["firewall_state_at_call"] = current
+            incident["pfctl_blocked"] = current.get("is_blocked") if current.get("verified") else None
         playback = Playback()
         playback_task = asyncio.create_task(playback.run(writer))
         session_task = asyncio.create_task(client_factory().start_voice_session(
@@ -133,7 +139,7 @@ async def handle_call(reader, writer, config, call_directory, client_factory=Gem
         finally:
             session_task.cancel()
             await asyncio.gather(session_task, return_exceptions=True)
-    except asyncio.IncompleteReadError:
+    except (asyncio.IncompleteReadError, ConnectionResetError, BrokenPipeError):
         if session_id != "unregistered":
             log.info("caller_hangup session=%s", session_id)
     except Exception as error:

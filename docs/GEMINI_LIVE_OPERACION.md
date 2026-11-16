@@ -12,6 +12,18 @@ Gemini escucha PCM16 a 16 kHz y devuelve audio nativo a 24 kHz. El puente convie
 a telefonía de 8 kHz y envía cuadros de 20 ms. Las interrupciones descartan el audio
 pendiente. No se generan grabaciones WAV ni se usa un segundo modelo TTS.
 
+## Instalación validada
+
+La instalación del 16 de noviembre usa los servicios de host sin privilegios
+`kronos-voice` y `kronos-dispatcher`, más `compose.live-host.yml` para Asterisk.
+El código está en `/opt/kronos/live-current`; las dependencias se instalan en
+`/opt/kronos/voice-venv`. El directorio compartido de llamadas usa grupo
+`kronos-voice`, setgid y permisos 2770. Para actualizar ese entorno preparado se
+incluye `deploy-live-host.sh`. `compose.live.yml` es una alternativa con servicios
+en contenedores, no el runtime usado en esta validación.
+
+Ver [resultados, recuperación de DVWA y límites](VALIDACION_OPERATIVA_2026-11-16.md).
+
 ## Configuración en VM103
 
 Se utiliza la instalación existente en `/etc/kronos/asterisk`; no reemplazar
@@ -79,6 +91,10 @@ el sensor. Una IP y su geolocalización no identifican a la persona atacante.
 - El agente solo describe el estado de esa tabla; no certifica la seguridad de
   toda la red ni la persistencia de un bloqueo tras reinicio.
 
+El enfriamiento de llamadas se configura con `KRONOS_CALL_COOLDOWN_SECONDS`
+y `KRONOS_GLOBAL_CALL_COOLDOWN_SECONDS` (120 segundos predeterminados). El
+bloqueo del IPS sigue funcionando mientras se suprimen avisos repetidos.
+
 ## Verificación y límites de esta entrega
 
 `python -m pytest tests src/pfsense_setup/tests -q` ejecuta las pruebas locales.
@@ -88,8 +104,10 @@ GeoIP y contexto por llamada. No hacen llamadas a personas ni cambian pfSense.
 
 El preflight abre una sesión real Gemini (sin voz), comprueba SSH/tabla y devuelve
 JSON sin credenciales. Eso aún no prueba SIP/RTP ni la comprensión de voz real.
-Para cerrar la validación hacen falta una llamada al anexo 1000 y una alerta real
-de laboratorio con comprobación antes/después en pfSense. No presentar pruebas
+La validación del 16 de noviembre incluyó llamadas automatizadas al anexo 1000
+por SIP/RTP y Tailscale, herramientas contra pfSense real y una alerta SQLi pública.
+Para la grabación corresponde usar los softphones del equipo; no participaron
+personas en las pruebas automatizadas. No presentar pruebas
 simuladas como una certificación de funcionamiento en producción.
 
 Para volver al estado anterior, restaurar el `extensions.conf` del directorio

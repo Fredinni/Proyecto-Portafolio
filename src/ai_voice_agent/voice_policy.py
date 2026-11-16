@@ -63,7 +63,7 @@ class VoiceActionPolicy:
                 return False, "No hay una orden de voz reciente verificable; pide confirmación explícita."
             if re.search(r"\b(no|nunca|jamas|espera|cancela\w*|manten\w*|dejala|dejalo)\b", text):
                 return False, "La orden contiene una negativa o solicita mantener el bloqueo."
-            if re.search(r"\b(como|podrias|puedes|se puede|que pasa|que pasaria)\b", text):
+            if re.search(r"\b(como|quien|cuando|se puede|que pasa|que pasaria)\b", text):
                 return False, "Es una consulta o solicitud ambigua; pide una orden explícita."
             # A direct call must identify its target before using a pronoun.
             if ip != self.focus_ip and ip not in mentioned_ips(text):
@@ -73,7 +73,7 @@ class VoiceActionPolicy:
                 yes = bool(re.fullmatch(r"[\s¿?¡!.,]*(si|dale|adelante|confirmo|autorizo)([\s,]+por favor)?[\s.!]*", text))
                 allowed = explicit or (yes and self.pending_unblock == ip)
             else:
-                allowed = bool(re.search(r"\b(bloquea\w*|bloquee\w*)\b", text))
+                allowed = bool(re.search(r"\b(bloquea(?:r|la|lo|me|nos|rla|rlo)?|bloquee(?:s|la|lo|me)?)\b", text))
             if not allowed:
                 return False, "No se identificó autorización explícita para esta acción; pregunta al operador."
             self.input_text = ""  # Consume once, including failed remote operations.

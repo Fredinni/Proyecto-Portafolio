@@ -161,14 +161,21 @@ class PfctlLogCorrelator:
 
         # Manejo de X-Forwarded-For en DMZ para identificar la IP real tras HAProxy
         if src_ip in self.config.get("trusted_proxy_ips", []):
-            real_ip = http_data.get("xff", "") or http_data.get("request_headers", {}).get("X-Real-IP", "")
-            if real_ip:
+            request_headers = http_data.get("request_headers", {})
+            if not isinstance(request_headers, dict):
+                request_headers = {}
+            real_ip = (event.get("xff") or alert.get("xff") or http_data.get("xff") or
+                       request_headers.get("X-Real-IP", ""))
+            if isinstance(real_ip, str) and real_ip:
                 src_ip = real_ip.split(",")[0].strip()
 
         try:
             src_ip = str(ipaddress.ip_address(src_ip))
         except ValueError:
             return {"status": "INVALID_SOURCE_IP", "suppressed": True, "is_real_attack": False}
+        if src_ip in self.config.get("protected_ips", []):
+            return {"status": "PROTECTED_INFRASTRUCTURE_SOURCE", "src_ip": src_ip,
+                    "suppressed": True, "is_real_attack": False}
 
         event_id = f"{src_ip}_{signature}_{timestamp}"
         if self._is_duplicate(event_id):
@@ -187,9 +194,18 @@ class PfctlLogCorrelator:
         is_real_attack = analysis.get("is_real_attack", False)
         attack_type = analysis.get("attack_type", "UNKNOWN")
         confidence = analysis.get("confidence_score", 0.0)
+        ips_dropped = alert.get("action") == "blocked" or (event.get("verdict") or {}).get("action") == "drop"
+        classification_source = "HEURISTIC"
+        if ips_dropped and not is_real_attack:
+            # An IPS-enforced drop is important evidence even if EVE has no
+            # HTTP body for the optional AST analysis. Do not invent a payload
+            # or a numerical confidence score the sensor did not provide.
+            is_real_attack = True
+            attack_type = "IPS_BLOCK: " + (alert.get("category") or signature or "Tipo no informado")
+            classification_source = "IPS_DROP"
 
         # Si el score no supera el umbral, se suprime como ruido de escaneo
-        if not is_real_attack or confidence < self.confidence_threshold:
+        if not ips_dropped and (not is_real_attack or confidence < self.confidence_threshold):
             logging.info(
                 f"-> [RUIDO SUPRIMIDO] Score: {confidence:.2f} | Tipo: {attack_type} - Sin escalamiento."
             )
@@ -229,7 +245,11 @@ class PfctlLogCorrelator:
             "attack_type": attack_type,
             "signature": signature,
             "severity": severity,
-            "confidence_score": confidence,
+            "confidence_score": confidence if classification_source == "HEURISTIC" else None,
+            "classification_source": classification_source,
+            "sensor_action": alert.get("action"),
+            "signature_id": alert.get("signature_id"),
+            "category": alert.get("category"),
             "http_endpoint": http_data.get("url"),
             "target_service": f"{dest_ip}:{event.get('dest_port', 'puerto no informado')}",
             "protocol": event.get("proto"),

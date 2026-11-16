@@ -1,0 +1,24 @@
+[Unit]
+Description=KRONOS Gemini Live AudioSocket bridge
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=kronos-voice
+Group=kronos-voice
+EnvironmentFile=/etc/kronos/voice.env
+WorkingDirectory=/opt/kronos/live-current
+ExecStart=/opt/kronos/voice-venv/bin/python /opt/kronos/live-current/src/asterisk_pbx/live_audio_server.py
+Restart=on-failure
+RestartSec=3
+UMask=0027
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=strict
+ReadWritePaths=/run/kronos/calls
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target

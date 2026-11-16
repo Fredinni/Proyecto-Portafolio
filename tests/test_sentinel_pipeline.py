@@ -292,6 +292,29 @@ class TestSentinelPipeline(unittest.TestCase):
         finally:
             mock_ami.stop()
 
+    def test_ips_drop_without_http_payload_is_not_suppressed(self):
+        correlator = PfctlLogCorrelator()
+        correlator.pfctl.simulation_mode = True
+        result = correlator.process_single_event({
+            "event_type": "alert", "src_ip": "198.18.0.254", "dest_ip": "192.0.2.10",
+            "alert": {"signature": "IPS detection without HTTP telemetry", "action": "blocked",
+                      "category": "Web Application Attack", "severity": 1}}, trigger_dispatch=False)
+        self.assertTrue(result["is_real_attack"])
+        self.assertEqual(result["incident"]["classification_source"], "IPS_DROP")
+        self.assertIsNone(result["incident"]["confidence_score"])
+
+    def test_xff_identity_is_used_only_for_the_verified_proxy(self):
+        correlator = PfctlLogCorrelator()
+        correlator.pfctl.simulation_mode = True
+        correlator.config.update({"trusted_proxy_ips": ["192.168.20.1"], "protected_ips": ["192.168.20.1"]})
+        event = {"event_type": "alert", "src_ip": "192.168.20.1", "xff": "198.18.0.253",
+                 "alert": {"signature": "Controlled IPS drop", "action": "blocked"}}
+        result = correlator.process_single_event(event, trigger_dispatch=False)
+        self.assertEqual(result["src_ip"], "198.18.0.253")
+        self.assertTrue(correlator.pfctl.is_ip_blocked("198.18.0.253"))
+        result = correlator.process_single_event({**event, "src_ip": "198.18.0.252"}, trigger_dispatch=False)
+        self.assertEqual(result["src_ip"], "198.18.0.252")
+
     def test_07_asterisk_spool_fallback(self):
         """A7: Verifica conmutación automática por error (fallback) a .call file si AMI está apagado"""
         # Puerto 59999 no existe, forzará fallback inmediato a spool

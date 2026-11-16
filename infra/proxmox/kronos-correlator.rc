@@ -1,0 +1,15 @@
+#!/bin/sh
+# PROVIDE: kronos_correlator
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+name="kronos_correlator"
+rcvar="kronos_correlator_enable"
+pidfile="/var/run/kronos-correlator-supervisor.pid"
+command="/usr/sbin/daemon"
+procname="/usr/sbin/daemon"
+command_args="-r -R 5 -P ${pidfile} -p /var/run/kronos-correlator.pid -o /var/log/kronos-correlator.log /usr/local/bin/python3.11 -u /usr/local/libexec/kronos/collector/collector_service.py /usr/local/etc/kronos/collector.json"
+load_rc_config "$name"
+: ${kronos_correlator_enable:="NO"}
+run_rc_command "$1"

@@ -57,7 +57,8 @@ def register_context(env, mode, get_variable=variable, directory=None):
     root = Path(directory or os.getenv("KRONOS_CALL_DIR", "/run/kronos/calls"))
     root.mkdir(parents=True, exist_ok=True, mode=0o750)
     path = root / (session_id + ".json")
-    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    # The shared directory has setgid and is restricted to the voice service.
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o640)
     with os.fdopen(fd, "w", encoding="utf-8") as handle:
         json.dump(context, handle, ensure_ascii=False)
     return session_id
