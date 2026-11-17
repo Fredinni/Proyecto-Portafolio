@@ -1,18 +1,40 @@
-# Acceso del equipo a KRONOS
+# Acceso autorizado al laboratorio KRONOS
 
-El equipo usa la tailnet separada `tailnet KRONOS del equipo`. KRONOS-MGMT (`100.73.101.28` al validar) actúa como subnet router hacia **solo** `192.168.99.0/24`, `192.168.10.0/24`, `192.168.20.0/24`, `192.168.30.0/24` y `10.254.254.1/32` para Edge. El tráfico de otras VLAN entra por MGMT `192.168.99.10`, pasa por pfSense `192.168.99.1` y obedece sus reglas. No se anuncia `10.10.20.0/24`, Proxmox `[IP privada de Proxmox]`, vmbr0 ni la WAN de Edge. Esta tailnet no sirve como transporte público; ese papel corresponde a WireGuard AWS↔Edge.
+Esta guía pública describe el procedimiento de acceso del equipo. Los destinos de administración, nombres de usuario, contraseñas, claves y certificados de confianza se entregan por el canal privado del operador. El inventario de credenciales permanece fuera de Git.
 
-Estado validado el 23 de septiembre de 2026: MGMT `Running` y `Online=True` en la tailnet separada; `AllowedIPs` y `PrimaryRoutes` incluyen las cuatro VLAN anteriores además de sus propias IPs Tailscale. La ruta `10.254.254.1/32` figura aprobada en `PrimaryRoutes` y `AllowedIPs`; desde esta PC de la tailnet del equipo respondió TCP22 de Edge, MGMT, pfSense, DMZ, VOIP y CORP. El default gateway de MGMT sigue siendo pfSense `192.168.99.1`. Desde MGMT, TCP8006 y TCP22 de Proxmox `[IP privada de Proxmox]` dieron timeout; pfSense HTTPS8443 y SSH22 de las VMs KRONOS respondieron. Se probaron SSH con contraseña a las seis VMs como `kronos` y login WebGUI de pfSense. Falta probar autenticación desde el dispositivo Tailscale de cada compañero.
+## Preparación
 
-1. **Unirse a la tailnet del equipo.** Iniciar sesión en Tailscale con una cuenta autorizada para `tailnet KRONOS del equipo`. Comprobar que se aceptan las rutas anunciadas por KRONOS-MGMT en el cliente. No unirse a la tailnet administrativa del Proxmox para trabajar en el laboratorio.
-2. **Comprobar MGMT.** Usar `tailscale ping 100.73.101.28` y luego `ssh kronos@100.73.101.28`. Si la IP cambia, localizar `KRONOS-MGMT` en `tailscale status` de esa tailnet. La contraseña está en la hoja privada de entrega del operador, no en Git.
-3. **Abrir pfSense.** Desde el navegador conectado a la tailnet del equipo, visitar `https://192.168.99.1:8443` e iniciar sesión como `kronos` con la contraseña específica de pfSense. También funciona `ssh kronos@192.168.99.1`. Verificar el certificado por el canal administrativo. La VM es CE2.9; WAN `10.254.254.2/30`, VLAN99 MGMT `192.168.99.1/24`. La WebGUI no está publicada en AWS.
-4. **Trabajar en DMZ.** `ssh kronos@192.168.20.50`. DVWA responde en `http://192.168.20.50/login.php`; MariaDB está inicializada. Repo en `/opt/kronos/Proyecto-Portafolio`. HAProxy/TLS y login funcional de usuario siguen pendientes.
-5. **Trabajar en VOIP.** `ssh kronos@192.168.30.50`. Asterisk corre en contenedor y escucha UDP5060 en esa IP; AMI, credenciales SIP, Gemini y llamada extremo a extremo aún no se han validado.
-6. **Usar CORP-TEST si corresponde.** `ssh kronos@192.168.10.50`; es un cliente de pruebas, no un bastion. CORP no puede abrir SSH hacia MGMT por la política actual.
-7. **Administrar Edge si corresponde.** Ya se probó `ssh kronos@10.254.254.1` desde MGMT. El compañero puede entrar primero con `ssh kronos@100.73.101.28` y, dentro de MGMT, ejecutar ese comando. La ruta `10.254.254.1/32` ya está aprobada y TCP22 respondió desde esta PC; cada compañero autorizado puede probar `ssh kronos@10.254.254.1` directamente. La autenticación por contraseña de este usuario solo se habilitó desde el transit de pfSense; el uplink de producción conserva el acceso operador por clave.
-8. **Comprobar el acceso.** Validar en este orden `tailscale ping 100.73.101.28`, conexión HTTPS a pfSense y SSH de la VM asignada. Si falla, registrar origen, destino, puerto y hora para revisar las rutas Tailscale y la regla de pfSense. No pedir acceso al hipervisor como solución al fallo.
+1. Solicitar al operador acceso a la tailnet del equipo y únicamente a la VM necesaria para la actividad.
+2. Iniciar sesión en Tailscale con la cuenta autorizada y aceptar las rutas del laboratorio. Revisar `tailscale status` antes de cambiar perfiles para no interrumpir otras sesiones.
+3. Obtener por el canal privado el destino de MGMT, el usuario asignado y la huella SSH o el certificado de confianza correspondiente.
 
-Se creó un único usuario de trabajo `kronos` por VM, con una contraseña distinta para cada máquina; en pfSense sirve para WebGUI y SSH. La hoja de credenciales está **fuera del repositorio** en `~/.kronos-secrets/team-access/HANDOFF.txt` del operador. Entregar a cada compañero solo la contraseña de la VM que necesita por un canal privado. No compartir la clave privada operadora `kronos-lab-ed25519` ni la contraseña administrativa de pfSense. Ninguna credencial se almacena en Git.
+## Comprobación
 
-Proxmox pertenece únicamente al operador de infraestructura; sus comandos QGA, snapshots y consola están en [la guía de despliegue](PROXMOX_ONPREM_DEPLOYMENT.md) para mantenimiento administrativo, no en este procedimiento del equipo. A2 sigue en ejecución y A3–A9 conservan sus estados del README: tener VMs y acceso no completa esas actividades.
+Los siguientes comandos usan parámetros que cada integrante completa con su entrega privada:
+
+```powershell
+$mgmt = "<destino-MGMT-autorizado>"
+$usuario = "<usuario-asignado>"
+tailscale ping $mgmt
+ssh "$usuario@$mgmt"
+```
+
+Acceder a la WebGUI de pfSense mediante la URL privada entregada por el operador. Verificar el certificado antes de ingresar credenciales. La interfaz de administración debe permanecer restringida a la red de gestión.
+
+Para administrar una VM, utilizar su destino privado y la credencial específica de esa VM. No reutilizar la contraseña de otro equipo. Registrar origen, destino, puerto y hora si falla una conexión; estos datos permiten revisar rutas y reglas sin compartir secretos.
+
+## Alcance de red
+
+MGMT actúa como router de subred hacia las VLAN autorizadas. El acceso a DMZ, VOIP, CORP y al tránsito de Edge queda sujeto a las reglas de pfSense. La tailnet del equipo no concede acceso al hipervisor y no sustituye el transporte público del laboratorio por WireGuard.
+
+El acceso administrativo a Proxmox corresponde al operador de infraestructura. Las tareas de mantenimiento se describen en [la guía de despliegue](PROXMOX_ONPREM_DEPLOYMENT.md), sin conceder permisos adicionales al equipo.
+
+## Manejo de credenciales
+
+- Mantener contraseñas, claves privadas, tokens, credenciales SIP y licencias fuera del repositorio y de sus capturas de pantalla.
+- Entregar a cada integrante solamente el acceso que requiere, mediante un canal privado.
+- Los scripts PHP que establecen contraseñas las reciben por entrada estándar; nunca incluirlas como literales, argumentos o ejemplos publicados.
+- Si se detecta una credencial publicada, retirarla y revocarla o rotarla en el servicio afectado. Borrar el texto del último commit no revoca su uso.
+- Antes de publicar un respaldo, eliminar hashes de contraseña, claves, usuarios de acceso, certificados y licencias. La copia pública sanitizada sirve como evidencia y no como respaldo de recuperación.
+
+Revisión documental: 17 de noviembre de 2026. Esta revisión describe el acceso autorizado; la disponibilidad de cada servicio debe comprobarse durante la actividad correspondiente.

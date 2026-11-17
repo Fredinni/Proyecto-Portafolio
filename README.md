@@ -22,6 +22,13 @@
 </p>
 
 ---
+## Entrega académica y correcciones — 17 de noviembre de 2026
+
+Las entregas están organizadas por fase en **Evidencias Individuales** y **Evidencias Grupales**. El [índice de correcciones y pendientes](docs/ENTREGA_APT_CORRECCIONES_2026-11-17.md) enlaza los Word editables, las presentaciones finales y el respaldo sanitizado de pfSense. Los formularios personales aún sin respuestas aparecen identificados como pendientes; no se consideran evaluaciones terminadas.
+
+Las evidencias de `docs/`, `assets/` e `infra/` se reúnen en el [índice técnico de Fase 2](docs/Fase_2_Desarrollo_Proyecto_APT/Evidencias%20Proyecto/README.md). El estado operativo más reciente y los tiempos medidos de llamadas están en la [validación de identidad y estabilidad de voz](docs/VALIDACION_ESTABILIDAD_VOZ_2026-11-16.md). El módulo de memoria existe en el repositorio; no debe confundirse con una integración activa comprobada en el flujo Live desplegado. Los avances y cronogramas siguientes conservan su fecha histórica.
+
+---
 ## 📌 Estado de Avance Real del Proyecto (Portafolio de Título APT122)
 
 > **Corte actualizado: 09 de noviembre de 2026 (Semana 13).** Hitos **A1 a A9 completados, integrados y verificados al 100% en laboratorio real**. Fase 3 (Pruebas de Penetración y Hardening) en ejecución activa.
@@ -35,7 +42,7 @@
 > - **A10 (QA Integral & Pruebas de Penetración Externas):** Pruebas de intrusión reales ejecutadas por el equipo de QA (Kevin Retamales) validando vectores SQLi y RCE contra el borde público AWS/pfSense, confirmando la contención por Suricata y la llamada telefónica interactiva con desbloqueo en caliente.
 > - **Auditoría Integral A1-A9 & Evidencias Automatizadas:** Suite de QA autónomo verificada con 8 compuertas de calidad ([`docs/AUDITORIA_INTEGRAL_A1_A7_KRONOS.md`](docs/AUDITORIA_INTEGRAL_A1_A7_KRONOS.md) y [`docs/QA_AUDIT_REPORT_A1_A7.json`](docs/QA_AUDIT_REPORT_A1_A7.json)), respaldada por capturas Playwright de alta fidelidad ([`docs/evidencias_a7/`](docs/evidencias_a7/)).
 
-**Presentación de Avance Fase 2:** [PPTX](docs/Fase_2_Desarrollo_Proyecto_APT/Presentaciones_y_Evidencias_EA2/06_Presentacion_Avance_Fase2_10_Slides_2026-10-27/KRONOS_SENTINEL_Avance_Fase2_Equipo5_2026-10-27.pptx) · [PDF](docs/Fase_2_Desarrollo_Proyecto_APT/Presentaciones_y_Evidencias_EA2/06_Presentacion_Avance_Fase2_10_Slides_2026-10-27/KRONOS_SENTINEL_Avance_Fase2_Equipo5_2026-10-27.pdf). Versión de 5 slides: [PPT, PDF y guion del equipo](docs/Fase_2_Desarrollo_Proyecto_APT/Presentaciones_y_Evidencias_EA2/05_Presentacion_Final_5_Slides_2026-10-06/PRESENTACION_EA2_EQUIPO.md).
+**Presentación de Avance Fase 2:** [PPTX](docs/Fase_2_Desarrollo_Proyecto_APT/Evidencias%20Grupales/Avances%20historicos/06_Presentacion_Avance_Fase2_10_Slides_2026-10-27/KRONOS_SENTINEL_Avance_Fase2_Equipo5_2026-10-27.pptx) · [PDF](docs/Fase_2_Desarrollo_Proyecto_APT/Evidencias%20Grupales/Avances%20historicos/06_Presentacion_Avance_Fase2_10_Slides_2026-10-27/KRONOS_SENTINEL_Avance_Fase2_Equipo5_2026-10-27.pdf). Versión de 5 slides: [PPT, PDF y guion del equipo](docs/Fase_2_Desarrollo_Proyecto_APT/Evidencias%20Grupales/Avances%20historicos/05_Presentacion_Final_5_Slides_2026-10-06/PRESENTACION_EA2_EQUIPO.md).
 
 > **Institución:** Duoc UC — Sede San Joaquín | **Carrera:** Ingeniería en Conectividad y Redes  
 > **Semestre Académico:** Segundo Semestre 2026 (Primavera 2026: Agosto – Diciembre 2026)  

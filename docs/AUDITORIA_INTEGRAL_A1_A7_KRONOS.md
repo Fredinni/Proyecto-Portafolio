@@ -92,7 +92,7 @@ En estricto cumplimiento del principio **Anti-Slop**, no existen plantillas est�
 
 ## 4. Herramientas SOAR Autónomas (Function Calling - Cero Funciones Vacías)
 
-El módulo [`src/ai_voice_agent/soar_tools_executor.py`](file:///c:/Users/bruno/Downloads/proyecto%20de%20titulo/src/ai_voice_agent/soar_tools_executor.py) implementa en su totalidad las funciones requeridas para mitigación perimetral:
+El módulo [`src/ai_voice_agent/soar_tools_executor.py`](../src/ai_voice_agent/soar_tools_executor.py) implementa en su totalidad las funciones requeridas para mitigación perimetral:
 
 ```python
 # 1. Bloqueo permanente y purga de socket en FreeBSD pf
@@ -114,15 +114,15 @@ def escalate_to_soc_tier2(incident_id: str, priority: str, notes: str) -> dict: 
 
 La memoria táctica y la personalidad del agente se almacenan en una estructura 100% compatible con **Obsidian**:
 
-1. [`00_PERSONALIDAD_IA_KRONOS.md`](file:///c:/Users/bruno/Downloads/proyecto%20de%20titulo/docs/obsidian_vault/00_PERSONALIDAD_IA_KRONOS.md):
+1. [`00_PERSONALIDAD_IA_KRONOS.md`](obsidian_vault/00_PERSONALIDAD_IA_KRONOS.md):
    * Instrucciones de estilo: De tú a tú, informal chilena, turnos rápidos (< 15 palabras).
    * Voz: Aoede (Google Gemini 3.8 Live).
-2. [`01_HISTORIAL_INCIDENTES_CORRELACIONADOS.md`](file:///c:/Users/bruno/Downloads/proyecto%20de%20titulo/docs/obsidian_vault/01_HISTORIAL_INCIDENTES_CORRELACIONADOS.md):
+2. [`01_HISTORIAL_INCIDENTES_CORRELACIONADOS.md`](obsidian_vault/01_HISTORIAL_INCIDENTES_CORRELACIONADOS.md):
    * Bitácora en Markdown con tabla viva de ataques, extracción de tautologías AST, acción en pfSense y badge `⚠️ xN (REINCIDENTE)`.
    * Sección de tickets escalados por voz (Tier 2).
-3. [`02_TOPOLOGIA_Y_REGLAS_PFSENSE.md`](file:///c:/Users/bruno/Downloads/proyecto%20de%20titulo/docs/obsidian_vault/02_TOPOLOGIA_Y_REGLAS_PFSENSE.md):
+3. [`02_TOPOLOGIA_Y_REGLAS_PFSENSE.md`](obsidian_vault/02_TOPOLOGIA_Y_REGLAS_PFSENSE.md):
    * Diagrama Mermaid de VLANs y arquitectura de la tabla `<snort2c>`.
-4. [`incident_memory.json`](file:///c:/Users/bruno/Downloads/proyecto%20de%20titulo/docs/obsidian_vault/incident_memory.json):
+4. [`incident_memory.json`](obsidian_vault/incident_memory.json):
    * Base de datos en JSON con marcas de tiempo, vectores y contador acumulativo por IP.
 
 ---
@@ -144,4 +144,4 @@ La memoria táctica y la personalidad del agente se almacenan en una estructura 
 ================================================================================
 ```
 
-Archivo de telemetry registrado: [`docs/QA_AUDIT_REPORT_A1_A7.json`](file:///c:/Users/bruno/Downloads/proyecto%20de%20titulo/docs/QA_AUDIT_REPORT_A1_A7.json).
+Archivo de telemetry registrado: [`docs/QA_AUDIT_REPORT_A1_A7.json`](QA_AUDIT_REPORT_A1_A7.json).

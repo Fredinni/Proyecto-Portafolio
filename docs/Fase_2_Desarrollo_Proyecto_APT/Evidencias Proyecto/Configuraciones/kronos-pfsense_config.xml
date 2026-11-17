@@ -1,0 +1,3088 @@
+<?xml version='1.0' encoding='utf-8'?>
+<pfsense>
+  <!-- COPIA SANITIZADA PARA EVIDENCIA ACADEMICA. NO RESTAURAR. Origen: exportacion real de /conf/config.xml; 2026-11-17 UTC. -->
+  <version>24.6</version>
+  <lastchange />
+  <system>
+    <optimization>normal</optimization>
+    <hostname>kronos-pfsense</hostname>
+    <domain>home.arpa</domain>
+    <group>
+      <name>all</name>
+      <description>All Users</description>
+      <scope>system</scope>
+      <gid>1998</gid>
+      <member>2000</member>
+    </group>
+    <group>
+      <name>admins</name>
+      <description>System Administrators</description>
+      <scope>system</scope>
+      <gid>1999</gid>
+      <member>0</member>
+      <member>2000</member>
+      <priv>page-all</priv>
+    </group>
+    <user>
+      <name>[ELIMINADO_PARA_PUBLICACION]</name>
+      <descr>[ELIMINADO_PARA_PUBLICACION]</descr>
+      <scope>system</scope>
+      <groupname>admins</groupname>
+      <uid>0</uid>
+      <priv>user-shell-access</priv>
+      <authorizedkeys>[ELIMINADO_PARA_PUBLICACION]</authorizedkeys>
+      <bcrypt-hash>[ELIMINADO_PARA_PUBLICACION]</bcrypt-hash>
+    </user>
+    <user>
+      <name>[ELIMINADO_PARA_PUBLICACION]</name>
+      <uid>2000</uid>
+      <scope>system</scope>
+      <descr>[ELIMINADO_PARA_PUBLICACION]</descr>
+      <priv>user-shell-access</priv>
+      <authorizedkeys />
+      <bcrypt-hash>[ELIMINADO_PARA_PUBLICACION]</bcrypt-hash>
+    </user>
+    <nextuid>2001</nextuid>
+    <nextgid>2000</nextgid>
+    <timeservers>2.pfsense.pool.ntp.org</timeservers>
+    <webgui>
+      <protocol>https</protocol>
+      <loginautocomplete />
+      <ssl-certref>6ab34c4219cd6</ssl-certref>
+      <port>8443</port>
+      <noantilockout />
+      <dashboardcolumns>2</dashboardcolumns>
+      <webguicss>pfSense.css</webguicss>
+      <logincss>1e3f75;</logincss>
+      <max_procs>2</max_procs>
+      <roaming>enabled</roaming>
+    </webgui>
+    <disablenatreflection>yes</disablenatreflection>
+    <disablesegmentationoffloading />
+    <disablelargereceiveoffloading />
+    <maximumtableentries>2000000</maximumtableentries>
+    <powerd_ac_mode>hadp</powerd_ac_mode>
+    <powerd_battery_mode>hadp</powerd_battery_mode>
+    <powerd_normal_mode>hadp</powerd_normal_mode>
+    <bogons>
+      <interval>monthly</interval>
+    </bogons>
+    <hn_altq_enable />
+    <earlyshellcmd>/usr/local/bin/php-cgi -f /usr/local/bin/apply_patches.php</earlyshellcmd>
+    <ssh>
+      <enable>enabled</enable>
+    </ssh>
+    <disablechecksumoffloading />
+    <language>en_US</language>
+    <timezone>Chile/Continental</timezone>
+    <dnsserver>1.1.1.1</dnsserver>
+    <dnsallowoverride />
+    <shellcmd>/sbin/ifconfig vtnet1 -vlanhwtag -vlanhwfilter -vlanhwcsum</shellcmd>
+    <shellcmd>/usr/local/sbin/kronos-ips-guard boot-start</shellcmd>
+    <shellcmd>/usr/local/etc/rc.d/kronos_correlator onestart</shellcmd>
+    <serialspeed>115200</serialspeed>
+    <primaryconsole>video</primaryconsole>
+  </system>
+  <interfaces>
+    <wan>
+      <enable />
+      <if>vtnet0</if>
+      <descr>WAN</descr>
+      <ipaddr>10.254.254.2</ipaddr>
+      <dhcphostname />
+      <dhcp6-duid />
+      <dhcp6-ia-pd-len>0</dhcp6-ia-pd-len>
+      <subnet>30</subnet>
+      <media />
+      <mediaopt />
+      <gateway>WANGW</gateway>
+      <mtu>1420</mtu>
+      <mss>1420</mss>
+    </wan>
+    <lan>
+      <descr>MGMT</descr>
+      <if>vtnet1.99</if>
+      <enable />
+      <ipaddr>192.168.99.1</ipaddr>
+      <subnet>24</subnet>
+      <track6-interface>wan</track6-interface>
+      <track6-prefix-id>0</track6-prefix-id>
+      <media />
+      <mediaopt />
+    </lan>
+    <opt1>
+      <if>vtnet1.10</if>
+      <descr>CORP</descr>
+      <enable />
+      <ipaddr>192.168.10.1</ipaddr>
+      <subnet>24</subnet>
+    </opt1>
+    <opt2>
+      <if>vtnet1.20</if>
+      <descr>DMZ</descr>
+      <enable />
+      <ipaddr>192.168.20.1</ipaddr>
+      <subnet>24</subnet>
+    </opt2>
+    <opt3>
+      <if>vtnet1.30</if>
+      <descr>VOIP</descr>
+      <enable />
+      <ipaddr>192.168.30.1</ipaddr>
+      <subnet>24</subnet>
+    </opt3>
+  </interfaces>
+  <staticroutes />
+  <dhcpd>
+    <lan>
+      <range>
+        <from>192.168.99.100</from>
+        <to>192.168.99.199</to>
+      </range>
+      <enable />
+      <gateway>192.168.99.1</gateway>
+      <dnsserver>192.168.99.1</dnsserver>
+      <defaultleasetime>3600</defaultleasetime>
+      <maxleasetime>86400</maxleasetime>
+    </lan>
+    <opt1>
+      <enable />
+      <range>
+        <from>192.168.10.100</from>
+        <to>192.168.10.199</to>
+      </range>
+      <gateway>192.168.10.1</gateway>
+      <dnsserver>192.168.10.1</dnsserver>
+      <defaultleasetime>3600</defaultleasetime>
+      <maxleasetime>86400</maxleasetime>
+    </opt1>
+    <opt2>
+      <enable />
+      <range>
+        <from>192.168.20.100</from>
+        <to>192.168.20.199</to>
+      </range>
+      <gateway>192.168.20.1</gateway>
+      <dnsserver>192.168.20.1</dnsserver>
+      <defaultleasetime>3600</defaultleasetime>
+      <maxleasetime>86400</maxleasetime>
+    </opt2>
+    <opt3>
+      <enable />
+      <range>
+        <from>192.168.30.100</from>
+        <to>192.168.30.199</to>
+      </range>
+      <gateway>192.168.30.1</gateway>
+      <dnsserver>192.168.30.1</dnsserver>
+      <defaultleasetime>3600</defaultleasetime>
+      <maxleasetime>86400</maxleasetime>
+    </opt3>
+  </dhcpd>
+  <dhcpdv6>
+    <lan>
+      <enable />
+      <range>
+        <from>::1000</from>
+        <to>::2000</to>
+      </range>
+      <ramode>assist</ramode>
+      <rapriority>medium</rapriority>
+    </lan>
+  </dhcpdv6>
+  <snmpd>
+    <syslocation />
+    <syscontact />
+    <rocommunity>[ELIMINADO_PARA_PUBLICACION]</rocommunity>
+  </snmpd>
+  <diag>
+    <ipv6nat>
+      <ipaddr />
+    </ipv6nat>
+  </diag>
+  <syslog>
+    <filterdescriptions>1</filterdescriptions>
+    <filter_settings>
+      <cronorder>reverse</cronorder>
+    </filter_settings>
+    <nologlinklocal4 />
+    <nologsnort2c />
+  </syslog>
+  <nat>
+    <outbound>
+      <mode>automatic</mode>
+    </outbound>
+  </nat>
+  <filter>
+    <rule>
+      <type>pass</type>
+      <interface>opt3</interface>
+      <ipprotocol>inet</ipprotocol>
+      <protocol>tcp</protocol>
+      <source>
+        <address>192.168.30.50</address>
+      </source>
+      <destination>
+        <address>192.168.99.1</address>
+        <port>22</port>
+      </destination>
+      <descr>KRONOS Voice restricted pfctl SSH</descr>
+      <tracker>1794823963</tracker>
+      <statetype>keep state</statetype>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1794252137</tracker>
+      <type>pass</type>
+      <interface>opt3</interface>
+      <ipprotocol>inet</ipprotocol>
+      <protocol>tcp</protocol>
+      <source>
+        <address>192.168.30.50</address>
+      </source>
+      <destination>
+        <address>192.168.99.1</address>
+        <port>8443</port>
+      </destination>
+      <descr>KRONOS SOAR Voice Agent unblock API access</descr>
+      <created>
+        <time>1794252137</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </created>
+      <updated>
+        <time>1794252137</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <type>pass</type>
+      <interface>lan,opt1,opt2,opt3</interface>
+      <ipprotocol>inet</ipprotocol>
+      <protocol>udp</protocol>
+      <floating>yes</floating>
+      <quick>yes</quick>
+      <direction>in</direction>
+      <source>
+        <any />
+        <port>68</port>
+      </source>
+      <destination>
+        <address>255.255.255.255</address>
+        <port>67</port>
+      </destination>
+      <descr>KRONOS IPS GUARD DHCP control</descr>
+      <tracker>1790950476</tracker>
+      <created>
+        <time>1790950475</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </created>
+      <updated>
+        <time>1790950475</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <protocol>tcp</protocol>
+      <floating>yes</floating>
+      <quick>yes</quick>
+      <direction>in</direction>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <address>KRONOS_GUARD_PRIVATE</address>
+        <not />
+        <port>443</port>
+      </destination>
+      <descr>KRONOS IPS GUARD MGMT Tailscale HTTPS</descr>
+      <tracker>1790950477</tracker>
+      <created>
+        <time>1790950475</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </created>
+      <updated>
+        <time>1790950475</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <protocol>udp</protocol>
+      <floating>yes</floating>
+      <quick>yes</quick>
+      <direction>in</direction>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <address>KRONOS_GUARD_PRIVATE</address>
+        <not />
+        <port>KRONOS_TAILSCALE_UDP</port>
+      </destination>
+      <descr>KRONOS IPS GUARD MGMT Tailscale UDP</descr>
+      <tracker>1790950478</tracker>
+      <created>
+        <time>1790950475</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </created>
+      <updated>
+        <time>1790950475</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <type>block</type>
+      <interface>wan,lan,opt1,opt2,opt3</interface>
+      <ipprotocol>inet</ipprotocol>
+      <protocol>any</protocol>
+      <floating>yes</floating>
+      <quick>yes</quick>
+      <direction>in</direction>
+      <source>
+        <address>KRONOS_IPS_GUARD</address>
+      </source>
+      <destination>
+        <network>(self)</network>
+        <not />
+      </destination>
+      <descr>KRONOS IPS GUARD transit until both IPS ready</descr>
+      <tracker>1790950479</tracker>
+      <created>
+        <time>1790950475</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </created>
+      <updated>
+        <time>1790950475</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+      <log />
+    </rule>
+    <rule>
+      <type>block</type>
+      <interface>wan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <protocol>tcp</protocol>
+      <floating>yes</floating>
+      <quick>yes</quick>
+      <direction>in</direction>
+      <source>
+        <address>KRONOS_IPS_GUARD</address>
+      </source>
+      <destination>
+        <network>(self)</network>
+        <port>KRONOS_PUBLIC_WEB</port>
+      </destination>
+      <descr>KRONOS IPS GUARD WAN web until both IPS ready</descr>
+      <tracker>1790950480</tracker>
+      <created>
+        <time>1790950475</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </created>
+      <updated>
+        <time>1790950475</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+      <log />
+    </rule>
+    <rule>
+      <type>block</type>
+      <interface>wan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <source>
+        <address>pfB_Europe_v4</address>
+      </source>
+      <destination>
+        <any />
+      </destination>
+      <log />
+      <descr>KRONOS A4 GeoIP RU WAN</descr>
+      <tracker>1790896396</tracker>
+    </rule>
+    <rule>
+      <type>block</type>
+      <interface>wan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <source>
+        <address>pfB_Asia_v4</address>
+      </source>
+      <destination>
+        <any />
+      </destination>
+      <log />
+      <descr>KRONOS A4 GeoIP KP WAN</descr>
+      <tracker>1790896395</tracker>
+    </rule>
+    <rule>
+      <type>block</type>
+      <interface>wan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <source>
+        <address>pfB_KRONOS_DROP_v4</address>
+      </source>
+      <destination>
+        <any />
+      </destination>
+      <log />
+      <descr>KRONOS A4 Spamhaus DROP WAN</descr>
+      <tracker>1790895585</tracker>
+    </rule>
+    <rule>
+      <type>block</type>
+      <interface>wan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <source>
+        <address>pfB_KRONOS_FIREHOL_v4</address>
+      </source>
+      <destination>
+        <any />
+      </destination>
+      <log />
+      <descr>KRONOS A4 FireHOL WAN</descr>
+      <tracker>1790952918</tracker>
+      <created>
+        <time>1790952918</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </created>
+      <updated>
+        <time>1790952918</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001001</tracker>
+      <type>pass</type>
+      <interface>wan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>icmp</protocol>
+      <icmptype>any</icmptype>
+      <source>
+        <address>10.254.254.1</address>
+      </source>
+      <destination>
+        <address>10.254.254.2</address>
+      </destination>
+      <descr>KRONOS BASE Borde WAN Diagnostico de ICMP</descr>
+      <updated>
+        <time>1790661170</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1792293725</tracker>
+      <type>pass</type>
+      <interface>wan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>tcp</protocol>
+      <source>
+        <any />
+      </source>
+      <destination>
+        <network>wanip</network>
+        <port>WEB_PORTS</port>
+      </destination>
+      <log />
+      <descr>KRONOS A5 HAProxy WEB (Public Edge &amp;amp; Internet)</descr>
+      <updated>
+        <time>1792293726</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+      <created>
+        <time>1792293726</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </created>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001003</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>tcp/udp</protocol>
+      <source>
+        <network>lan</network>
+      </source>
+      <destination>
+        <address>192.168.99.1</address>
+        <port>53</port>
+      </destination>
+      <descr>KRONOS BASE Permite DNS TCP/UDP</descr>
+      <updated>
+        <time>1790661545</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001004</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>udp</protocol>
+      <source>
+        <network>lan</network>
+      </source>
+      <destination>
+        <address>192.168.99.1</address>
+        <port>123</port>
+      </destination>
+      <descr>KRONOS BASE Permite NTP a LAN</descr>
+      <updated>
+        <time>1790661570</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001005</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>icmp</protocol>
+      <icmptype>any</icmptype>
+      <source>
+        <network>lan</network>
+      </source>
+      <destination>
+        <address>192.168.99.1</address>
+      </destination>
+      <descr>KRONOS BASE Diagnostico al Gateway de LAN/ICMP</descr>
+      <updated>
+        <time>1790661705</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001006</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>tcp</protocol>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <address>192.168.99.1</address>
+        <port>22</port>
+      </destination>
+      <descr>KRONOS BASE MGMT administrar pfSense TCP 22</descr>
+      <updated>
+        <time>1790664053</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001007</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>tcp</protocol>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <address>192.168.99.1</address>
+        <port>8443</port>
+      </destination>
+      <descr>KRONOS BASE MGMT Administracion pfSense TCP 8443</descr>
+      <updated>
+        <time>1790663778</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001008</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>icmp</protocol>
+      <icmptype>any</icmptype>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <address>192.168.99.1</address>
+      </destination>
+      <descr>KRONOS BASE MGMT Diagnostico Gateway</descr>
+      <updated>
+        <time>1790663825</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001009</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>tcp</protocol>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <address>192.168.10.50</address>
+        <port>22</port>
+      </destination>
+      <descr>KRONOS BASE MGMT SSH 192.168.10.50 (Cliente test)</descr>
+      <updated>
+        <time>1790663943</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001010</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>icmp</protocol>
+      <icmptype>any</icmptype>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <address>192.168.10.50</address>
+      </destination>
+      <descr>KRONOS BASE MGMT ping 192.168.10.50 (Cliente Test)</descr>
+      <updated>
+        <time>1790663954</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001011</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>tcp</protocol>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <address>192.168.20.50</address>
+        <port>22</port>
+      </destination>
+      <descr>KRONOS BASE MGMT SSH 192.168.20.50 (DVWA)</descr>
+      <updated>
+        <time>1790664008</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001012</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>icmp</protocol>
+      <icmptype>any</icmptype>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <address>192.168.20.50</address>
+      </destination>
+      <descr>KRONOS BASE MGMT ping 192.168.20.50 (DVWA)</descr>
+      <updated>
+        <time>1790663999</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001013</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>tcp</protocol>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <address>192.168.30.50</address>
+        <port>22</port>
+      </destination>
+      <descr>KRONOS BASE MGMT SSH 192.168.30.50 (Host Asterisk)</descr>
+      <updated>
+        <time>1790664029</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001014</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>icmp</protocol>
+      <icmptype>any</icmptype>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <address>192.168.30.50</address>
+      </destination>
+      <descr>KRONOS BASE MGMT ping 192.168.30.50 (Host Asterisk)</descr>
+      <updated>
+        <time>1790664041</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1792981179</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>tcp/udp</protocol>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <address>192.168.30.50</address>
+        <port>5060</port>
+      </destination>
+      <descr>KRONOS BASE MGMT SIP 5060 (Asterisk PBX)</descr>
+      <updated>
+        <time>1792981139</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1792981188</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>tcp</protocol>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <address>192.168.30.50</address>
+        <port>5038</port>
+      </destination>
+      <descr>KRONOS BASE MGMT AMI 5038 (Asterisk PBX)</descr>
+      <updated>
+        <time>1792981139</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1792981186</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>udp</protocol>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <address>192.168.30.50</address>
+        <port>10000-10100</port>
+      </destination>
+      <descr>KRONOS BASE MGMT RTP 10000-10100 (Asterisk PBX)</descr>
+      <updated>
+        <time>1792981139</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001015</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>tcp</protocol>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <address>192.168.20.50</address>
+        <port>80</port>
+      </destination>
+      <descr>KRONOS BASE MGMT DVWA Conexion HTTP (Test health)</descr>
+      <updated>
+        <time>1790664093</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <type>pass</type>
+      <ipprotocol>inet</ipprotocol>
+      <interface>lan</interface>
+      <tracker>1790001999</tracker>
+      <descr>KRONOS TEAM MGMT SSH Edge transit</descr>
+      <protocol>tcp</protocol>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <address>10.254.254.1</address>
+        <port>22</port>
+      </destination>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001016</tracker>
+      <type>block</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>lan</network>
+      </source>
+      <destination>
+        <address>10.0.0.0/8</address>
+      </destination>
+      <log />
+      <descr>KRONOS BASE Blockea 10.0.0.0/8 hacia lan</descr>
+      <updated>
+        <time>1790661326</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001017</tracker>
+      <type>block</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>lan</network>
+      </source>
+      <destination>
+        <address>172.16.0.0/12</address>
+      </destination>
+      <log />
+      <descr>KRONOS BASE Blockea 172.16.0.0/12 hacia lan</descr>
+      <updated>
+        <time>1790661339</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001018</tracker>
+      <type>block</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>lan</network>
+      </source>
+      <destination>
+        <address>192.168.0.0/16</address>
+      </destination>
+      <log />
+      <descr>KRONOS BASE Blockea 192.168.0.0/16 hacia lan</descr>
+      <updated>
+        <time>1790661354</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001019</tracker>
+      <type>block</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>lan</network>
+      </source>
+      <destination>
+        <address>100.64.0.0/10</address>
+      </destination>
+      <log />
+      <descr>KRONOS BASE block private 100.64.0.0/10 on lan</descr>
+      <updated>
+        <time>1790661373</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001020</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>tcp</protocol>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <any />
+        <port>80</port>
+      </destination>
+      <descr>KRONOS BASE MGMT Salida TCP 80</descr>
+      <updated>
+        <time>1790664132</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001021</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>tcp</protocol>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <any />
+        <port>443</port>
+      </destination>
+      <descr>KRONOS BASE MGMT Salida TCP 443</descr>
+      <updated>
+        <time>1790664150</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001022</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>udp</protocol>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <any />
+        <port>41641</port>
+      </destination>
+      <descr>KRONOS BASE MGMT Tailscale UDP 41641</descr>
+      <updated>
+        <time>1790664168</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001023</tracker>
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>udp</protocol>
+      <source>
+        <address>192.168.99.10</address>
+      </source>
+      <destination>
+        <any />
+        <port>3478</port>
+      </destination>
+      <descr>KRONOS BASE MGMT Tailscale UDP 3478</descr>
+      <updated>
+        <time>1790664178</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001024</tracker>
+      <type>pass</type>
+      <interface>opt1</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>tcp</protocol>
+      <source>
+        <network>opt1</network>
+      </source>
+      <destination>
+        <address>192.168.10.1</address>
+        <port>53</port>
+      </destination>
+      <descr>KRONOS BASE CORP DNS /TCP</descr>
+      <updated>
+        <time>1790665037</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001025</tracker>
+      <type>pass</type>
+      <interface>opt1</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>udp</protocol>
+      <source>
+        <network>opt1</network>
+      </source>
+      <destination>
+        <address>192.168.10.1</address>
+        <port>53</port>
+      </destination>
+      <descr>KRONOS BASE CORP DNS /UDP</descr>
+      <updated>
+        <time>1790665057</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001026</tracker>
+      <type>pass</type>
+      <interface>opt1</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>udp</protocol>
+      <source>
+        <network>opt1</network>
+      </source>
+      <destination>
+        <address>192.168.10.1</address>
+        <port>123</port>
+      </destination>
+      <descr>KRONOS BASE CORP NTP</descr>
+      <updated>
+        <time>1790665068</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001027</tracker>
+      <type>pass</type>
+      <interface>opt1</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>icmp</protocol>
+      <icmptype>any</icmptype>
+      <source>
+        <network>opt1</network>
+      </source>
+      <destination>
+        <address>192.168.10.1</address>
+      </destination>
+      <descr>KRONOS BASE CORP Diagnostico de Gateway /ICMP</descr>
+      <updated>
+        <time>1790665108</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001028</tracker>
+      <type>block</type>
+      <interface>opt1</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>opt1</network>
+      </source>
+      <destination>
+        <address>10.0.0.0/8</address>
+      </destination>
+      <log />
+      <descr>KRONOS BASE Blockea 10.0.0.0/8 on opt1</descr>
+      <updated>
+        <time>1790665123</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001029</tracker>
+      <type>block</type>
+      <interface>opt1</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>opt1</network>
+      </source>
+      <destination>
+        <address>172.16.0.0/12</address>
+      </destination>
+      <log />
+      <descr>KRONOS BASE Blockea 172.16.0.0/12 on opt1</descr>
+      <updated>
+        <time>1790665133</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001030</tracker>
+      <type>block</type>
+      <interface>opt1</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>opt1</network>
+      </source>
+      <destination>
+        <address>192.168.0.0/16</address>
+      </destination>
+      <log />
+      <descr>KRONOS BASE Blockea 192.168.0.0/16 on opt1</descr>
+      <updated>
+        <time>1790665152</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001031</tracker>
+      <type>block</type>
+      <interface>opt1</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>opt1</network>
+      </source>
+      <destination>
+        <address>100.64.0.0/10</address>
+      </destination>
+      <log />
+      <descr>KRONOS BASE Blockea 100.64.0.0/10 CORP</descr>
+      <updated>
+        <time>1790665169</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001032</tracker>
+      <type>pass</type>
+      <interface>opt1</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>opt1</network>
+      </source>
+      <destination>
+        <any />
+      </destination>
+      <descr>KRONOS BASE CORP Salida Internet</descr>
+      <updated>
+        <time>1790665004</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001033</tracker>
+      <type>pass</type>
+      <interface>opt2</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>tcp/udp</protocol>
+      <source>
+        <network>opt2</network>
+      </source>
+      <destination>
+        <address>192.168.20.1</address>
+        <port>53</port>
+      </destination>
+      <descr>KRONOS BASE DMZ DNS /TCP &amp;amp;amp; UDP</descr>
+      <updated>
+        <time>1790703392</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001035</tracker>
+      <type>pass</type>
+      <interface>opt2</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>udp</protocol>
+      <source>
+        <network>opt2</network>
+      </source>
+      <destination>
+        <address>192.168.20.1</address>
+        <port>123</port>
+      </destination>
+      <descr>KRONOS BASE DMZ /NTP</descr>
+      <updated>
+        <time>1790703409</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001036</tracker>
+      <type>pass</type>
+      <interface>opt2</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>icmp</protocol>
+      <icmptype>any</icmptype>
+      <source>
+        <network>opt2</network>
+      </source>
+      <destination>
+        <address>192.168.20.1</address>
+      </destination>
+      <descr>KRONOS BASE DMZ Diagnostico Gateway ICMP</descr>
+      <updated>
+        <time>1790703428</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001037</tracker>
+      <type>block</type>
+      <interface>opt2</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>opt2</network>
+      </source>
+      <destination>
+        <address>10.0.0.0/8</address>
+      </destination>
+      <log />
+      <descr>KRONOS BASE Blockea 10.0.0.0/8 DMZ</descr>
+      <updated>
+        <time>1790703447</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001038</tracker>
+      <type>block</type>
+      <interface>opt2</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>opt2</network>
+      </source>
+      <destination>
+        <address>172.16.0.0/12</address>
+      </destination>
+      <log />
+      <descr>KRONOS BASE Blockea 172.16.0.0/12 DMZ</descr>
+      <updated>
+        <time>1790703458</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001039</tracker>
+      <type>block</type>
+      <interface>opt2</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>opt2</network>
+      </source>
+      <destination>
+        <address>192.168.0.0/16</address>
+      </destination>
+      <log />
+      <descr>KRONOS BASE Blockea 192.168.0.0/16 DMZ</descr>
+      <updated>
+        <time>1790703472</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001040</tracker>
+      <type>block</type>
+      <interface>opt2</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>opt2</network>
+      </source>
+      <destination>
+        <address>100.64.0.0/10</address>
+      </destination>
+      <log />
+      <descr>KRONOS BASE Blockea 100.64.0.0/10 DMZ</descr>
+      <updated>
+        <time>1790703484</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <type>pass</type>
+      <ipprotocol>inet</ipprotocol>
+      <interface>opt2</interface>
+      <tracker>1790001041</tracker>
+      <descr>KRONOS BASE DMZ public TCP 80</descr>
+      <source>
+        <network>opt2</network>
+      </source>
+      <destination>
+        <any />
+        <port>80</port>
+      </destination>
+      <protocol>tcp</protocol>
+    </rule>
+    <rule>
+      <type>pass</type>
+      <ipprotocol>inet</ipprotocol>
+      <interface>opt2</interface>
+      <tracker>1790001042</tracker>
+      <descr>KRONOS BASE DMZ public TCP 443</descr>
+      <source>
+        <network>opt2</network>
+      </source>
+      <destination>
+        <any />
+        <port>443</port>
+      </destination>
+      <protocol>tcp</protocol>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001043</tracker>
+      <type>pass</type>
+      <interface>opt3</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>tcp</protocol>
+      <source>
+        <network>opt3</network>
+      </source>
+      <destination>
+        <address>192.168.30.1</address>
+        <port>53</port>
+      </destination>
+      <descr>KRONOS BASE VoIP DNS /TCP</descr>
+      <updated>
+        <time>1790665567</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001044</tracker>
+      <type>pass</type>
+      <interface>opt3</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>udp</protocol>
+      <source>
+        <network>opt3</network>
+      </source>
+      <destination>
+        <address>192.168.30.1</address>
+        <port>53</port>
+      </destination>
+      <descr>KRONOS BASE VoIP DNS /UDP</descr>
+      <updated>
+        <time>1790665578</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001045</tracker>
+      <type>pass</type>
+      <interface>opt3</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>udp</protocol>
+      <source>
+        <network>opt3</network>
+      </source>
+      <destination>
+        <address>192.168.30.1</address>
+        <port>123</port>
+      </destination>
+      <descr>KRONOS BASE VoIP /NTP</descr>
+      <updated>
+        <time>1790665592</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001046</tracker>
+      <type>pass</type>
+      <interface>opt3</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>icmp</protocol>
+      <icmptype>any</icmptype>
+      <source>
+        <network>opt3</network>
+      </source>
+      <destination>
+        <address>192.168.30.1</address>
+      </destination>
+      <descr>KRONOS BASE VoIP Diagnostico de Gateway ICMP</descr>
+      <updated>
+        <time>1790665640</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1792981172</tracker>
+      <type>pass</type>
+      <interface>opt3</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>tcp/udp</protocol>
+      <source>
+        <address>192.168.30.50</address>
+      </source>
+      <destination>
+        <address>192.168.99.10</address>
+        <port>5060</port>
+      </destination>
+      <descr>KRONOS BASE VOIP SIP to MGMT 5060</descr>
+      <updated>
+        <time>1792981139</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1792981188</tracker>
+      <type>pass</type>
+      <interface>opt3</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <protocol>udp</protocol>
+      <source>
+        <address>192.168.30.50</address>
+      </source>
+      <destination>
+        <address>192.168.99.10</address>
+      </destination>
+      <descr>KRONOS BASE VOIP all UDP to MGMT (SIP &amp;amp; RTP dynamic)</descr>
+      <updated>
+        <time>1792981139</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001047</tracker>
+      <type>block</type>
+      <interface>opt3</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>opt3</network>
+      </source>
+      <destination>
+        <address>10.0.0.0/8</address>
+      </destination>
+      <log />
+      <descr>KRONOS BASE Blockea 10.0.0.0/8 VoIP</descr>
+      <updated>
+        <time>1790665622</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001048</tracker>
+      <type>block</type>
+      <interface>opt3</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>opt3</network>
+      </source>
+      <destination>
+        <address>172.16.0.0/12</address>
+      </destination>
+      <log />
+      <descr>KRONOS BASE Blockea 172.16.0.0/12 VoIP</descr>
+      <updated>
+        <time>1790665634</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001049</tracker>
+      <type>block</type>
+      <interface>opt3</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>opt3</network>
+      </source>
+      <destination>
+        <address>192.168.0.0/16</address>
+      </destination>
+      <log />
+      <descr>KRONOS BASE Blockea 192.168.0.0/16 VoIP</descr>
+      <updated>
+        <time>1790665655</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <id />
+      <tracker>1790001050</tracker>
+      <type>block</type>
+      <interface>opt3</interface>
+      <ipprotocol>inet</ipprotocol>
+      <tag />
+      <tagged />
+      <max />
+      <max-src-nodes />
+      <max-src-conn />
+      <max-src-states />
+      <statetimeout />
+      <statepolicy />
+      <statetype>keep state</statetype>
+      <os />
+      <source>
+        <network>opt3</network>
+      </source>
+      <destination>
+        <address>100.64.0.0/10</address>
+      </destination>
+      <log />
+      <descr>KRONOS BASE Blockea 100.64.0.0/10 VoIP</descr>
+      <updated>
+        <time>1790665672</time>
+        <username>[ELIMINADO_PARA_PUBLICACION]</username>
+      </updated>
+    </rule>
+    <rule>
+      <type>pass</type>
+      <ipprotocol>inet</ipprotocol>
+      <interface>opt3</interface>
+      <tracker>1790001051</tracker>
+      <descr>KRONOS BASE VOIP public TCP 80</descr>
+      <source>
+        <network>opt3</network>
+      </source>
+      <destination>
+        <any />
+        <port>80</port>
+      </destination>
+      <protocol>tcp</protocol>
+    </rule>
+    <rule>
+      <type>pass</type>
+      <ipprotocol>inet</ipprotocol>
+      <interface>opt3</interface>
+      <tracker>1790001052</tracker>
+      <descr>KRONOS BASE VOIP public TCP 443</descr>
+      <source>
+        <network>opt3</network>
+      </source>
+      <destination>
+        <any />
+        <port>443</port>
+      </destination>
+      <protocol>tcp</protocol>
+    </rule>
+  </filter>
+  <shaper />
+  <ipsec />
+  <aliases>
+    <alias>
+      <name>pfB_Asia_v4</name>
+      <url>https://127.0.0.1:8443/pfblockerng/pfblockerng.php?pfb=pfB_Asia_v4</url>
+      <updatefreq>32</updatefreq>
+      <address />
+      <descr>pfBlockerNG  GeoIP Alias [ KP, ]</descr>
+      <type>urltable</type>
+      <detail>DO NOT EDIT THIS ALIAS</detail>
+    </alias>
+    <alias>
+      <name>pfB_Europe_v4</name>
+      <url>https://127.0.0.1:8443/pfblockerng/pfblockerng.php?pfb=pfB_Europe_v4</url>
+      <updatefreq>32</updatefreq>
+      <address />
+      <descr>pfBlockerNG  GeoIP Alias [ RU, ]</descr>
+      <type>urltable</type>
+      <detail>DO NOT EDIT THIS ALIAS</detail>
+    </alias>
+    <alias>
+      <name>pfB_KRONOS_DROP_v4</name>
+      <url>https://127.0.0.1:8443/pfblockerng/pfblockerng.php?pfb=pfB_KRONOS_DROP_v4</url>
+      <updatefreq>32</updatefreq>
+      <address />
+      <descr>pfBlockerNG  Alias [s] [ KRONOS_SPAMHAUS_DROP_v4, ]</descr>
+      <type>urltable</type>
+      <detail>DO NOT EDIT THIS ALIAS</detail>
+    </alias>
+    <alias>
+      <name>pfB_KRONOS_FIREHOL_v4</name>
+      <url>https://127.0.0.1:8443/pfblockerng/pfblockerng.php?pfb=pfB_KRONOS_FIREHOL_v4</url>
+      <updatefreq>32</updatefreq>
+      <address />
+      <descr>pfBlockerNG  Alias [s] [ KRONOS_FIREHOL_L1_v4, ]</descr>
+      <type>urltable</type>
+      <detail>DO NOT EDIT THIS ALIAS</detail>
+    </alias>
+    <alias>
+      <name>KRONOS_IPS_GUARD</name>
+      <type>network</type>
+      <address>0.0.0.0/0</address>
+      <descr>KRONOS readiness guard - closed persistent default</descr>
+      <detail />
+    </alias>
+    <alias>
+      <name>KRONOS_GUARD_PRIVATE</name>
+      <type>network</type>
+      <address>10.0.0.0/8 172.16.0.0/12 192.168.0.0/16</address>
+      <descr>KRONOS readiness guard - control plane selector</descr>
+      <detail />
+    </alias>
+    <alias>
+      <name>KRONOS_PUBLIC_WEB</name>
+      <type>port</type>
+      <address>80 443</address>
+      <descr>KRONOS readiness guard - control plane selector</descr>
+      <detail />
+    </alias>
+    <alias>
+      <name>KRONOS_TAILSCALE_UDP</name>
+      <type>port</type>
+      <address>3478 41641</address>
+      <descr>KRONOS readiness guard - Tailscale ports</descr>
+      <detail />
+    </alias>
+    <alias>
+      <name>WEB_PORTS</name>
+      <type>port</type>
+      <address>80 443</address>
+      <descr>HTTP y HTTPS para HAProxy A5</descr>
+      <detail>Entry added Sun, 18 Oct 2026 00:18:32 -0300||Entry added Sun, 18 Oct 2026 00:18:32 -0300</detail>
+    </alias>
+  </aliases>
+  <proxyarp />
+  <cron>
+    <item>
+      <minute>*/1</minute>
+      <hour>*</hour>
+      <mday>*</mday>
+      <month>*</month>
+      <wday>*</wday>
+      <who>root</who>
+      <command>/usr/sbin/newsyslog</command>
+    </item>
+    <item>
+      <minute>1</minute>
+      <hour>3</hour>
+      <mday>*</mday>
+      <month>*</month>
+      <wday>*</wday>
+      <who>root</who>
+      <command>/etc/rc.periodic daily</command>
+    </item>
+    <item>
+      <minute>15</minute>
+      <hour>4</hour>
+      <mday>*</mday>
+      <month>*</month>
+      <wday>6</wday>
+      <who>root</who>
+      <command>/etc/rc.periodic weekly</command>
+    </item>
+    <item>
+      <minute>30</minute>
+      <hour>5</hour>
+      <mday>1</mday>
+      <month>*</month>
+      <wday>*</wday>
+      <who>root</who>
+      <command>/etc/rc.periodic monthly</command>
+    </item>
+    <item>
+      <minute>1,31</minute>
+      <hour>0-5</hour>
+      <mday>*</mday>
+      <month>*</month>
+      <wday>*</wday>
+      <who>root</who>
+      <command>/usr/bin/nice -n20 adjkerntz -a</command>
+    </item>
+    <item>
+      <minute>1</minute>
+      <hour>3</hour>
+      <mday>1</mday>
+      <month>*</month>
+      <wday>*</wday>
+      <who>root</who>
+      <command>/usr/bin/nice -n20 /etc/rc.update_bogons.sh</command>
+    </item>
+    <item>
+      <minute>1</minute>
+      <hour>1</hour>
+      <mday>*</mday>
+      <month>*</month>
+      <wday>*</wday>
+      <who>root</who>
+      <command>/usr/bin/nice -n20 /etc/rc.dyndns.update</command>
+    </item>
+    <item>
+      <minute>*/60</minute>
+      <hour>*</hour>
+      <mday>*</mday>
+      <month>*</month>
+      <wday>*</wday>
+      <who>root</who>
+      <command>/usr/bin/nice -n20 /usr/local/sbin/expiretable -v -t 3600 virusprot</command>
+    </item>
+    <item>
+      <minute>30</minute>
+      <hour>12</hour>
+      <mday>*</mday>
+      <month>*</month>
+      <wday>*</wday>
+      <who>root</who>
+      <command>/usr/bin/nice -n20 /etc/rc.update_urltables</command>
+    </item>
+    <item>
+      <minute>1</minute>
+      <hour>0</hour>
+      <mday>*</mday>
+      <month>*</month>
+      <wday>*</wday>
+      <who>root</who>
+      <command>/usr/bin/nice -n20 /etc/rc.update_pkg_metadata</command>
+    </item>
+    <item>
+      <minute>*/5</minute>
+      <hour>*</hour>
+      <mday>*</mday>
+      <month>*</month>
+      <wday>*</wday>
+      <who>root</who>
+      <command>/usr/bin/nice -n20 /usr/local/bin/php-cgi -f /usr/local/pkg/suricata/suricata_check_cron_misc.inc</command>
+    </item>
+    <item>
+      <minute>30</minute>
+      <hour>3</hour>
+      <mday>*/1</mday>
+      <month>*</month>
+      <wday>*</wday>
+      <who>root</who>
+      <command>/usr/bin/nice -n20 /usr/local/bin/php-cgi -f /usr/local/pkg/suricata/suricata_check_for_rule_updates.php</command>
+    </item>
+    <item>
+      <minute />
+      <hour />
+      <mday />
+      <month />
+      <wday />
+      <who>root</who>
+      <command>/usr/bin/nice -n20 /sbin/pfctl -q -t snort2c -T expire </command>
+    </item>
+    <item>
+      <minute>0</minute>
+      <hour>0</hour>
+      <mday>*</mday>
+      <month>*</month>
+      <wday>*</wday>
+      <who>root</who>
+      <command>/usr/local/bin/php /usr/local/www/pfblockerng/pfblockerng.php cron &gt;&gt; /var/log/pfblockerng/pfblockerng.log 2&gt;&amp;1</command>
+    </item>
+    <item>
+      <minute>0</minute>
+      <hour>19</hour>
+      <mday>*</mday>
+      <month>*</month>
+      <wday>*</wday>
+      <who>root</who>
+      <command>/usr/local/bin/php /usr/local/www/pfblockerng/pfblockerng.php dcc &gt;&gt; /var/log/pfblockerng/extras.log 2&gt;&amp;1</command>
+    </item>
+  </cron>
+  <wol />
+  <rrd>
+    <enable />
+    <category>left=system-processor&amp;right=&amp;resolution=300&amp;timePeriod=-1d&amp;startDate=&amp;endDate=&amp;startTime=0&amp;endTime=0&amp;graphtype=line&amp;invert=true&amp;refresh-interval=0</category>
+  </rrd>
+  <widgets>
+    <sequence>system_information:col1:open:0,disks:col1:open:0,netgate_services_and_support:col2:open:0,interfaces:col2:open:0,pfblockerng:col2:open:0</sequence>
+    <period>10</period>
+  </widgets>
+  <openvpn />
+  <dnshaper />
+  <unbound>
+    <enable />
+    <dnssec />
+    <active_interface />
+    <outgoing_interface />
+    <custom_options />
+    <hideidentity />
+    <hideversion />
+    <dnssecstripped />
+    <qname-minimisation />
+  </unbound>
+  <vlans>
+    <vlan>
+      <if>vtnet1</if>
+      <tag>99</tag>
+      <pcp>0</pcp>
+      <descr>MGMT</descr>
+      <vlanif>vtnet1.99</vlanif>
+    </vlan>
+    <vlan>
+      <if>vtnet1</if>
+      <tag>10</tag>
+      <pcp>0</pcp>
+      <descr>CORP</descr>
+      <vlanif>vtnet1.10</vlanif>
+    </vlan>
+    <vlan>
+      <if>vtnet1</if>
+      <tag>20</tag>
+      <pcp>0</pcp>
+      <descr>DMZ</descr>
+      <vlanif>vtnet1.20</vlanif>
+    </vlan>
+    <vlan>
+      <if>vtnet1</if>
+      <tag>30</tag>
+      <pcp>0</pcp>
+      <descr>VOIP</descr>
+      <vlanif>vtnet1.30</vlanif>
+    </vlan>
+  </vlans>
+  <qinqs />
+  <gateways>
+    <gateway_item>
+      <interface>wan</interface>
+      <gateway>10.254.254.1</gateway>
+      <ipprotocol>inet</ipprotocol>
+      <name>WANGW</name>
+      <descr />
+      <weight />
+      <gw_down_kill_states />
+    </gateway_item>
+    <defaultgw4>WANGW</defaultgw4>
+  </gateways>
+  <revision>
+    <time>1794827506</time>
+    <description>(system): KRONOS: rotate exposed shared operator password</description>
+    <username>[ELIMINADO_PARA_PUBLICACION]</username>
+  </revision>
+  <cert>
+    <refid>6ab34c4219cd6</refid>
+    <descr>GUI default (6ab34c4219cd6)</descr>
+    <autorenew>enabled</autorenew>
+    <type>server</type>
+    <crt>[ELIMINADO_PARA_PUBLICACION]</crt>
+    <prv>[ELIMINADO_PARA_PUBLICACION]</prv>
+  </cert>
+  <cert>
+    <refid>6ad42c6718369</refid>
+    <descr>kronos-dvwa</descr>
+    <autorenew>disabled</autorenew>
+    <type>server</type>
+    <caref>6ad42adfc10f3</caref>
+    <crt>[ELIMINADO_PARA_PUBLICACION]</crt>
+    <prv>[ELIMINADO_PARA_PUBLICACION]</prv>
+  </cert>
+  <installedpackages>
+    <package>
+      <name>System Patches</name>
+      <internal_name>System_Patches</internal_name>
+      <descr>A package to apply and maintain custom system patches.</descr>
+      <version>2.3.5_1</version>
+      <configurationfile>systempatches.xml</configurationfile>
+      <include_file>/usr/local/pkg/patches.inc</include_file>
+    </package>
+    <package>
+      <name>suricata</name>
+      <website>http://suricata-ids.org/</website>
+      <descr>High Performance Network IDS, IPS and Security Monitoring engine by OISF.</descr>
+      <version>7.0.9</version>
+      <configurationfile>suricata.xml</configurationfile>
+      <include_file>/usr/local/pkg/suricata/suricata.inc</include_file>
+      <plugins>
+        <item>
+          <type>plugin_xmlrpc_send</type>
+        </item>
+        <item>
+          <type>plugin_xmlrpc_recv</type>
+        </item>
+      </plugins>
+      <ramdisk_dir_names>suricata</ramdisk_dir_names>
+    </package>
+    <package>
+      <name>pfBlockerNG-devel</name>
+      <descr>pfBlockerNG-devel is the Next Generation of pfBlockerNG.&amp;amp;lt;br /&amp;amp;gt;Manage IPv4/v6 List Sources into &amp;amp;apos;Deny, Permit or Match&amp;amp;apos; formats.&amp;amp;lt;br /&amp;amp;gt;GeoIP database by MaxMind Inc. (GeoLite2 Free version).&amp;amp;lt;br /&amp;amp;gt;De-Duplication, Suppression, and Reputation enhancements.&amp;amp;lt;br /&amp;amp;gt;Provision to download from diverse List formats.&amp;amp;lt;br /&amp;amp;gt;Advanced Integration for Proofpoint ET IQRisk IP Reputation Threat Sources.&amp;amp;lt;br /&amp;amp;gt;Domain Name (DNSBL) blocking via Unbound DNS Resolver.</descr>
+      <pkginfolink>https://docs.netgate.com/pfsense/en/latest/packages/pfblocker.html</pkginfolink>
+      <version>3.2.17_1</version>
+      <configurationfile>pfblockerng.xml</configurationfile>
+      <include_file>/usr/local/pkg/pfblockerng/pfblockerng.inc</include_file>
+      <plugins>
+        <item>
+          <type>plugin_xmlrpc_send</type>
+        </item>
+        <item>
+          <type>plugin_xmlrpc_recv</type>
+        </item>
+      </plugins>
+      <ramdisk_dir_names>pfblockerng</ramdisk_dir_names>
+    </package>
+    <package>
+      <name>haproxy</name>
+      <pkginfolink>https://docs.netgate.com/pfsense/en/latest/packages/haproxy.html</pkginfolink>
+      <descr>The Reliable, High Performance TCP/HTTP(S) Load Balancer.&amp;amp;lt;br /&amp;amp;gt;This package implements the TCP, HTTP and HTTPS balancing features from haproxy.&amp;amp;lt;br /&amp;amp;gt;Supports ACLs for smart backend switching.</descr>
+      <website>http://haproxy.1wt.eu/</website>
+      <version>0.65.7</version>
+      <configurationfile>haproxy.xml</configurationfile>
+      <logging>
+        <logsocket>/tmp/haproxy_chroot/var/run/log</logsocket>
+        <facilityname>haproxy</facilityname>
+        <logfilename>haproxy.log</logfilename>
+      </logging>
+      <filter_rule_function>haproxy_generate_rules</filter_rule_function>
+      <include_file>/usr/local/pkg/haproxy/haproxy.inc</include_file>
+      <plugins>
+        <item>
+          <type>plugin_carp</type>
+        </item>
+        <item>
+          <type>plugin_certificates</type>
+        </item>
+        <item>
+          <type>plugin_xmlrpc_send</type>
+        </item>
+        <item>
+          <type>plugin_xmlrpc_recv</type>
+        </item>
+        <item>
+          <type>plugin_xmlrpc_recv_done</type>
+        </item>
+      </plugins>
+    </package>
+    <menu>
+      <name>Patches</name>
+      <section>System</section>
+      <url>/system_patches.php</url>
+    </menu>
+    <menu>
+      <name>Suricata</name>
+      <tooltiptext>Configure Suricata settings</tooltiptext>
+      <section>Services</section>
+      <url>/suricata/suricata_interfaces.php</url>
+    </menu>
+    <menu>
+      <name>pfBlockerNG</name>
+      <section>Firewall</section>
+      <url>/pfblockerng/pfblockerng_general.php</url>
+    </menu>
+    <menu>
+      <name>HAProxy</name>
+      <tooltiptext />
+      <section>Services</section>
+      <url>/haproxy/haproxy_listeners.php</url>
+    </menu>
+    <menu>
+      <name>HAProxy Stats</name>
+      <tooltiptext>Stats of HAProxy</tooltiptext>
+      <section>Status</section>
+      <url>/haproxy/haproxy_stats.php?haproxystats=1</url>
+    </menu>
+    <suricata>
+      <config>
+        <forcekeepsettings>on</forcekeepsettings>
+        <sid_list_migration>1</sid_list_migration>
+        <suricata_config_ver>7.0.9</suricata_config_ver>
+        <enable_etopen_rules>on</enable_etopen_rules>
+        <enable_etpro_rules>off</enable_etpro_rules>
+        <autoruleupdate>1d_up</autoruleupdate>
+        <autoruleupdatetime>03:30</autoruleupdatetime>
+        <live_swap_updates>on</live_swap_updates>
+        <auto_manage_sids>on</auto_manage_sids>
+        <enable_log_mgmt>on</enable_log_mgmt>
+        <suricataloglimit>on</suricataloglimit>
+        <suricataloglimitsize>500</suricataloglimitsize>
+        <eve_log_limit_size>100000</eve_log_limit_size>
+        <eve_log_retention>24</eve_log_retention>
+        <alert_log_limit_size>5000</alert_log_limit_size>
+        <alert_log_retention>24</alert_log_retention>
+        <stats_log_limit_size>5000</stats_log_limit_size>
+        <stats_log_retention>24</stats_log_retention>
+      </config>
+      <sid_mgmt_lists>
+        <item>
+          <name>disablesid-sample.conf</name>
+          <modtime>1786599229</modtime>
+          <content>IyBleGFtcGxlIGRpc2FibGVzaWQuY29uZgoKIyBFeGFtcGxlIG9mIG1vZGlmeWluZyBzdGF0ZSBmb3IgaW5kaXZpZHVhbCBydWxlcwojIDE6MTAzNCwxOjk4MzcsMToxMjcwLDE6MzM5MCwxOjcxMCwxOjEyNDksMzoxMzAxMAoKIyBFeGFtcGxlIG9mIG1vZGlmeWluZyBzdGF0ZSBmb3IgcnVsZSByYW5nZXMKIyAxOjIyMC0xOjMyNjQsMzoxMzAxMC0zOjEzMDEzCgojIENvbW1lbnRzIGFyZSBhbGxvd2VkIGluIHRoaXMgZmlsZSwgYW5kIGNhbiBhbHNvIGJlIG9uIHRoZSBzYW1lIGxpbmUKIyBBcyB0aGUgbW9kaWZ5IHN0YXRlIHN5bnRheCwgYXMgbG9uZyBhcyBpdCBpcyBhIHRyYWlsaW5nIGNvbW1lbnQKIyAxOjEwMTEgIyBJIERpc2FibGVkIHRoaXMgcnVsZSBiZWNhdXNlIEkgY291bGQhCgojIEV4YW1wbGUgb2YgbW9kaWZ5aW5nIHN0YXRlIGZvciBNUyBhbmQgY3ZlIHJ1bGVzLCBub3RlIHRoZSB1c2Ugb2YgdGhlIDogCiMgaW4gY3ZlLiBUaGlzIHdpbGwgbW9kaWZ5IE1TMDktMDA4LCBjdmUgMjAwOS0wMjMzLCBidWd0cmFxIDIxMzAxLAojIGFuZCBhbGwgTVMwMCBhbmQgYWxsIGN2ZSAyMDAwIHJlbGF0ZWQgc2lkcyEgIFRoZXNlIHN1cHBvcnQgcmVndWxhciBleHByZXNzaW9uCiMgbWF0Y2hpbmcgb25seSBhZnRlciB5b3UgaGF2ZSBzcGVjaWZpZWQgd2hhdCB5b3UgYXJlIGxvb2tpbmcgZm9yLCBpLmUuIAojIE1TMDAtPHJlZ2V4PiBvciBjdmU6PHJlZ2V4PiwgdGhlIGZpcnN0IHNlY3Rpb24gQ0FOTk9UIGNvbnRhaW4gYSByZWd1bGFyCiMgZXhwcmVzc2lvbiAoTVNcZHsyfS1cZCspIHdpbGwgTk9UIHdvcmssIHVzZSB0aGUgcGNyZToga2V5d29yZCAoYmVsb3cpCiMgZm9yIHRoaXMuCiMgTVMwOS0wMDgsY3ZlOjIwMDktMDIzMyxidWd0cmFxOjIxMzAxLE1TMDAtXGQrLGN2ZToyMDAwLVxkKwoKIyBFeGFtcGxlIG9mIHVzaW5nIHRoZSBwY3JlOiBrZXl3b3JkIHRvIG1vZGlmeSBydWxlc3RhdGUuICB0aGUgcGNyZSBrZXl3b3JkIAojIGFsbG93cyBmb3IgZnVsbCB1c2Ugb2YgcmVndWxhciBleHByZXNzaW9uIHN5bnRheCwgeW91IGRvIG5vdCBuZWVkIHRvIGRlc2lnbmF0ZQojIHdpdGggLyBhbmQgYWxsIHBjcmUgc2VhcmNoZXMgYXJlIHRyZWF0ZWQgYXMgY2FzZSBpbnNlbnNpdGl2ZS4gRm9yIG1vcmUgaW5mb3JtYXRpb24gCiMgYWJvdXQgcmVndWxhciBleHByZXNzaW9uIHN5bnRheDogaHR0cDovL3d3dy5yZWd1bGFyLWV4cHJlc3Npb25zLmluZm8vCiMgVGhlIGZvbGxvd2luZyBleGFtcGxlIG1vZGlmaWVzIHN0YXRlIGZvciBhbGwgTVMwNyB0aHJvdWdoIE1TMTAgCiMgcGNyZTpNUygwWzctOV18MTApLVxkKwojIHBjcmU6Ikpvb21sYSIKCiMgRXhhbXBsZSBvZiBtb2RpZnlpbmcgc3RhdGUgZm9yIHNwZWNpZmljIGNhdGVnb3JpZXMgZW50aXJlbHkuCiMgInNub3J0XyIgbGltaXRzIHRvIFNub3J0IFZSVCBydWxlcywgImVtZXJnaW5nLSIgbGltaXRzIHRvIAojIEVtZXJnaW5nIFRocmVhdHMgT3BlbiBydWxlcywgImV0cHJvLSIgbGltaXRzIHRvIEVULVBSTyBydWxlcy4KIyAic2hlbGxjb2RlIiB3aXRoIG5vIHByZWZpeCB3b3VsZCBtYXRjaCBpbiBhbnkgdmVuZG9yIHNldC4KIyBzbm9ydF93ZWItaWlzLGVtZXJnaW5nLXNoZWxsY29kZSxldHByby1pbWFwLHNoZWxsY29kZQoKIyBBbnkgb2YgdGhlIGFib3ZlIHZhbHVlcyBjYW4gYmUgb24gYSBzaW5nbGUgbGluZSBvciBtdWx0aXBsZSBsaW5lcywgd2hlbiAKIyBvbiBhIHNpbmdsZSBsaW5lIHRoZXkgc2ltcGx5IG5lZWQgdG8gYmUgc2VwYXJhdGVkIGJ5IGEgLAojIDE6OTgzNywxOjIyMC0xOjMyNjQsMzoxMzAxMC0zOjEzMDEzLHBjcmU6TVMoMFswLTddKS1cZCssTVMwOS0wMDgsY3ZlOjIwMDktMDIzMwoKIyBUaGUgbW9kaWZpY2F0aW9ucyBpbiB0aGlzIGZpbGUgYXJlIGZvciBzYW1wbGUvZXhhbXBsZSBwdXJwb3NlcyBvbmx5IGFuZAojIHNob3VsZCBub3QgYWN0aXZlbHkgYmUgdXNlZCwgeW91IG5lZWQgdG8gbW9kaWZ5IHRoaXMgZmlsZSB0byBmaXQgeW91ciAKIyBlbnZpcm9ubWVudC4KCg==</content>
+        </item>
+        <item>
+          <name>dropsid-sample.conf</name>
+          <modtime>1786599229</modtime>
+          <content>IyBOb3RlOiBUaGlzIGZpbGUgaXMgdXNlZCB0byBzcGVjaWZ5IHdoYXQgcnVsZXMgeW91IHdpc2ggdG8gYmUgc2V0IHRvIGhhdmUKIyBhbiBhY3Rpb24gb2YgZHJvcCByYXRoZXIgdGhhbiBhbGVydC4KCiMgRXhhbXBsZSBvZiBtb2RpZnlpbmcgc3RhdGUgZm9yIGluZGl2aWR1YWwgcnVsZXMKIyAxOjEwMzQsMTo5ODM3LDE6MTI3MCwxOjMzOTAsMTo3MTAsMToxMjQ5LDM6MTMwMTAKCiMgRXhhbXBsZSBvZiBtb2RpZnlpbmcgc3RhdGUgZm9yIHJ1bGUgcmFuZ2VzCiMgMToyMjAtMTozMjY0LDM6MTMwMTAtMzoxMzAxMwoKIyBDb21tZW50cyBhcmUgYWxsb3dlZCBpbiB0aGlzIGZpbGUsIGFuZCBjYW4gYWxzbyBiZSBvbiB0aGUgc2FtZSBsaW5lCiMgQXMgdGhlIG1vZGlmeSBzdGF0ZSBzeW50YXgsIGFzIGxvbmcgYXMgaXQgaXMgYSB0cmFpbGluZyBjb21tZW50CiMgMToxMDExICMgSSBEaXNhYmxlZCB0aGlzIHJ1bGUgYmVjYXVzZSBJIGNvdWxkIQoKIyBFeGFtcGxlIG9mIG1vZGlmeWluZyBzdGF0ZSBmb3IgTVMgYW5kIGN2ZSBydWxlcywgbm90ZSB0aGUgdXNlIG9mIHRoZSA6IAojIGluIGN2ZS4gVGhpcyB3aWxsIG1vZGlmeSBNUzA5LTAwOCwgY3ZlIDIwMDktMDIzMywgYnVndHJhcSAyMTMwMSwKIyBhbmQgYWxsIE1TMDAgYW5kIGFsbCBjdmUgMjAwMCByZWxhdGVkIHNpZHMhICBUaGVzZSBzdXBwb3J0IHJlZ3VsYXIgZXhwcmVzc2lvbgojIG1hdGNoaW5nIG9ubHkgYWZ0ZXIgeW91IGhhdmUgc3BlY2lmaWVkIHdoYXQgeW91IGFyZSBsb29raW5nIGZvciwgaS5lLiAKIyBNUzAwLTxyZWdleD4gb3IgY3ZlOjxyZWdleD4sIHRoZSBmaXJzdCBzZWN0aW9uIENBTk5PVCBjb250YWluIGEgcmVndWxhcgojIGV4cHJlc3Npb24gKE1TXGR7Mn0tXGQrKSB3aWxsIE5PVCB3b3JrLCB1c2UgdGhlIHBjcmU6IGtleXdvcmQgKGJlbG93KQojIGZvciB0aGlzLgojIE1TMDktMDA4LGN2ZToyMDA5LTAyMzMsYnVndHJhcToyMTMwMSxNUzAwLVxkKyxjdmU6MjAwMC1cZCsKCiMgRXhhbXBsZSBvZiB1c2luZyB0aGUgcGNyZToga2V5d29yZCB0byBtb2RpZnkgcnVsZXN0YXRlLiAgdGhlIHBjcmUga2V5d29yZCAKIyBhbGxvd3MgZm9yIGZ1bGwgdXNlIG9mIHJlZ3VsYXIgZXhwcmVzc2lvbiBzeW50YXgsIHlvdSBkbyBub3QgbmVlZCB0byBkZXNpZ25hdGUKIyB3aXRoIC8gYW5kIGFsbCBwY3JlIHNlYXJjaGVzIGFyZSB0cmVhdGVkIGFzIGNhc2UgaW5zZW5zaXRpdmUuIEZvciBtb3JlIGluZm9ybWF0aW9uIAojIGFib3V0IHJlZ3VsYXIgZXhwcmVzc2lvbiBzeW50YXg6IGh0dHA6Ly93d3cucmVndWxhci1leHByZXNzaW9ucy5pbmZvLwojIFRoZSBmb2xsb3dpbmcgZXhhbXBsZSBtb2RpZmllcyBzdGF0ZSBmb3IgYWxsIE1TMDcgdGhyb3VnaCBNUzEwIAojIHBjcmU6TVMoMFs3LTldfDEwKS1cZCsKCiMgVGhlIGZvbGxvd2luZyBleGFtcGxlIG1vZGlmaWVzIHN0YXRlIGZvciBTbm9ydCBWUlQgcnVsZXMgdGFnZ2VkIHdpdGggSVBTIAojIFBvbGljeSBTZWN1cml0eSBhbmQgaXBzIGRyb3AKIyAtLS0tLS0tLS0tLS0tLS0tLQojIHBjcmU6InBjcmU6c2VjdXJpdHktaXBzXHMqZHJvcCIKCiMgRXhhbXBsZSBvZiBtb2RpZnlpbmcgc3RhdGUgZm9yIHNwZWNpZmljIGNhdGVnb3JpZXMgZW50aXJlbHkKIyBWUlQtd2ViLWlpcyxFVC1zaGVsbGNvZGUsRVQtZW1lcmdpbmd0aHJlYXRzLXNtdHAsQ3VzdG9tLXNoZWxsY29kZSxDdXN0b20tZW1lcmdpbmd0aHJlYXRzLXNtdHAKCiMgQW55IG9mIHRoZSBhYm92ZSB2YWx1ZXMgY2FuIGJlIG9uIGEgc2luZ2xlIGxpbmUgb3IgbXVsdGlwbGUgbGluZXMsIHdoZW4gCiMgb24gYSBzaW5nbGUgbGluZSB0aGV5IHNpbXBseSBuZWVkIHRvIGJlIHNlcGFyYXRlZCBieSBhICwKIyAxOjk4MzcsMToyMjAtMTozMjY0LDM6MTMwMTAtMzoxMzAxMyxwY3JlOk1TKDBbMC03XSktXGQrLE1TMDktMDA4LGN2ZToyMDA5LTAyMzMKCiMgVGhlIG1vZGlmaWNhdGlvbnMgaW4gdGhpcyBmaWxlIGFyZSBmb3Igc2FtcGxlL2V4YW1wbGUgcHVycG9zZXMgb25seSBhbmQKIyBzaG91bGQgbm90IGFjdGl2ZWx5IGJlIHVzZWQsIHlvdSBuZWVkIHRvIG1vZGlmeSB0aGlzIGZpbGUgdG8gZml0IHlvdXIgCiMgZW52aXJvbm1lbnQuCg==</content>
+        </item>
+        <item>
+          <name>enablesid-sample.conf</name>
+          <modtime>1786599229</modtime>
+          <content>IyBleGFtcGxlIGVuYWJsZXNpZC5jb25mCgojIEV4YW1wbGUgb2YgbW9kaWZ5aW5nIHN0YXRlIGZvciBpbmRpdmlkdWFsIHJ1bGVzCiMgMToxMDM0LDE6OTgzNywxOjEyNzAsMTozMzkwLDE6NzEwLDE6MTI0OSwzOjEzMDEwCgojIEV4YW1wbGUgb2YgbW9kaWZ5aW5nIHN0YXRlIGZvciBydWxlIHJhbmdlcwojIDE6MjIwLTE6MzI2NCwzOjEzMDEwLTM6MTMwMTMKCiMgQ29tbWVudHMgYXJlIGFsbG93ZWQgaW4gdGhpcyBmaWxlLCBhbmQgY2FuIGFsc28gYmUgb24gdGhlIHNhbWUgbGluZQojIEFzIHRoZSBtb2RpZnkgc3RhdGUgc3ludGF4LCBhcyBsb25nIGFzIGl0IGlzIGEgdHJhaWxpbmcgY29tbWVudAojIDE6MTAxMSAjIEkgRGlzYWJsZWQgdGhpcyBydWxlIGJlY2F1c2UgSSBjb3VsZCEKCiMgRXhhbXBsZSBvZiBtb2RpZnlpbmcgc3RhdGUgZm9yIE1TIGFuZCBjdmUgcnVsZXMsIG5vdGUgdGhlIHVzZSBvZiB0aGUgOiAKIyBpbiBjdmUuIFRoaXMgd2lsbCBtb2RpZnkgTVMwOS0wMDgsIGN2ZSAyMDA5LTAyMzMsIGJ1Z3RyYXEgMjEzMDEsCiMgYW5kIGFsbCBNUzAwIGFuZCBhbGwgY3ZlIDIwMDAgcmVsYXRlZCBzaWRzISAgVGhlc2Ugc3VwcG9ydCByZWd1bGFyIGV4cHJlc3Npb24KIyBtYXRjaGluZyBvbmx5IGFmdGVyIHlvdSBoYXZlIHNwZWNpZmllZCB3aGF0IHlvdSBhcmUgbG9va2luZyBmb3IsIGkuZS4gCiMgTVMwMC08cmVnZXg+IG9yIGN2ZTo8cmVnZXg+LCB0aGUgZmlyc3Qgc2VjdGlvbiBDQU5OT1QgY29udGFpbiBhIHJlZ3VsYXIKIyBleHByZXNzaW9uIChNU1xkezJ9LVxkKykgd2lsbCBOT1Qgd29yaywgdXNlIHRoZSBwY3JlOiBrZXl3b3JkIChiZWxvdykKIyBmb3IgdGhpcy4KIyBNUzA5LTAwOCxjdmU6MjAwOS0wMjMzLGJ1Z3RyYXE6MjEzMDEsTVMwMC1cZCssY3ZlOjIwMDAtXGQrCgojIEV4YW1wbGUgb2YgdXNpbmcgdGhlIHBjcmU6IGtleXdvcmQgdG8gbW9kaWZ5IHJ1bGVzdGF0ZS4gIHRoZSBwY3JlIGtleXdvcmQgCiMgYWxsb3dzIGZvciBmdWxsIHVzZSBvZiByZWd1bGFyIGV4cHJlc3Npb24gc3ludGF4LCB5b3UgZG8gbm90IG5lZWQgdG8gZGVzaWduYXRlCiMgd2l0aCAvIGFuZCBhbGwgcGNyZSBzZWFyY2hlcyBhcmUgdHJlYXRlZCBhcyBjYXNlIGluc2Vuc2l0aXZlLiBGb3IgbW9yZSBpbmZvcm1hdGlvbiAKIyBhYm91dCByZWd1bGFyIGV4cHJlc3Npb24gc3ludGF4OiBodHRwOi8vd3d3LnJlZ3VsYXItZXhwcmVzc2lvbnMuaW5mby8KIyBUaGUgZm9sbG93aW5nIGV4YW1wbGUgbW9kaWZpZXMgc3RhdGUgZm9yIGFsbCBNUzA3IHRocm91Z2ggTVMxMCAKIyBwY3JlOk1TKDBbNy05XXwxMCktXGQrCiMgcGNyZToiSm9vbWxhIgoKIyBFeGFtcGxlIG9mIG1vZGlmeWluZyBzdGF0ZSBmb3Igc3BlY2lmaWMgY2F0ZWdvcmllcyBlbnRpcmVseS4KIyAic25vcnRfIiBsaW1pdHMgdG8gU25vcnQgVlJUIHJ1bGVzLCAiZW1lcmdpbmctIiBsaW1pdHMgdG8gCiMgRW1lcmdpbmcgVGhyZWF0cyBPcGVuIHJ1bGVzLCAiZXRwcm8tIiBsaW1pdHMgdG8gRVQtUFJPIHJ1bGVzLgojICJzaGVsbGNvZGUiIHdpdGggbm8gcHJlZml4IHdvdWxkIG1hdGNoIGluIGFueSB2ZW5kb3Igc2V0LgojIHNub3J0X3dlYi1paXMsZW1lcmdpbmctc2hlbGxjb2RlLGV0cHJvLWltYXAsc2hlbGxjb2RlCgojIEFueSBvZiB0aGUgYWJvdmUgdmFsdWVzIGNhbiBiZSBvbiBhIHNpbmdsZSBsaW5lIG9yIG11bHRpcGxlIGxpbmVzLCB3aGVuIAojIG9uIGEgc2luZ2xlIGxpbmUgdGhleSBzaW1wbHkgbmVlZCB0byBiZSBzZXBhcmF0ZWQgYnkgYSAsCiMgMTo5ODM3LDE6MjIwLTE6MzI2NCwzOjEzMDEwLTM6MTMwMTMscGNyZTpNUygwWzAtN10pLVxkKyxNUzA5LTAwOCxjdmU6MjAwOS0wMjMzCgo=</content>
+        </item>
+        <item>
+          <name>modifysid-sample.conf</name>
+          <modtime>1786599229</modtime>
+          <content>IyBleGFtcGxlIG1vZGlmeXNpZC5jb25mCiMKIyBmb3JtYXR0aW5nIGlzIHNpbXBsZQojIDxzaWQsIGNhdGVnb3J5LCBsaXN0IG9mIHNpZHMmY2F0ZWdvcmllcz4gIndoYXQgSSdtIHJlcGxhY2luZyIgIndoYXQgSSdtIHJlcGxhY2luZyBpdCB3aXRoIgojCiMgTm90ZSB0aGF0IHRoaXMgd2lsbCBvbmx5IHdvcmsgd2l0aCBHSUQ6MSBydWxlcywgc2ltcGx5IGJlY2F1c2UgbW9kaWZ5aW5nCiMgR0lEOjMgU08gc3R1YiBydWxlcyB3b3VsZCBub3QgYWN0dWFsbHkgYWZmZWN0IHRoZSBydWxlLgojCiMgSWYgeW91IGFyZSBhdHRlbXB0aW5nIHRvIGNoYW5nZSBydWxlc3RhdGUgKGVuYWJsZSxkaXNhYmxlKSBmcm9tIGhlcmUKIyB0aGVuIHlvdSBhcmUgZG9pbmcgaXQgd3JvbmcuIERvIHRoaXMgZnJvbSB3aXRoaW4gdGhlIHJlc3BlY3RpdmUgCiMgcnVsZXN0YXRlIG1vZGlmaWNhdGlvbiBjb25maWd1cmF0aW9uIGZpbGVzLgoKIyB0aGUgZm9sbG93aW5nIGFwcGxpZXMgdG8gc2lkIDEwMDEwIG9ubHkgYW5kIHJlcHJlc2VudHMgd2hhdCB3b3VsZCBub3JtYWxseQojIGJlIHMvdG9fY2xpZW50L2Zyb21fc2VydmVyLwojIDEwMDEwICJ0b19jbGllbnQiICJmcm9tX3NlcnZlciIKCiMgdGhlIGZvbGxvd2luZyB3b3VsZCByZXBsYWNlIEhUVFBfUE9SVFMgd2l0aCBIVFRQU19QT1JUUyBmb3IgQUxMIEdJRDoxCiMgcnVsZXMKIyAiSFRUUF9QT1JUUyIgIkhUVFBTX1BPUlRTIgoKIyBtdWx0aXBsZSBzaWRzIGNhbiBiZSBzcGVjaWZpZWQgYXMgbm90ZWQgYmVsb3c6CiMgMzAyLDQyOSwxODIxICIkRVhURVJOQUxfTkVUIiAiJEhPTUVfTkVUIgoKIyBtb2RpZnkgYWxsIHNpZ25hdHVyZXMgaW4gYSBjYXRlZ29yeS4gRXhhbXBsZTogcmVwbGFjZSAiJEVYVEVSTkFMX05FVFMiIHdpdGggImFueSIgdG8gYmUgYWxlcnRzIG9uIGluc2lkZXIgdGhyZWF0cyBhcyB3ZWxsCiMgZW1lcmdpbmctc2NhbiAiJEVYVEVSTkFMX05FVCIgImFueSIKCiMgbW9kaWZ5IGFsbCBzaWduYXR1cmVzIGluIG11bHRpcGxlIGNhdGVnb3JpZXMKIyBlbWVyZ2luZy1zY2FuLGVtZXJnaW5nLXNxbCAiJEVYVEVSTkFMX05FVCIgImFueSIKCiMgbW9kaWZ5IGFsbCBzaWduYXR1cmVzIGZvciBhIGNhdGVnb3J5IGFuZCBzcGVjaWZpYyBTSURzIGZyb20gb3RoZXIgY2F0ZWdvcmllcwojIGVtZXJnaW5nLXNxbCwyMTAwNjkxLDIwMDk4MTcgIiRFWFRFUk5BTF9ORVQiICJhbnkiCg==</content>
+        </item>
+        <item>
+          <name>dropsid.conf</name>
+          <modtime>1790895771</modtime>
+          <content>IyBLUk9OT1MgYXBwcm92ZWQgaW5pdGlhbCBoaWdoLWNvbmZpZGVuY2UgRVQgbWFsd2FyZSBzaWduYXR1cmUKMToyMDA4MzI3Cg==</content>
+        </item>
+      </sid_mgmt_lists>
+      <rule>
+        <ip_max_frags>65535</ip_max_frags>
+        <ip_frag_timeout>60</ip_frag_timeout>
+        <frag_memcap>33554432</frag_memcap>
+        <defrag_memcap_policy>ignore</defrag_memcap_policy>
+        <ip_max_trackers>65535</ip_max_trackers>
+        <frag_hash_size>65536</frag_hash_size>
+        <flow_memcap>134217728</flow_memcap>
+        <flow_memcap_policy>ignore</flow_memcap_policy>
+        <flow_prealloc>10000</flow_prealloc>
+        <flow_hash_size>65536</flow_hash_size>
+        <flow_emerg_recovery>30</flow_emerg_recovery>
+        <flow_prune>5</flow_prune>
+        <flow_tcp_new_timeout>60</flow_tcp_new_timeout>
+        <flow_tcp_established_timeout>3600</flow_tcp_established_timeout>
+        <flow_tcp_closed_timeout>120</flow_tcp_closed_timeout>
+        <flow_tcp_emerg_new_timeout>10</flow_tcp_emerg_new_timeout>
+        <flow_tcp_emerg_established_timeout>300</flow_tcp_emerg_established_timeout>
+        <flow_tcp_emerg_closed_timeout>20</flow_tcp_emerg_closed_timeout>
+        <flow_udp_new_timeout>30</flow_udp_new_timeout>
+        <flow_udp_established_timeout>300</flow_udp_established_timeout>
+        <flow_udp_emerg_new_timeout>10</flow_udp_emerg_new_timeout>
+        <flow_udp_emerg_established_timeout>100</flow_udp_emerg_established_timeout>
+        <flow_icmp_new_timeout>30</flow_icmp_new_timeout>
+        <flow_icmp_established_timeout>300</flow_icmp_established_timeout>
+        <flow_icmp_emerg_new_timeout>10</flow_icmp_emerg_new_timeout>
+        <flow_icmp_emerg_established_timeout>100</flow_icmp_emerg_established_timeout>
+        <stream_memcap>268435456</stream_memcap>
+        <stream_prealloc_sessions>32768</stream_prealloc_sessions>
+        <reassembly_memcap>131217728</reassembly_memcap>
+        <reassembly_depth>1048576</reassembly_depth>
+        <reassembly_to_server_chunk>2560</reassembly_to_server_chunk>
+        <reassembly_to_client_chunk>2560</reassembly_to_client_chunk>
+        <max_synack_queued>5</max_synack_queued>
+        <enable_midstream_sessions>off</enable_midstream_sessions>
+        <stream_memcap_policy>ignore</stream_memcap_policy>
+        <reassembly_memcap_policy>ignore</reassembly_memcap_policy>
+        <midstream_policy>ignore</midstream_policy>
+        <stream_checksum_validation>off</stream_checksum_validation>
+        <enable_async_sessions>off</enable_async_sessions>
+        <stream_bypass>off</stream_bypass>
+        <stream_drop_invalid>off</stream_drop_invalid>
+        <delayed_detect>off</delayed_detect>
+        <intf_promisc_mode>on</intf_promisc_mode>
+        <intf_snaplen>1518</intf_snaplen>
+        <mpm_algo>auto</mpm_algo>
+        <spm_algo>auto</spm_algo>
+        <app_layer_error_policy>ignore</app_layer_error_policy>
+        <asn1_max_frames>256</asn1_max_frames>
+        <bittorrent_parser>yes</bittorrent_parser>
+        <dcerpc_parser>yes</dcerpc_parser>
+        <dhcp_parser>yes</dhcp_parser>
+        <dns_global_memcap>16777216</dns_global_memcap>
+        <dns_state_memcap>524288</dns_state_memcap>
+        <dns_request_flood_limit>500</dns_request_flood_limit>
+        <dns_parser_udp>yes</dns_parser_udp>
+        <dns_parser_tcp>yes</dns_parser_tcp>
+        <dns_parser_udp_ports>53</dns_parser_udp_ports>
+        <dns_parser_tcp_ports>53</dns_parser_tcp_ports>
+        <enip_parser>yes</enip_parser>
+        <ftp_parser>yes</ftp_parser>
+        <ftp_data_parser>on</ftp_data_parser>
+        <http_parser>yes</http_parser>
+        <http_parser_memcap>67108864</http_parser_memcap>
+        <http2_parser>yes</http2_parser>
+        <ikev2_parser>yes</ikev2_parser>
+        <imap_parser>detection-only</imap_parser>
+        <krb5_parser>yes</krb5_parser>
+        <mqtt_parser>yes</mqtt_parser>
+        <msn_parser>detection-only</msn_parser>
+        <nfs_parser>yes</nfs_parser>
+        <ntp_parser>yes</ntp_parser>
+        <pgsql_parser>yes</pgsql_parser>
+        <quic_parser>yes</quic_parser>
+        <rdp_parser>yes</rdp_parser>
+        <rfb_parser>yes</rfb_parser>
+        <sip_parser>yes</sip_parser>
+        <smb_parser>yes</smb_parser>
+        <smtp_parser>yes</smtp_parser>
+        <smtp_parser_decode_mime>off</smtp_parser_decode_mime>
+        <smtp_parser_decode_base64>on</smtp_parser_decode_base64>
+        <smtp_parser_decode_quoted_printable>on</smtp_parser_decode_quoted_printable>
+        <smtp_parser_extract_urls>on</smtp_parser_extract_urls>
+        <smtp_parser_compute_body_md5>off</smtp_parser_compute_body_md5>
+        <snmp_parser>yes</snmp_parser>
+        <ssh_parser>yes</ssh_parser>
+        <telnet_parser>yes</telnet_parser>
+        <tftp_parser>yes</tftp_parser>
+        <tls_parser>yes</tls_parser>
+        <tls_detect_ports>443</tls_detect_ports>
+        <tls_encrypt_handling>default</tls_encrypt_handling>
+        <tls_ja3_fingerprint>on</tls_ja3_fingerprint>
+        <enable_iprep>off</enable_iprep>
+        <host_memcap>33554432</host_memcap>
+        <host_hash_size>4096</host_hash_size>
+        <host_prealloc>1000</host_prealloc>
+        <host_os_policy>
+          <item>
+            <name>default</name>
+            <bind_to>all</bind_to>
+            <policy>bsd</policy>
+          </item>
+        </host_os_policy>
+        <libhtp_policy>
+          <item>
+            <name>default</name>
+            <bind_to>all</bind_to>
+            <personality>IDS</personality>
+            <request-body-limit>4096</request-body-limit>
+            <response-body-limit>4096</response-body-limit>
+            <double-decode-path>no</double-decode-path>
+            <double-decode-query>no</double-decode-query>
+            <uri-include-all>no</uri-include-all>
+            <meta-field-limit>18432</meta-field-limit>
+          </item>
+        </libhtp_policy>
+        <interface>wan</interface>
+        <enable>on</enable>
+        <descr>KRONOS WAN Inline</descr>
+        <uuid>49823</uuid>
+        <blockoffenders>on</blockoffenders>
+        <ips_mode>ips_mode_inline</ips_mode>
+        <ips_netmap_threads>auto</ips_netmap_threads>
+        <blockoffenderskill>off</blockoffenderskill>
+        <blockoffendersip>both</blockoffendersip>
+        <enable_eve_log>on</enable_eve_log>
+        <eve_output_type>regular</eve_output_type>
+        <eve_log_alerts>on</eve_log_alerts>
+        <eve_log_alerts_verdict>on</eve_log_alerts_verdict>
+        <eve_log_drops>on</eve_log_drops>
+        <eve_log_drops_verdict>on</eve_log_drops_verdict>
+        <eve_log_drops_flows>all</eve_log_drops_flows>
+        <eve_log_stats>on</eve_log_stats>
+        <eve_log_flow>on</eve_log_flow>
+        <eve_log_dns>on</eve_log_dns>
+        <eve_log_tls>on</eve_log_tls>
+        <eve_log_http>on</eve_log_http>
+        <enable_stats_log>on</enable_stats_log>
+        <stats_upd_interval>10</stats_upd_interval>
+        <alertsystemlog>off</alertsystemlog>
+        <rulesets>app-layer-events.rules||decoder-events.rules||dhcp-events.rules||dnp3-events.rules||dns-events.rules||enip-events.rules||files.rules||ftp-events.rules||http-events.rules||http2-events.rules||ipsec-events.rules||kerberos-events.rules||ldap-events.rules||mdns-events.rules||modbus-events.rules||mqtt-events.rules||nfs-events.rules||ntp-events.rules||pgsql-events.rules||pop3-events.rules||quic-events.rules||rfb-events.rules||smb-events.rules||smtp-events.rules||ssh-events.rules||stream-events.rules||tls-events.rules||websocket-events.rules||emerging-malware.rules||emerging-exploit.rules||emerging-web_server.rules||emerging-info.rules</rulesets>
+        <customrules>ZHJvcCBpY21wIDEwLjI1NC4yNTQuMSBhbnkgLT4gMTAuMjU0LjI1NC4yIGFueSAobXNnOiJLUk9OT1MgYmVuaWduIE5ldG1hcCBJUFMgdGVzdCI7IGl0eXBlOjg7IGNvbnRlbnQ6IktST05PUy1JUFMtVEVTVCI7IHNpZDoxMDAwMDAxOyByZXY6MTspCg==</customrules>
+        <enable_stats_collection>on</enable_stats_collection>
+        <eve_log_stats_totals>on</eve_log_stats_totals>
+        <drop_sid_file>dropsid.conf</drop_sid_file>
+        <sid_state_order>disable_enable</sid_state_order>
+        <autoflowbitrules>on</autoflowbitrules>
+      </rule>
+      <rule>
+        <ip_max_frags>65535</ip_max_frags>
+        <ip_frag_timeout>60</ip_frag_timeout>
+        <frag_memcap>33554432</frag_memcap>
+        <defrag_memcap_policy>ignore</defrag_memcap_policy>
+        <ip_max_trackers>65535</ip_max_trackers>
+        <frag_hash_size>65536</frag_hash_size>
+        <flow_memcap>134217728</flow_memcap>
+        <flow_memcap_policy>ignore</flow_memcap_policy>
+        <flow_prealloc>10000</flow_prealloc>
+        <flow_hash_size>65536</flow_hash_size>
+        <flow_emerg_recovery>30</flow_emerg_recovery>
+        <flow_prune>5</flow_prune>
+        <flow_tcp_new_timeout>60</flow_tcp_new_timeout>
+        <flow_tcp_established_timeout>3600</flow_tcp_established_timeout>
+        <flow_tcp_closed_timeout>120</flow_tcp_closed_timeout>
+        <flow_tcp_emerg_new_timeout>10</flow_tcp_emerg_new_timeout>
+        <flow_tcp_emerg_established_timeout>300</flow_tcp_emerg_established_timeout>
+        <flow_tcp_emerg_closed_timeout>20</flow_tcp_emerg_closed_timeout>
+        <flow_udp_new_timeout>30</flow_udp_new_timeout>
+        <flow_udp_established_timeout>300</flow_udp_established_timeout>
+        <flow_udp_emerg_new_timeout>10</flow_udp_emerg_new_timeout>
+        <flow_udp_emerg_established_timeout>100</flow_udp_emerg_established_timeout>
+        <flow_icmp_new_timeout>30</flow_icmp_new_timeout>
+        <flow_icmp_established_timeout>300</flow_icmp_established_timeout>
+        <flow_icmp_emerg_new_timeout>10</flow_icmp_emerg_new_timeout>
+        <flow_icmp_emerg_established_timeout>100</flow_icmp_emerg_established_timeout>
+        <stream_memcap>268435456</stream_memcap>
+        <stream_prealloc_sessions>32768</stream_prealloc_sessions>
+        <reassembly_memcap>131217728</reassembly_memcap>
+        <reassembly_depth>1048576</reassembly_depth>
+        <reassembly_to_server_chunk>2560</reassembly_to_server_chunk>
+        <reassembly_to_client_chunk>2560</reassembly_to_client_chunk>
+        <max_synack_queued>5</max_synack_queued>
+        <enable_midstream_sessions>off</enable_midstream_sessions>
+        <stream_memcap_policy>ignore</stream_memcap_policy>
+        <reassembly_memcap_policy>ignore</reassembly_memcap_policy>
+        <midstream_policy>ignore</midstream_policy>
+        <stream_checksum_validation>off</stream_checksum_validation>
+        <enable_async_sessions>off</enable_async_sessions>
+        <stream_bypass>off</stream_bypass>
+        <stream_drop_invalid>off</stream_drop_invalid>
+        <delayed_detect>off</delayed_detect>
+        <intf_promisc_mode>on</intf_promisc_mode>
+        <intf_snaplen>1518</intf_snaplen>
+        <mpm_algo>auto</mpm_algo>
+        <spm_algo>auto</spm_algo>
+        <app_layer_error_policy>ignore</app_layer_error_policy>
+        <asn1_max_frames>256</asn1_max_frames>
+        <bittorrent_parser>yes</bittorrent_parser>
+        <dcerpc_parser>yes</dcerpc_parser>
+        <dhcp_parser>yes</dhcp_parser>
+        <dns_global_memcap>16777216</dns_global_memcap>
+        <dns_state_memcap>524288</dns_state_memcap>
+        <dns_request_flood_limit>500</dns_request_flood_limit>
+        <dns_parser_udp>yes</dns_parser_udp>
+        <dns_parser_tcp>yes</dns_parser_tcp>
+        <dns_parser_udp_ports>53</dns_parser_udp_ports>
+        <dns_parser_tcp_ports>53</dns_parser_tcp_ports>
+        <enip_parser>yes</enip_parser>
+        <ftp_parser>yes</ftp_parser>
+        <ftp_data_parser>on</ftp_data_parser>
+        <http_parser>yes</http_parser>
+        <http_parser_memcap>67108864</http_parser_memcap>
+        <http2_parser>yes</http2_parser>
+        <ikev2_parser>yes</ikev2_parser>
+        <imap_parser>detection-only</imap_parser>
+        <krb5_parser>yes</krb5_parser>
+        <mqtt_parser>yes</mqtt_parser>
+        <msn_parser>detection-only</msn_parser>
+        <nfs_parser>yes</nfs_parser>
+        <ntp_parser>yes</ntp_parser>
+        <pgsql_parser>yes</pgsql_parser>
+        <quic_parser>yes</quic_parser>
+        <rdp_parser>yes</rdp_parser>
+        <rfb_parser>yes</rfb_parser>
+        <sip_parser>yes</sip_parser>
+        <smb_parser>yes</smb_parser>
+        <smtp_parser>yes</smtp_parser>
+        <smtp_parser_decode_mime>off</smtp_parser_decode_mime>
+        <smtp_parser_decode_base64>on</smtp_parser_decode_base64>
+        <smtp_parser_decode_quoted_printable>on</smtp_parser_decode_quoted_printable>
+        <smtp_parser_extract_urls>on</smtp_parser_extract_urls>
+        <smtp_parser_compute_body_md5>off</smtp_parser_compute_body_md5>
+        <snmp_parser>yes</snmp_parser>
+        <ssh_parser>yes</ssh_parser>
+        <telnet_parser>yes</telnet_parser>
+        <tftp_parser>yes</tftp_parser>
+        <tls_parser>yes</tls_parser>
+        <tls_detect_ports>443</tls_detect_ports>
+        <tls_encrypt_handling>default</tls_encrypt_handling>
+        <tls_ja3_fingerprint>on</tls_ja3_fingerprint>
+        <enable_iprep>off</enable_iprep>
+        <host_memcap>33554432</host_memcap>
+        <host_hash_size>4096</host_hash_size>
+        <host_prealloc>1000</host_prealloc>
+        <host_os_policy>
+          <item>
+            <name>default</name>
+            <bind_to>all</bind_to>
+            <policy>bsd</policy>
+          </item>
+        </host_os_policy>
+        <libhtp_policy>
+          <item>
+            <name>default</name>
+            <bind_to>all</bind_to>
+            <personality>IDS</personality>
+            <request-body-limit>4096</request-body-limit>
+            <response-body-limit>4096</response-body-limit>
+            <double-decode-path>no</double-decode-path>
+            <double-decode-query>no</double-decode-query>
+            <uri-include-all>no</uri-include-all>
+            <meta-field-limit>18432</meta-field-limit>
+          </item>
+        </libhtp_policy>
+        <interface>opt2</interface>
+        <enable>on</enable>
+        <descr>KRONOS protected trunk Inline</descr>
+        <uuid>62511</uuid>
+        <blockoffenders>on</blockoffenders>
+        <ips_mode>ips_mode_inline</ips_mode>
+        <ips_netmap_threads>auto</ips_netmap_threads>
+        <blockoffenderskill>off</blockoffenderskill>
+        <blockoffendersip>both</blockoffendersip>
+        <enable_eve_log>on</enable_eve_log>
+        <eve_output_type>regular</eve_output_type>
+        <eve_log_alerts>on</eve_log_alerts>
+        <eve_log_alerts_verdict>on</eve_log_alerts_verdict>
+        <eve_log_drops>on</eve_log_drops>
+        <eve_log_drops_verdict>on</eve_log_drops_verdict>
+        <eve_log_drops_flows>all</eve_log_drops_flows>
+        <eve_log_stats>on</eve_log_stats>
+        <eve_log_flow>on</eve_log_flow>
+        <eve_log_dns>on</eve_log_dns>
+        <eve_log_tls>on</eve_log_tls>
+        <eve_log_http>on</eve_log_http>
+        <enable_stats_log>on</enable_stats_log>
+        <stats_upd_interval>10</stats_upd_interval>
+        <alertsystemlog>off</alertsystemlog>
+        <rulesets>app-layer-events.rules||decoder-events.rules||dhcp-events.rules||dnp3-events.rules||dns-events.rules||enip-events.rules||files.rules||ftp-events.rules||http-events.rules||http2-events.rules||ipsec-events.rules||kerberos-events.rules||ldap-events.rules||mdns-events.rules||modbus-events.rules||mqtt-events.rules||nfs-events.rules||ntp-events.rules||pgsql-events.rules||pop3-events.rules||quic-events.rules||rfb-events.rules||smb-events.rules||smtp-events.rules||ssh-events.rules||stream-events.rules||tls-events.rules||websocket-events.rules||emerging-malware.rules||emerging-exploit.rules||emerging-web_server.rules||emerging-info.rules</rulesets>
+        <customrules>ZHJvcCBodHRwIDE5Mi4xNjguOTkuMTAgYW55IC0+IDE5Mi4xNjguMjAuNTAgODAgKG1zZzoiS1JPTk9TIGJlbmlnbiBpbnRlcm5hbCBIVFRQIElQUyB0ZXN0IjsgZmxvdzplc3RhYmxpc2hlZCx0b19zZXJ2ZXI7IGh0dHAudXJpOyBjb250ZW50OiIvLmtyb25vcy1pcHMtdGVzdCI7IHNpZDoxMDAwMDAyOyByZXY6MTspCmRyb3AgaWNtcCAxOTIuMTY4Ljk5LjEwIGFueSAtPiAxOTIuMTY4LjIwLjUwIGFueSAobXNnOiJLUk9OT1MgYmVuaWduIGludGVybmFsIElDTVAgSVBTIHRlc3QiOyBpdHlwZTo4OyBjb250ZW50OiJLUk9OT1MtSU5URVJOQUwtSVBTIjsgc2lkOjEwMDAwMDM7IHJldjoxOykKIyBUYXJnZXQgaXMgdGhlIGlzb2xhdGVkIERWV0EgYmFja2VuZCBhZnRlciBIQVByb3h5IFRMUyB0ZXJtaW5hdGlvbi4KZHJvcCBodHRwIGFueSBhbnkgLT4gMTkyLjE2OC4yMC41MCA4MCAobXNnOiJLUk9OT1MgU1FMIGluamVjdGlvbiBVTklPTiBTRUxFQ1QgVVJJIjsgZmxvdzplc3RhYmxpc2hlZCx0b19zZXJ2ZXI7IGh0dHAudXJpOyBjb250ZW50OiJ1bmlvbiI7IG5vY2FzZTsgZmFzdF9wYXR0ZXJuOyBwY3JlOiIvXGJ1bmlvbig/OlxzfCUyMHxcKykrKD86YWxsKD86XHN8JTIwfFwrKSspP3NlbGVjdFxiL2kiOyBjbGFzc3R5cGU6d2ViLWFwcGxpY2F0aW9uLWF0dGFjazsgc2lkOjEwMDAwMTA7IHJldjoxOykKZHJvcCBodHRwIGFueSBhbnkgLT4gMTkyLjE2OC4yMC41MCA4MCAobXNnOiJLUk9OT1MgU1FMIGluamVjdGlvbiB0YXV0b2xvZ3kgVVJJIjsgZmxvdzplc3RhYmxpc2hlZCx0b19zZXJ2ZXI7IGh0dHAudXJpOyBjb250ZW50OiJvciI7IG5vY2FzZTsgZmFzdF9wYXR0ZXJuOyBwY3JlOiIvXGJvcig/OlxzfCUyMHxcKykrKD86J3wlMjcpPzEoPzonfCUyNyk/KD86XHN8JTIwfFwrKSooPzo9fCUzZCkoPzpcc3wlMjB8XCspKig/Oid8JTI3KT8xXGIvaSI7IGNsYXNzdHlwZTp3ZWItYXBwbGljYXRpb24tYXR0YWNrOyBzaWQ6MTAwMDAxMTsgcmV2OjE7KQpkcm9wIGh0dHAgYW55IGFueSAtPiAxOTIuMTY4LjIwLjUwIDgwIChtc2c6IktST05PUyBjb21tYW5kIGluamVjdGlvbiBVUkkiOyBmbG93OmVzdGFibGlzaGVkLHRvX3NlcnZlcjsgaHR0cC51cmk7IHBjcmU6Ii8oPzpceDNifCUzYnxceDdjfCU3Y3wmJnwlMjYlMjYpKD86XHN8JTIwfFwrKSooPzp3aG9hbWl8aWR8Y2F0fHdnZXR8Y3VybHxiYXNofHNofG5jKVxiL2kiOyBjbGFzc3R5cGU6d2ViLWFwcGxpY2F0aW9uLWF0dGFjazsgc2lkOjEwMDAwMTI7IHJldjoxOykKZHJvcCBodHRwIGFueSBhbnkgLT4gMTkyLjE2OC4yMC41MCA4MCAobXNnOiJLUk9OT1MgU1FMIGluamVjdGlvbiBVTklPTiBTRUxFQ1QgYm9keSI7IGZsb3c6ZXN0YWJsaXNoZWQsdG9fc2VydmVyOyBodHRwLnJlcXVlc3RfYm9keTsgY29udGVudDoidW5pb24iOyBub2Nhc2U7IGZhc3RfcGF0dGVybjsgcGNyZToiL1xidW5pb24oPzpcc3wlMjB8XCspKyg/OmFsbCg/OlxzfCUyMHxcKykrKT9zZWxlY3RcYi9pIjsgY2xhc3N0eXBlOndlYi1hcHBsaWNhdGlvbi1hdHRhY2s7IHNpZDoxMDAwMDEzOyByZXY6MTspCmRyb3AgaHR0cCBhbnkgYW55IC0+IDE5Mi4xNjguMjAuNTAgODAgKG1zZzoiS1JPTk9TIFNRTCBpbmplY3Rpb24gdGF1dG9sb2d5IGJvZHkiOyBmbG93OmVzdGFibGlzaGVkLHRvX3NlcnZlcjsgaHR0cC5yZXF1ZXN0X2JvZHk7IGNvbnRlbnQ6Im9yIjsgbm9jYXNlOyBmYXN0X3BhdHRlcm47IHBjcmU6Ii9cYm9yKD86XHN8JTIwfFwrKSsoPzonfCUyNyk/MSg/Oid8JTI3KT8oPzpcc3wlMjB8XCspKig/Oj18JTNkKSg/OlxzfCUyMHxcKykqKD86J3wlMjcpPzFcYi9pIjsgY2xhc3N0eXBlOndlYi1hcHBsaWNhdGlvbi1hdHRhY2s7IHNpZDoxMDAwMDE0OyByZXY6MTspCmRyb3AgaHR0cCBhbnkgYW55IC0+IDE5Mi4xNjguMjAuNTAgODAgKG1zZzoiS1JPTk9TIGNvbW1hbmQgaW5qZWN0aW9uIGJvZHkiOyBmbG93OmVzdGFibGlzaGVkLHRvX3NlcnZlcjsgaHR0cC5yZXF1ZXN0X2JvZHk7IHBjcmU6Ii8oPzpceDNifCUzYnxceDdjfCU3Y3wmJnwlMjYlMjYpKD86XHN8JTIwfFwrKSooPzp3aG9hbWl8aWR8Y2F0fHdnZXR8Y3VybHxiYXNofHNofG5jKVxiL2kiOyBjbGFzc3R5cGU6d2ViLWFwcGxpY2F0aW9uLWF0dGFjazsgc2lkOjEwMDAwMTU7IHJldjoxOykK</customrules>
+        <enable_stats_collection>on</enable_stats_collection>
+        <eve_log_stats_totals>on</eve_log_stats_totals>
+        <drop_sid_file>dropsid.conf</drop_sid_file>
+        <sid_state_order>disable_enable</sid_state_order>
+        <autoflowbitrules>on</autoflowbitrules>
+        <eve_log_alerts_xff>on</eve_log_alerts_xff>
+        <eve_log_alerts_xff_mode>extra-data</eve_log_alerts_xff_mode>
+        <eve_log_alerts_xff_deployment>reverse</eve_log_alerts_xff_deployment>
+        <eve_log_alerts_xff_header>X-Forwarded-For</eve_log_alerts_xff_header>
+        <eve_log_alerts_metadata>on</eve_log_alerts_metadata>
+      </rule>
+    </suricata>
+    <service>
+      <name>suricata</name>
+      <rcfile>suricata.sh</rcfile>
+      <executable>suricata</executable>
+      <description>Suricata IDS/IPS Daemon</description>
+    </service>
+    <service>
+      <name>pfb_dnsbl</name>
+      <rcfile>pfb_dnsbl.sh</rcfile>
+      <executable>lighttpd_pfb</executable>
+      <description>pfBlockerNG DNSBL service</description>
+    </service>
+    <service>
+      <name>pfb_filter</name>
+      <rcfile>pfb_filter.sh</rcfile>
+      <executable>php_pfb</executable>
+      <description>pfBlockerNG firewall filter service</description>
+    </service>
+    <service>
+      <name>haproxy</name>
+      <rcfile>haproxy.sh</rcfile>
+      <executable>haproxy</executable>
+      <description>TCP/HTTP(S) Load Balancer</description>
+    </service>
+    <pfblockerng>
+      <config>
+        <enable_cb>on</enable_cb>
+        <pfb_keep>on</pfb_keep>
+        <pfb_interval>24</pfb_interval>
+        <pfb_min>0</pfb_min>
+        <pfb_hour>0</pfb_hour>
+        <pfb_dailystart>0</pfb_dailystart>
+      </config>
+    </pfblockerng>
+    <pfblockernglistsv4>
+      <config>
+        <aliasname>KRONOS_DROP</aliasname>
+        <description>Spamhaus DROP reputation</description>
+        <action>Alias_Native</action>
+        <cron>EveryDay</cron>
+        <dow>1</dow>
+        <sort>sort</sort>
+        <aliaslog>enabled</aliaslog>
+        <stateremoval>disabled</stateremoval>
+        <row>
+          <format>auto</format>
+          <state>Enabled</state>
+          <url>https://www.spamhaus.org/drop/drop.txt</url>
+          <header>KRONOS_SPAMHAUS_DROP</header>
+        </row>
+      </config>
+      <config>
+        <aliasname>KRONOS_FIREHOL</aliasname>
+        <description>FireHOL level1 alias only; includes bogons; no enforcement</description>
+        <action>Alias_Deny</action>
+        <cron>EveryDay</cron>
+        <dow>1</dow>
+        <sort>sort</sort>
+        <aliaslog>enabled</aliaslog>
+        <stateremoval>disabled</stateremoval>
+        <row>
+          <format>auto</format>
+          <state>Enabled</state>
+          <url>https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_level1.netset</url>
+          <header>KRONOS_FIREHOL_L1</header>
+        </row>
+      </config>
+    </pfblockernglistsv4>
+    <pfblockerngipsettings>
+      <config>
+        <maxmind_account>[ELIMINADO_PARA_PUBLICACION]</maxmind_account>
+        <maxmind_key>[ELIMINADO_PARA_PUBLICACION]</maxmind_key>
+        <maxmind_locale>en</maxmind_locale>
+        <suppression>on</suppression>
+        <v4suppression>MTAuMC4wLjAvOAoxNzIuMTYuMC4wLzEyCjE5Mi4xNjguMC4wLzE2CjEwMC42NC4wLjAvMTA=</v4suppression>
+      </config>
+    </pfblockerngipsettings>
+    <pfblockerngasia>
+      <config>
+        <countries4>KP</countries4>
+        <countries6 />
+        <action>Alias_Native</action>
+        <aliaslog>enabled</aliaslog>
+        <description>KRONOS authorized WAN country KP</description>
+      </config>
+    </pfblockerngasia>
+    <pfblockerngeurope>
+      <config>
+        <countries4>RU</countries4>
+        <countries6 />
+        <action>Alias_Native</action>
+        <aliaslog>enabled</aliaslog>
+        <description>KRONOS authorized WAN country RU</description>
+      </config>
+    </pfblockerngeurope>
+    <haproxy>
+      <configversion>00.58</configversion>
+      <ha_pools>
+        <item>
+          <ha_servers>
+            <item>
+              <status>active</status>
+              <name>dvwa_node1</name>
+              <address>192.168.20.50</address>
+              <port>80</port>
+              <id>101</id>
+              <_index />
+            </item>
+          </ha_servers>
+          <a_acl />
+          <a_actionitems />
+          <errorfiles />
+          <advanced />
+          <advanced_backend>c3RpY2stdGFibGUgdHlwZSBpcCBzaXplIDUwayBleHBpcmUgNW0gc3RvcmUgaHR0cF9yZXFfcmF0ZSgxMHMp</advanced_backend>
+          <name>bk_dvwa_dmz</name>
+          <balance>roundrobin</balance>
+          <balance_urilen />
+          <balance_uridepth />
+          <balance_uriwhole />
+          <transparent_clientip />
+          <transparent_interface>lan</transparent_interface>
+          <check_type>HTTP</check_type>
+          <checkinter>3000</checkinter>
+          <log-health-checks>yes</log-health-checks>
+          <httpcheck_method>GET</httpcheck_method>
+          <monitor_uri>/login.php</monitor_uri>
+          <monitor_httpversion />
+          <monitor_username />
+          <monitor_domain />
+          <monitor_agentport>bk_dvwa_dmz</monitor_agentport>
+          <agent_check />
+          <agent_port />
+          <agent_inter />
+          <connection_timeout />
+          <server_timeout />
+          <retries />
+          <stats_enabled />
+          <stats_username />
+          <stats_password />
+          <stats_uri />
+          <stats_scope />
+          <stats_realm />
+          <stats_admin />
+          <stats_node />
+          <stats_desc />
+          <stats_refresh />
+          <persist_stick_expire />
+          <persist_stick_tablesize />
+          <persist_stick_length />
+          <persist_stick_cookiename />
+          <persist_sticky_type>none</persist_sticky_type>
+          <persist_cookie_enabled />
+          <persist_cookie_name />
+          <persist_cookie_mode>passive</persist_cookie_mode>
+          <persist_cookie_cachable />
+          <persist_cookie_postonly />
+          <persist_cookie_httponly />
+          <persist_cookie_secure />
+          <haproxy_cookie_maxidle />
+          <haproxy_cookie_maxlife />
+          <haproxy_cookie_domains />
+          <haproxy_cookie_dynamic_cookie_key />
+          <strict_transport_security />
+          <cookie_attribute_secure />
+          <email_level />
+          <email_to />
+          <id>100</id>
+        </item>
+      </ha_pools>
+      <ha_backends>
+        <item>
+          <name>fe_kronos_wan</name>
+          <descr>A5 HTTPS DVWA</descr>
+          <status>active</status>
+          <type>http</type>
+          <httpclose>http-keep-alive</httpclose>
+          <backend_serverpool>bk_dvwa_dmz</backend_serverpool>
+          <ssloffloadcert>6ad42c6718369</ssloffloadcert>
+          <ssloffloadacl_an />
+          <advanced>c3RpY2stdGFibGUgdHlwZSBpcCBzaXplIDEwMGsgZXhwaXJlIDJtIHN0b3JlIGNvbm5fY3VyLGNvbm5fcmF0ZSgzcyksaHR0cF9yZXFfcmF0ZSgxMHMpLGh0dHBfZXJyX3JhdGUoMTBzKQ0KdGNwLXJlcXVlc3QgY29ubmVjdGlvbiB0cmFjay1zYzAgc3JjDQp0Y3AtcmVxdWVzdCBjb25uZWN0aW9uIHJlamVjdCBpZiB7IHNjX2Nvbm5fY3VyKDApIGd0IDIwIH0NCnRjcC1yZXF1ZXN0IGNvbm5lY3Rpb24gcmVqZWN0IGlmIHsgc2NfY29ubl9yYXRlKDApIGd0IDMwIH0NCmh0dHAtcmVxdWVzdCBkZWwtaGVhZGVyIFgtRm9yd2FyZGVkLUZvcg0KaHR0cC1yZXF1ZXN0IHNldC1oZWFkZXIgWC1Gb3J3YXJkZWQtUHJvdG8gaHR0cHMgaWYgeyBzc2xfZmMgfQ0KaHR0cC1yZXF1ZXN0IHNldC1oZWFkZXIgWC1Gb3J3YXJkZWQtRm9yICVbc3JjXQ0KaHR0cC1yZXF1ZXN0IHNldC1oZWFkZXIgWC1SZWFsLUlQICVbc3JjXQ0KaHR0cC1yZXNwb25zZSBzZXQtaGVhZGVyIFN0cmljdC1UcmFuc3BvcnQtU2VjdXJpdHkgIm1heC1hZ2U9MzE1MzYwMDA7IGluY2x1ZGVTdWJEb21haW5zOyBwcmVsb2FkIg0KaHR0cC1yZXNwb25zZSBzZXQtaGVhZGVyIFgtRnJhbWUtT3B0aW9ucyAiU0FNRU9SSUdJTiINCmh0dHAtcmVzcG9uc2Ugc2V0LWhlYWRlciBYLUNvbnRlbnQtVHlwZS1PcHRpb25zICJub3NuaWZmIg0KaHR0cC1yZXNwb25zZSBzZXQtaGVhZGVyIFJlZmVycmVyLVBvbGljeSAic3RyaWN0LW9yaWdpbi13aGVuLWNyb3NzLW9yaWdpbiINCmh0dHAtcmVzcG9uc2UgZGVsLWhlYWRlciBTZXJ2ZXINCmh0dHAtcmVzcG9uc2UgZGVsLWhlYWRlciBYLVBvd2VyZWQtQnkNCmh0dHAtcmVxdWVzdCBkZW55IGRlbnlfc3RhdHVzIDQyOSBpZiB7IHNjX2h0dHBfcmVxX3JhdGUoMCkgZ3QgODAgfQ0KaHR0cC1yZXF1ZXN0IGRlbnkgZGVueV9zdGF0dXMgNDI5IGlmIHsgc2NfaHR0cF9lcnJfcmF0ZSgwKSBndCAyNSB9DQphY2wgaXNfbG9naW5fZW5kcG9pbnQgcGF0aF9iZWcgLWkgL2xvZ2luLnBocCAvdnVsbmVyYWJpbGl0aWVzL2JydXRlLw0KaHR0cC1yZXF1ZXN0IHRyYWNrLXNjMSBzcmMgdGFibGUgYmtfZHZ3YV9kbXpfaXB2QU5ZIGlmIGlzX2xvZ2luX2VuZHBvaW50DQpodHRwLXJlcXVlc3QgZGVueSBkZW55X3N0YXR1cyA0MjkgaWYgaXNfbG9naW5fZW5kcG9pbnQgeyBzY19odHRwX3JlcV9yYXRlKDEpIGd0IDUgfQ0KaHR0cC1yZXF1ZXN0IHJlZGlyZWN0IHNjaGVtZSBodHRwcyBjb2RlIDMwMSB1bmxlc3MgeyBzc2xfZmMgfQ==</advanced>
+          <a_extaddr>
+            <item>
+              <extaddr>wan_ipv4</extaddr>
+              <extaddr_port>443</extaddr_port>
+              <extaddr_ssl>yes</extaddr_ssl>
+              <_index />
+            </item>
+            <item>
+              <extaddr>wan_ipv4</extaddr>
+              <extaddr_port>80</extaddr_port>
+              <_index />
+            </item>
+          </a_extaddr>
+          <secondary />
+          <primary_frontend />
+          <forwardfor />
+          <extaddr />
+          <max_connections />
+          <client_timeout />
+          <port />
+          <advanced_bind />
+          <sslsnifilter />
+          <ssl_crtlist_advanced />
+          <dcertadv />
+          <ssloffload />
+          <ssloffloadacl />
+          <ssloffloadacladditional />
+          <ssloffloadacladditional_an />
+          <sslclientcert-none />
+          <sslclientcert-invalid />
+          <sslocsp />
+          <socket-stats />
+          <dontlognull />
+          <dontlog-normal />
+          <log-separate-errors />
+          <log-detailed />
+        </item>
+      </ha_backends>
+      <email_mailers />
+      <dns_resolvers />
+      <enable />
+      <maxconn>4096</maxconn>
+      <logfacility>local0</logfacility>
+      <loglevel>info</loglevel>
+      <localstatsport>2200</localstatsport>
+      <nbthread />
+      <hard_stop_after />
+      <localstats_refreshtime />
+      <localstats_sticktable_refreshtime />
+      <log-send-hostname />
+      <sslcompatibilitymode>auto</sslcompatibilitymode>
+      <ssldefaultdhparam>2048</ssldefaultdhparam>
+      <email_level />
+      <email_myhostname />
+      <email_from />
+      <email_to />
+      <resolver_retries />
+      <resolver_timeoutretry />
+      <resolver_holdvalid />
+    </haproxy>
+  </installedpackages>
+  <sysctl>
+    <item>
+      <tunable>net.inet.ip.intr_queue_maxlen</tunable>
+      <value>4096</value>
+      <descr>KRONOS A1 Netmap validated tuning</descr>
+    </item>
+  </sysctl>
+  <ca>
+    <refid>6ad42adfc10f3</refid>
+    <descr>KRONOS-CA</descr>
+    <trust>disabled</trust>
+    <randomserial>disabled</randomserial>
+    <crt>[ELIMINADO_PARA_PUBLICACION]</crt>
+    <prv>[ELIMINADO_PARA_PUBLICACION]</prv>
+    <serial>2</serial>
+  </ca>
+</pfsense>

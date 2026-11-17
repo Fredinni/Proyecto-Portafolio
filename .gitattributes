@@ -10,3 +10,11 @@ Dockerfile* text eol=lf
 *.rules text eol=lf
 *.php text eol=lf
 *.conf text eol=lf
+*.md text eol=lf
+*.xml text eol=lf
+# Office and PDF exports must preserve exact bytes, including xref offsets.
+*.pdf binary
+*.docx binary
+*.pptx binary
+# Keep the uploaded audiovisual transcript byte-for-byte.
+*.vtt -text

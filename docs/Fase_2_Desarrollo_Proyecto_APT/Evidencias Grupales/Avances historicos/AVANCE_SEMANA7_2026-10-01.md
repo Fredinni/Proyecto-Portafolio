@@ -1,6 +1,6 @@
 # KRONOS SENTINEL — avance comprobado al 1 de octubre de 2026
 
-Este corte corresponde a la semana 7 y a la preparación de la Evaluación 2 del 6 de octubre. Las fechas planificadas se toman de la [carta Gantt oficial](Informacion_EA2/Plan_Trabajo_Carta_Gantt.md). Las verificaciones descritas aquí se ejecutaron el **1 de octubre**: no se presentan como pruebas realizadas retrospectivamente en agosto o septiembre.
+Este corte corresponde a la semana 7 y a la preparación de la Evaluación 2 del 6 de octubre. Las fechas planificadas se toman de la [carta Gantt oficial](../Planificacion/Plan_Trabajo_Carta_Gantt.md). Las verificaciones descritas aquí se ejecutaron el **1 de octubre**: no se presentan como pruebas realizadas retrospectivamente en agosto o septiembre.
 
 Los responsables son los asignados en la planificación; la automatización de despliegue y auditoría no demuestra por sí sola participación personal de cada integrante. **PROVISIONED** significa recurso creado; **CONFIGURED**, configuración aplicada; **TESTED**, prueba ejecutada; **VALIDATED**, criterios completos verificados.
 
@@ -103,21 +103,21 @@ La credencial operadora temporal y su archivo de hosts conocidos se retiraron de
 
 Estas capturas presentan salidas reales de las pruebas del corte; no sustituyen capturas de la WebGUI ni atribuyen resultados simulados al sistema:
 
-- [DHCP y aislamiento A2](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/pruebas/01-a2-dhcp-aislamiento.png).
-- [Persistencia de Edge](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/pruebas/02-edge-persistencia.png).
-- [Auditoría de kernel A1](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/pruebas/03-a1-kernel.png).
-- [Descarte Inline y controles A3](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/pruebas/04-suricata-ips.png).
-- [Reputación y GeoIP A4](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/pruebas/05-pfblocker.png).
-- [IP pública original preservada](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/pruebas/06-source-preservation.png).
-- [Contadores del bloqueo RU/KP](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/pruebas/07-geoip-country-policy.png).
+- [DHCP y aislamiento A2](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/pruebas/01-a2-dhcp-aislamiento.png).
+- [Persistencia de Edge](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/pruebas/02-edge-persistencia.png).
+- [Auditoría de kernel A1](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/pruebas/03-a1-kernel.png).
+- [Descarte Inline y controles A3](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/pruebas/04-suricata-ips.png).
+- [Reputación y GeoIP A4](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/pruebas/05-pfblocker.png).
+- [IP pública original preservada](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/pruebas/06-source-preservation.png).
+- [Contadores del bloqueo RU/KP](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/pruebas/07-geoip-country-policy.png).
 
-Se obtuvieron **22 capturas de la WebGUI real**. El [registro de capturas](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/capturas-observaciones.json) identifica las observaciones. Una selección breve para el equipo:
+Se obtuvieron **22 capturas de la WebGUI real**. El [registro de capturas](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/capturas-observaciones.json) identifica las observaciones. Una selección breve para el equipo:
 
-- [VLAN 802.1Q](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/03-vlan-8021q.png) y [DHCP CORP](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/04-dhcp-VLAN10-CORP.png).
-- [Offloading](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/05-offloading.png) y [tuning](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/06-system-tunables.png).
-- [Suricata WAN](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/09b-suricata-WAN-settings.png), [categorías](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/09c-suricata-categories.png) y [gestión de SID](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/09c-suricata-SID-management.png).
-- [Listas IPv4 pfBlockerNG](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/10b-pfBlocker-IPv4-lists.png), [reglas WAN](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/08b-rules-WAN-reputation.png) y [DVWA](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/11-DVWA-login.png).
+- [VLAN 802.1Q](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/03-vlan-8021q.png) y [DHCP CORP](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/04-dhcp-VLAN10-CORP.png).
+- [Offloading](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/05-offloading.png) y [tuning](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/06-system-tunables.png).
+- [Suricata WAN](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/09b-suricata-WAN-settings.png), [categorías](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/09c-suricata-categories.png) y [gestión de SID](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/09c-suricata-SID-management.png).
+- [Listas IPv4 pfBlockerNG](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/10b-pfBlocker-IPv4-lists.png), [reglas WAN](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/08b-rules-WAN-reputation.png) y [DVWA](02_Avance_S7_Corte_2026-10-01/EA2_Evidencias_2026-10-01/configuraciones/11-DVWA-login.png).
 
-Presentación de tres diapositivas: [PowerPoint editable](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/Evaluacion2_Avance_Semana7_2026-10-01.pptx) y [PDF](Presentaciones_y_Evidencias_EA2/02_Avance_S7_Corte_2026-10-01/Evaluacion2_Avance_Semana7_2026-10-01.pdf). Incluye responsables, fechas Gantt, criterios medibles y contraste entre resultados esperados y obtenidos. Se comprobó visualmente el contenido y el layout sin desbordamientos.
+Presentación de tres diapositivas: [PowerPoint editable](02_Avance_S7_Corte_2026-10-01/Evaluacion2_Avance_Semana7_2026-10-01.pptx) y [PDF](02_Avance_S7_Corte_2026-10-01/Evaluacion2_Avance_Semana7_2026-10-01.pdf). Incluye responsables, fechas Gantt, criterios medibles y contraste entre resultados esperados y obtenidos. Se comprobó visualmente el contenido y el layout sin desbordamientos.
 
 Los registros crudos permanecen en evidencia privada local. Las configuraciones base de semana 7 y su persistencia están probadas dentro del alcance descrito. Faltan las integraciones posteriores: HAProxy, motor KRONOS, AMI, Gemini y QA extremo a extremo, además de revisar el flowbit advertido y ensayar rotación sostenida. Suricata en WAN puede observar TLS/metadatos; la inspección de SQLi HTTP requiere el tramo posterior a la terminación TLS. Ninguna actividad futura se declara completada por disponer de sus VMs.
