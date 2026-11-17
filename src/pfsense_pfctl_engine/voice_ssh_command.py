@@ -4,6 +4,7 @@
 import ipaddress
 import json
 import os
+import re
 from pathlib import Path
 import shlex
 import subprocess
@@ -12,6 +13,8 @@ import sys
 
 def validate_command(command, table, protected_ips=()):
     args = shlex.split(command)
+    if len(args) == 2 and args[0] == "kronos-incident-identity" and re.fullmatch(r"[a-f0-9]{64}", args[1]):
+        return ["/usr/local/bin/python3.11", str(Path(__file__).with_name("incident_store.py")), args[1]]
     if args == ["pfctl", "-t", table, "-T", "show"]:
         return ["/sbin/pfctl", *args[1:]]
     mutating_ip = None

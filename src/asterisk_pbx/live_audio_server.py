@@ -14,7 +14,7 @@ import time
 import uuid
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ai_voice_agent"))
-from gemini_live_client import GeminiLiveVoiceClient
+from gemini_live_client import GeminiLiveVoiceClient, InitialAudioTimeout, RecoverableLiveDisconnect
 from soar_tools_executor import SoarToolsExecutor
 
 log = logging.getLogger("kronos.live")
@@ -85,6 +85,33 @@ async def microphone(reader):
             raise ValueError("Unexpected AudioSocket packet type")
 
 
+class MicrophoneBuffer:
+    """Drain AudioSocket during setup; retain at most one second of fresh audio."""
+    def __init__(self, max_frames=50):
+        self.queue = asyncio.Queue(maxsize=max_frames)
+        self.dropped = 0
+
+    def push(self, frame):
+        if self.queue.full():
+            self.queue.get_nowait()
+            self.dropped += 1
+        self.queue.put_nowait(frame)
+
+    async def pump(self, reader):
+        try:
+            async for frame in microphone(reader):
+                self.push(frame)
+        finally:
+            self.push(None)
+
+    async def stream(self):
+        while True:
+            frame = await self.queue.get()
+            if frame is None:
+                return
+            yield frame
+
+
 def consume_context(session_id, directory):
     session_id = str(uuid.UUID(session_id))
     path = Path(directory) / (session_id + ".json")
@@ -105,8 +132,10 @@ def consume_context(session_id, directory):
 
 
 async def handle_call(reader, writer, config, call_directory, client_factory=GeminiLiveVoiceClient):
+    started = time.monotonic()
     session_id = "unregistered"
     playback_task = None
+    microphone_task = None
     try:
         writer.get_extra_info("socket").setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
         kind, payload = await asyncio.wait_for(read_packet(reader), timeout=5)
@@ -119,17 +148,52 @@ async def handle_call(reader, writer, config, call_directory, client_factory=Gem
         incident.update({"operator_name": operator.get("name", "operador"),
                          "operator_role": operator.get("role", "no identificado")})
         tools = SoarToolsExecutor(config=config, incident=incident)
-        if incident.get("attacker_ip"):
-            incident["sensor_pfctl_blocked_at_alert"] = incident.get("pfctl_blocked")
-            current = await asyncio.to_thread(tools.execute_tool_call, "get_firewall_states",
-                                             {"ip": incident["attacker_ip"]})
-            incident["firewall_state_at_call"] = current
-            incident["pfctl_blocked"] = current.get("is_blocked") if current.get("verified") else None
+        log.info("call_open session=%s operator=%s mode=%s", session_id, extension, incident.get("mode"))
         playback = Playback()
         playback_task = asyncio.create_task(playback.run(writer))
-        session_task = asyncio.create_task(client_factory().start_voice_session(
-            incident, microphone(reader), playback.feed, tools,
-            playback.interrupt, playback.finish_turn))
+        buffered_microphone = MicrophoneBuffer()
+        microphone_task = asyncio.create_task(buffered_microphone.pump(reader))
+        if incident.get("attacker_ip"):
+            incident["sensor_pfctl_blocked_at_alert"] = incident.get("pfctl_blocked")
+            queries = {"state": asyncio.create_task(asyncio.to_thread(tools.execute_tool_call,
+                       "get_firewall_states", {"ip": incident["attacker_ip"]}))}
+            if incident.get("incident_id"):
+                queries["identity"] = asyncio.create_task(asyncio.to_thread(tools.execute_tool_call,
+                                      "get_incident_details", {}))
+            done, pending = await asyncio.wait(queries.values(), timeout=2.5)
+            for task in pending:
+                task.cancel()
+            await asyncio.gather(*pending, return_exceptions=True)
+            current = {"success": False, "verified": False, "is_blocked": None}
+            if queries["state"] in done:
+                current = queries["state"].result()
+            if "identity" in queries and queries["identity"] in done:
+                network = queries["identity"].result()
+                incident["network_evidence_source"] = network.get("source")
+                incident["network_identity_query_verified"] = network.get("identity_query_verified", False)
+            incident["firewall_state_at_call"] = current
+            incident["pfctl_blocked"] = current.get("is_blocked") if current.get("verified") else None
+        log.info("call_preflight session=%s elapsed=%.3f", session_id, time.monotonic() - started)
+        async def conversation():
+            active_tools = tools
+            for attempt in range(2):
+                try:
+                    return await client_factory().start_voice_session(
+                        incident, buffered_microphone.stream(), playback.feed, active_tools,
+                        playback.interrupt, playback.finish_turn)
+                except (InitialAudioTimeout, RecoverableLiveDisconnect):
+                    log.warning("live_safe_reconnect session=%s attempt=%s", session_id, attempt + 1)
+                    if attempt == 1:
+                        raise
+                    # No mutation was attempted and no audio played. Discard
+                    # stale intent; the new session asks the operator again.
+                    active_tools = SoarToolsExecutor(config=config, incident=incident)
+                    incident["connection_recovered"] = True
+                    if incident.get("attacker_ip"):
+                        current = await asyncio.wait_for(asyncio.to_thread(active_tools.execute_tool_call,
+                                  'get_firewall_states', {'ip':incident['attacker_ip']}), 5.5)
+                        incident['firewall_state_at_call'] = current
+        session_task = asyncio.create_task(conversation())
         try:
             done, _ = await asyncio.wait([session_task, playback_task],
                                         timeout=int(config.get("max_call_seconds", 300)),
@@ -146,10 +210,18 @@ async def handle_call(reader, writer, config, call_directory, client_factory=Gem
         # Log only the exception class: external connection errors may contain
         # a WebSocket URL whose query includes the API credential.
         log.error("call_failed session=%s error_type=%s", session_id, type(error).__name__)
+        log.error("call_failure_detail session=%s sent_code=%s received_code=%s ping_timeout=%s", session_id,
+                  getattr(getattr(error, "sent", None), "code", None),
+                  getattr(getattr(error, "rcvd", None), "code", None),
+                  "keepalive ping timeout" in str(error))
     finally:
         if playback_task:
             playback_task.cancel()
             await asyncio.gather(playback_task, return_exceptions=True)
+        if microphone_task:
+            microphone_task.cancel()
+            await asyncio.gather(microphone_task, return_exceptions=True)
+            log.info("call_microphone session=%s dropped_stale_frames=%s", session_id, buffered_microphone.dropped)
         try:
             writer.write(packet(0x00))
             await writer.drain()

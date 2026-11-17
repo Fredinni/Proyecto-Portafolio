@@ -25,6 +25,8 @@ en contenedores, no el runtime usado en esta validación.
 Ver [resultados, recuperación de DVWA y límites](VALIDACION_OPERATIVA_2026-11-16.md).
 La [validación posterior de SQLi y llamadas](VALIDACION_QA_SQLI_2026-11-16.md)
 documenta la corrección de alertas desde MGMT y el cambio autorizado de DVWA a Low.
+La [validación de identidad y estabilidad](VALIDACION_ESTABILIDAD_VOZ_2026-11-16.md)
+documenta la lectura restringida en pfSense y las llamadas con tiempos medidos.
 
 ## Configuración en VM103
 

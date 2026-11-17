@@ -83,11 +83,26 @@ class VoicePolicyTests(unittest.TestCase):
     def test_yes_requires_previous_question(self):
         tools, fw = self.executor()
         tools.observe_input("Sí")
+        self.assertIsNone(tools.policy.confirmed_unblock_target())
         self.assertFalse(tools.execute_tool_call("unblock_ip", {"ip": IP})["success"])
         tools.observe_output("¿Quieres que desbloquee esta IP o la mantenemos bloqueada?")
         tools.finish_turn()
         tools.observe_input("Sí, por favor.")
+        self.assertEqual(tools.policy.confirmed_unblock_target(), IP)
         self.assertTrue(tools.execute_tool_call("unblock_ip", {"ip": IP})["success"])
+
+    def test_interrupted_question_preserves_explicit_input_but_cancels_bare_yes(self):
+        tools, fw = self.executor()
+        tools.observe_output("¿Quieres que desbloquee esta IP?")
+        tools.observe_input("Desbloquea esa IP")
+        tools.interrupt_output()
+        self.assertTrue(tools.execute_tool_call("unblock_ip", {"ip": IP})["success"])
+        tools, fw = self.executor()
+        tools.observe_output("¿Quieres que desbloquee esta IP?")
+        tools.finish_turn()
+        tools.interrupt_output()
+        tools.observe_input("Sí")
+        self.assertFalse(tools.execute_tool_call("unblock_ip", {"ip": IP})["success"])
 
     def test_negations_qa_details_and_questions_never_authorize(self):
         for phrase in ["No la desbloquees", "Déjala bloqueada", "Espera, desbloquea después",
@@ -306,7 +321,8 @@ class AudioIntegrationTests(unittest.IsolatedAsyncioTestCase):
                 await ws.send(json.dumps({"setupComplete": {}}))
                 await ws.recv()  # Initial greeting instruction.
                 await ws.send(json.dumps({"serverContent": {
-                    "outputTranscription": {"text": "¿Quieres que desbloquee esta IP?"}, "turnComplete": True}}))
+                    "outputTranscription": {"text": "¿Quieres que desbloquee esta IP?"}, "generationComplete": True}}))
+                await ws.send(json.dumps({"serverContent": {"turnComplete": True}}))
                 # Real bidirectional microphone frames reach the WebSocket.
                 while True:
                     incoming = json.loads(await ws.recv())
@@ -314,7 +330,8 @@ class AudioIntegrationTests(unittest.IsolatedAsyncioTestCase):
                         self.assertEqual(incoming["realtimeInput"]["audio"]["mimeType"], "audio/pcm;rate=16000")
                         break
                 await ws.send(json.dumps({"serverContent": {"inputTranscription": {"text": "Sí, por favor."}}}))
-                await ws.send(json.dumps({"toolCall": {"functionCalls": [{"id": "unblock-1", "name": "unblock_ip", "args": {"ip": IP, "reason": "QA"}}]}}))
+                await ws.send(json.dumps({"toolCall": {"functionCalls": [{"id": "unblock-1", "name": "unblock_ip", "args": {"ip": IP, "reason": "QA"}}]},
+                                          "serverContent": {"generationComplete": True}}))
                 while True:
                     incoming = json.loads(await ws.recv())
                     if "toolResponse" in incoming:
@@ -343,7 +360,7 @@ class AudioIntegrationTests(unittest.IsolatedAsyncioTestCase):
                         reader, writer = await asyncio.open_connection("127.0.0.1", server.sockets[0].getsockname()[1])
                         writer.write(packet(1, uuid.UUID(sid).bytes))
                         for _ in range(10):
-                            writer.write(packet(0x10, b"\x10\x00" * 160))
+                            writer.write(packet(0x10, b"\x00\x04" * 160))
                         await writer.drain()
                         await asyncio.wait_for(completed.wait(), timeout=5)
                         heard_audio = False

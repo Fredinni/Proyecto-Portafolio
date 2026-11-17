@@ -54,6 +54,22 @@ class VoiceActionPolicy:
             self.input_text = ""
             self.updated_at = 0
 
+    def interrupt_output(self):
+        """Discard an unfinished question without losing fresh operator input."""
+        with self.lock:
+            self.output_text = ""
+            self.pending_unblock = None
+
+    def confirmed_unblock_target(self):
+        """A contextual yes confirms the question already asked, without another LLM decision."""
+        with self.lock:
+            if not self.authorized or not self.pending_unblock or time.monotonic() - self.updated_at > 30:
+                return None
+            text = normalize(self.input_text)
+            if re.fullmatch(r"[\s¿?¡!.,]*(si|dale|adelante|confirmo|autorizo)([\s,]+por favor)?[\s.!]*", text):
+                return self.pending_unblock
+            return None
+
     def authorize(self, action, ip):
         with self.lock:
             if not self.authorized:

@@ -6,6 +6,7 @@ Project: KRONOS SENTINEL - Autonomous AI-IPS & Live Voice Incident Response
 """
 
 import ipaddress
+import json
 import logging
 import re
 import shlex
@@ -167,6 +168,21 @@ class PfctlWrapper:
         if not result["success"]:
             raise RuntimeError("Cannot read firewall table")
         return result["is_blocked"]
+
+    def get_incident_identity(self, incident_id: str) -> Dict[str, Any]:
+        """Read identity from the pfSense collector through its restricted SSH key."""
+        if not re.fullmatch(r"[a-f0-9]{64}", incident_id):
+            return {"success": False, "error": "Invalid incident ID"}
+        if self.simulation_mode:
+            return {"success": False, "error": "No real evidence in simulation"}
+        result = self._exec_command(["kronos-incident-identity", incident_id])
+        try:
+            evidence = json.loads(result.stdout)
+            if result.returncode == 0 and evidence.get("success") and evidence.get("incident", {}).get("incident_id") == incident_id:
+                return evidence
+        except (ValueError, AttributeError):
+            pass
+        return {"success": False, "error": "No se pudo consultar la evidencia de pfSense."}
 
     def get_ip_status(self, ip: str) -> Dict[str, Any]:
         """A failed query is UNKNOWN, never a successful 'not blocked'.

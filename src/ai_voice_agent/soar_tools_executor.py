@@ -29,6 +29,9 @@ class SoarToolsExecutor:
     def finish_turn(self):
         self.policy.finish_turn()
 
+    def interrupt_output(self):
+        self.policy.interrupt_output()
+
     def execute_tool_call(self, function_name, arguments):
         if function_name == "get_incident_details":
             fields = ("attacker_ip", "attack_type", "signature", "severity", "timestamp",
@@ -38,7 +41,15 @@ class SoarToolsExecutor:
             fields += ("sensor_dropped", "source_protected", "observed_source_ip", "source_identity", "pfctl_blocked")
             details = {k: self.incident[k] for k in fields if k in self.incident}
             details.update(describe_network_identity(self.incident))
-            return {"success": True, "incident": details,
+            source = "CALL_CONTEXT"
+            identity = self.incident.get("incident_id")
+            if identity:
+                evidence = self.pfctl.get_incident_identity(identity)
+                row = evidence.get("incident", {})
+                if evidence.get("success") and row.get("attacker_ip") == self.incident.get("attacker_ip") and row.get("target_ip") == self.incident.get("target_ip"):
+                    details.update(row)
+                    source = "PFSENSE_EVE"
+            return {"success": True, "source": source, "identity_query_verified": source == "PFSENSE_EVE", "incident": details,
                     "note": "La telemetría describe el incidente. Consulta el firewall para conocer el bloqueo actual."}
         if function_name not in {"get_firewall_states", "unblock_ip", "block_ip_permanently"}:
             return {"success": False, "error": "Herramienta no disponible."}
@@ -72,6 +83,10 @@ class SoarToolsExecutor:
                   "is_blocked": state.get("is_blocked"),
                   "status": "Cambio confirmado en la tabla del firewall." if verified else
                             "No se pudo confirmar el cambio en el firewall; no anuncies éxito."}
+        if verified and function_name == "unblock_ip":
+            result["ips_remains_active"] = True
+            result["test_guidance"] = ("Comprueba el acceso con una solicitud normal. Un nuevo SQLi o ataque "
+                                       "puede volver a bloquear la IP; no se ha creado una excepción al IPS.")
         log.info("firewall_action session=%s operator=%s action=%s ip=%s verified=%s",
                  self.incident.get("session_id"), self.incident.get("operator_extension"),
                  function_name, ip, verified)

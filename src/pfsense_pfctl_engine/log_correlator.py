@@ -33,6 +33,7 @@ if BASE_DIR not in sys.path:
 from false_positive_filter import FalsePositiveFilter
 from pfctl_wrapper import PfctlWrapper
 from incident_identity import describe_network_identity
+from incident_store import save_identity
 
 logging.basicConfig(
     level=logging.INFO,
@@ -259,6 +260,8 @@ class PfctlLogCorrelator:
         # 3. Construcción del payload estructurado del incidente
         incident_payload = {
             "timestamp": timestamp,
+            "sensor_log": self.eve_log_path,
+            "flow_id": event.get("flow_id"),
             "attacker_ip": src_ip,
             "target_ip": dest_ip,
             "attack_type": attack_type,
@@ -288,6 +291,12 @@ class PfctlLogCorrelator:
             "geo_country": self.filter.get_geoip(src_ip)
         }
         incident_payload.update(describe_network_identity(incident_payload))
+        if self.config.get("incident_store_dir"):
+            try:
+                save_identity(self.config["incident_store_dir"], incident_payload)
+            except OSError:
+                logging.exception("No se pudo conservar evidencia de identidad; se notificara igualmente")
+                incident_payload.pop("incident_id", None)
 
         # 4. Despacho asíncrono al agente de voz Asterisk / Gemini Live
         if trigger_dispatch:
