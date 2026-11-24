@@ -49,7 +49,7 @@ Ataque de SQL Injection contra DVWA a través del flujo real (Internet → borde
 
 ## Pendiente (en corrección con el responsable de A6)
 
-- **Fallo en desbloqueo por voz IA (Grave - Pendiente de resolución):** Durante las pruebas en vivo de QA, la orden de voz del analista solicitando levantar el bloqueo no se concreta de forma consistente en la tabla `snort2c` del firewall pfSense, requiriendo vaciado manual. Registrado como defecto prioritario para depuración post-demostración en [INCIDENCIA_QA_DESBLOQUEO_VOZ_2026-11-24.md](../../../../INCIDENCIA_QA_DESBLOQUEO_VOZ_2026-11-24.md).
+- **Fallo en desbloqueo por voz IA (Resuelto el 2026-11-24):** Corregida la detección VAD, la política de autorización para variantes coloquiales chilenas y el falso corte por `Model audio stalled mid-response`, desplegado en `20261124-live-03` y validado con pruebas unitarias (`85/85` pytest, `10/10` sentinel) y E2E reales sobre AudioSocket + pfSense `snort2c`. Además se documentó evitar recargas F5 sobre formularios `POST` SQLi previos tras el desbloqueo para impedir re-bloqueos inmediatos por Suricata. Detalle y evidencia en [INCIDENCIA_QA_DESBLOQUEO_VOZ_2026-11-24.md](../../../../INCIDENCIA_QA_DESBLOQUEO_VOZ_2026-11-24.md).
 - **Doble NAT en el borde:** la IP pública real del atacante no llega a pfSense, por lo que la capa de notificación por voz reporta una IP representativa. Solución identificada: propagar la IP real vía `X-Forwarded-For` de HAProxy hacia el motor KRONOS.
 - **Registro en el firewall:** que el motor escriba la IP real del atacante en su tabla de bloqueo (`KRONOS_IPS_GUARD`).
 - **Medición de la cadena completa:** tiempo total detección → bloqueo (meta < 1,5 s), una vez integrada la propagación de IP.
