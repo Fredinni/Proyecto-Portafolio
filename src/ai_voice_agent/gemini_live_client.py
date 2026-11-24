@@ -17,6 +17,7 @@ from audio_activity import AudioActivityGate
 
 log = logging.getLogger(__name__)
 INITIAL_AUDIO_TIMEOUT_SECONDS = 8
+MODEL_AUDIO_STALL_SECONDS = 25
 
 
 class InitialAudioTimeout(TimeoutError):
@@ -121,9 +122,9 @@ class GeminiLiveVoiceClient:
         cancelled_ids = set()
         transcription = {"updated": 0.0, "finished": False}
         started = time.monotonic()
-        timing = {"first_audio": False, "speech_end": None, "mutation_attempted": False,
-                  "response_active": False, "last_audio": None, "pending_tools": 0,
-                  "response_has_output": False, "completion_notified": False,
+        timing = {"first_audio": False, "greeting_completed": False, "speech_end": None,
+                  "mutation_attempted": False, "response_active": False, "last_audio": None,
+                  "pending_tools": 0, "response_has_output": False, "completion_notified": False,
                   "input_generation": 0, "receipt": None, "last_input_end": None}
         mutation_lock = asyncio.Lock()
         async with self.open_session(url, incident_data) as ws:
@@ -140,29 +141,41 @@ class GeminiLiveVoiceClient:
             async def startup_watchdog():
                 while True:
                     await asyncio.sleep(.25)
+                    now = time.monotonic()
                     if (not timing["first_audio"] and not timing["mutation_attempted"] and
-                            time.monotonic() - greeting_at > INITIAL_AUDIO_TIMEOUT_SECONDS):
+                            now - greeting_at > INITIAL_AUDIO_TIMEOUT_SECONDS):
                         raise InitialAudioTimeout("No initial model audio")
                     if (timing["speech_end"] is not None and not timing["mutation_attempted"] and
-                            time.monotonic() - timing["speech_end"] > 10):
-                        raise RecoverableLiveDisconnect("No model response after speech")
+                            not timing["response_active"] and timing["pending_tools"] == 0):
+                        limit = 14 if transcription["updated"] else 24
+                        if now - timing["speech_end"] > limit:
+                            raise RecoverableLiveDisconnect("No model response after speech")
                     if (timing["response_active"] and not timing["mutation_attempted"] and
-                            time.monotonic() - timing["last_audio"] > 10):
+                            timing["speech_end"] is None and not transcription["updated"] and
+                            timing["pending_tools"] == 0 and timing["last_audio"] is not None and
+                            now - timing["last_audio"] > MODEL_AUDIO_STALL_SECONDS):
                         raise RecoverableLiveDisconnect("Model audio stalled mid-response")
 
             async def microphone():
-                gate = AudioActivityGate(threshold=int(os.getenv("KRONOS_VAD_RMS_THRESHOLD", "64")))
-                async for pcm in audio_input_stream:
-                    chunks, speech_end = gate.feed(pcm)
-                    for chunk in chunks:
-                        await send({"realtimeInput": {"audio": {
-                            "mimeType": "audio/pcm;rate=16000",
-                            "data": base64.b64encode(chunk).decode("ascii")}}})
-                    if speech_end:
-                        timing["speech_end"] = time.monotonic()
-                        timing["last_input_end"] = timing["speech_end"]
-                        log.info("live_speech_end session=%s", incident_data.get("session_id"))
-                        await send({"realtimeInput": {"audioStreamEnd": True}})
+                gate = AudioActivityGate(threshold=int(os.getenv("KRONOS_VAD_RMS_THRESHOLD", "140")))
+                try:
+                    async for pcm in audio_input_stream:
+                        chunks, speech_end = gate.feed(pcm)
+                        for chunk in chunks:
+                            await send({"realtimeInput": {"audio": {
+                                "mimeType": "audio/pcm;rate=16000",
+                                "data": base64.b64encode(chunk).decode("ascii")}}})
+                        if speech_end and (timing["greeting_completed"] or
+                                           time.monotonic() - greeting_at > 4.0):
+                            now = time.monotonic()
+                            timing["speech_end"] = now
+                            timing["last_input_end"] = now
+                            if timing["last_audio"] is None or now - timing["last_audio"] > 1.5:
+                                timing["response_active"] = False
+                            log.info("live_speech_end session=%s", incident_data.get("session_id"))
+                            await send({"realtimeInput": {"audioStreamEnd": True}})
+                except websockets.exceptions.ConnectionClosedOK:
+                    return
 
             async def run_tool(name, arguments):
                 if name not in {"unblock_ip", "block_ip_permanently"}:
@@ -172,8 +185,11 @@ class GeminiLiveVoiceClient:
                     key = (timing["input_generation"], name, arguments.get("ip"))
                     if receipt and receipt[0] == key:
                         return {**receipt[1], "already_executed": True}
+                    prior_mutated = timing["mutation_attempted"]
                     timing["mutation_attempted"] = True
                     result = await asyncio.to_thread(tools.execute_tool_call, name, arguments)
+                    if result.get("firewall_touched", True) is False and not prior_mutated:
+                        timing["mutation_attempted"] = False
                     if result.get("verified"):
                         timing["receipt"] = (key, result)
                     return result
@@ -181,19 +197,24 @@ class GeminiLiveVoiceClient:
             async def confirmation_controller():
                 while True:
                     await asyncio.sleep(.05)
+                    now = time.monotonic()
                     ended = timing["last_input_end"]
-                    if (ended is None or not transcription["updated"] or
-                            time.monotonic() - ended < .3 or
-                            time.monotonic() - transcription["updated"] < .3):
+                    ready_silence = ended is not None and now - ended >= .3
+                    ready_asr = bool(transcription["finished"]) and now - transcription["updated"] >= .45
+                    if (not transcription["updated"] or
+                            (not ready_silence and not ready_asr) or
+                            now - transcription["updated"] < .25):
                         continue
                     ip = tools.policy.confirmed_unblock_target()
                     if ip:
+                        timing["speech_end"] = None
                         result = await run_tool("unblock_ip", {"ip": ip, "reason": "Confirmacion de la pregunta de desbloqueo por el operador"})
                         log.info("voice_confirmation_action session=%s verified=%s", incident_data.get("session_id"), result.get("verified"))
                         await send({"clientContent": {"turns": [{"role": "user", "parts": [{"text":
                             "KRONOS_ACTION_RESULT: el controlador ya proceso la confirmacion del operador. "
                             "Informa este resultado sin volver a pedir confirmacion ni repetir la operacion: " + json.dumps(result, ensure_ascii=False)}]}], "turnComplete": True}})
                         timing["last_input_end"] = None
+                        transcription["finished"] = False
 
             async def execute_calls(calls):
                 responses = []
@@ -201,7 +222,8 @@ class GeminiLiveVoiceClient:
                     if call.get("id") in cancelled_ids:
                         continue
                     if call.get("name") in {"unblock_ip", "block_ip_permanently"}:
-                        timing["mutation_attempted"] = True
+                        log.info("live_tool_requested session=%s name=%s ip=%s",
+                                 incident_data.get("session_id"), call.get("name"), call.get("args", {}).get("ip"))
                         # Input transcription can trail the tool call. Continue
                         # receiving while waiting briefly for the complete text.
                         deadline = time.monotonic() + 1.5
@@ -217,6 +239,9 @@ class GeminiLiveVoiceClient:
                         result = await run_tool(call["name"], call.get("args", {}))
                         log.info("live_tool session=%s name=%s elapsed=%.3f", incident_data.get("session_id"),
                                  call["name"], time.monotonic() - tool_started)
+                        if call["name"] in {"unblock_ip", "block_ip_permanently"} and not result.get("verified"):
+                            log.warning("live_tool_rejected session=%s name=%s error=%s",
+                                        incident_data.get("session_id"), call["name"], result.get("error"))
                     except Exception:
                         log.exception("tool_execution_failed name=%s", call.get("name"))
                         result = {"success": False, "error": "No se pudo verificar la operación."}
@@ -246,6 +271,9 @@ class GeminiLiveVoiceClient:
                             tools.interrupt_output()
                             timing["response_has_output"] = False
                         timing["response_active"] = False
+                        timing["speech_end"] = None
+                        if timing["first_audio"]:
+                            timing["greeting_completed"] = True
                         await on_interrupt()
                     text = content.get("inputTranscription", {}).get("text", "")
                     if text:
@@ -255,6 +283,9 @@ class GeminiLiveVoiceClient:
                         tools.observe_input(text)
                         transcription["updated"] = time.monotonic()
                         transcription["finished"] = content["inputTranscription"].get("finished", False)
+                        if transcription["finished"]:
+                            log.info("live_input_finished session=%s chars=%s",
+                                     incident_data.get("session_id"), len(tools.policy.input_text.strip()))
                     output_text = content.get("outputTranscription", {}).get("text", "")
                     if output_text:
                         timing["response_has_output"] = True
@@ -280,10 +311,14 @@ class GeminiLiveVoiceClient:
                         cancelled_ids.add(call_id)
                     calls = message.get("toolCall", {}).get("functionCalls", [])
                     if calls:
+                        timing["greeting_completed"] = True
+                        timing["speech_end"] = None
                         timing["pending_tools"] += 1
                         tool_queue.put_nowait(calls)
                     if content.get("generationComplete") or content.get("turnComplete"):
                         timing["response_active"] = False
+                        timing["speech_end"] = None
+                        timing["greeting_completed"] = True
                         if (timing["response_has_output"] and not timing["completion_notified"] and
                                 not timing["pending_tools"]):
                             timing["completion_notified"] = True

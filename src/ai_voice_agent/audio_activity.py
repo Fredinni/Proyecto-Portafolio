@@ -4,7 +4,7 @@ from collections import deque
 
 
 class AudioActivityGate:
-    def __init__(self, threshold=64, silence_ms=600, prefix_ms=160):
+    def __init__(self, threshold=140, silence_ms=800, prefix_ms=160):
         self.threshold = threshold
         self.silence_samples = silence_ms * 16
         self.prefix_samples = prefix_ms * 16

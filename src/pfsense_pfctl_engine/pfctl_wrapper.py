@@ -73,7 +73,7 @@ class PfctlWrapper:
 
         if self.use_ssh:
             full_cmd = [
-                "ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=3",
+                "ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=4",
                 "-o", "StrictHostKeyChecking=yes"
             ]
             if self.config.get("ssh_identity_file"):
@@ -86,7 +86,7 @@ class PfctlWrapper:
             full_cmd = cmd
 
         try:
-            return subprocess.run(full_cmd, capture_output=True, text=True, timeout=5)
+            return subprocess.run(full_cmd, capture_output=True, text=True, timeout=8)
         except subprocess.TimeoutExpired:
             logging.error(f"Timeout ejecutando pfctl: {' '.join(full_cmd)}")
             return subprocess.CompletedProcess(args=full_cmd, returncode=124, stdout="", stderr="Timeout")
@@ -248,6 +248,16 @@ class PfctlWrapper:
         if res.returncode == 0:
             return [line.strip() for line in res.stdout.splitlines() if line.strip()]
         return []
+
+    def list_blocked_ips_status(self) -> Dict[str, Any]:
+        """Consulta verificable de las IPs presentes en la tabla del firewall."""
+        res = self._exec_command(["pfctl", "-t", self.table_name, "-T", "show"])
+        if res.returncode != 0:
+            return {"success": False, "verified": False, "table": self.table_name,
+                    "error": "No se pudo consultar la tabla del firewall."}
+        blocked = [line.strip() for line in res.stdout.splitlines() if line.strip()]
+        return {"success": True, "verified": not self.simulation_mode, "table": self.table_name,
+                "blocked_ips": blocked, "count": len(blocked)}
 
     def get_state_summary(self) -> Dict[str, Any]:
         """Obtiene estadísticas de la tabla de bloqueo en kernel"""

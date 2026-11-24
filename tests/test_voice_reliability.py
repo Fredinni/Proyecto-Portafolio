@@ -198,3 +198,183 @@ class StartupRetryTests(unittest.IsolatedAsyncioTestCase):
             self.assertTrue(first.closed)
             self.assertEqual(len(second.sent),1)
         self.assertTrue(second.closed)
+
+
+class UnblockReliabilityRegressionTests(unittest.IsolatedAsyncioTestCase):
+    def test_chilean_explicit_and_contextual_phrases_authorize_unblock(self):
+        ip = '181.42.184.12'
+        for phrase in [
+            'Sí, desbloquéamela por favor',
+            'Oye, como estaba probando yo, desbloquéame la IP',
+            'Quítame el bloqueo de esa IP',
+            'Sácame del bloqueo por favor',
+            'Levanta el bloqueo de la IP',
+        ]:
+            with self.subTest(phrase=phrase):
+                fw = Mock(simulation_mode=False, table_name='snort2c')
+                fw.unblock_ip.return_value = True
+                fw.get_ip_status.return_value = {'success': True, 'verified': True, 'is_blocked': False}
+                tools = SoarToolsExecutor({'authorized_extensions': ['1004']},
+                                          {'attacker_ip': ip, 'operator_extension': '1004'}, pfctl=fw)
+                tools.observe_input(phrase)
+                res = tools.execute_tool_call('unblock_ip', {'ip': ip, 'reason': 'QA'})
+                self.assertTrue(res['verified'])
+                fw.unblock_ip.assert_called_once_with(ip)
+
+        for yes_phrase in ['Sí, claro, porfa', 'Ya, dale', 'Sí, dale nomás', 'Claro, por favor']:
+            with self.subTest(yes_phrase=yes_phrase):
+                fw = Mock(simulation_mode=False, table_name='snort2c')
+                fw.unblock_ip.return_value = True
+                fw.get_ip_status.return_value = {'success': True, 'verified': True, 'is_blocked': False}
+                tools = SoarToolsExecutor({'authorized_extensions': ['1004']},
+                                          {'attacker_ip': ip, 'operator_extension': '1004'}, pfctl=fw)
+                tools.observe_output('¿Quieres que desbloquee esta IP?')
+                tools.finish_turn()
+                tools.observe_input(yes_phrase)
+                self.assertEqual(tools.policy.confirmed_unblock_target(), ip)
+                res = tools.execute_tool_call('unblock_ip', {'ip': ip, 'reason': 'QA'})
+                self.assertTrue(res['verified'])
+
+    def test_interim_filler_turn_preserves_unconsumed_order_but_never_leaks_refusal(self):
+        ip = '181.42.184.12'
+        fw = Mock(simulation_mode=False, table_name='snort2c')
+        fw.unblock_ip.return_value = True
+        fw.get_ip_status.return_value = {'success': True, 'verified': True, 'is_blocked': False}
+        tools = SoarToolsExecutor({'authorized_extensions': ['1004']},
+                                  {'attacker_ip': ip, 'operator_extension': '1004'}, pfctl=fw)
+        tools.observe_input('Desbloquéame la IP por favor')
+        tools.observe_output('Un momento, reviso el firewall.')
+        tools.finish_turn()
+        res = tools.execute_tool_call('unblock_ip', {'ip': ip})
+        self.assertTrue(res['verified'])
+        # Single consumption remains enforced after stashed order is used.
+        self.assertFalse(tools.execute_tool_call('unblock_ip', {'ip': ip})['success'])
+
+        fw2 = Mock(simulation_mode=False, table_name='snort2c')
+        tools2 = SoarToolsExecutor({'authorized_extensions': ['1004']},
+                                   {'attacker_ip': ip, 'operator_extension': '1004'}, pfctl=fw2)
+        tools2.observe_input('No la desbloquees')
+        tools2.observe_output('Entendido.')
+        tools2.finish_turn()
+        self.assertFalse(tools2.execute_tool_call('unblock_ip', {'ip': ip})['success'])
+        fw2.unblock_ip.assert_not_called()
+
+    def test_direct_call_lists_blocked_ip_and_allows_confirmed_unblock(self):
+        ip = '181.42.184.12'
+        fw = Mock(simulation_mode=False, table_name='snort2c')
+        fw.list_blocked_ips_status.return_value = {
+            'success': True, 'verified': True, 'table': 'snort2c', 'blocked_ips': [ip], 'count': 1
+        }
+        fw.unblock_ip.return_value = True
+        fw.get_ip_status.return_value = {'success': True, 'verified': True, 'is_blocked': False}
+        tools = SoarToolsExecutor({'authorized_extensions': ['1004'], 'protected_ips': ['192.168.99.10']},
+                                  {'mode': 'DIRECT_CALL', 'operator_extension': '1004'}, pfctl=fw)
+        listed = tools.execute_tool_call('list_blocked_ips', {})
+        self.assertEqual(listed['blocked_ips'], [ip])
+        tools.observe_output(f'Veo bloqueada la IP {ip} en snort2c. ¿Quieres que desbloquee esta IP?')
+        tools.finish_turn()
+        tools.observe_input('Sí, por favor.')
+        self.assertEqual(tools.policy.confirmed_unblock_target(), ip)
+        res = tools.execute_tool_call('unblock_ip', {'ip': ip})
+        self.assertTrue(res['verified'])
+        fw.unblock_ip.assert_called_once_with(ip)
+
+    async def test_pre_greeting_noise_does_not_emit_early_stream_end_and_allows_recovery(self):
+        events = []
+        ip = '181.42.184.12'
+        fw = Mock(simulation_mode=False, table_name='snort2c')
+        fw.unblock_ip.return_value = True
+        fw.get_ip_status.return_value = {'success': True, 'verified': True, 'is_blocked': False}
+        tools = SoarToolsExecutor({'authorized_extensions': ['1004']},
+                                  {'attacker_ip': ip, 'operator_extension': '1004'}, pfctl=fw)
+
+        async def fake(ws):
+            await ws.recv()
+            await ws.send('{"setupComplete":{}}')
+            await ws.recv()
+            # Wait briefly before greeting audio while early mic click+silence runs.
+            await asyncio.sleep(.25)
+            await ws.send(json.dumps({
+                'serverContent': {'outputTranscription': {'text': '¿Quieres que desbloquee esta IP?'},
+                                  'generationComplete': True}
+            }))
+            # Model prematurely asks for unblock before valid input -> local rejection only.
+            await ws.send(json.dumps({'toolCall': {'functionCalls': [{'id': 't1', 'name': 'unblock_ip', 'args': {'ip': ip}}]}}))
+            while True:
+                msg = json.loads(await ws.recv())
+                events.append(msg)
+                if 'toolResponse' in msg:
+                    self.assertFalse(msg['toolResponse']['functionResponses'][0]['response']['verified'])
+                    break
+            # Operator then confirms via ASR finished without needing AudioActivityGate end.
+            await ws.send(json.dumps({'serverContent': {'inputTranscription': {'text': 'Sí, porfa', 'finished': True}}}))
+            while True:
+                msg = json.loads(await ws.recv())
+                events.append(msg)
+                if 'clientContent' in msg and 'KRONOS_ACTION_RESULT' in msg['clientContent']['turns'][0]['parts'][0]['text']:
+                    break
+
+        async def mic():
+            # Early click + quiet before greeting finishes, then keep channel open.
+            for frame in ([b'\x00\x04' * 320] * 2 + [b'\x00\x00' * 320] * 45):
+                yield frame
+                await asyncio.sleep(.002)
+            while True:
+                yield b'\x00\x00' * 320
+                await asyncio.sleep(.05)
+
+        async def sink(*args):
+            pass
+
+        async with websockets.serve(fake, '127.0.0.1', 0) as server:
+            url = 'ws://127.0.0.1:' + str(server.sockets[0].getsockname()[1])
+            client = GeminiLiveVoiceClient(api_key='test', connect=lambda _, **kw: websockets.connect(url, **kw))
+            await asyncio.wait_for(client.start_voice_session({'attacker_ip': ip, 'operator_extension': '1004'}, mic(), sink, tools, sink), 6)
+        # Early click+silence before greeting must NOT have emitted audioStreamEnd.
+        early_ends = [m for m in events if m.get('realtimeInput', {}).get('audioStreamEnd')]
+        self.assertEqual(early_ends, [])
+        fw.unblock_ip.assert_called_once_with(ip)
+
+    async def test_burst_greeting_without_turn_complete_does_not_false_stall_after_speech(self):
+        ip = '181.42.184.12'
+        fw = Mock(simulation_mode=False, table_name='snort2c')
+        fw.unblock_ip.return_value = True
+        fw.get_ip_status.return_value = {'success': True, 'verified': True, 'is_blocked': False}
+        tools = SoarToolsExecutor({'authorized_extensions': ['1004']}, {'attacker_ip': ip, 'operator_extension': '1004'}, pfctl=fw)
+
+        async def fake(ws):
+            await ws.recv()
+            await ws.send('{"setupComplete":{}}')
+            await ws.recv()
+            # Greeting audio chunk arrives without turnComplete/generationComplete.
+            await ws.send(json.dumps({'serverContent': {'modelTurn': {'parts': [{'inlineData': {
+                'mimeType': 'audio/pcm;rate=24000', 'data': base64.b64encode(b'\x00\x04' * 480).decode()}}]},
+                'outputTranscription': {'text': '¿Quieres que desbloquee la IP 181.42.184.12?'}}}))
+            # User speaks across patched MODEL_AUDIO_STALL_SECONDS=0.35; watchdog must not kill session.
+            await asyncio.sleep(0.20)
+            await ws.send(json.dumps({'serverContent': {'inputTranscription': {'text': 'Sí, desbloquéala', 'finished': True}}}))
+            await asyncio.sleep(0.25)
+            await ws.send(json.dumps({'toolCall': {'functionCalls': [{'id': 'c1', 'name': 'unblock_ip', 'args': {'ip': ip}}]}}))
+            while True:
+                msg = json.loads(await ws.recv())
+                if 'toolResponse' in msg:
+                    self.assertTrue(msg['toolResponse']['functionResponses'][0]['response']['verified'])
+                    break
+
+        async def mic():
+            while True:
+                yield b'\x00\x00' * 320
+                await asyncio.sleep(0.02)
+
+        async def sink(*args):
+            pass
+
+        with patch('gemini_live_client.MODEL_AUDIO_STALL_SECONDS', 0.35):
+            async with websockets.serve(fake, '127.0.0.1', 0) as server:
+                url = 'ws://127.0.0.1:' + str(server.sockets[0].getsockname()[1])
+                client = GeminiLiveVoiceClient(api_key='test', connect=lambda _, **kw: websockets.connect(url, **kw))
+                await asyncio.wait_for(
+                    client.start_voice_session({'attacker_ip': ip, 'operator_extension': '1004'}, mic(), sink, tools, sink),
+                    5,
+                )
+        fw.unblock_ip.assert_called_once_with(ip)

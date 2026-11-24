@@ -176,14 +176,14 @@ async def handle_call(reader, writer, config, call_directory, client_factory=Gem
         log.info("call_preflight session=%s elapsed=%.3f", session_id, time.monotonic() - started)
         async def conversation():
             active_tools = tools
-            for attempt in range(2):
+            for attempt in range(3):
                 try:
                     return await client_factory().start_voice_session(
                         incident, buffered_microphone.stream(), playback.feed, active_tools,
                         playback.interrupt, playback.finish_turn)
-                except (InitialAudioTimeout, RecoverableLiveDisconnect):
-                    log.warning("live_safe_reconnect session=%s attempt=%s", session_id, attempt + 1)
-                    if attempt == 1:
+                except (InitialAudioTimeout, RecoverableLiveDisconnect) as error:
+                    log.warning("live_safe_reconnect session=%s attempt=%s reason=%s", session_id, attempt + 1, error)
+                    if attempt == 2:
                         raise
                     # No mutation was attempted and no audio played. Discard
                     # stale intent; the new session asks the operator again.

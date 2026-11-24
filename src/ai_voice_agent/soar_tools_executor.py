@@ -51,6 +51,15 @@ class SoarToolsExecutor:
                     source = "PFSENSE_EVE"
             return {"success": True, "source": source, "identity_query_verified": source == "PFSENSE_EVE", "incident": details,
                     "note": "La telemetría describe el incidente. Consulta el firewall para conocer el bloqueo actual."}
+        if function_name == "list_blocked_ips":
+            if self.pfctl.simulation_mode:
+                return {"success": False, "verified": False, "error": "El firewall está en simulación; no se consultó la tabla real."}
+            result = self.pfctl.list_blocked_ips_status()
+            if result.get("success"):
+                protected = set(self.config.get("protected_ips", []))
+                candidates = [entry for entry in result.get("blocked_ips", []) if entry not in protected]
+                self.policy.record_offered_ips(candidates)
+            return result
         if function_name not in {"get_firewall_states", "unblock_ip", "block_ip_permanently"}:
             return {"success": False, "error": "Herramienta no disponible."}
         try:
@@ -65,20 +74,24 @@ class SoarToolsExecutor:
 
         if (ip in self.config.get("protected_ips", []) or
                 (self.incident.get("source_protected") and ip == self.incident.get("attacker_ip"))):
-            return {"success": False, "verified": False,
+            return {"success": False, "verified": False, "firewall_touched": False,
                     "error": "Origen de infraestructura protegido. El IPS descarta el payload, pero no se modifica su bloqueo global. Para QA usa un origen separado por la URL publica."}
         allowed, reason = self.policy.authorize(function_name, ip)
         if not allowed:
-            return {"success": False, "verified": False, "error": reason}
+            log.info("firewall_authorization_denied session=%s operator=%s action=%s ip=%s reason=%s",
+                     self.incident.get("session_id"), self.incident.get("operator_extension"),
+                     function_name, ip, reason)
+            return {"success": False, "verified": False, "firewall_touched": False, "error": reason}
         # No silent simulation in the telephone runtime.
         if self.pfctl.simulation_mode:
-            return {"success": False, "verified": False, "error": "El firewall está en simulación; no se ejecutaron cambios reales."}
+            return {"success": False, "verified": False, "firewall_touched": False,
+                    "error": "El firewall está en simulación; no se ejecutaron cambios reales."}
         operation = self.pfctl.unblock_ip if function_name == "unblock_ip" else self.pfctl.block_ip
         ok = operation(ip)
         state = self.pfctl.get_ip_status(ip)
         expected = function_name == "block_ip_permanently"
         verified = bool(ok and state["success"] and state["is_blocked"] == expected)
-        result = {"success": verified, "verified": verified, "ip": ip,
+        result = {"success": verified, "verified": verified, "firewall_touched": True, "ip": ip,
                   "action": function_name, "table": self.pfctl.table_name,
                   "is_blocked": state.get("is_blocked"),
                   "status": "Cambio confirmado en la tabla del firewall." if verified else
