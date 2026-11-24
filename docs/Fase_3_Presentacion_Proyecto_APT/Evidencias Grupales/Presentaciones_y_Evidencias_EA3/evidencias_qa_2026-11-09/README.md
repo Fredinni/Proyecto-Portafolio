@@ -49,6 +49,7 @@ Ataque de SQL Injection contra DVWA a través del flujo real (Internet → borde
 
 ## Pendiente (en corrección con el responsable de A6)
 
+- **Fallo en desbloqueo por voz IA (Grave - Pendiente de resolución):** Durante las pruebas en vivo de QA, la orden de voz del analista solicitando levantar el bloqueo no se concreta de forma consistente en la tabla `snort2c` del firewall pfSense, requiriendo vaciado manual. Registrado como defecto prioritario para depuración post-demostración en [INCIDENCIA_QA_DESBLOQUEO_VOZ_2026-11-24.md](../../../../INCIDENCIA_QA_DESBLOQUEO_VOZ_2026-11-24.md).
 - **Doble NAT en el borde:** la IP pública real del atacante no llega a pfSense, por lo que la capa de notificación por voz reporta una IP representativa. Solución identificada: propagar la IP real vía `X-Forwarded-For` de HAProxy hacia el motor KRONOS.
 - **Registro en el firewall:** que el motor escriba la IP real del atacante en su tabla de bloqueo (`KRONOS_IPS_GUARD`).
 - **Medición de la cadena completa:** tiempo total detección → bloqueo (meta < 1,5 s), una vez integrada la propagación de IP.
